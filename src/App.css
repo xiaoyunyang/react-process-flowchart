@@ -1,3 +1,5 @@
+@import url("https://use.fontawesome.com/releases/v5.8.0/css/all.css");
+
 * {
   box-sizing: border-box;
 }
@@ -12,37 +14,22 @@
 .two-row-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 1px;
-  grid-auto-rows: minmax(100px, auto);
+  grid-auto-rows: minmax(95px, auto);
 }
-.two-row-wrapper .subgrid {
-  border-radius: 5px;
-  border: 2px solid rgb(233, 171, 88);
-  color: #d9480f;
-}
-
-/* .wrapper .subgrid {
-  border-radius: 5px;
-  border: 2px solid rgb(233, 171, 88);
-  color: #d9480f;
-} */
 
 .two-row-left {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 2;
+  grid-row: 1;
+  width: 180px;
+  height: 75px;
 }
 .two-row-right {
-  grid-column-start: 2;
-  grid-column-end: 3;
+  grid-column: 2;
+  grid-row: 1;
+  width: 100px;
+  height: 75px;
 }
-
-
-/* .subgrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1px;
-  grid-auto-rows: minmax(20px, auto);
-} */
 
 .lines {
   display: absolute;
@@ -69,6 +56,11 @@
 
 .col4 {
   grid-column: 4;
+  grid-row: 1;
+}
+
+.col5 {
+  grid-column: 5;
   grid-row: 1;
 }
 
@@ -99,15 +91,20 @@
 .arrow {
   display: flex;
   flex-wrap: wrap;
-  /* align-content: stretch; */
+  flex-direction: row;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
 }
 
 .line {
   align-self: auto;
-  width: 95px;
+  width: 93px;
   height: 40px;
-  border-bottom: 2px solid red;
+  border-bottom: solid 1px #747b7c;
   position: relative;
 }
 
@@ -116,49 +113,79 @@
   margin-left: -0.3em;
   top: 2.18em;
   display: inline-block;
-  color: red;
+  color: #747b7c;
   box-sizing: border-box;
   width: 0;
   height: 0;
-  border: 4px solid transparent;
-  border-top: 4px solid;
-  border-right: 4px solid;
+  border: 5px solid transparent;
+  border-top: 5px solid;
+  border-right: 5px solid;
   transform: rotate(45deg);
+}
+.arrow-head-down {
+  display: inline-block;
+  color: #333333;
+  box-sizing: border-box;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top: 5px solid;
+  border-right: 5px solid;
+  transform: rotate(135deg);
 }
 
 .box {
-  background-color: red;
-  border: 2px solid rgb(0, 0, 0);
-  border-radius: 5px;
-  color: white;
-  height: 75px;
-  padding: 20px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  height: 70px;
+  padding: 10px;
+  align-self: auto;
+  line-height: 1.33;
 }
 
-.col1-inner {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row: 1;
-  width: 180px;
-  height: 75px;
+.theme-dark {
+  background-color: #747b7c;
+  color: #ffffff;
 }
 
-.col2-inner {
-  grid-column: 2;
-  grid-row: 1;
-  width: 100px;
-  height: 75px;
+.theme-light {
+  color: #4a4f50;
+  background-color: #ffffff;
+}
+
+.theme-light i {
+  color: #9590b0;
+}
+
+.box p {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.box span {
+  margin-left: 0.6em;
+  margin-bottom: 0.3em;
+}
+
+.icon-container {
+  width: 100%;
+  display: inline-block;
+  text-align: center;
 }
 
 /* DEBUGGING CODE BEGIN */
 /* Code for debugging only. Remove for production */
 #flowchart-container {
   padding-top: 100px;
-  max-width: 1124px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 .col1 {
-  background-color: rgba(233, 171, 88, 0.5);
+  background-color: #e9ab5880;
 }
 .col2 {
   background-color: rgba(233, 233, 88, 0.5);
@@ -168,6 +195,9 @@
 }
 .col4 {
   background-color: rgba(233, 88, 88, 0.5);
+}
+.col5 {
+  background-color: rgba(88, 233, 88, 0.5);
 }
 
 /* .col1 > div,

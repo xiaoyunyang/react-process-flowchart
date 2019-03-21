@@ -2,7 +2,11 @@
 
 A flowchart based on CSS Grid built with React
 
-![](/resource/simple.png)
+![](/resource/simpleWorkflow.png)
+
+CSS Grid
+
+![](/resource/simpleWorkflow-debug.png)
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
