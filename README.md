@@ -1,5 +1,9 @@
 # css-grid-flowchart
-A flowchart based on CSS Grid and React
+
+A flowchart based on CSS Grid built with React
+
+![](/resource/simple.png)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
