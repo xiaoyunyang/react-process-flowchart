@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { data1 } from './data/mock';
 import {
-  AUTHORIZE
+  AUTHORIZE, DECISION
 } from "./types/workflowTypes";
 
 const iconClassName = {
@@ -17,7 +17,7 @@ const iconClassName = {
 };
 
 const workflowStepDisplay = {
-  AUTHORIZE: { icon: "", theme: "dark" },
+  AUTHORIZE: { icon: "inbox", theme: "dark" },
   DECISION: { icon: "branch", theme: "light" },
   ADMIN_APPROVAL: { icon: "inbox", theme: "light" },
   PRE_TRANSLATION: { icon: "pause", theme: "light" },
@@ -28,28 +28,54 @@ const workflowStepDisplay = {
   PUBLISH: { icon: "check", theme: "dark" },
 }
 
-const Icon = ({ type }) => {   
-    return (
-      <div className="icon-container">
-        <i className={iconClassName[type]}/>
-      </div>
-    )
+const Icon = ({ icon }) => {   
+  return (
+    <div className="icon-container">
+      <i className={iconClassName[icon]}/>
+    </div>
+  );
 }
-const WorkflowStep = ({ name, iconName, theme, type }) => {
+
+const DiamondIcon = ({ icon }) => {
+  return (
+    <div className="icon-container-diamond">
+      <i className={iconClassName[icon]}/>
+    </div>
+  );
+}
+
+const DecisionStep = () => {
+  const { icon, theme } = workflowStepDisplay[DECISION];
+  return (
+    <div className={`diamond flex-container theme-${theme}`}>
+      <DiamondIcon icon={icon} />
+    </div>
+  );
+}
+const WorkflowStep = ({ name, type }) => {
+  const { icon, theme } = workflowStepDisplay[type];
+
   return (
     <div className={`box flex-container theme-${theme}`}>
-      <Icon type={type} />
+      <Icon icon={icon} />
       <p>{name}<span className="arrow-head-down"/></p>
     </div>
   )
 }
 const TwoRow = ({ leftNode, rightEdge = false }) => {
-  const {icon, theme} = workflowStepDisplay[leftNode.type];
+  const {name, type} = leftNode;
   return (
     <div className="two-row-wrapper">
-      <div className="two-row-left">
-        <WorkflowStep name={leftNode.name} theme={theme} type={icon} />
-      </div>
+      {
+        type === DECISION ? 
+          <div className="two-row-left-diamond">
+            <DecisionStep />
+          </div>
+          :
+          <div className="two-row-left">
+            <WorkflowStep name={name} type={type} />
+          </div>
+      }
       { rightEdge && (
           <div className="two-row-right">
             <Arrow />
@@ -108,13 +134,10 @@ class App extends Component {
 
     const grid = createGrid(data);
 
-    const { workflows, firstStep } = data;
+    const { workflows } = data;
     let cols = grid.map(colNodes => 
       colNodes.map(node => workflows[node])
     );
-
-    const authorizeStep = {id: "authorize", name: "Authorize", type: AUTHORIZE, children: [firstStep] };
-    cols = [[authorizeStep]].concat(cols)
 
     const offset = 1;
     

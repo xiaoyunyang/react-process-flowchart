@@ -12,8 +12,9 @@ CSS Grid
 
 ```javascript
 data = {
-    firstStep: "b1fe",
+    firstStep: "b1fe-auth",
     workflows: {
+        "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
         "b1fe": { id: "b1fe", name: "Decision", type: DECISION, children: ["3902", "e5d2"] },
         "3902": { id: "3902", name: "Human", type: TRANSLATION, children: [ "2910"] },
         "e5d2": { id: "e5d2", name: "Machine", type: TRANSLATION, children: ["3bb4"] },
