@@ -19,7 +19,7 @@ data = {
         "e5d2": { id: "e5d2", name: "Machine", type: TRANSLATION, children: ["3bb4"] },
         "2910": { id: "2910", name: "Edit", type: POST_TRANSLATION, children: ["3bb4"] },
         "3bb4": { id: "3bb4", name: "Review", type: REVIEW, children: ["51fa"] },
-        "51fa": { id: "51fa", name: "Published", type: PUBLISH, children: [], theme: "dark" }
+        "51fa": { id: "51fa", name: "Published", type: PUBLISH, children: [] }
     }
 }
 ```
