@@ -8,24 +8,34 @@ export const data1 = {
     workflows: {
         "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
         "b1fe": { id: "b1fe", name: "Decision", type: DECISION, children: ["3902", "e5d2"] },
-        "3902": { id: "3902", name: "Human", type: TRANSLATION, children: [ "2910"] },
+        "3902": { id: "3902", name: "Human", type: TRANSLATION, children: ["2910"] },
         "e5d2": { id: "e5d2", name: "Machine", type: TRANSLATION, children: ["3bb4"] },
         "2910": { id: "2910", name: "Edit", type: POST_TRANSLATION, children: ["3bb4"] },
         "3bb4": { id: "3bb4", name: "Review", type: REVIEW, children: ["51fa"] },
         "51fa": { id: "51fa", name: "Published", type: PUBLISH, children: [] }
     }
 }
+export const data12 = {
+    firstStep: "b1fe-auth",
+    workflows: {
+        "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
+        "b1fe": { id: "b1fe", name: "Decision", type: DECISION, children: ["3bb4"] },
+        "3bb4": { id: "3bb4", name: "Review", type: REVIEW, children: ["51fa"] },
+        "51fa": { id: "51fa", name: "Published", type: PUBLISH, children: [] }
+    }
+}
 
 export const data2 = {
-    firstStep: "b1fe",
+    firstStep: "b1fe-auth",
     workflows: {
-      "b1fe": { id: "b1fe", name: "Decision", type: "DECISION", children: ["3902", "e5d2"] },
-      "3902": { id: "3902", name: "Human", type: "TRANSLATION", children: [ "2910"] },
-      "e5d2": { id: "e5d2", name: "Machine", type: "TRANSLATION", children: ["e5d3"] },
-      "e5d3": { id: "e5d3", name: "Machine2", type: "TRANSLATION", children: ["3bb4"] },
-      "2910": { id: "2910", name: "Edit", type: "POST_TRANSLATION", children: ["3bb4"] },
-      "3bb4": { id: "3bb4", name: "Review", type: "REVIEW", children: ["51fa"] },
-      "51fa": { id: "51fa", name: "Published", type: "PUBLISH", children: [] }
+        "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
+        "b1fe": { id: "b1fe", name: "Decision", type: "DECISION", children: ["3902", "e5d2"] },
+        "3902": { id: "3902", name: "Human", type: "TRANSLATION", children: ["2910"] },
+        "e5d2": { id: "e5d2", name: "Machine", type: "TRANSLATION", children: ["e5d3"] },
+        "e5d3": { id: "e5d3", name: "Machine2", type: "TRANSLATION", children: ["3bb4"] },
+        "2910": { id: "2910", name: "Edit", type: "POST_TRANSLATION", children: ["3bb4"] },
+        "3bb4": { id: "3bb4", name: "Review", type: "REVIEW", children: ["51fa"] },
+        "51fa": { id: "51fa", name: "Published", type: "PUBLISH", children: [] }
     }
 }
 
@@ -35,7 +45,7 @@ const data3 = {
     firstStep: "b1fe",
     workflows: {
         "b1fe": { name: "Translation", children: ["3902"] },
-        "3902": { name: "Editing", children: [ "e5d2", "b1fe"] },
+        "3902": { name: "Editing", children: ["e5d2", "b1fe"] },
         "e5d2": { name: "Internal Review", children: ["51fa", "3902"] },
         "51fa": { name: "Published", children: [] }
     }

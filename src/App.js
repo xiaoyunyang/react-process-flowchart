@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { data1 } from './data/mock';
+import { data1, data12, data2 } from './data/mock';
 import {
-  AUTHORIZE, DECISION
+  DECISION
 } from "./types/workflowTypes";
 
 const iconClassName = {
@@ -21,17 +21,17 @@ const workflowStepDisplay = {
   DECISION: { icon: "branch", theme: "light" },
   ADMIN_APPROVAL: { icon: "inbox", theme: "light" },
   PRE_TRANSLATION: { icon: "pause", theme: "light" },
-  TRANSLATION: {icon: "comment", theme: "light" },
+  TRANSLATION: { icon: "comment", theme: "light" },
   POST_TRANSLATION: { icon: "pencil", theme: "light" },
   REVIEW: { icon: "eye", theme: "light" },
   WORKFLOW_HOLD: { icon: "pause", theme: "light" },
   PUBLISH: { icon: "check", theme: "dark" },
 }
 
-const Icon = ({ icon }) => {   
+const Icon = ({ icon }) => {
   return (
     <div className="icon-container">
-      <i className={iconClassName[icon]}/>
+      <i className={iconClassName[icon]} />
     </div>
   );
 }
@@ -39,7 +39,7 @@ const Icon = ({ icon }) => {
 const DiamondIcon = ({ icon }) => {
   return (
     <div className="icon-container-diamond">
-      <i className={iconClassName[icon]}/>
+      <i className={iconClassName[icon]} />
     </div>
   );
 }
@@ -58,101 +58,122 @@ const WorkflowStep = ({ name, type }) => {
   return (
     <div className={`box flex-container theme-${theme}`}>
       <Icon icon={icon} />
-      <p>{name}<span className="arrow-head-down"/></p>
+      <p>{name}<span className="arrow-head-down" /></p>
     </div>
   )
 }
-const TwoRow = ({ leftNode, rightEdge = false }) => {
-  const {name, type} = leftNode;
+
+const Arrow = () => (
+  <div className="arrow flex-container">
+    <div className="line" />
+    <i className="arrow-head-right" />
+  </div>
+);
+
+
+const TwoRowBox = ({ leftNode, rightEdge = false }) => {
+  const { name, type } = leftNode;
+
   return (
     <div className="two-row-wrapper">
-      {
-        type === DECISION ? 
-          <div className="two-row-left-diamond">
-            <DecisionStep />
-          </div>
-          :
-          <div className="two-row-left">
-            <WorkflowStep name={name} type={type} />
-          </div>
-      }
-      { rightEdge && (
-          <div className="two-row-right">
-            <Arrow />
-          </div>
-        )
+      <div className="two-row-left-box">
+        <WorkflowStep name={name} type={type} />
+      </div>
+      {rightEdge && (
+        <div className="two-row-right">
+          <Arrow />
+        </div>)
       }
     </div>
   );
 };
 
-const Arrow = () => (
-  <div className="arrow flex-container">
-    <div className="line"/>
-    <i className="arrow-head-right"/>
-  </div>
-)
+const TwoRowDiamond = () => (
+  <div className="two-row-wrapper-diamond">
+    <div className="two-row-left-diamond">
+      <DecisionStep />
+    </div>
 
-const Column = ({ nodes, hasNext }) => {
-  return nodes.map((node, i) => {
-    return <TwoRow key={node.id} leftNode={node} rightEdge={hasNext} />
-  });
-};
+    <div className="two-row-right">
+      <Arrow />
+    </div>
+  </div>
+);
+
+const Column = ({ nodes, hasNext }) => nodes.map(node => (
+  <div key={node.id}>
+    {
+      node.type === DECISION ?
+        <TwoRowDiamond />
+        :
+        <TwoRowBox leftNode={node} rightEdge={hasNext} />
+    }
+  </div>
+));
 
 // TODO: works for Not totally correct. Need to increase depth
 // of level based on branching
-const createGrid = ({firstStep, workflows}) => {
+const createGrid = ({ firstStep, workflows }) => {
   let grid = [[firstStep]];
   let toExplore = [firstStep];
   let explored = {};
   while (toExplore.length > 0) {
-    const id = toExplore.shift();
+    const [id, ...rest] = toExplore;
+    toExplore = rest;
     const workflow = workflows[id];
-    const children = workflow.children;
+    const { children } = workflow;
 
-    grid.push([]);
-    const lastLevelGrid = grid[grid.length-1];
+    grid = grid.concat([[]]);
 
+    // eslint-disable-next-line no-loop-func
     children.forEach((child) => {
-      if(!explored[child]) {
-        toExplore.push(child);
+      if (!explored[child]) {
+        toExplore = toExplore.concat(child);
         explored[child] = true;
-        lastLevelGrid.push(child);
+        grid[grid.length - 1] = grid[grid.length - 1].concat(child);
       }
-    })
+    });
 
-    if(lastLevelGrid.length === 0) {
-      grid.pop();
+    if (grid[grid.length - 1].length === 0) {
+      grid = grid.slice(0, -1);
     }
   }
   return grid;
 }
 
-class App extends Component {
-  render() {
-    const data = data1;
+const WorkflowsViz = ({ data }) => {
+  const grid = createGrid(data);
 
-    const grid = createGrid(data);
+  const { workflows } = data;
+  let cols = grid.map(colNodes =>
+    colNodes.map(node => workflows[node])
+  );
 
-    const { workflows } = data;
-    let cols = grid.map(colNodes => 
-      colNodes.map(node => workflows[node])
-    );
-
-    const offset = 1;
-    
-    return (
-      <div id="flowchart-container">
-        <div className="wrapper">
-          {
-            cols.map((col, i) => (
-              <div key={`col-${offset+i}`} className={`col${offset+i}`}>
-                <Column nodes={col} hasNext={i===cols.length-1 ? false : true} />
-              </div>)
-            )
-          }
+  const offset = 1;
+  return (
+    <div id="flowchart-container">
+      <div className="wrapper">
+        {
+          cols.map((col, i) => (
+            <div key={`col-${offset + i}`} className={`col${offset + i}`}>
+              <Column nodes={col} hasNext={i === cols.length - 1 ? false : true} />
+            </div>)
+          )
+        }
       </div>
     </div>
+  )
+}
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <WorkflowsViz data={data1} />
+        <WorkflowsViz data={data12} />
+        <WorkflowsViz data={data2} />
+      </div>
+
     );
   }
 }

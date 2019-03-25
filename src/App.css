@@ -6,46 +6,63 @@
 
 .wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1px;
-  grid-auto-rows: minmax(100px, auto);
+  grid-template-columns: 225px 135px 225px 225px 225px 225px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  min-height: 80px;
 }
 
 .two-row-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: minmax(95px, auto);
+  grid-template-columns: 150px 75px;
 }
 
-.two-row-left {
+.two-row-wrapper-diamond {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 60px 75px;
+}
+
+.two-row-left-box {
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row: 1;
-  width: 180px;
-  height: 75px;
-  margin-top: 25px;
+  width: 150px;
+  margin-top: 18px;
 }
+
+.box {
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  height: 55px;
+  padding: 10px;
+  align-self: auto;
+  line-height: 1.33;
+}
+
 .two-row-left-diamond {
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row: 1;
-  width: 60px;
-  margin-top: 34px;
-  margin-left: 12px;
+  width: 50px;
+  margin-top: 25px;
+  margin-left: 8px;
+}
+
+.diamond {
+  width: 43px;
+  height: 43px;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  transform: rotate(45deg);
 }
 .two-row-right {
   grid-column: 2;
   grid-row: 1;
-  width: 100px;
-  height: 75px;
-  margin-top: 20px;
-}
-
-.lines {
-  display: absolute;
-  grid-template-columns: 1fr;
-  grid-gap: 10px;
-  grid-auto-rows: minmax(20px, auto);
+  height: 50px;
+  width: 75px;
+  margin-top: 12px;
 }
 
 .col1 {
@@ -124,8 +141,8 @@
 
 .line {
   align-self: auto;
-  width: 93px;
-  height: 40px;
+  width: 66px;
+  height: 35px;
   border-bottom: solid 1px #747b7c;
   position: relative;
 }
@@ -133,7 +150,7 @@
 .arrow-head-right {
   position: relative;
   margin-left: -0.3em;
-  top: 2.18em;
+  top: 1.9em;
   display: inline-block;
   color: #747b7c;
   box-sizing: border-box;
@@ -155,23 +172,6 @@
   border-top: 5px solid;
   border-right: 5px solid;
   transform: rotate(135deg);
-}
-
-.box {
-  border: 1px solid #d8d8d8;
-  border-radius: 8px;
-  height: 70px;
-  padding: 10px;
-  align-self: auto;
-  line-height: 1.33;
-}
-
-.diamond {
-  width: 50px;
-  height: 50px;
-  border: 1px solid #d8d8d8;
-  border-radius: 3px;
-  transform: rotate(45deg);
 }
 
 .theme-dark {
@@ -216,7 +216,7 @@
 .icon-container-diamond i {
   color: #4a4f50;
   font-size: 20px;
-  padding: 15px;
+  padding: 10px;
   margin-bottom: 12px;
 }
 
@@ -224,9 +224,10 @@
 /* Code for debugging only. Remove for production */
 #flowchart-container {
   padding-top: 100px;
-  max-width: 1300px;
+  max-width: 100%;
   display: block;
   margin-left: 5%;
+  margin-right: 5%;
 }
 .col1 {
   background-color: #e9ab5880;
@@ -245,6 +246,9 @@
 }
 .col6 {
   background-color: rgba(88, 233, 233, 0.5);
+}
+.col7 {
+  background-color: rgba(88, 88, 233, 0.5);
 }
 
 /* .col1 > div,
