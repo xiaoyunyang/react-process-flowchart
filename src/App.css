@@ -63,6 +63,18 @@
   grid-column: 5;
   grid-row: 1;
 }
+.col6 {
+  grid-column: 6;
+  grid-row: 1;
+}
+.col7 {
+  grid-column: 7;
+  grid-row: 1;
+}
+.col8 {
+  grid-column: 8;
+  grid-row: 1;
+}
 
 .row1 {
   grid-column: 1;
@@ -182,7 +194,8 @@
 #flowchart-container {
   padding-top: 100px;
   max-width: 1300px;
-  margin: 0 auto;
+  display: block;
+  margin-left: 5%;
 }
 .col1 {
   background-color: #e9ab5880;
@@ -198,6 +211,9 @@
 }
 .col5 {
   background-color: rgba(88, 233, 88, 0.5);
+}
+.col6 {
+  background-color: rgba(88, 233, 233, 0.5);
 }
 
 /* .col1 > div,
