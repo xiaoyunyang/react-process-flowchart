@@ -34,10 +34,13 @@ const DecisionStep = () => {
 const WorkflowStep = ({ name, type }) => {
     const { icon, theme } = workflowStepDisplay[type];
 
+    // truncate name if too long
+    const displayName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
+
     return (
         <div className={`box flex-container theme-${theme}`}>
             <Icon icon={icon} />
-            <p>{name}<span className="arrow-head-down" /></p>
+            <p>{displayName}<span className="arrow-head-down" /></p>
         </div>
     )
 }
