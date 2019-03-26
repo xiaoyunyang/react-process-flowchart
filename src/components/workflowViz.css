@@ -6,6 +6,7 @@
     grid-template-columns: 225px 135px 225px 225px 225px 225px;
     overflow-x: scroll;
     overflow-y: hidden;
+    padding-bottom: 15px;
     min-height: 80px;
   }
   
