@@ -1,7 +1,7 @@
 import React from 'react';
 import './workflowViz.css';
 import {
-    DECISION
+    DECISION, AUTHORIZE
 } from "../types/workflowTypes";
 
 import { iconClassName, workflowStepDisplay } from "../constants/workflowStepDisplay";
@@ -37,12 +37,16 @@ const WorkflowStep = ({ name, type }) => {
     // truncate name if too long
     const displayName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
 
+    // TODO: We would like to pass down a noDropDown from props to specify all the workflow
+    // types that don't want have dropdown
+    const arrowHeadDown = type === AUTHORIZE ? null : <span className="arrow-head-down" />;
+
     return (
         <div className={`box flex-container theme-${theme}`}>
             <Icon icon={icon} />
-            <p>{displayName}<span className="arrow-head-down" /></p>
+            <p>{displayName}{arrowHeadDown}</p>
         </div>
-    )
+    );
 }
 
 const Arrow = () => (
