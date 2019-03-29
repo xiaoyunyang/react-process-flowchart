@@ -4,10 +4,10 @@ import {
 
 // NOTE: Don't add to the children array if the id is an acestor of the current node
 export const data1 = {
-    firstStep: "b1fe-auth",
+    firstStep: "1111-auth",
     workflows: {
-        "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
-        "b1fe": { id: "b1fe", name: "Decision", type: DECISION, children: ["3902", "e5d2"] },
+        "1111-auth": { id: "1111-auth", name: "Authorize", type: AUTHORIZE, children: ["1111-decision"] },
+        "1111-decision": { id: "b1fe", name: "Decision", type: DECISION, children: ["3902", "e5d2"] },
         "3902": { id: "3902", name: "Human", type: TRANSLATION, children: ["2910"] },
         "e5d2": { id: "e5d2", name: "MachineMachineMachine", type: TRANSLATION, children: ["3bb4"] },
         "2910": { id: "2910", name: "Edit", type: POST_TRANSLATION, children: ["3bb4"] },

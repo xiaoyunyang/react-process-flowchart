@@ -7,6 +7,38 @@ import {
 import { iconClassName, workflowStepDisplay } from "../constants/workflowStepDisplay";
 import { createGrid } from "../utils/workflowVizUtils";
 
+
+const uiElement = {
+    "elbow-sw-decision": { id: "elbow-sw-decision", type: DECISION },
+    "elbow-se-box": { id: "elbow-se-box", type: "BOX" },
+    "elbow-se-arrow-box": { id: "elbow-se-arrow-box", type: "BOX" }
+};
+
+const Connector = ({ id }) => {
+    const mapping = {
+        "elbow-sw-decision": <div className="elbow-sw-decision" />,
+        "elbow-se-box": <div className="elbow-se-box" />,
+        "elbow-se-arrow-box": <ElbowSeArrowBox />,
+        "arrow-right": <Arrow />
+    };
+    return mapping[id];
+}
+
+
+const ElbowSeArrowBox = () => (
+    <div className="flex-container elbow-se-arrow-box">
+        <div className="elbow-se-box" />
+        <i className="arrow-head-up" />
+    </div>
+);
+
+const Arrow = () => (
+    <div className="arrow flex-container">
+        <div className="line" />
+        <i className="arrow-head-right" />
+    </div>
+);
+
 const Icon = ({ icon }) => {
     return (
         <div className="icon-container">
@@ -23,19 +55,29 @@ const DiamondIcon = ({ icon }) => {
     );
 }
 
-const DecisionStep = () => {
+const DecisionStep = ({ node }) => {
     const { icon, theme } = workflowStepDisplay[DECISION];
+    console.log(node)
+    if (uiElement[node.id]) {
+        return <Connector id={node.id} />;
+    }
     return (
         <div className={`diamond flex-container theme-${theme}`}>
             <DiamondIcon icon={icon} />
         </div>
     );
 }
-const WorkflowStep = ({ name, type }) => {
+const WorkflowStep = ({ node }) => {
+    const { name, type } = node;
+    if (uiElement[node.id]) {
+        console.log("node.id is ", node.id)
+        return <Connector id={node.id} />;
+    }
+
     const { icon, theme } = workflowStepDisplay[type];
 
     // truncate name if too long
-    const displayName = name.length > 8 ? `${name.substring(0, 8)}...` : name;
+    const displayName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
 
     // TODO: We would like to pass down a noDropDown from props to specify all the workflow
     // types that don't want have dropdown
@@ -49,34 +91,30 @@ const WorkflowStep = ({ name, type }) => {
     );
 }
 
-const Arrow = () => (
-    <div className="arrow flex-container">
-        <div className="line" />
-        <i className="arrow-head-right" />
-    </div>
-);
-
 const TwoRowBox = ({ leftNode, rightEdge = false }) => {
-    const { name, type } = leftNode;
-
     return (
         <div className="two-row-wrapper">
             <div className="two-row-left-box">
-                <WorkflowStep name={name} type={type} />
+                {
+                    <WorkflowStep node={leftNode} />
+                }
+
             </div>
-            {rightEdge && (
-                <div className="two-row-right">
+            <div className="two-row-right">
+                {rightEdge &&
+
                     <Arrow />
-                </div>)
-            }
+                }
+            </div>
         </div>
     );
+
 };
 
-const TwoRowDiamond = () => (
+const TwoRowDiamond = ({ node }) => (
     <div className="two-row-wrapper-diamond">
         <div className="two-row-left-diamond">
-            <DecisionStep />
+            <DecisionStep node={node} />
         </div>
 
         <div className="two-row-right">
@@ -89,7 +127,7 @@ const Column = ({ nodes, hasNext }) => nodes.map(node => (
     <div key={node.id}>
         {
             node.type === DECISION ?
-                <TwoRowDiamond />
+                <TwoRowDiamond node={node} />
                 :
                 <TwoRowBox leftNode={node} rightEdge={hasNext} />
         }
@@ -97,12 +135,27 @@ const Column = ({ nodes, hasNext }) => nodes.map(node => (
 ));
 
 const WorkflowsViz = ({ data }) => {
-    const grid = createGrid(data);
+    // const grid = createGrid(data);
 
+    const grid = [
+        ["1111-auth"],
+        ["1111-decision", "elbow-sw-decision"],
+        ["3902", "e5d2"],
+        ["2910", "elbow-se-arrow-box"],
+        ["3bb4"],
+        ["51fa"]
+    ];
+
+    console.log("grid", grid);
+
+    // TODO: Each elem of the inner array should be a pair {left, right}
+    // This is better at describing the Column left and right than using hasNext.
     const { workflows } = data;
     let cols = grid.map(colNodes =>
-        colNodes.map(node => workflows[node])
+        colNodes.map(node => workflows[node] ? workflows[node] : uiElement[node])
     );
+
+    console.log("cols", cols);
 
     const offset = 1;
     return (
