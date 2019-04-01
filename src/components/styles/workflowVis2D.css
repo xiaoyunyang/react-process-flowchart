@@ -142,9 +142,29 @@
   flex-direction: row;
 }
 
-.arrowRight i {
+.circle {
   position: relative;
-  margin-left: -0.3em;
+  background-color: var(--tealish);
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: flex;
+}
+
+.circle i {
+  display: block;
+  margin: auto;
+  color: var(--white);
+  font-size: 10px;
+}
+
+.arrowRight .circle {
+  margin-top: calc(var(--box-height)/2.4);
+}
+
+.arrowRight .caret {
+  position: relative;
+  margin-left: -0.4em; /* <-- Fudge Factor */
   top: 1.9em; /* <-- Fudge Factor */
   color: var(--battleship-grey);
 }
@@ -157,10 +177,18 @@
 
 .line {
   align-self: auto;
-  width: 66px;
-  height: 35px;
   border-bottom: solid 1px #747b7c;
   position: relative;
+}
+
+.arrowRight .lineLong {
+  width: calc(var(--workflow-step-right-width)*0.9);
+  height: 35px;
+}
+
+.arrowRight .lineShort {
+  width: calc(var(--workflow-step-right-width)/3.2);
+  height: 35px;
 }
 
 .caret {
@@ -269,7 +297,28 @@
   margin-left: 5%;
   margin-right: 5%;
 }
-.col1 {
+
+#flowchartContainer button {
+  font-size: 18px;
+  border: var(--box-border);
+  margin-left: 80%;
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.toggleEdit {
+  background-color: var(--white);
+  color: var(--battleship-grey);
+}
+
+.toggleEditHighlight {
+  background-color: var(--tealish);
+  color: var(--white);
+}
+
+/* .col1 {
   background-color: #e9ab5880;
 }
 .col2 {
@@ -289,7 +338,7 @@
 }
 .col7 {
   background-color: rgba(88, 88, 233, 0.5);
-}
+} */
 
 /* .col1 > div,
 .col2 > div,

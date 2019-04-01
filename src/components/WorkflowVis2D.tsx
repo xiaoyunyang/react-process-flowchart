@@ -8,7 +8,7 @@ import './styles/workflowVis2D.css';
 import { WorkflowStepType } from "../types/workflow";
 
 // Components
-import { RightUpArrow, ArrowRight, Connector } from "./connectors";
+import { RightUpArrow, ArrowRight, ArrowRightEditable, Connector } from "./connectors";
 import WorkflowStep, { uiElement } from "./WorkflowStep";
 
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
@@ -38,8 +38,9 @@ const DecisionStep = ({ node }: { node: any }) => {
 
 
 const TwoRowBox = (
-    { leftNode, rightEdge = false }: { leftNode: NodeT; rightEdge: boolean }
-) => {
+    { leftNode, rightEdge = false, editMode }: {
+        leftNode: NodeT; rightEdge: boolean; editMode: boolean;
+    }) => {
     const { name, type } = leftNode;
 
     return (
@@ -47,7 +48,9 @@ const TwoRowBox = (
             <WorkflowStep node={leftNode} />
             {rightEdge && (
                 <div className="twoRowRight">
-                    <ArrowRight />
+                    {
+                        editMode ? <ArrowRightEditable /> : <ArrowRight />
+                    }
                 </div>)
             }
         </div>
@@ -55,30 +58,36 @@ const TwoRowBox = (
 };
 
 
-const TwoRowDiamond = ({ node }: { node: NodeT }) => (
+const TwoRowDiamond = ({ node, editMode }: { node: NodeT; editMode: boolean }) => (
     <div className="twoRowWrapperDiamond">
         <div className="twoRowLeftDiamond">
             <DecisionStep node={node} />
         </div>
 
         <div className="twoRowRight">
-            <ArrowRight />
+            {
+                editMode ? <ArrowRightEditable /> : <ArrowRight />
+            }
         </div>
     </div>
 );
 
-const Column = ({ nodes, hasNext }: { nodes: any; hasNext: boolean }) => nodes.map((node: NodeT) => (
+const Column = ({ nodes, hasNext, editMode }: {
+    nodes: any; hasNext: boolean; editMode: boolean;
+}) => nodes.map((node: NodeT) => (
     <div key={node.id}>
         {
             node.type === WorkflowStepType.DECISION ?
-                <TwoRowDiamond node={node} />
+                <TwoRowDiamond node={node} editMode={editMode} />
                 :
-                <TwoRowBox leftNode={node} rightEdge={hasNext} />
+                <TwoRowBox leftNode={node} rightEdge={hasNext} editMode={editMode} />
         }
     </div>
 ));
 
-const WorkflowsVis = ({ workflowVisData }: { workflowVisData: WorkflowVisDataT }) => {
+const WorkflowsVis = ({ workflowVisData, editMode }: {
+    workflowVisData: WorkflowVisDataT; editMode: boolean;
+}) => {
     // const grid = createGrid(data);
 
     const grid = [
@@ -101,17 +110,16 @@ const WorkflowsVis = ({ workflowVisData }: { workflowVisData: WorkflowVisDataT }
 
     const offset = 1;
     return (
-        <div id="flowchartContainer">
-            <div className="wrapperWithDecisionStep">
-                {
-                    cols.map((col, i) => (
-                        <div key={`col-${offset + i}`} className={`col${offset + i}`}>
-                            <Column nodes={col} hasNext={i === cols.length - 1 ? false : true} />
-                        </div>)
-                    )
-                }
-            </div>
+        <div className="wrapperWithDecisionStep">
+            {
+                cols.map((col, i) => (
+                    <div key={`col-${offset + i}`} className={`col${offset + i}`}>
+                        <Column nodes={col} editMode={editMode} hasNext={i === cols.length - 1 ? false : true} />
+                    </div>)
+                )
+            }
         </div>
+
     )
 }
 
