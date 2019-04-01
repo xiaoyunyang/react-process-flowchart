@@ -1,10 +1,10 @@
 import React from 'react';
-import './workflowViz.css';
+import './styles/workflowViz.css';
 import {
-    DECISION, AUTHORIZE
-} from "../types/workflowTypes";
+    WorkflowStepType
+} from "../types/workflow";
 
-import { iconClassName, workflowStepDisplay } from "../constants/workflowStepDisplay";
+import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
 import { createGrid } from "../utils/workflowVizUtils";
 
 const Icon = ({ icon }) => {
@@ -24,7 +24,7 @@ const DiamondIcon = ({ icon }) => {
 }
 
 const DecisionStep = () => {
-    const { icon, theme } = workflowStepDisplay[DECISION];
+    const { icon, theme } = workflowStepConfig[WorkflowStepType.DECISION];
     return (
         <div className={`diamond flex-container theme-${theme}`}>
             <DiamondIcon icon={icon} />
@@ -32,14 +32,14 @@ const DecisionStep = () => {
     );
 }
 const WorkflowStep = ({ name, type }) => {
-    const { icon, theme } = workflowStepDisplay[type];
+    const { icon, theme } = workflowStepConfig[type];
 
     // truncate name if too long
     const displayName = name.length > 8 ? `${name.substring(0, 8)}...` : name;
 
     // TODO: We would like to pass down a noDropDown from props to specify all the workflow
     // types that don't want have dropdown
-    const arrowHeadDown = type === AUTHORIZE ? null : <span className="arrow-head-down" />;
+    const arrowHeadDown = type === WorkflowStepType.AUTHORIZE ? null : <span className="arrow-head-down" />;
 
     return (
         <div className={`box flex-container theme-${theme}`}>
@@ -88,7 +88,7 @@ const TwoRowDiamond = () => (
 const Column = ({ nodes, hasNext }) => nodes.map(node => (
     <div key={node.id}>
         {
-            node.type === DECISION ?
+            node.type === WorkflowStepType.DECISION ?
                 <TwoRowDiamond />
                 :
                 <TwoRowBox leftNode={node} rightEdge={hasNext} />
@@ -107,7 +107,7 @@ const WorkflowsViz = ({ data }) => {
     const offset = 1;
     return (
         <div id="flowchart-container">
-            <div className="wrapper">
+            <div className="wrapper-with-decision-step">
                 {
                     cols.map((col, i) => (
                         <div key={`col-${offset + i}`} className={`col${offset + i}`}>

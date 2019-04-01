@@ -1,9 +1,23 @@
+// Types
+import { WorkflowStepType } from "../types/workflow";
+
+export interface NodeT {
+    id: string;
+    name: string;
+    type: WorkflowStepType;
+    children: string[];
+}
+export interface WorkflowVisDataT {
+    firstStep: string;
+    workflows: { [id: string]: NodeT };
+}
 // TODO: works for Not totally correct. Need to increase depth
 // of level based on branching
-export const createGrid = ({ firstStep, workflows }) => {
+export const createGrid = (workflowVisData: WorkflowVisDataT) => {
+    const { firstStep, workflows } = workflowVisData;
     let grid = [[firstStep]];
     let toExplore = [firstStep];
-    let explored = {};
+    const explored: { [id: string]: boolean | undefined } = {};
     while (toExplore.length > 0) {
         const [id, ...rest] = toExplore;
         toExplore = rest;
@@ -12,18 +26,19 @@ export const createGrid = ({ firstStep, workflows }) => {
 
         grid = grid.concat([[]]);
 
-        // eslint-disable-next-line no-loop-func
-        children.forEach((child) => {
+        let child = null;
+        for (let i = 0; i < children.length; i += 1) {
+            child = children[i];
             if (!explored[child]) {
                 toExplore = toExplore.concat(child);
                 explored[child] = true;
                 grid[grid.length - 1] = grid[grid.length - 1].concat(child);
             }
-        });
+        }
 
-        if (grid[grid.length - 1].length === 0) {
+        if (grid.slice(-1)[0].length === 0) {
             grid = grid.slice(0, -1);
         }
     }
     return grid;
-}
+};

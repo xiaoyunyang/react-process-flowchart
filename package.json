@@ -3,9 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.12.2",
+    "@types/react": "^16.8.10",
+    "@types/react-dom": "^16.8.3",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "typescript": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
