@@ -90,6 +90,7 @@ const WorkflowsVis = ({ workflowVisData, editMode }: {
 }) => {
     // const grid = createGrid(data);
 
+    // Each element of grid is a col.
     const grid = [
         ["1111-auth"],
         ["1111-decision", "downRightArrowDecision"],

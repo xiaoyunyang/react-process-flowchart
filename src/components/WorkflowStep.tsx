@@ -144,7 +144,9 @@ const WorkflowStep = ({ node }: { node: any }) => {
         <div className="twoRowLeftBox">
             <div className={`box flexContainer theme${theme}`}>
                 <Icon icon={icon} />
-                <p>{displayName}{arrowHeadDown}</p>
+                <div className="workflowStepDisplayName" >
+                    <p>{displayName}{arrowHeadDown}</p>
+                </div>
             </div>
         </div>
     );
