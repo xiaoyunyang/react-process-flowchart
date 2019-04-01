@@ -1,14 +1,14 @@
 export const workflowStepDisplay = {
-    AUTHORIZE: { icon: "inbox", theme: "dark" },
-    DECISION: { icon: "branch", theme: "light" },
-    ADMIN_APPROVAL: { icon: "inbox", theme: "light" },
-    PRE_TRANSLATION: { icon: "pause", theme: "light" },
-    TRANSLATION: { icon: "comment", theme: "light" },
-    POST_TRANSLATION: { icon: "pencil", theme: "light" },
-    REVIEW: { icon: "eye", theme: "light" },
-    WORKFLOW_HOLD: { icon: "pause", theme: "light" },
-    PUBLISH: { icon: "check", theme: "dark" },
-    ANALYSIS: { icon: "eye", theme: "light" }
+    AUTHORIZE: { icon: "inbox", theme: "Dark" },
+    DECISION: { icon: "branch", theme: "Light" },
+    ADMIN_APPROVAL: { icon: "inbox", theme: "Light" },
+    PRE_TRANSLATION: { icon: "pause", theme: "Light" },
+    TRANSLATION: { icon: "comment", theme: "Light" },
+    POST_TRANSLATION: { icon: "pencil", theme: "Light" },
+    REVIEW: { icon: "eye", theme: "Light" },
+    WORKFLOW_HOLD: { icon: "pause", theme: "Light" },
+    PUBLISH: { icon: "check", theme: "Dark" },
+    ANALYSIS: { icon: "eye", theme: "Light" }
 };
 
 export const iconClassName = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import './workflowViz.css';
+import './styles/workflowVis2D.css';
 import {
     DECISION, AUTHORIZE
 } from "../types/workflowTypes";
@@ -9,39 +9,39 @@ import { createGrid } from "../utils/workflowVizUtils";
 
 
 const uiElement = {
-    "elbow-sw-decision": { id: "elbow-sw-decision", type: DECISION },
-    "elbow-se-box": { id: "elbow-se-box", type: "BOX" },
-    "elbow-se-arrow-box": { id: "elbow-se-arrow-box", type: "BOX" }
+    "downRightArrowDecision": { id: "downRightArrowDecision", type: DECISION },
+    "elbowSeBox": { id: "elbowSeBox", type: "BOX" },
+    "rightUpArrow": { id: "rightUpArrow", type: "BOX" }
 };
 
 const Connector = ({ id }) => {
     const mapping = {
-        "elbow-sw-decision": <div className="elbow-sw-decision" />,
-        "elbow-se-box": <div className="elbow-se-box" />,
-        "elbow-se-arrow-box": <ElbowSeArrowBox />,
-        "arrow-right": <Arrow />
+        "downRightArrowDecision": <div className="downRightArrowDecision" />,
+        "rightUpBox": <div className="rightUpBox" />,
+        "rightUpArrow": <RightUpArrow />,
+        "arrowRight": <Arrow />
     };
     return mapping[id];
 }
 
 
-const ElbowSeArrowBox = () => (
-    <div className="flex-container elbow-se-arrow-box">
-        <div className="elbow-se-box" />
-        <i className="arrow-head-up" />
+const RightUpArrow = () => (
+    <div className="flexContainer rightUpArrow">
+        <div className="rightUpBox" />
+        <i className="caret caretUp" />
     </div>
 );
 
 const Arrow = () => (
-    <div className="arrow flex-container">
+    <div className="arrowRight flexContainer">
         <div className="line" />
-        <i className="arrow-head-right" />
+        <i className="caret caretRight" />
     </div>
 );
 
 const Icon = ({ icon }) => {
     return (
-        <div className="icon-container">
+        <div className="iconContainer">
             <i className={iconClassName[icon]} />
         </div>
     );
@@ -49,7 +49,7 @@ const Icon = ({ icon }) => {
 
 const DiamondIcon = ({ icon }) => {
     return (
-        <div className="icon-container-diamond">
+        <div className="iconContainerDiamond">
             <i className={iconClassName[icon]} />
         </div>
     );
@@ -62,7 +62,7 @@ const DecisionStep = ({ node }) => {
         return <Connector id={node.id} />;
     }
     return (
-        <div className={`diamond flex-container theme-${theme}`}>
+        <div className={`diamond flexContainer theme${theme}`}>
             <DiamondIcon icon={icon} />
         </div>
     );
@@ -81,10 +81,10 @@ const WorkflowStep = ({ node }) => {
 
     // TODO: We would like to pass down a noDropDown from props to specify all the workflow
     // types that don't want have dropdown
-    const arrowHeadDown = type === AUTHORIZE ? null : <span className="arrow-head-down" />;
+    const arrowHeadDown = type === AUTHORIZE ? null : <span className="caret caretDown" />;
 
     return (
-        <div className={`box flex-container theme-${theme}`}>
+        <div className={`box flexContainer theme${theme}`}>
             <Icon icon={icon} />
             <p>{displayName}{arrowHeadDown}</p>
         </div>
@@ -93,16 +93,15 @@ const WorkflowStep = ({ node }) => {
 
 const TwoRowBox = ({ leftNode, rightEdge = false }) => {
     return (
-        <div className="two-row-wrapper">
-            <div className="two-row-left-box">
+        <div className="twoRowWrapper">
+            <div className="twoRowLeftBox">
                 {
                     <WorkflowStep node={leftNode} />
                 }
 
             </div>
-            <div className="two-row-right">
+            <div className="twoRowRight">
                 {rightEdge &&
-
                     <Arrow />
                 }
             </div>
@@ -112,12 +111,12 @@ const TwoRowBox = ({ leftNode, rightEdge = false }) => {
 };
 
 const TwoRowDiamond = ({ node }) => (
-    <div className="two-row-wrapper-diamond">
-        <div className="two-row-left-diamond">
+    <div className="twoRowWrapperDiamond">
+        <div className="twoRowLeftDiamond">
             <DecisionStep node={node} />
         </div>
 
-        <div className="two-row-right">
+        <div className="twoRowRight">
             <Arrow />
         </div>
     </div>
@@ -134,14 +133,14 @@ const Column = ({ nodes, hasNext }) => nodes.map(node => (
     </div>
 ));
 
-const WorkflowsViz = ({ data }) => {
+const WorkflowsVis = ({ data }) => {
     // const grid = createGrid(data);
 
     const grid = [
         ["1111-auth"],
-        ["1111-decision", "elbow-sw-decision"],
+        ["1111-decision", "downRightArrowDecision"],
         ["3902", "e5d2"],
-        ["2910", "elbow-se-arrow-box"],
+        ["2910", "rightUpArrow"],
         ["3bb4"],
         ["51fa"]
     ];
@@ -155,12 +154,10 @@ const WorkflowsViz = ({ data }) => {
         colNodes.map(node => workflows[node] ? workflows[node] : uiElement[node])
     );
 
-    console.log("cols", cols);
-
     const offset = 1;
     return (
-        <div id="flowchart-container">
-            <div className="wrapper">
+        <div id="flowchartContainer">
+            <div className="wrapperWithDecisionStep">
                 {
                     cols.map((col, i) => (
                         <div key={`col-${offset + i}`} className={`col${offset + i}`}>
@@ -173,4 +170,4 @@ const WorkflowsViz = ({ data }) => {
     )
 }
 
-export default WorkflowsViz;
+export default WorkflowsVis;

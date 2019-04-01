@@ -1,44 +1,56 @@
 @import url("https://use.fontawesome.com/releases/v5.8.0/css/all.css");
+@import "./gridVariables.css";
+@import "./box.css";
+@import "./colors.css";
+
+.wrapperWithDecisionStep {
+  display: grid;
+    grid-template-columns: var(--workflow-step-width) var(--decision-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width);
+    min-height: var(--workflow-wrapper-min-height);
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: var(--workflow-wrapper-padding-bottom);
+}
 
 .wrapper {
   display: grid;
-  grid-gap: 1px;
-  grid-template-columns: 225px 135px 225px 225px 225px 225px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding-bottom: 15px;
-  min-height: 80px;
+    grid-template-columns: var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width) var(--workflow-step-width);
+    min-height: var(--workflow-wrapper-min-height);
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: var(--workflow-wrapper-padding-bottom);
 }
   
-.two-row-wrapper {
+.twoRowWrapper {
   display: grid;
-  grid-template-columns: 150px 75px;
+  grid-template-columns: var(--workflow-step-left-width) var(--workflow-step-right-width);
 }
   
-.two-row-wrapper-diamond {
+.twoRowWrapperDiamond {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-columns: 60px 75px;
+  grid-template-columns: var(--decision-step-left-width) var(--workflow-step-right-width);
 }
   
-.two-row-left-box {
+.twoRowLeftBox {
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row: 1;
-  width: 150px;
-  margin-top: 15px;
+  width: var(--workflow-step-left-width);
+  margin-top: 18px;
 }
   
 .box {
-  border: 1px solid #d8d8d8;
-  border-radius: 8px;
-  height: 55px;
-  padding: 10px;
+  border: var(--box-border);
+  border-radius: var(--box-border-radius);
+  border-width: var(--box-border-width);
+  height: var(--box-height);
+  padding: var(--box-padding);
   align-self: auto;
-  line-height: 1.33;
+  line-height: var(--box-line-height);
 }
   
-.two-row-left-diamond {
+.twoRowLeftDiamond {
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row: 1;
@@ -48,18 +60,17 @@
 }
   
 .diamond {
-  width: 43px;
-  height: 43px;
-  border: 1px solid #d8d8d8;
-  border-radius: 3px;
+  width: var(--diamond-width);
+  height: var(--diamond-width);
+  border: 1px solid var(--silver-five);
+  border-radius: var(--diamond-border-radius);
   transform: rotate(45deg);
 }
 
-.two-row-right {
+.twoRowRight {
   grid-column: 2;
   grid-row: 1;
-  height: 50px;
-  width: 75px;
+  width: var(--workflow-step-right-width);
   margin-top: 12px;
 }
   
@@ -125,13 +136,20 @@
   visibility: hidden;
 }
 
-.arrow {
+.arrowRight {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
 
-.flex-container {
+.arrowRight i {
+  position: relative;
+  margin-left: -0.3em;
+  top: 1.9em; /* <-- Fudge Factor */
+  color: var(--battleship-grey);
+}
+
+.flexContainer {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -145,51 +163,39 @@
   position: relative;
 }
 
-.arrow-head-right {
-  position: relative;
-  margin-left: -0.3em;
-  top: 1.9em;
+.caret {
   display: inline-block;
-  color: #747b7c;
+  color: var(--battleship-grey);
   box-sizing: border-box;
   width: 0;
   height: 0;
-  border: 5px solid transparent;
-  border-top: 5px solid;
-  border-right: 5px solid;
+  border: var(--caret-width) solid transparent;
+  border-top: var(--caret-width) solid;
+  border-right: var(--caret-width) solid;
+}
+
+.caretRight {
   transform: rotate(45deg);
 }
 
-.arrow-head-down {
-  display: inline-block;
-  color: #333333;
-  box-sizing: border-box;
-  width: 0;
-  height: 0;
-  border: 5px solid transparent;
-  border-top: 5px solid;
-  border-right: 5px solid;
+.caretDown {
   transform: rotate(135deg);
 }
 
-.arrow-head-up {
-  display: inline-block;
-  color: #747b7c;
-  box-sizing: border-box;
-  width: 0;
-  height: 0;
-  border: 5px solid transparent;
-  border-top: 5px solid;
-  border-right: 5px solid;
+.caretUp {
   transform: rotate(315deg);
 }
 
-.elbow-se-arrow-box i {
+.box .caret {
+  color: var(--dark-grey-two);
+}
+
+.rightUpArrow i {
   margin-left: -0.36em;
   margin-top: -13px;
 }
 
-.elbow-sw-decision {
+.downRightArrowDecision {
   border-bottom: solid 1px #747b7c;
   border-left: solid 1px #747b7c;
   height: 39px;
@@ -199,7 +205,7 @@
   position: relative;
 }
 
-.elbow-se-box {
+.rightUpBox {
   border-bottom: solid 1px #747b7c;
   border-right: solid 1px #747b7c;
   height: 42px;
@@ -208,17 +214,17 @@
   left: 0px;
   position: relative;
 }
-.theme-Dark {
+.themeDark {
   background-color: #747b7c;
   color: #ffffff;
 }
 
-.theme-Light {
+.themeLight {
   color: #4a4f50;
   background-color: #ffffff;
 }
 
-.theme-light i {
+.themeLight i {
   color: #9590b0;
 }
 
@@ -236,18 +242,18 @@
   margin-bottom: 0.3em;
 }
 
-.icon-container {
+.iconContainer {
   width: 100%;
   display: inline-block;
   text-align: center;
 }
 
-.icon-container-diamond {
+.iconContainerDiamond {
   display: inline-block;
   text-align: center;
   transform: rotate(45deg);
 }
-.icon-container-diamond i {
+.iconContainerDiamond i {
   color: #4a4f50;
   font-size: 20px;
   padding: 10px;
@@ -256,7 +262,7 @@
 
 /* DEBUGGING CODE BEGIN */
 /* Code for debugging only. Remove for production */
-#flowchart-container {
+#flowchartContainer {
   padding-top: 100px;
   max-width: 100%;
   display: block;
