@@ -3,6 +3,9 @@ import React from 'react';
 // Styles
 import './styles/workflowVis2D.css';
 
+// Types
+import { ConnectorT, ConnectorType } from "../types/workflowVis";
+
 export const ArrowRight = () => (
     <div className="arrowRight flexContainer">
         <div className="line lineLong" />
@@ -21,10 +24,10 @@ export const ArrowRightEditable = () => (
     </div>
 );
 
-export const Line = () => <div className="line lineLong" />;
+export const LineHoriz = () => <div className="line lineLong" />;
 
-export const LineEditable = () => (
-    <div className="arrowRight flexContainer">
+export const LineHorizEditable = () => (
+    <div className="lineHoriz flexContainer">
         <div className="line lineShort" />
         <span className="circle" >
             <i className="fas fa-plus" />
@@ -40,15 +43,63 @@ export const RightUpArrow = () => (
     </div>
 );
 
+export const connectors: { [id: string]: ConnectorT } = {
+    "downRightDiamond": {
+        id: "downRightDiamond",
+        name: "connectorContainerDiamond",
+        type: ConnectorType.DIAMOND_CONNECTOR
+    },
+    "elbowSeBox": {
+        id: "elbowSeBox",
+        name: "connectorContainerBox",
+        type: ConnectorType.BOX_CONNECTOR
+    },
+    "rightUpArrow": {
+        id: "rightUpArrow",
+        name: "connectorContainerBox",
+        type: ConnectorType.BOX_CONNECTOR
+    },
+    "standard.arrowRight": {
+        id: "standard.arrowRight",
+        name: "connectorContainerStandard",
+        type: ConnectorType.STANDARD_CONNECTOR
+    },
+    "standard.arrowRight.edit": {
+        id: "standard.arrowRight.edit",
+        name: "connectorContainerStandard",
+        type: ConnectorType.STANDARD_CONNECTOR
+    },
+    "box.arrowRight": {
+        id: "box.arrowRight",
+        name: "connectorContainerBox",
+        type: ConnectorType.STANDARD_CONNECTOR
+    },
+    "standard.lineHoriz": {
+        id: "standard.lineHoriz",
+        name: "connectorContainerStandard",
+        type: ConnectorType.STANDARD_CONNECTOR
+    },
+    "standard.lineHoriz.edit": {
+        id: "standard.lineHoriz.edit",
+        name: "connectorContainerStandard",
+        type: ConnectorType.STANDARD_CONNECTOR,
+    },
+};
+
 export const Connector = ({ id }: { id: string }) => {
     const mapping: { [id: string]: JSX.Element } = {
-        "downRightArrowDecision": <div className="downRightArrowDecision" />,
-        "rightUpBox": <div className="rightUpBox" />,
+        "downRightDiamond": <div className="downRightDiamond" />,
         "rightUpArrow": <RightUpArrow />,
-        "arrowRight": <ArrowRight />,
-        "arrowRightEditable": <ArrowRightEditable />,
-        "line": <Line />,
-        "lineEditable": <LineEditable />
+        "standard.arrowRight": <ArrowRight />,
+        "box.arrowRight": <ArrowRight />,
+        "standard.arrowRight.edit": <ArrowRightEditable />,
+        "standard.lineHoriz": <LineHoriz />,
+        "standard.lineHoriz.edit": <LineHorizEditable />
     };
-    return mapping[id];
+
+    return (
+        <div className={connectors[id].name}>
+            {mapping[id]}
+        </div>
+    );
 }

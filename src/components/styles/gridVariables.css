@@ -3,17 +3,16 @@
 :root {
     --workflow-wrapper-min-height: 80px;
     --workflow-wrapper-padding-bottom: 15px;
-    --workflow-step-width: 225px;
-    --decision-step-width: 135px;
     --workflow-step-left-width: 150px;
     --workflow-step-right-width: 75px;
-    --decision-step-right-width: 60px;
     --box-border-width: 1px;
     --box-border-radius: 8px;
     --box-border: 1px solid var(--silver-five);
+    --box-width: 150px;
     --box-height: 55px;
     --box-padding: 10px;
     --box-line-height: 1.33;
+    --diamond-container-width: 50px;
     --diamond-width: 43px;
     --diamond-border-radius: 3px;
     --caret-width: 5px;

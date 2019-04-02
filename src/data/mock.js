@@ -3,6 +3,16 @@ import {
 } from "../types/workflow";
 
 // NOTE: Don't add to the children array if the id is an acestor of the current node
+export const data0 = {
+    firstStep: "1111-auth",
+    workflows: {
+        "1111-auth": { id: "1111-auth", name: "Authorize", type: WorkflowStepType.AUTHORIZE, children: ["3902"] },
+        "3902": { id: "3902", name: "Translation", type: WorkflowStepType.TRANSLATION, children: ["2910"] },
+        "2910": { id: "2910", name: "Edit", type: WorkflowStepType.POST_TRANSLATION, children: ["3bb4"] },
+        "3bb4": { id: "3bb4", name: "Review", type: WorkflowStepType.REVIEW, children: ["51fa"] },
+        "51fa": { id: "51fa", name: "Published", type: WorkflowStepType.PUBLISH, children: [] }
+    }
+}
 export const data1 = {
     firstStep: "1111-auth",
     workflows: {

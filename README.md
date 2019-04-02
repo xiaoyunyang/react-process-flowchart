@@ -1,12 +1,6 @@
 # css-grid-flowchart
 
-A flowchart based on CSS Grid built with React
-
-![](/resource/simpleWorkflow.png)
-
-CSS Grid
-
-![](/resource/simpleWorkflow-debug.png)
+> A process flowchart built with based on CSS Grid and React
 
 ## Data-driven Visualization
 
@@ -17,7 +11,7 @@ data = {
         "b1fe-auth": { id: "b1fe-auth", name: "Authorize", type: AUTHORIZE, children: ["b1fe"] },
         "b1fe": { id: "b1fe", name: "Decision", type: DECISION, children: ["3902", "e5d2"] },
         "3902": { id: "3902", name: "Human", type: TRANSLATION, children: [ "2910"] },
-        "e5d2": { id: "e5d2", name: "Machine", type: TRANSLATION, children: ["3bb4"] },
+        "e5d2": { id: "e5d2", name: "MachineMachine", type: TRANSLATION, children: ["3bb4"] },
         "2910": { id: "2910", name: "Edit", type: POST_TRANSLATION, children: ["3bb4"] },
         "3bb4": { id: "3bb4", name: "Review", type: REVIEW, children: ["51fa"] },
         "51fa": { id: "51fa", name: "Published", type: PUBLISH, children: [] }
@@ -27,7 +21,7 @@ data = {
 
 becomes
 
-![](/resource/simpleWorkflow-2d.png)
+![](/resource/2dworkflow-with-edit.gif)
 
 
 ### Run the Project

@@ -264,24 +264,42 @@
   margin-right: 5%;
 }
 .col1 {
-  background-color: #e9ab5880;
+  background-color: rgba(88, 88, 233, 0.5);
 }
 .col2 {
   background-color: rgba(233, 233, 88, 0.5);
 }
 .col3 {
-  background-color: rgba(233, 171, 233, 0.5);
+  background-color: rgba(88, 88, 233, 0.5);
 }
 .col4 {
-  background-color: rgba(233, 88, 88, 0.5);
+  background-color: rgba(233, 233, 88, 0.5);
 }
 .col5 {
-  background-color: rgba(88, 233, 88, 0.5);
+  background-color: rgba(88, 88, 233, 0.5);
 }
 .col6 {
-  background-color: rgba(88, 233, 233, 0.5);
+  background-color: rgba(233, 233, 88, 0.5);
 }
 .col7 {
+  background-color: rgba(88, 88, 233, 0.5);
+}
+.col8 {
+  background-color: rgba(233, 233, 88, 0.5);
+}
+.col9 {
+  background-color: rgba(88, 88, 233, 0.5);
+}
+.col10 {
+  background-color: rgba(233, 233, 88, 0.5);
+}
+.col11 {
+  background-color: rgba(88, 88, 233, 0.5);
+}
+.col12 {
+  background-color: rgba(88, 233, 233, 0.5);
+}
+.col13 {
   background-color: rgba(88, 88, 233, 0.5);
 }
 

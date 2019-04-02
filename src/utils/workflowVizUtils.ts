@@ -1,16 +1,7 @@
 // Types
 import { WorkflowStepType } from "../types/workflow";
+import { WorkflowStepNodeT, WorkflowVisDataT } from "../types/workflowVis";
 
-export interface NodeT {
-    id: string;
-    name: string;
-    type: WorkflowStepType;
-    children: string[];
-}
-export interface WorkflowVisDataT {
-    firstStep: string;
-    workflows: { [id: string]: NodeT };
-}
 // TODO: works for Not totally correct. Need to increase depth
 // of level based on branching
 export const createGrid = (workflowVisData: WorkflowVisDataT) => {
