@@ -22,9 +22,12 @@ const App = () => (
                 <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
             )
         }
-        <WorkflowViz data={data1} />
-        <WorkflowViz data={data12} />
-        <WorkflowViz data={data2} />
+        {
+            // <WorkflowViz data={data1} />
+            // <WorkflowViz data={data12} />
+            // <WorkflowViz data={data2} />
+        }
+
     </div>
 
 );

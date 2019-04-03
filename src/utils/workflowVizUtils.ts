@@ -2,66 +2,156 @@
 import { WorkflowVisDataT, WorkflowStepNodeT } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepType } from "../types/workflow";
 
+// Utils
+import { clone } from "ramda";
+
+interface OccurenceDict {
+    [id: string]: number;
+}
+
+interface ExistentialDict {
+    [id: string]: boolean;
+}
+
+const initializeMatrix = ({ cols, rows }: { cols: number; rows: number }) => {
+    const innerArray = Array(rows).fill("");
+    const matrix = Array(cols).fill(innerArray);
+    return matrix;
+}
+
+const addToColumn = (col: string[], newItem: string): string[] => {
+    // Immutable....but we may change that for efficiency
+    const colCpy = clone(col);
+    for (let i = 0; i < col.length; i += 1) {
+        if (col[i] === "") {
+            colCpy[i] = newItem;
+            break;
+        }
+    }
+    return colCpy;
+
+}
+
 export const generateWorkflowVisData = (
     workflowSteps: WorkflowStepT[], workflowUid: string
-): WorkflowVisDataT => {
+): { workflowVisData: WorkflowVisDataT; initMatrix: string[][] } => {
     const firstStepId = `${workflowUid}-auth`;
 
-    let workflows: { [id: string]: WorkflowStepNodeT } = {};
-    let authorizeChildren: string[] = [];
+    let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
+    let authorizeNextSteps: string[] = [];
 
-    workflowSteps.forEach((workflowStep) => {
+    let workflowStepOrderOccur: OccurenceDict = {};
+    for (let i = 0; i < workflowSteps.length; i += 1) {
+        const workflowStep = workflowSteps[i];
+
         const { workflowStepOrder, workflowStepUid,
             workflowStepName, workflowStepType, actions } = workflowStep;
+
+        workflowStepOrderOccur[String(workflowStepOrder)] = (
+            workflowStepOrderOccur[String(workflowStepOrder)] ? workflowStepOrderOccur[String(workflowStepOrder)] : 0
+        ) + 1;
+
         if (workflowStepOrder === 1) {
-            authorizeChildren = [workflowStepUid];
+            authorizeNextSteps = [workflowStepUid];
         }
-        const children = actions
+
+        const nextSteps = actions
             .filter(action => action.actionType !== "REJECT")
             .map(action => action.nextWorkflowStepUid);
 
-        workflows[workflowStepUid] = {
+        workflowStepNodes[workflowStepUid] = {
             id: workflowStepUid,
             name: workflowStepName,
             type: workflowStepType,
-            children
+            workflowStepOrder,
+            nextSteps
         };
-    });
+    }
 
-    workflows = {
-        ...workflows,
-        [firstStepId]: { id: firstStepId, name: "Authorize", type: WorkflowStepType.AUTHORIZE, children: authorizeChildren }
+    workflowStepNodes = {
+        ...workflowStepNodes,
+        [firstStepId]: {
+            id: firstStepId,
+            name: "Authorize",
+            type: WorkflowStepType.AUTHORIZE,
+            nextSteps: authorizeNextSteps,
+            workflowStepOrder: 0
+        }
     };
+
+    const workflowVisData = {
+        firstStep: firstStepId,
+        workflowStepNodes
+    };
+
+    const cols = Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2 + 1;
+    const rows = Math.max(...Object.values(workflowStepOrderOccur));
+    const initMatrix = initializeMatrix({ cols, rows });
 
     return {
-        firstStep: firstStepId,
-        workflows
-    };
+        workflowVisData,
+        initMatrix
+    }
 };
+
+
+export const populateMatrix = ({ workflowVisData, initMatrix }: {
+    workflowVisData: WorkflowVisDataT; initMatrix: string[][];
+}) => {
+    const matrix = clone(initMatrix);
+    const { firstStep, workflowStepNodes } = workflowVisData;
+
+    let toExplore = [firstStep];
+    const explored: ExistentialDict = {};
+
+    while (toExplore.length > 0) {
+        const [id, ...rest] = toExplore;
+        toExplore = rest;
+        const workflowStepNode = workflowStepNodes[id];
+        const { nextSteps, workflowStepOrder } = workflowStepNode;
+
+        // Place the workflow step id into the matrix
+        const col = matrix[workflowStepOrder * 2];
+        matrix[workflowStepOrder * 2] = addToColumn(col, id)
+
+
+        let nextStep = null;
+        for (let i = 0; i < nextSteps.length; i += 1) {
+            nextStep = nextSteps[i];
+            if (!explored[nextStep]) {
+                toExplore = toExplore.concat(nextStep);
+                explored[nextStep] = true;
+            }
+        }
+
+    }
+    return matrix;
+};
+
 
 
 // TODO: works for Not totally correct. Need to increase depth
 // of level based on branching
 export const createGrid = (workflowVisData: WorkflowVisDataT) => {
-    const { firstStep, workflows } = workflowVisData;
+    const { firstStep, workflowStepNodes } = workflowVisData;
     let grid = [[firstStep]];
     let toExplore = [firstStep];
     const explored: { [id: string]: boolean | undefined } = {};
     while (toExplore.length > 0) {
         const [id, ...rest] = toExplore;
         toExplore = rest;
-        const workflow = workflows[id];
-        const { children } = workflow;
+        const workflowStepNode = workflowStepNodes[id];
+        const { nextSteps } = workflowStepNode;
 
         grid = grid.concat([[]]);
 
-        let child = null;
-        for (let i = 0; i < children.length; i += 1) {
-            child = children[i];
-            if (!explored[child]) {
-                toExplore = toExplore.concat(child);
-                explored[child] = true;
-                grid[grid.length - 1] = grid[grid.length - 1].concat(child);
+        let nextStep = null;
+        for (let i = 0; i < nextSteps.length; i += 1) {
+            nextStep = nextSteps[i];
+            if (!explored[nextStep]) {
+                toExplore = toExplore.concat(nextStep);
+                explored[nextStep] = true;
+                grid[grid.length - 1] = grid[grid.length - 1].concat(nextStep);
             }
         }
 

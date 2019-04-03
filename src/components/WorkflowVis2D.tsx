@@ -11,68 +11,36 @@ import Column from "./Column";
 import { WorkflowVisDataT } from "../types/workflowVis";
 
 // Utils
-import { createGrid } from "../utils/workflowVizUtils";
+import { createGrid, populateMatrix } from "../utils/workflowVizUtils";
 
 const CSS_GRID_OFFSET = 1;
 
-const WorkflowsVis = ({ workflowVisData, editMode }: {
-    workflowVisData: WorkflowVisDataT; editMode: boolean;
+const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
+    workflowVisData: WorkflowVisDataT; matrix: string[][]; editMode: boolean;
 }) => {
-    const grid = createGrid(workflowVisData);
+    // const grid = createGrid(workflowVisData);
 
-    // Each element of grid is a col.
+    // purge all the empty strings from matrix
+    let grid = matrix.map(col => {
+        return col.filter(tile => tile !== "")
+    });
 
-    const grid0 = [
-        ["1111-auth"],
-        ["standard.arrowRight"],
-        ["3902"],
-        ["arrowRight"],
-        ["51fa"]
-    ];
-    const grid1 = [
-        ["1111-auth"],
-        ["standard.arrowRight"],
-        ["1111-decision"],
-        ["standard.arrowRight"],
-        ["3902"],
-        ["standard.arrowRight"],
-        ["51fa"]
-    ];
+    // grid = [
+    //     ["5890236e433b-auth", ""],
+    //     ["", ""],
+    //     ["ba322565b1bf", ""],
+    //     ["", ""],
+    //     ["09e6110fda58", "b2b5c4c7cfd7"],
+    //     ["", ""],
+    //     ["a3135bdf3aa3", ""]
+    // ];
 
-    const grid2 = [
-        ["1111-auth"],
-        ["standard.arrowRight"],
-        ["3902"],
-        ["standard.arrowRight"],
-        ["2910"],
-        ["standard.arrowRight"],
-        ["3bb4"],
-        ["standard.arrowRight"],
-        ["51fa"]
-    ];
-    const grid3 = [
-        ["1111-auth"],
-        ["standard.arrowRight"],
-        ["1111-decision", "downRightDiamond"],
-        ["standard.arrowRight", "standard.arrowRight"],
-        ["3902", "e5d2"],
-        ["standard.arrowRight", "standard.lineHoriz"],
-        ["2910", "rightUpArrow"],
-        ["standard.arrowRight"],
-        ["3bb4"],
-        ["standard.arrowRight"],
-        ["51fa"]
-    ];
-
-    // const grid = grid3;
-    console.log("grid", grid);
-
-    const { workflows } = workflowVisData;
+    const { workflowStepNodes } = workflowVisData;
     let cols = grid.map(colNodes =>
-        colNodes.map(node => workflows[node] ? workflows[node] : connectors[node])
+        colNodes.map(node => workflowStepNodes[node] ? workflowStepNodes[node] : connectors[node])
     );
 
-    console.log(cols);
+    // console.log(cols);
 
     return (
         <div className="wrapper">

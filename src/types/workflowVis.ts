@@ -4,11 +4,13 @@ export interface WorkflowStepNodeT {
     id: string;
     name: string;
     type: WorkflowStepType;
-    children: string[];
+    nextSteps: string[];
+    workflowStepOrder: number;
 }
+
 export interface WorkflowVisDataT {
     firstStep: string;
-    workflows: { [id: string]: WorkflowStepNodeT };
+    workflowStepNodes: { [id: string]: WorkflowStepNodeT };
 }
 
 export enum ConnectorType {

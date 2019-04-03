@@ -11,7 +11,7 @@ import WorkflowVis from "./WorkflowVis2D";
 import { WorkflowStepT } from "../types/workflow";
 
 // Utils
-import { generateWorkflowVisData } from "../utils/workflowVizUtils";
+import { generateWorkflowVisData, populateMatrix } from "../utils/workflowVizUtils";
 
 
 interface PropsT {
@@ -24,9 +24,18 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT> {
 
     render() {
         const { workflowSteps, workflowUid, editMode } = this.props;
-        const workflowVisData = generateWorkflowVisData(workflowSteps, workflowUid);
+        const { workflowVisData, initMatrix } = generateWorkflowVisData(workflowSteps, workflowUid);
+        console.log("workflowVisData", workflowVisData)
+        console.log("initMatrix", initMatrix)
 
-        return <WorkflowVis workflowVisData={workflowVisData} editMode={editMode} />;
+        const matrix = populateMatrix({ workflowVisData, initMatrix });
+        console.log("matrix", matrix);
+
+        // pass matrix cols (array length) and height (inner array length) to workflowVis
+        // matrix cols is based on the largest workflowStepOrder seen
+        // matrix rows is based on the greatest number of occurrences of a workflowStepOrder
+
+        return <WorkflowVis matrix={matrix} workflowVisData={workflowVisData} editMode={editMode} />;
     }
 
 }
