@@ -9,7 +9,7 @@ type ActionType =
     | "POST_MACHINE_REVISION"
     | "DECISION";
 
-interface WorkflowAction {
+interface WorkflowActionT {
     primary: boolean;
     actionType: ActionType;
     nextWorkflowStepUid: string;
@@ -28,34 +28,10 @@ export enum WorkflowStepType {
     ANALYSIS = "ANALYSIS"
 }
 
-export interface WorkflowStep {
+export interface WorkflowStepT {
     workflowStepUid: string;
     workflowStepName: string;
     workflowStepType: WorkflowStepType;
     workflowStepOrder: number;
-    matchScore?: number;
-    autoPrePublishType: AutoPrePublishType;
-    claimingEnabled: boolean;
-    assignmentEnabled: boolean;
-    submitOnSaveEnabled: boolean;
-    offlineTranslationEnabled: boolean;
-    canEditPublishStepEnabled: boolean;
-    configurationUid?: string;
-    actions: WorkflowAction[];
-}
-
-export interface WorkflowStep {
-    workflowStepUid: string;
-    workflowStepName: string;
-    workflowStepType: WorkflowStepType;
-    workflowStepOrder: number;
-    matchScore?: number;
-    autoPrePublishType: AutoPrePublishType;
-    claimingEnabled: boolean;
-    assignmentEnabled: boolean;
-    submitOnSaveEnabled: boolean;
-    offlineTranslationEnabled: boolean;
-    canEditPublishStepEnabled: boolean;
-    configurationUid?: string;
-    actions: WorkflowAction[];
+    actions: WorkflowActionT[];
 }

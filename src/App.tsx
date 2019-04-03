@@ -1,47 +1,32 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+
+// Styles
 import './App.css';
+
+// Data
 import { data1, data12, data2 } from './data/mock';
-import WorkflowsViz from "./components/workflowViz";
-import WorkflowsVis2D from "./components/WorkflowVis2D";
+import workflowsDataMock from "./data/workflowsData";
 
-interface State {
-    editMode: boolean;
-}
-type PropsT = any;
+// Components
+import WorkflowViz from "./components/workflowViz";
+import WorkflowContainer from "./components/WorkflowContainer";
 
-class App extends React.PureComponent<PropsT, State> {
-    constructor(props: PropsT) {
-        super(props);
-        this.state = {
-            editMode: false
+const workflowsData: any = workflowsDataMock;
+const workflowUids = Object.keys(workflowsData);
+
+const App = () => (
+    <div id="flowchartContainer">
+        {
+            workflowUids.map(workflowUid =>
+                <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
+            )
         }
-        this.boundToggleEditMode = this.toggleEditMode.bind(this);
-    }
+        <WorkflowViz data={data1} />
+        <WorkflowViz data={data12} />
+        <WorkflowViz data={data2} />
+    </div>
 
-    toggleEditMode() {
-        this.setState({ editMode: !this.state.editMode });
-    }
-
-    boundToggleEditMode: () => void;
-
-    render() {
-        const { editMode } = this.state;
-        const toggleEditModeLabel = editMode ? "Done" : "Edit";
-        const toggleEditClassName = editMode ? "toggleEditHighlight" : "toggleEdit";
-        return (
-            <div id="flowchartContainer">
-                <button className={toggleEditClassName} onClick={this.boundToggleEditMode}>
-                    {toggleEditModeLabel}
-                </button>
-                <WorkflowsVis2D workflowVisData={data1} editMode={editMode} />
-                <WorkflowsViz data={data1} />
-                <WorkflowsViz data={data12} />
-                <WorkflowsViz data={data2} />
-            </div>
-
-        );
-    }
-}
+);
 
 export default App;

@@ -10,12 +10,15 @@ import Column from "./Column";
 
 import { WorkflowVisDataT } from "../types/workflowVis";
 
+// Utils
+import { createGrid } from "../utils/workflowVizUtils";
+
 const CSS_GRID_OFFSET = 1;
 
 const WorkflowsVis = ({ workflowVisData, editMode }: {
     workflowVisData: WorkflowVisDataT; editMode: boolean;
 }) => {
-    // const grid = createGrid(data);
+    const grid = createGrid(workflowVisData);
 
     // Each element of grid is a col.
 
@@ -61,7 +64,7 @@ const WorkflowsVis = ({ workflowVisData, editMode }: {
         ["51fa"]
     ];
 
-    const grid = grid3;
+    // const grid = grid3;
     console.log("grid", grid);
 
     const { workflows } = workflowVisData;
