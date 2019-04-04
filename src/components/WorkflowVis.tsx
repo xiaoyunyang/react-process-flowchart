@@ -10,23 +10,13 @@ import Column from "./Column";
 
 import { WorkflowVisDataT } from "../types/workflowVis";
 
-// Utils
-import { createGrid, populateMatrix } from "../utils/workflowVisUtils";
-
 const CSS_GRID_OFFSET = 1;
 
 const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
     workflowVisData: WorkflowVisDataT; matrix: string[][]; editMode: boolean;
 }) => {
-    // const grid = createGrid(workflowVisData);
-
-    // purge all the empty strings from matrix
-    let grid = matrix.map(col => {
-        return col.filter(tile => tile !== "")
-    });
-
     const { workflowStepNodes } = workflowVisData;
-    let cols = grid.map(colNodes =>
+    let cols = matrix.map(colNodes =>
         colNodes.map(node => workflowStepNodes[node] ? workflowStepNodes[node] : connectors[node])
     );
 

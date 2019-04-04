@@ -13,9 +13,21 @@ interface ExistentialDict {
     [id: string]: boolean;
 }
 
-const initializeMatrix = ({ cols, rows }: { cols: number; rows: number }) => {
-    const innerArray = Array(rows).fill("");
-    const matrix = Array(cols).fill(innerArray);
+const MATRIX_PLACEHOLDER = "empty";
+
+const isPlaceholder = (id: string): boolean => (id.split(".")[1] === MATRIX_PLACEHOLDER);
+
+const initializeMatrix = ({ cols, rows, colTypes }: { cols: number; rows: number; colTypes: string[] }) => {
+    // TODO: the placeholder has to be pre-pended with "box.", "diamond.", or "standard."
+    const innerArray: {
+        [id: string]: string[];
+    } = {
+        "box": Array(rows).fill(`box.${MATRIX_PLACEHOLDER}`),
+        "diamond": Array(rows).fill(`diamond.${MATRIX_PLACEHOLDER}`),
+        "standard": Array(rows).fill(`standard.${MATRIX_PLACEHOLDER}`),
+    };
+
+    let matrix = Array(cols).fill([]).map((col, i) => innerArray[colTypes[i]]);
     return matrix;
 }
 
@@ -23,7 +35,7 @@ const addToColumn = (col: string[], newItem: string): string[] => {
     // Immutable....but we may change that for efficiency
     const colCpy = clone(col);
     for (let i = 0; i < col.length; i += 1) {
-        if (col[i] === "") {
+        if (isPlaceholder(col[i])) {
             colCpy[i] = newItem;
             break;
         }
@@ -39,6 +51,7 @@ export const generateWorkflowVisData = (
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
     let authorizeNextSteps: string[] = [];
+    let decisionStepCols: number[] = [];
 
     let workflowStepOrderOccur: OccurenceDict = {};
     for (let i = 0; i < workflowSteps.length; i += 1) {
@@ -50,6 +63,10 @@ export const generateWorkflowVisData = (
         workflowStepOrderOccur[String(workflowStepOrder)] = (
             workflowStepOrderOccur[String(workflowStepOrder)] ? workflowStepOrderOccur[String(workflowStepOrder)] : 0
         ) + 1;
+
+        if (workflowStepType === WorkflowStepType.DECISION) {
+            decisionStepCols = decisionStepCols.concat(workflowStepOrder * 2);
+        }
 
         if (workflowStepOrder === 1) {
             authorizeNextSteps = [workflowStepUid];
@@ -86,7 +103,12 @@ export const generateWorkflowVisData = (
 
     const cols = Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2 + 1;
     const rows = Math.max(...Object.values(workflowStepOrderOccur));
-    const initMatrix = initializeMatrix({ cols, rows });
+    const colTypes = Array(cols).fill("standard").map((colType: string, i) => {
+        if (i % 2 === 1) return colType;
+        return decisionStepCols.includes(i) ? "diamond" : "box"
+    });
+
+    const initMatrix = initializeMatrix({ cols, rows, colTypes });
 
     return {
         workflowVisData,
