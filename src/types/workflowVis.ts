@@ -20,6 +20,7 @@ export enum ConnectorType {
 }
 export interface ConnectorT {
     id: string;
+    containerName: string;
     type: ConnectorType;
     name: string;
 }

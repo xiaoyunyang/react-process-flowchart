@@ -13,7 +13,7 @@ import WorkflowViz from "./components/workflowViz";
 import WorkflowContainer from "./components/WorkflowContainer";
 
 const workflowsData: any = workflowsDataMock;
-const workflowUids = Object.keys(workflowsData);
+const workflowUids = Object.keys(workflowsData).slice(0, 1);
 
 const App = () => (
     <div id="flowchartContainer">

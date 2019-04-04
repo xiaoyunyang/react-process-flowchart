@@ -3,8 +3,7 @@
 :root {
     --workflow-wrapper-min-height: 80px;
     --workflow-wrapper-padding-bottom: 15px;
-    --workflow-step-left-width: 150px;
-    --workflow-step-right-width: 75px;
+    --connector-standard-width: 75px;
     --box-border-width: 1px;
     --box-border-radius: 8px;
     --box-border: 1px solid var(--silver-five);
@@ -13,7 +12,10 @@
     --box-padding: 10px;
     --box-line-height: 1.33;
     --diamond-container-width: 50px;
+    --diamond-container-height: 75px;
     --diamond-width: 43px;
     --diamond-border-radius: 3px;
     --caret-width: 5px;
+    --connector-container-margin-top: 13px;
+    --box-connector-container-height: 60px;
 }

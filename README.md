@@ -1,6 +1,10 @@
 # css-grid-flowchart
 
-> A process flowchart built with based on CSS Grid and React
+> A lean process flowchart generator built with based on CSS Grid and React
+
+![](/resource/04-04-demo-permutations.gif)
+
+![](/resource/04-04-demo-plus-sign.gif)
 
 ## Data-driven Visualization
 
@@ -21,7 +25,7 @@ data = {
 
 becomes
 
-![](/resource/2dworkflow-with-edit.gif)
+![](/resource/example-workflow.png)
 
 
 ### Run the Project

@@ -30,12 +30,12 @@
 }
   
 .box {
-  border: 1px solid #d8d8d8;
+  /* border: 1px solid #d8d8d8;
   border-radius: 8px;
   height: 55px;
   padding: 10px;
   align-self: auto;
-  line-height: 1.33;
+  line-height: 1.33; */
 }
   
 .two-row-left-diamond {
@@ -48,11 +48,11 @@
 }
   
 .diamond {
-  width: 43px;
+  /* width: 43px;
   height: 43px;
   border: 1px solid #d8d8d8;
   border-radius: 3px;
-  transform: rotate(45deg);
+  transform: rotate(45deg); */
 }
 
 .two-row-right {
@@ -64,9 +64,9 @@
 }
   
 .col1 {
-  grid-column-start: 1;
+  /* grid-column-start: 1;
   grid-column-end: 2;
-  grid-row: 1;
+  grid-row: 1; */
 }
   
 .col2 {
@@ -126,9 +126,9 @@
 }
 
 .arrow {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: row; */
 }
 
 .flex-container {
@@ -138,11 +138,11 @@
 }
 
 .line {
-  align-self: auto;
+  /* align-self: auto;
   width: 66px;
   height: 35px;
   border-bottom: solid 1px #747b7c;
-  position: relative;
+  position: relative; */
 }
 
 .arrow-head-right {
@@ -223,17 +223,17 @@
 }
 
 .box p {
-  margin-block-start: 0px;
+  /* margin-block-start: 0px;
   margin-block-end: 0px;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   display: block;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: auto; */
 }
 .box span {
-  margin-left: 0.6em;
-  margin-bottom: 0.3em;
+  /* margin-left: 0.6em;
+  margin-bottom: 0.3em; */
 }
 
 .icon-container {

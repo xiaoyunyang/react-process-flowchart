@@ -94,7 +94,7 @@ export const generateWorkflowVisData = (
     }
 };
 
-
+// TODO: We might not need BFS to place the workflowStep into the matrix
 export const populateMatrix = ({ workflowVisData, initMatrix }: {
     workflowVisData: WorkflowVisDataT; initMatrix: string[][];
 }) => {
