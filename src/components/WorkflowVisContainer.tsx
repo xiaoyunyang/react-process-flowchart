@@ -2,16 +2,16 @@
 import React from 'react';
 
 // Styles
-import './styles/workflowVis2D.css';
+import './styles/workflowVis.css';
 
 // Components
-import WorkflowVis from "./WorkflowVis2D";
+import WorkflowVis from "./WorkflowVis";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
 
 // Utils
-import { generateWorkflowVisData, populateMatrix } from "../utils/workflowVizUtils";
+import { generateWorkflowVisData, populateMatrix } from "../utils/workflowVisUtils";
 
 
 interface PropsT {
@@ -25,10 +25,12 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT> {
     render() {
         const { workflowSteps, workflowUid, editMode } = this.props;
         const { workflowVisData, initMatrix } = generateWorkflowVisData(workflowSteps, workflowUid);
-        console.log("workflowVisData", workflowVisData)
+
+        console.log("workflowVisData", workflowVisData, null, 2);
+        // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
         console.log("initMatrix", initMatrix)
 
-        const matrix = populateMatrix({ workflowVisData, initMatrix });
+        let matrix = populateMatrix({ workflowVisData, initMatrix });
         console.log("matrix", matrix);
 
         // pass matrix cols (array length) and height (inner array length) to workflowVis

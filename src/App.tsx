@@ -5,15 +5,16 @@ import logo from './logo.svg';
 import './App.css';
 
 // Data
-import { data1, data12, data2 } from './data/mock';
 import workflowsDataMock from "./data/workflowsData";
+import { workflowVisData, matrices } from "./components/test/workflowVisMock";
 
 // Components
-import WorkflowViz from "./components/workflowViz";
 import WorkflowContainer from "./components/WorkflowContainer";
+import WorkflowVis from "./components/WorkflowVis";
+
 
 const workflowsData: any = workflowsDataMock;
-const workflowUids = Object.keys(workflowsData).slice(0, 1);
+const workflowUids = Object.keys(workflowsData);
 
 const App = () => (
     <div id="flowchartContainer">
@@ -22,14 +23,13 @@ const App = () => (
                 <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
             )
         }
+        <h1>Vis Demo</h1>
         {
-            // <WorkflowViz data={data1} />
-            // <WorkflowViz data={data12} />
-            // <WorkflowViz data={data2} />
+            matrices.map((matrix, i) =>
+                <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
+            )
         }
-
     </div>
-
 );
 
 export default App;

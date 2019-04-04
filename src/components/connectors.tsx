@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Styles
-import './styles/workflowVis2D.css';
+import './styles/workflowVis.css';
 
 // Types
 import { ConnectorT, ConnectorType } from "../types/workflowVis";
