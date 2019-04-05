@@ -68,7 +68,7 @@
 .connectorContainerDiamond .lineLong {
   width: 58px;
 }
-  
+
 .col1 {
   grid-column: 1;
   grid-row: 1;
@@ -194,7 +194,7 @@
   align-self: auto;
   border-bottom: solid 1px #747b7c;
   position: relative;
-  height: 56%;
+  height: 57%;
 }
 
 .lineLong {
@@ -245,12 +245,12 @@
 
 .connectorContainerBox .rightUpArrow {
   width: calc(var(--box-width)/1.8);
-  margin-top: 17px;
+  margin-top: 18px;
 }
 
 .rightUpArrow .caret {
   margin-left: -0.36em;
-  margin-top: -8px;
+  margin-top: -9px;
 }
 
 .downRight {
@@ -356,7 +356,7 @@
 
 /* DEBUGGING CODE BEGIN */
 /* Code for debugging only. Remove for production */
-#flowchartContainer {
+.flowchartContainer {
   padding-top: 100px;
   max-width: 90%;
   display: block;
@@ -364,7 +364,7 @@
   margin-right: auto;
 }
 
-#flowchartContainer button {
+.flowchartContainer button {
   font-size: 18px;
   border: var(--box-border);
   margin-left: 50%;
@@ -396,43 +396,43 @@
   margin-left: 5%;
   margin-right: 5%;
 }
-.col1 {
+.debug .col1 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col2 {
+.debug .col2 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col3 {
+.debug .col3 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col4 {
+.debug .col4 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col5 {
+.debug .col5 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col6 {
+.debug .col6 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col7 {
+.debug .col7 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col8 {
+.debug .col8 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col9 {
+.debug .col9 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col10 {
+.debug .col10 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col11 {
+.debug .col11 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.col12 {
+.debug .col12 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.col13 {
+.debug .col13 {
   background-color: rgba(88, 88, 233, 0.5);
 }
 

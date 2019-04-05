@@ -134,7 +134,13 @@ export const populateMatrix = ({ workflowVisData, initMatrix }: {
 
         // Place the workflow step id into the matrix
         const col = matrix[workflowStepOrder * 2];
-        matrix[workflowStepOrder * 2] = addToColumn(col, id)
+        matrix[workflowStepOrder * 2] = addToColumn(col, id);
+
+        // TODO: place the connector ids into the matrix
+        if (workflowStepOrder >= 1) {
+            const prevCol = matrix[workflowStepOrder * 2 - 1];
+            matrix[workflowStepOrder * 2 - 1] = addToColumn(prevCol, "standard.arrowRight")
+        }
 
 
         let nextStep = null;

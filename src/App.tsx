@@ -17,19 +17,23 @@ const workflowsData: any = workflowsDataMock;
 const workflowUids = Object.keys(workflowsData);
 
 const App = () => (
-    <div id="flowchartContainer">
-        {
-            workflowUids.map(workflowUid =>
-                <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
-            )
-        }
-        <h1>Vis Demo</h1>
-        {
-            matrices.map((matrix, i) =>
-                <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
-            )
-        }
-    </div>
+    <div>
+        <div className="flowchartContainer debug">
+            {
+                workflowUids.map(workflowUid =>
+                    <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
+                )
+            }
+        </div>
+        <div className="flowchartContainer" >
+            <h1>Vis Demo</h1>
+            {
+                matrices.map((matrix, i) =>
+                    <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
+                )
+            }
+        </div >
+    </div >
 );
 
 export default App;
