@@ -1,5 +1,6 @@
 module.exports = {
     extends: [
+        // "airbnb",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
     ],
@@ -16,13 +17,17 @@ module.exports = {
     rules: {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-member-accessibility": "off",
-        "import/extensions": [1, "never", { ts: "never" }]
+        "import/extensions": [1, "never", { ts: "never" }],
+        // "react/jsx-indent": [true, 6],
+        // "@typescript-eslint/indent": [false, "spaces", 8],
+        "react/jsx-filename-extension": false
     },
     overrides: [
         {
             files: ["**/*.ts", "**/*.tsx"],
             rules: {
-                "no-unused-vars": ["off"]
+                "no-unused-vars": ["off"],
+                "semi": 1
             }
         }
     ],

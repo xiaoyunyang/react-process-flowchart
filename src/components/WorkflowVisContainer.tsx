@@ -28,7 +28,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT> {
 
         console.log("workflowVisData", workflowVisData, null, 2);
         // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
-        console.log("initMatrix", initMatrix)
+        console.log("initMatrix", initMatrix);
 
         let matrix = populateMatrix({ workflowVisData, initMatrix });
         console.log("matrix", matrix);

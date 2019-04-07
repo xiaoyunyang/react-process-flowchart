@@ -20,8 +20,6 @@ const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
         colNodes.map(node => workflowStepNodes[node] ? workflowStepNodes[node] : connectors[node])
     );
 
-    console.log("====> cols", cols);
-
     return (
         <div className="wrapper">
             {
@@ -33,7 +31,7 @@ const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
             }
         </div>
 
-    )
-}
+    );
+};
 
 export default WorkflowsVis;

@@ -16,7 +16,7 @@ export const ArrowRight = () => (
 export const ArrowRightEditable = () => (
     <div className="arrowRight flexContainer">
         <div className="line lineShort" />
-        <span className="circle" >
+        <span className="circle">
             <i className="fas fa-plus" />
         </span>
         <div className="line lineShort" />
@@ -29,7 +29,7 @@ export const LineHoriz = () => <div className="line lineLong" />;
 export const LineHorizEditable = () => (
     <div className="lineHoriz flexContainer">
         <div className="line lineShort" />
-        <span className="circle" >
+        <span className="circle">
             <i className="fas fa-plus" />
         </span>
         <div className="line lineShort" />
@@ -159,4 +159,4 @@ export const Connector = ({ id }: { id: string }) => {
             {connectorComp[name]}
         </div>
     );
-}
+};

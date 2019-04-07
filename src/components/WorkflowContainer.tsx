@@ -19,7 +19,7 @@ const workflowNameLUT: { [id: string]: string } = {
     "c26dfe7f5a1a": "B-E",
     "28fb8c360358": "B-F",
     "670086456c82": "C-D",
-}
+};
 
 const workflowsData: any = workflowsDataMock;
 
@@ -37,7 +37,7 @@ export default class WorkflowContainer extends React.PureComponent<PropsT, State
         super(props);
         this.state = {
             editMode: false
-        }
+        };
         this.boundToggleEditMode = this.toggleEditMode.bind(this);
     }
 
@@ -60,7 +60,7 @@ export default class WorkflowContainer extends React.PureComponent<PropsT, State
             <div>
                 <div className="flexContainer">
                     <h1 style={{ maxWidth: 200 }}>{workflowName}</h1>
-                    <button className={toggleEditClassName} onClick={this.boundToggleEditMode}>
+                    <button type="button" className={toggleEditClassName} onClick={this.boundToggleEditMode}>
                         {toggleEditModeLabel}
                     </button>
                 </div>
@@ -71,6 +71,6 @@ export default class WorkflowContainer extends React.PureComponent<PropsT, State
                     editMode={editMode}
                 />
             </div>
-        )
+        );
     }
 }

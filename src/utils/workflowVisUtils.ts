@@ -1,9 +1,11 @@
 // Types
+import { clone } from "ramda";
 import { WorkflowVisDataT, WorkflowStepNodeT } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepType } from "../types/workflow";
+import { connectors } from "../components/connectors";
+import { encode } from "punycode";
 
 // Utils
-import { clone } from "ramda";
 
 interface OccurenceDict {
     [id: string]: number;
@@ -11,6 +13,14 @@ interface OccurenceDict {
 
 interface ExistentialDict {
     [id: string]: boolean;
+}
+
+interface EndomorphDict {
+    [id: string]: string;
+}
+
+interface PolymorphDict {
+    [id: string]: string[];
 }
 
 const MATRIX_PLACEHOLDER = "empty";
@@ -29,20 +39,7 @@ const initializeMatrix = ({ cols, rows, colTypes }: { cols: number; rows: number
 
     let matrix = Array(cols).fill([]).map((col, i) => innerArray[colTypes[i]]);
     return matrix;
-}
-
-const addToColumn = (col: string[], newItem: string): string[] => {
-    // Immutable....but we may change that for efficiency
-    const colCpy = clone(col);
-    for (let i = 0; i < col.length; i += 1) {
-        if (isPlaceholder(col[i])) {
-            colCpy[i] = newItem;
-            break;
-        }
-    }
-    return colCpy;
-
-}
+};
 
 export const generateWorkflowVisData = (
     workflowSteps: WorkflowStepT[], workflowUid: string
@@ -105,7 +102,7 @@ export const generateWorkflowVisData = (
     const rows = Math.max(...Object.values(workflowStepOrderOccur));
     const colTypes = Array(cols).fill("standard").map((colType: string, i) => {
         if (i % 2 === 1) return colType;
-        return decisionStepCols.includes(i) ? "diamond" : "box"
+        return decisionStepCols.includes(i) ? "diamond" : "box";
     });
 
     const initMatrix = initializeMatrix({ cols, rows, colTypes });
@@ -113,18 +110,168 @@ export const generateWorkflowVisData = (
     return {
         workflowVisData,
         initMatrix
+    };
+};
+
+const addToColumn = (col: string[], newItem: string): string[] => {
+    // Immutable....but we may change that for efficiency
+    const colCpy = clone(col);
+    for (let i = 0; i < col.length; i += 1) {
+        if (isPlaceholder(col[i])) {
+            colCpy[i] = newItem;
+            break;
+        }
     }
+    return colCpy;
+
+};
+
+const addWorkflowStepToColumn = ({ col, newItem }: {
+    col: string[]; colNum: number; newItem: string;
+}): {
+    updatedCol: string[]; rowNum: number;
+} => {
+    // Add to column
+    // Immutable....but we may change that for efficiency
+    const updatedCol = clone(col);
+    let rowNum = 0;
+    for (rowNum = 0; rowNum < col.length; rowNum += 1) {
+        if (isPlaceholder(col[rowNum])) {
+            updatedCol[rowNum] = newItem;
+            break;
+        }
+    }
+    return {
+        updatedCol,
+        rowNum,
+    };
+};
+interface MatrixCoord {
+    col: number;
+    row: number;
+}
+interface ConnectorsToPlace {
+    row: number;
+    col: number;
+    connectorId: string;
+}
+
+const encodeMatrixCoord = ({ col, row }: MatrixCoord): string => `${col},${row}`;
+
+const decodeMatrixCoord = (colRow: string): MatrixCoord => {
+    const [col, row] = colRow.split(",").map(s => +s);
+    return { col, row };
+};
+
+const lineHorizes = ({ startCol, endCol, row }: {
+    startCol: number; endCol: number; row: number;
+}): ConnectorsToPlace[] => {
+    let res = [];
+    for (let col = startCol; col < endCol; col += 1) {
+        const newEntry = { col, row, connectorId: "lineHoriz" };
+        res.push(newEntry);
+    }
+
+    return res;
+};
+
+const createConnectorsBetweenNodes = ({ fromCoord, toCoord }: {
+    fromCoord: MatrixCoord;
+    toCoord: MatrixCoord;
+}): ConnectorsToPlace[] => {
+    const { col: fromCol, row: fromRow } = fromCoord;
+    const { col: toCol, row: toRow } = toCoord;
+
+    // Case 1: fromRow = toRow 
+    // should be lineHoriz, ..., arrowRight
+    // row should be fromRow.
+    // fill connectors at: fromCol+1 until toCol-1
+    if (fromRow === toRow) {
+        const startCol = fromCol + 1;
+        const endCol = toCol - 1;
+        const row = fromRow;
+
+        let res = lineHorizes({ startCol, endCol, row });
+
+        const lastEntry = { col: endCol, row, connectorId: "arrowRight" };
+        res.push(lastEntry);
+        return res;
+    }
+
+
+    // Case 2: fromRow < toRow
+    // should be downRight, lineHoriz, ..., arrowRight
+    // row should be toRow.
+    // fill connectors at: fromCol until toCol-1
+    if (fromRow < toRow) {
+        const startCol = fromCol;
+        const endCol = toCol - 1;
+        const row = toRow;
+        const firstEntry = { col: startCol, row, connectorId: "downRight" };
+        let res = [firstEntry];
+        res = res.concat(lineHorizes({ startCol: startCol + 1, endCol, row }));
+        const lastEntry = { col: endCol, row, connectorId: "arrowRight" };
+        res.push(lastEntry);
+        return res;
+    }
+
+    // Case 3: fromRow > toRow
+    // should be lineHoriz, ..., rightUpArrow
+    // row should be fromRow.
+    // fill connectors at: fromCol+1 until toCol
+    const startCol = fromCol + 1;
+    const endCol = toCol;
+    const row = fromRow;
+    let res = lineHorizes({ startCol, endCol, row });
+    const lastEntry = { col: endCol, row, connectorId: "rightUpArrow" };
+    res.push(lastEntry);
+
+    return res;
+};
+
+/** createCoordPairs
+ * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
+ *
+*/
+const createCoordPairs = ({ nodeCoord, parentCoords }: {
+    nodeCoord: EndomorphDict;
+    parentCoords: PolymorphDict;
+}): { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] => {
+    const nodeIds = Object.keys(parentCoords);
+    let res: { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] = [];
+    for (let i = 0; i < nodeIds.length; i += 1) {
+        const toCoord = decodeMatrixCoord(nodeCoord[nodeIds[i]]);
+        const coords = parentCoords[nodeIds[i]].map(colRow => ({
+            toCoord,
+            fromCoord: decodeMatrixCoord(colRow)
+        }));
+        res = res.concat(coords);
+    }
+
+    return res;
 };
 
 // TODO: We might not need BFS to place the workflowStep into the matrix
 export const populateMatrix = ({ workflowVisData, initMatrix }: {
     workflowVisData: WorkflowVisDataT; initMatrix: string[][];
 }) => {
+    console.log("Populate Matrix...");
+
     const matrix = clone(initMatrix);
+
+    // Step 1 - Traverse graph (BFS) and generate parentCoords and nodeCoord
+    // together, these hash maps tell us how tiles in the matrix are connected
+
     const { firstStep, workflowStepNodes } = workflowVisData;
 
     let toExplore = [firstStep];
     const explored: ExistentialDict = {};
+
+    // id -> (colNum,rowNum)
+    const nodeCoord: EndomorphDict = {};
+
+    // connectedNodes is a mapping from (colNum,rowNum) of a node to (colNum, rowNum)[] to its children nodes
+    const parentCoords: PolymorphDict = {};
 
     while (toExplore.length > 0) {
         const [id, ...rest] = toExplore;
@@ -133,28 +280,60 @@ export const populateMatrix = ({ workflowVisData, initMatrix }: {
         const { nextSteps, workflowStepOrder } = workflowStepNode;
 
         // Place the workflow step id into the matrix
-        const col = matrix[workflowStepOrder * 2];
-        matrix[workflowStepOrder * 2] = addToColumn(col, id);
+        const colNum = workflowStepOrder * 2;
+        const col = matrix[colNum];
 
-        // TODO: place the connector ids into the matrix
-        if (workflowStepOrder >= 1) {
-            const prevCol = matrix[workflowStepOrder * 2 - 1];
-            matrix[workflowStepOrder * 2 - 1] = addToColumn(prevCol, "standard.arrowRight")
-        }
+        // TODO: We need to account for the coord of the parent node when placing a new
+        // node into the matrix
+        const { updatedCol, rowNum } = addWorkflowStepToColumn({ col, colNum, newItem: id });
+        matrix[workflowStepOrder * 2] = updatedCol;
+
+        nodeCoord[id] = encodeMatrixCoord({ col: colNum, row: rowNum });
 
 
-        let nextStep = null;
+        let nextStepId = null;
         for (let i = 0; i < nextSteps.length; i += 1) {
-            nextStep = nextSteps[i];
-            if (!explored[nextStep]) {
-                toExplore = toExplore.concat(nextStep);
-                explored[nextStep] = true;
+            nextStepId = nextSteps[i];
+
+            // TODO: update the parentCoord here using nodeCoord.
+            // We are guaranteed that nextStep's parent's coord is in nodeCoord
+            const parentCoordsEntry = parentCoords[nextStepId];
+            parentCoords[nextStepId] = (parentCoordsEntry ? parentCoordsEntry : []).concat([nodeCoord[id]]);
+
+            if (!explored[nextStepId]) {
+                toExplore = toExplore.concat(nextStepId);
+                explored[nextStepId] = true;
             }
         }
-
     }
+
+    // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
+    console.log("--nodeCoord", nodeCoord);
+    console.log("--parentCoords", parentCoords);
+    // get { fromCoord, toCoord }[] from nodeCoord and parentCoords
+    Object.keys(parentCoords);
+    const coordPairs = createCoordPairs({ nodeCoord, parentCoords });
+    const connectorsToPlace = coordPairs
+        .map(coordPair => createConnectorsBetweenNodes(coordPair))
+        .flat();
+
+    console.log("connectorsToPlace", connectorsToPlace);
+
+    // place connectors into the matrix
+    for (let i = 0; i < connectorsToPlace.length; i += 1) {
+        const { col: colNum, row: rowNum, connectorId } = connectorsToPlace[i];
+
+        const columnType = matrix[colNum][rowNum].split(".")[0];
+        // TODO: create a helper function to replace a tile in a matrix
+        const newCol = clone(matrix[colNum]);
+        newCol[rowNum] = `${columnType}.${connectorId}`;
+        matrix[colNum] = newCol;
+    }
+
     return matrix;
 };
+
+
 
 
 

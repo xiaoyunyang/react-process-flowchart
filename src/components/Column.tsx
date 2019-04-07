@@ -41,6 +41,7 @@ export default class Column extends React.PureComponent<PropsT> {
     render() {
         const { nodes, editMode, colNum } = this.props;
         return nodes.map((node: GenericNodeT, i: number) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div key={`${node.id}-${colNum}-${i}`}>
                 {this.renderNode({ node, editMode })}
             </div>

@@ -14,7 +14,11 @@ import WorkflowVis from "./components/WorkflowVis";
 
 
 const workflowsData: any = workflowsDataMock;
-const workflowUids = Object.keys(workflowsData);
+// TODO: there's something wrong with visualizing B-D .slice(3,4)
+// Cannot read property 'id' of undefined
+// It doesn't work because a workflow step is placed in the wrong row
+// of a column that only has one workflow step
+const workflowUids = Object.keys(workflowsData).slice(0, 3);
 
 const App = () => (
     <div>
