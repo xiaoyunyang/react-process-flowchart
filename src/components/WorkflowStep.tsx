@@ -9,6 +9,7 @@ import { WorkflowStepType } from "../types/workflow";
 
 // Constants
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
+// eslint-disable-next-line import/named
 import { GenericNodeTypeT } from "../types/workflowVis";
 
 const TRUNCATE_WORDS_CUTOFF = 10;
@@ -42,12 +43,15 @@ const WorkflowStep = ({ name, type }: PropsT) => {
         <div className="boxContainer">
             <div className={`box flexContainer theme${theme}`}>
                 <Icon icon={icon} />
-                <div className="workflowStepDisplayName" >
-                    <p>{displayName}{arrowHeadDown}</p>
+                <div className="workflowStepDisplayName">
+                    <p>
+                        {displayName}
+                        {arrowHeadDown}
+                    </p>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default WorkflowStep;

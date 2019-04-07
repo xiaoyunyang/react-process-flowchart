@@ -42,7 +42,8 @@ export default class WorkflowContainer extends React.PureComponent<PropsT, State
     }
 
     toggleEditMode() {
-        this.setState({ editMode: !this.state.editMode });
+        const { editMode } = this.state;
+        this.setState({ editMode: !editMode });
     }
 
     boundToggleEditMode: () => void;

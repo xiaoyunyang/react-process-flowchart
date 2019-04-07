@@ -23,14 +23,15 @@ const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
     return (
         <div className="wrapper">
             {
-                cols.map((col, i) => (
-                    <div key={`col-${CSS_GRID_OFFSET + i}`} className={`col${CSS_GRID_OFFSET + i}`}>
-                        <Column colNum={CSS_GRID_OFFSET + i} nodes={col} editMode={editMode} />
-                    </div>)
+                cols.map((col, i) =>
+                    (
+                        <div key={`col-${CSS_GRID_OFFSET + i}`} className={`col${CSS_GRID_OFFSET + i}`}>
+                            <Column colNum={CSS_GRID_OFFSET + i} nodes={col} editMode={editMode} />
+                        </div>
+                    )
                 )
             }
         </div>
-
     );
 };
 

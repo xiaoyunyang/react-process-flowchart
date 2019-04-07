@@ -2,11 +2,8 @@
 import { clone } from "ramda";
 import { WorkflowVisDataT, WorkflowStepNodeT } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepType } from "../types/workflow";
-import { connectors } from "../components/connectors";
-import { encode } from "punycode";
 
 // Utils
-
 interface OccurenceDict {
     [id: string]: number;
 }
@@ -111,19 +108,6 @@ export const generateWorkflowVisData = (
         workflowVisData,
         initMatrix
     };
-};
-
-const addToColumn = (col: string[], newItem: string): string[] => {
-    // Immutable....but we may change that for efficiency
-    const colCpy = clone(col);
-    for (let i = 0; i < col.length; i += 1) {
-        if (isPlaceholder(col[i])) {
-            colCpy[i] = newItem;
-            break;
-        }
-    }
-    return colCpy;
-
 };
 
 const addWorkflowStepToColumn = ({ col, newItem }: {

@@ -1,6 +1,6 @@
 module.exports = {
     extends: [
-        // "airbnb",
+        "airbnb",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
     ],
@@ -18,8 +18,8 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-member-accessibility": "off",
         "import/extensions": [1, "never", { ts: "never" }],
-        // "react/jsx-indent": [true, 6],
-        // "@typescript-eslint/indent": [false, "spaces", 8],
+        "react/jsx-indent": [true, 6],
+        "react/jsx-indent-props": [false],
         "react/jsx-filename-extension": false
     },
     overrides: [
