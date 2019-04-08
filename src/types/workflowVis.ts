@@ -31,3 +31,15 @@ export interface GenericNodeT {
     name: string;
     id: string;
 }
+
+export type Matrix = string[][];
+
+export interface MatrixCoord {
+    colNum: number;
+    rowNum: number;
+}
+export interface ConnectorsToPlace {
+    rowNum: number;
+    colNum: number;
+    connectorId: string;
+}

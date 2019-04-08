@@ -29,15 +29,15 @@ const App = () => (
                 )
             }
         </div>
-        <div className="flowchartContainer" >
+        <div className="flowchartContainer">
             <h1>Vis Demo</h1>
             {
                 matrices.map((matrix, i) =>
                     <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
                 )
             }
-        </div >
-    </div >
+        </div>
+    </div>
 );
 
 export default App;
