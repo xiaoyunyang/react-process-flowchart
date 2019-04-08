@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 
 // Styles
 import './App.css';
 
 // Data
-import workflowsDataMock from "./components/spec/mockWorkflowsData";
+import { BA, BB, BC } from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -14,19 +14,18 @@ import WorkflowContainer from "./components/WorkflowContainer";
 import WorkflowVis from "./components/WorkflowVis";
 
 
-const workflowsData: any = workflowsDataMock;
-// TODO: there's something wrong with visualizing B-D .slice(3,4)
+const workflows: any = [BA, BB, BC];
+// TODO: there's something wrong with visualizing B-D
 // Cannot read property 'id' of undefined
 // It doesn't work because a workflow step is placed in the wrong row
 // of a column that only has one workflow step
-const workflowUids = Object.keys(workflowsData).slice(0, 3);
 
 const App = () => (
     <div>
         <div className="flowchartContainer debug">
             {
-                workflowUids.map(workflowUid =>
-                    <WorkflowContainer key={workflowUid} workflowUid={workflowUid} />
+                workflows.map((workflow: any) =>
+                    <WorkflowContainer workflow={workflow} />
                 )
             }
         </div>

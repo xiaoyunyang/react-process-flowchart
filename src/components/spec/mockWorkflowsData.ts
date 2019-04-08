@@ -1,5 +1,7 @@
-export default { // <== mapping from workflowUid to workflowSteps
-    "5890236e433b": [ // <== B-A
+export const BA = {
+    workflowUid: "5890236e433b",
+    workflowName: "B-A",
+    workflowSteps: [
         {
             "workflowStepUid": "ba322565b1bf",
             "workflowStepName": "D",
@@ -77,8 +79,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "6a000972b9b4": [ // <== B-B
+    ]
+};
+
+export const BB = {
+    workflowUid: "6a000972b9b4",
+    workflowName: "B-B",
+    workflowSteps: [
         {
             "workflowStepUid": "cd9bc63c262d",
             "workflowStepName": "D",
@@ -156,8 +163,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "ced08d24af21": [ // <== B-C
+    ]
+};
+
+export const BC = {
+    workflowUid: "ced08d24af21",
+    workflowName: "B-C",
+    workflowSteps: [
         {
             "workflowStepUid": "0839ff2c552a",
             "workflowStepName": "D",
@@ -235,8 +247,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "34779d99f25d": [ // <== B-D
+    ]
+};
+
+export const BD = {
+    workflowUid: "34779d99f25d",
+    workflowName: "B-D",
+    workflowSteps: [
         {
             "workflowStepUid": "694f1ab5da72",
             "workflowStepName": "D",
@@ -314,8 +331,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "c26dfe7f5a1a": [ // <== B-E
+    ]
+};
+
+export const BE = {
+    workflowUid: "c26dfe7f5a1a",
+    workflowName: "B-E",
+    workflowSteps: [
         {
             "workflowStepUid": "eba3f5263651",
             "workflowStepName": "D",
@@ -393,8 +415,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "28fb8c360358": [ // <== B-F
+    ]
+};
+
+export const BF = {
+    workflowUid: "28fb8c360358",
+    workflowName: "B-F",
+    workflowSteps: [
         {
             "workflowStepUid": "b5e96430cba5",
             "workflowStepName": "D",
@@ -490,8 +517,13 @@ export default { // <== mapping from workflowUid to workflowSteps
                 }
             ]
         }
-    ],
-    "670086456c82": [ // <== C-D
+    ]
+};
+
+export const CD = {
+    workflowUid: "670086456c82",
+    workflowName: "C-D",
+    workflowSteps: [
         {
             "workflowStepUid": "7dbc1ae9cde2",
             "workflowStepName": "D",
@@ -619,4 +651,4 @@ export default { // <== mapping from workflowUid to workflowSteps
             ]
         }
     ]
-}
+};
