@@ -1,9 +1,9 @@
-import { WorkflowStepType } from "./workflow";
+import { WorkflowStepTypeT } from "./workflow";
 
 export interface WorkflowStepNodeT {
     id: string;
     name: string;
-    type: WorkflowStepType;
+    type: WorkflowStepTypeT;
     nextSteps: string[];
     workflowStepOrder: number;
 }
@@ -12,8 +12,7 @@ export interface WorkflowVisDataT {
     firstStep: string;
     workflowStepNodes: { [id: string]: WorkflowStepNodeT };
 }
-
-export enum ConnectorType {
+export enum ConnectorTypeT {
     BOX_CONNECTOR = "BOX_CONNECTOR",
     DIAMOND_CONNECTOR = "DIAMOND_CONNECTOR",
     STANDARD_CONNECTOR = "STANDARD_CONNECTOR"
@@ -21,11 +20,11 @@ export enum ConnectorType {
 export interface ConnectorT {
     id: string;
     containerName: string;
-    type: ConnectorType;
+    type: ConnectorTypeT;
     name: string;
 }
 
-export type GenericNodeTypeT = ConnectorType | WorkflowStepType;
+export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT;
 export interface GenericNodeT {
     type: GenericNodeTypeT;
     name: string;

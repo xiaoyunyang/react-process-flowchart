@@ -4,7 +4,7 @@ import React from 'react';
 import './styles/workflowVis.css';
 
 // Types
-import { ConnectorT, ConnectorType } from "../types/workflowVis";
+import { ConnectorT, ConnectorTypeT } from "../types/workflowVis";
 
 export const ArrowRight = () => (
     <div className="arrowRight flexContainer">
@@ -48,115 +48,111 @@ export const connectors: { [id: string]: ConnectorT } = {
         id: "diamond.downRight",
         name: "downRight",
         containerName: "connectorContainerDiamond",
-        type: ConnectorType.DIAMOND_CONNECTOR
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "box.downRight": {
         id: "box.downRight",
         name: "downRight",
         containerName: "connectorContainerDiamond",
-        type: ConnectorType.DIAMOND_CONNECTOR
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "box.rightUpArrow": {
         id: "box.rightUpArrow",
         name: "rightUpArrow",
         containerName: "connectorContainerBox",
-        type: ConnectorType.DIAMOND_CONNECTOR
-    },
-    "elbowSeBox": {
-        id: "elbowSeBox",
-        name: "elbowSeBox",
-        containerName: "connectorContainerBox",
-        type: ConnectorType.BOX_CONNECTOR
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "standard.arrowRight": {
         id: "standard.arrowRight",
         name: "arrowRight",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "standard.arrowRight.edit": {
         id: "standard.arrowRight.edit",
         name: "arrowRight.edit",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "box.arrowRight": {
         id: "box.arrowRight",
         name: "arrowRight",
         containerName: "connectorContainerBox",
-        type: ConnectorType.STANDARD_CONNECTOR
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "box.lineHoriz": {
         id: "box.lineHoriz",
         name: "lineHoriz",
         containerName: "connectorContainerBox",
-        type: ConnectorType.STANDARD_CONNECTOR
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "standard.lineHoriz": {
         id: "standard.lineHoriz",
         name: "lineHoriz",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "standard.lineHoriz.edit": {
         id: "standard.lineHoriz.edit",
         name: "lineHoriz.edit",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR,
+        type: ConnectorTypeT.STANDARD_CONNECTOR,
     },
     "diamond.lineHoriz": {
         id: "diamond.lineHoriz",
         name: "lineHoriz",
         containerName: "connectorContainerDiamond",
-        type: ConnectorType.DIAMOND_CONNECTOR,
+        type: ConnectorTypeT.DIAMOND_CONNECTOR,
     },
     "diamond.lineHoriz.edit": {
         id: "diamond.lineHoriz.edit",
         name: "lineHoriz.edit",
         containerName: "connectorContainerDiamond",
-        type: ConnectorType.DIAMOND_CONNECTOR,
+        type: ConnectorTypeT.DIAMOND_CONNECTOR,
     },
     "diamond.empty": {
         id: "diamond.empty",
         name: "empty",
         containerName: "connectorContainerDiamond",
-        type: ConnectorType.DIAMOND_CONNECTOR,
+        type: ConnectorTypeT.DIAMOND_CONNECTOR,
     },
     "box.empty": {
         id: "box.empty",
         name: "empty",
         containerName: "connectorContainerBox",
-        type: ConnectorType.BOX_CONNECTOR,
+        type: ConnectorTypeT.BOX_CONNECTOR,
     },
     "standard.empty": {
         id: "standard.empty",
         name: "empty",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR,
+        type: ConnectorTypeT.STANDARD_CONNECTOR,
     },
     "standard.empty.edit": {
         id: "standard.empty",
         name: "empty",
         containerName: "connectorContainerStandard",
-        type: ConnectorType.STANDARD_CONNECTOR,
+        type: ConnectorTypeT.STANDARD_CONNECTOR,
     }
 };
 
-export const Connector = ({ id }: { id: string }) => {
-    const connectorComp: { [id: string]: JSX.Element } = {
-        "downRight": <div className="downRight" />,
-        "rightUpArrow": <RightUpArrow />,
-        "arrowRight": <ArrowRight />,
-        "arrowRight.edit": <ArrowRightEditable />,
-        "lineHoriz": <LineHoriz />,
-        "lineHoriz.edit": <LineHorizEditable />,
-        "empty": <div className="empty" />
-    };
+export const connectorComponent: { [id: string]: JSX.Element } = {
+    "downRight": <div className="downRight" />,
+    "rightUpArrow": <RightUpArrow />,
+    "arrowRight": <ArrowRight />,
+    "arrowRight.edit": <ArrowRightEditable />,
+    "lineHoriz": <LineHoriz />,
+    "lineHoriz.edit": <LineHorizEditable />,
+    "empty": <div className="empty" />
+};
 
+const Connector = ({ id }: { id: string }) => {
     const { name, containerName } = connectors[id];
     return (
         <div className={containerName}>
-            {connectorComp[name]}
+            {connectorComponent[name]}
         </div>
     );
 };
+
+export default Connector;

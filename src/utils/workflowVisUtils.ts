@@ -1,10 +1,9 @@
-/* eslint-disable import/named */
 // Utils
 import { clone } from "ramda";
 
 // Types
 import { WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace } from "../types/workflowVis";
-import { WorkflowStepT, WorkflowStepType } from "../types/workflow";
+import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
 // Constants
@@ -58,7 +57,7 @@ export const generateWorkflowVisData = (
             workflowStepOrderOccur[String(workflowStepOrder)] ? workflowStepOrderOccur[String(workflowStepOrder)] : 0
         ) + 1;
 
-        if (workflowStepType === WorkflowStepType.DECISION) {
+        if (workflowStepType === WorkflowStepTypeT.DECISION) {
             decisionStepCols = decisionStepCols.concat(workflowStepOrder * 2);
         }
 
@@ -84,7 +83,7 @@ export const generateWorkflowVisData = (
         [firstStepId]: {
             id: firstStepId,
             name: "Authorize",
-            type: WorkflowStepType.AUTHORIZE,
+            type: WorkflowStepTypeT.AUTHORIZE,
             nextSteps: authorizeNextSteps,
             workflowStepOrder: 0
         }
@@ -114,10 +113,14 @@ const addWorkflowStepToMatrix = ({ matrix, colNum, newStepId }: { matrix: Matrix
     const col = matrix[colNum];
 
     // Determine rowNum
+
     // Naive: rowNum is the first unoccupied
     // Better: If no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum
+
+    // TODO:
     // Best: if no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then
     // we shift col 2 places to the right
+    // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
     let rowNum = 0;
     for (rowNum = 0; rowNum < col.length; rowNum += 1) {
         if (isPlaceholder(col[rowNum])) {

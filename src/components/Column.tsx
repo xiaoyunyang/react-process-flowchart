@@ -4,11 +4,11 @@ import React from "react";
 // Components
 import WorkflowStep from "./WorkflowStep";
 import DecisionStep from "./DecisionStep";
-import { Connector } from "./connectors";
+import Connector from "./Connector";
 
 // Types
-import { WorkflowStepType } from "../types/workflow";
-import { ConnectorType, GenericNodeT } from "../types/workflowVis";
+import { WorkflowStepTypeT } from "../types/workflow";
+import { ConnectorTypeT, GenericNodeT } from "../types/workflowVis";
 
 interface PropsT {
     nodes: GenericNodeT[];
@@ -16,13 +16,11 @@ interface PropsT {
     colNum: number;
 }
 
-
 export default class Column extends React.PureComponent<PropsT> {
     renderNode({ node, editMode }: {
         node: GenericNodeT; editMode: boolean;
     }) {
-        // Connector
-        if (Object.values(ConnectorType).includes(node.type)) {
+        if (Object.values(ConnectorTypeT).includes(node.type)) {
             const id = (editMode && node.id.split(".")[0] === "standard")
                 ? `${node.id}.edit` : node.id;
             return (
@@ -30,12 +28,10 @@ export default class Column extends React.PureComponent<PropsT> {
             );
         }
 
-        // Decision Step
-        if (node.type === WorkflowStepType.DECISION) {
+        if (node.type === WorkflowStepTypeT.DECISION) {
             return <DecisionStep />;
         }
 
-        // Workflow Step
         return <WorkflowStep name={node.name} type={node.type} />;
     }
     render() {

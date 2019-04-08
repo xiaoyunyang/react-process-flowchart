@@ -15,7 +15,7 @@ interface WorkflowActionT {
     nextWorkflowStepUid: string;
 }
 
-export enum WorkflowStepType {
+export enum WorkflowStepTypeT {
     AUTHORIZE = "AUTHORIZE",
     DECISION = "DECISION",
     ADMIN_APPROVAL = "ADMIN_APPROVAL",
@@ -31,7 +31,7 @@ export enum WorkflowStepType {
 export interface WorkflowStepT {
     workflowStepUid: string;
     workflowStepName: string;
-    workflowStepType: WorkflowStepType;
+    workflowStepType: WorkflowStepTypeT;
     workflowStepOrder: number;
     actions: WorkflowActionT[];
 }

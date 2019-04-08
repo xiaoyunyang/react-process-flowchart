@@ -8,7 +8,7 @@ import './styles/workflowVis.css';
 import WorkflowVisContainer from "./WorkflowVisContainer";
 
 // Data
-import workflowsDataMock from "../data/workflowsData";
+import workflowsDataMock from "./spec/mockWorkflowsData";
 
 // Constants - Temp. Dummy Data
 const workflowNameLUT: { [id: string]: string } = {

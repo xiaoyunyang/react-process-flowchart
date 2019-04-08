@@ -5,16 +5,17 @@ import React from 'react';
 import './styles/workflowVis.css';
 
 // Components
-import { connectors } from "./connectors";
+import { connectors } from "./Connector";
 import Column from "./Column";
 
-import { WorkflowVisDataT } from "../types/workflowVis";
+// Types
+import { Matrix, WorkflowVisDataT } from "../types/workflowVis";
 
 const CSS_GRID_OFFSET = 1;
 
-const WorkflowsVis = ({ workflowVisData, matrix, editMode }: {
-    workflowVisData: WorkflowVisDataT; matrix: string[][]; editMode: boolean;
-}) => {
+const WorkflowsVis = ({
+    workflowVisData, matrix, editMode }: { workflowVisData: WorkflowVisDataT; matrix: Matrix; editMode: boolean }
+) => {
     const { workflowStepNodes } = workflowVisData;
     let cols = matrix.map(colNodes =>
         colNodes.map(node => workflowStepNodes[node] ? workflowStepNodes[node] : connectors[node])

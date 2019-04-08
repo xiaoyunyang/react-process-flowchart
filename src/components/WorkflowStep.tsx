@@ -5,7 +5,7 @@ import React from 'react';
 import './styles/workflowVis.css';
 
 // Types
-import { WorkflowStepType } from "../types/workflow";
+import { WorkflowStepTypeT } from "../types/workflow";
 
 // Constants
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
@@ -37,7 +37,7 @@ const WorkflowStep = ({ name, type }: PropsT) => {
 
     // TODO: We would like to pass down a noDropDown from props to specify all the workflow
     // types that don't want have dropdown
-    const arrowHeadDown = type === WorkflowStepType.AUTHORIZE ? null : <span className="caret caretDown" />;
+    const arrowHeadDown = type === WorkflowStepTypeT.AUTHORIZE ? null : <span className="caret caretDown" />;
 
     return (
         <div className="boxContainer">

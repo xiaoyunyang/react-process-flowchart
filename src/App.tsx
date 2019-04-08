@@ -5,8 +5,9 @@ import logo from './logo.svg';
 import './App.css';
 
 // Data
-import workflowsDataMock from "./data/workflowsData";
-import { workflowVisData, matrices } from "./components/test/workflowVisMock";
+import workflowsDataMock from "./components/spec/mockWorkflowsData";
+
+import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
 // Components
 import WorkflowContainer from "./components/WorkflowContainer";

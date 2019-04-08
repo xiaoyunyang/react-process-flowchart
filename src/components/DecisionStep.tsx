@@ -5,7 +5,7 @@ import React from 'react';
 import './styles/workflowVis.css';
 
 // Types
-import { WorkflowStepType } from "../types/workflow";
+import { WorkflowStepTypeT } from "../types/workflow";
 
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
 
@@ -15,10 +15,10 @@ const DiamondIcon = ({ icon }: { icon: string }) => {
             <i className={iconClassName[icon]} />
         </div>
     );
-}
+};
 
 const DecisionStep = () => {
-    const { icon, theme } = workflowStepConfig[WorkflowStepType.DECISION];
+    const { icon, theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
     return (
         <div className="diamondContainer">
             <div className={`diamond flexContainer theme${theme}`}>
@@ -27,6 +27,6 @@ const DecisionStep = () => {
         </div>
 
     );
-}
+};
 
 export default DecisionStep;

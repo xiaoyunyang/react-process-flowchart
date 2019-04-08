@@ -1,6 +1,4 @@
-
-// Types
-import { WorkflowStepType } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../types/workflow";
 
 export const workflowVisData = {
     "firstStep": "5890236e433b-auth",
@@ -8,7 +6,7 @@ export const workflowVisData = {
         "ba322565b1bf": {
             "id": "ba322565b1bf",
             "name": "D",
-            "type": WorkflowStepType.DECISION,
+            "type": WorkflowStepTypeT.DECISION,
             "workflowStepOrder": 1,
             "nextSteps": [
                 "09e6110fda58",
@@ -18,7 +16,7 @@ export const workflowVisData = {
         "297786162f15": {
             "id": "297786162f15",
             "name": "E",
-            "type": WorkflowStepType.POST_TRANSLATION,
+            "type": WorkflowStepTypeT.POST_TRANSLATION,
             "workflowStepOrder": 3,
             "nextSteps": [
                 "492b709fc90a"
@@ -27,14 +25,14 @@ export const workflowVisData = {
         "a3135bdf3aa3": {
             "id": "a3135bdf3aa3",
             "name": "Published",
-            "type": WorkflowStepType.PUBLISH,
+            "type": WorkflowStepTypeT.PUBLISH,
             "workflowStepOrder": 5,
             "nextSteps": []
         },
         "492b709fc90a": {
             "id": "492b709fc90a",
             "name": "R",
-            "type": WorkflowStepType.POST_TRANSLATION,
+            "type": WorkflowStepTypeT.POST_TRANSLATION,
             "workflowStepOrder": 4,
             "nextSteps": [
                 "a3135bdf3aa3"
@@ -43,7 +41,7 @@ export const workflowVisData = {
         "09e6110fda58": {
             "id": "09e6110fda58",
             "name": "Translation",
-            "type": WorkflowStepType.TRANSLATION,
+            "type": WorkflowStepTypeT.TRANSLATION,
             "workflowStepOrder": 2,
             "nextSteps": [
                 "297786162f15"
@@ -52,7 +50,7 @@ export const workflowVisData = {
         "b2b5c4c7cfd7": {
             "id": "b2b5c4c7cfd7",
             "name": "Translation2",
-            "type": WorkflowStepType.TRANSLATION,
+            "type": WorkflowStepTypeT.TRANSLATION,
             "workflowStepOrder": 2,
             "nextSteps": [
                 "297786162f15"
@@ -61,47 +59,16 @@ export const workflowVisData = {
         "5890236e433b-auth": {
             "id": "5890236e433b-auth",
             "name": "Authorize",
-            "type": WorkflowStepType.AUTHORIZE,
+            "type": WorkflowStepTypeT.AUTHORIZE,
             "nextSteps": [
                 "ba322565b1bf"
             ],
             "workflowStepOrder": 0
         }
     }
-}
+};
 
-const matrixSave = [
-    ["5890236e433b-auth", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["ba322565b1bf", "diamond.lineHoriz"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["a3135bdf3aa3", "box.lineHoriz"]
-];
-
-const matrixWorking = [
-    ["5890236e433b-auth"],
-    ["standard.arrowRight"],
-    ["ba322565b1bf", "diamond.downRight"], //TODO: change downRightDiamond to diamond.downRight
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow"] //TODO: change rightUpArrow to box.rightUpArrow
-];
-
-
-const gridTest = [
-    ["5890236e433b-auth", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["diamond.lineHoriz", "ba322565b1bf", "ba322565b1bf"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.arrowRight"],
-    ["a3135bdf3aa3", "box.lineHoriz"]
-];
-
-const matrixA = [
+export const matrixA = [
     ["5890236e433b-auth", "box.empty"],
     ["standard.arrowRight", "standard.empty"],
     ["ba322565b1bf", "diamond.downRight"],
@@ -110,7 +77,8 @@ const matrixA = [
     ["standard.arrowRight", "standard.lineHoriz"],
     ["a3135bdf3aa3", "box.rightUpArrow"]
 ];
-const matrixBA = [
+
+export const matrixBA = [
     ["5890236e433b-auth", "box.empty"],
     ["standard.arrowRight", "standard.empty"],
     ["ba322565b1bf", "diamond.downRight"],
@@ -124,7 +92,7 @@ const matrixBA = [
     ["a3135bdf3aa3", "box.empty"]
 ];
 
-const matrixBB = [
+export const matrixBB = [
     ["5890236e433b-auth", "box.empty"],
     ["standard.arrowRight", "standard.empty"],
     ["ba322565b1bf", "diamond.downRight"],
@@ -150,7 +118,8 @@ const matrixBC = [
     ["standard.arrowRight", "standard.lineHoriz"],
     ["a3135bdf3aa3", "box.rightUpArrow"]
 ];
-const matrixBD = [
+
+export const matrixBD = [
     ["5890236e433b-auth", "box.empty"],
     ["standard.arrowRight", "standard.empty"],
     ["ba322565b1bf", "diamond.downRight"],
@@ -176,7 +145,8 @@ const matrixBE = [
     ["standard.arrowRight", "standard.lineHoriz"],
     ["a3135bdf3aa3", "box.rightUpArrow"]
 ];
-const matrixBF = [
+
+export const matrixBF = [
     ["5890236e433b-auth", "box.empty", "box.empty"],
     ["standard.arrowRight", "standard.empty", "standard.empty"],
     ["ba322565b1bf", "diamond.downRight", "diamond.downRight"], // TODO: fix style for diamond.downRight
