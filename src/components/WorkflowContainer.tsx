@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Styles
-import './styles/workflowVis.css';
+import style from './styles/workflowVis.module.css';
 
 // Components
 import WorkflowVisContainer from "./WorkflowVisContainer";
@@ -50,9 +50,9 @@ export default class WorkflowContainer extends React.PureComponent<PropsT, State
 
         return (
             <div>
-                <div className="flexContainer">
+                <div className={style.flexContainer}>
                     <h1 style={{ maxWidth: 200 }}>{workflowName}</h1>
-                    <button type="button" className={toggleEditClassName} onClick={this.boundToggleEditMode}>
+                    <button type="button" className={style[toggleEditClassName]} onClick={this.boundToggleEditMode}>
                         {toggleEditModeLabel}
                     </button>
                 </div>

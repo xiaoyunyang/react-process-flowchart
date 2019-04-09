@@ -1,8 +1,11 @@
 import React from 'react';
+import classNames from "classnames";
+
 import logo from './logo.svg';
 
 // Styles
 import './App.css';
+import styles from "./components/styles/workflowVis.module.css";
 
 // Data
 import { AA, BA, BB, BC } from "./components/spec/mockWorkflowsData";
@@ -22,17 +25,18 @@ const workflows: any = [AA, BA, BB, BC];
 
 const App = () => (
     <div>
-        <div className="flowchartContainer debug">
+        <div className={classNames(styles.flowchartContainer, styles.debug)}>
             {
                 workflows.map((workflow: any) =>
                     <WorkflowContainer workflow={workflow} />
                 )
             }
         </div>
-        <div className="flowchartContainer">
+        <div className={styles.flowchartContainer}>
             <h1>Vis Demo</h1>
             {
                 matrices.map((matrix, i) =>
+                    // eslint-disable-next-line react/no-array-index-key
                     <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
                 )
             }

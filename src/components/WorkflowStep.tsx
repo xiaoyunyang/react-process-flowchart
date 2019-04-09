@@ -1,8 +1,9 @@
 // Components
 import React from 'react';
+import classNames from "classnames";
 
 // Style
-import './styles/workflowVis.css';
+import styles from './styles/workflowVis.module.css';
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
@@ -15,7 +16,7 @@ import { GenericNodeTypeT } from "../types/workflowVis";
 const TRUNCATE_WORDS_CUTOFF = 10;
 
 const Icon = ({ icon }: { icon: string }) => (
-    <div className="iconContainer">
+    <div className={styles.iconContainer}>
         <i className={iconClassName[icon]} />
     </div>
 );
@@ -37,13 +38,13 @@ const WorkflowStep = ({ name, type }: PropsT) => {
 
     // TODO: We would like to pass down a noDropDown from props to specify all the workflow
     // types that don't want have dropdown
-    const arrowHeadDown = type === WorkflowStepTypeT.AUTHORIZE ? null : <span className="caret caretDown" />;
+    const arrowHeadDown = type === WorkflowStepTypeT.AUTHORIZE ? null : <span className={classNames(styles.caret, styles.caretDown)} />;
 
     return (
-        <div className="boxContainer">
-            <div className={`box flexContainer theme${theme}`}>
+        <div className={styles.boxContainer}>
+            <div className={classNames(styles.box, styles.flexContainer, styles[`theme${theme}`])}>
                 <Icon icon={icon} />
-                <div className="workflowStepDisplayName">
+                <div className={styles.workflowStepDisplayName}>
                     <p>
                         {displayName}
                         {arrowHeadDown}

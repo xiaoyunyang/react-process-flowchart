@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Styles
-import './styles/workflowVis.css';
+import style from './styles/workflowVis.module.css';
 
 // Components
 import { connectors } from "./Connector";
@@ -22,11 +22,11 @@ const WorkflowsVis = ({
     );
 
     return (
-        <div className="wrapper">
+        <div className={style.wrapper}>
             {
                 cols.map((col, i) =>
                     (
-                        <div key={`col-${CSS_GRID_OFFSET + i}`} className={`col${CSS_GRID_OFFSET + i}`}>
+                        <div key={`col-${CSS_GRID_OFFSET + i}`} className={style[`col${CSS_GRID_OFFSET + i}`]}>
                             <Column colNum={CSS_GRID_OFFSET + i} nodes={col} editMode={editMode} />
                         </div>
                     )

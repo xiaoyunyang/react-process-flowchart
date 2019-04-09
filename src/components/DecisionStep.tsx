@@ -1,8 +1,9 @@
 // Components
 import React from 'react';
+import classNames from "classnames";
 
 // Styles
-import './styles/workflowVis.css';
+import styles from './styles/workflowVis.module.css';
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
@@ -11,7 +12,7 @@ import { iconClassName, workflowStepConfig } from "../constants/workflowStepConf
 
 const DiamondIcon = ({ icon }: { icon: string }) => {
     return (
-        <div className="iconContainerDiamond">
+        <div className={styles.iconContainerDiamond}>
             <i className={iconClassName[icon]} />
         </div>
     );
@@ -20,8 +21,8 @@ const DiamondIcon = ({ icon }: { icon: string }) => {
 const DecisionStep = () => {
     const { icon, theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
     return (
-        <div className="diamondContainer">
-            <div className={`diamond flexContainer theme${theme}`}>
+        <div className={styles.diamondContainer}>
+            <div className={classNames(styles.diamond, styles.flexContainer, styles[`theme${theme}`])}>
                 <DiamondIcon icon={icon} />
             </div>
         </div>

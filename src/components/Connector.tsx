@@ -1,45 +1,46 @@
 import React from 'react';
+import classNames from "classnames";
 
 // Styles
-import './styles/workflowVis.css';
+import styles from './styles/workflowVis.module.css';
 
 // Types
 import { ConnectorT, ConnectorTypeT } from "../types/workflowVis";
 
 export const ArrowRight = () => (
-    <div className="arrowRight flexContainer">
-        <div className="line lineLong" />
-        <i className="caret caretRight" />
+    <div className={classNames(styles.arrowRight, styles.flexContainer)}>
+        <div className={classNames(styles.line, styles.lineLong)} />
+        <i className={classNames(styles.caret, styles.caretRight)} />
     </div>
 );
 
 export const ArrowRightEditable = () => (
-    <div className="arrowRight flexContainer">
-        <div className="line lineShort" />
-        <span className="circle">
+    <div className={classNames(styles.arrowRight, styles.flexContainer)}>
+        <div className={classNames(styles.line, styles.lineShort)} />
+        <span className={styles.circle}>
             <i className="fas fa-plus" />
         </span>
-        <div className="line lineShort" />
-        <i className="caret caretRight" />
+        <div className={classNames(styles.line, styles.lineShort)} />
+        <i className={classNames(styles.caret, styles.caretRight)} />
     </div>
 );
 
-export const LineHoriz = () => <div className="line lineLong" />;
+export const LineHoriz = () => <div className={classNames(styles.line, styles.lineLong)} />;
 
 export const LineHorizEditable = () => (
-    <div className="lineHoriz flexContainer">
-        <div className="line lineShort" />
-        <span className="circle">
+    <div className={classNames(styles.lineHoriz, styles.flexContainer)}>
+        <div className={classNames(styles.line, styles.lineShort)} />
+        <span className={styles.circle}>
             <i className="fas fa-plus" />
         </span>
-        <div className="line lineShort" />
+        <div className={classNames(styles.line, styles.lineShort)} />
     </div>
 );
 
 export const RightUpArrow = () => (
-    <div className="flexContainer rightUpArrow">
-        <div className="rightUp" />
-        <i className="caret caretUp" />
+    <div className={classNames(styles.flexContainer, styles.rightUpArrow)}>
+        <div className={styles.rightUp} />
+        <i className={classNames(styles.caret, styles.caretUp)} />
     </div>
 );
 
@@ -137,7 +138,7 @@ export const connectors: { [id: string]: ConnectorT } = {
 };
 
 export const connectorComponent: { [id: string]: JSX.Element } = {
-    "downRight": <div className="downRight" />,
+    "downRight": <div className={styles.downRight} />,
     "rightUpArrow": <RightUpArrow />,
     "arrowRight": <ArrowRight />,
     "arrowRight.edit": <ArrowRightEditable />,
@@ -149,7 +150,7 @@ export const connectorComponent: { [id: string]: JSX.Element } = {
 const Connector = ({ id }: { id: string }) => {
     const { name, containerName } = connectors[id];
     return (
-        <div className={containerName}>
+        <div className={styles[containerName]}>
             {connectorComponent[name]}
         </div>
     );
