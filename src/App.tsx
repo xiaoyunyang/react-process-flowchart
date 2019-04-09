@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 
 // Data
-import { BA, BB, BC } from "./components/spec/mockWorkflowsData";
+import { AA, BA, BB, BC } from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -14,7 +14,7 @@ import WorkflowContainer from "./components/WorkflowContainer";
 import WorkflowVis from "./components/WorkflowVis";
 
 
-const workflows: any = [BA, BB, BC];
+const workflows: any = [AA, BA, BB, BC];
 // TODO: there's something wrong with visualizing B-D
 // Cannot read property 'id' of undefined
 // It doesn't work because a workflow step is placed in the wrong row

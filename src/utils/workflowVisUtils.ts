@@ -11,7 +11,9 @@ import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "..
 // Constants
 const MATRIX_PLACEHOLDER = "empty";
 
-export const isPlaceholder = (id: string): boolean => (id.split(".")[1] === MATRIX_PLACEHOLDER);
+export const isPlaceholder = (id: string): boolean =>
+    (Object.values(ColType).includes(id.split(".")[0])) && (id.split(".")[1] === MATRIX_PLACEHOLDER);
+
 
 // Mutable function (mutates matrix) instead of returning
 // a new matrix for performance reasons
@@ -25,7 +27,7 @@ const replaceTile = (
     matrix[colNum] = newCol;
 };
 
-const initCol = (
+export const initCol = (
     { numRows, colType }: { numRows: number; colType: ColType }
 ): string[] => Array(numRows).fill(`${colType}.${MATRIX_PLACEHOLDER}`);
 
@@ -45,14 +47,14 @@ export const initMatrix = (
 };
 
 /**
- * Generates the workflowVisData and initial matrix
+ * creates the workflowVisData and initial matrix
  *
  * @param workflowSteps 
  * @param workflowUid 
  * @returns { WorkflowVisData, initialMatrix }
  */
-export const generateWorkflowVisData = (
-    workflowSteps: WorkflowStepT[], workflowUid: string
+export const createWorkflowVisData = (
+    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
 ): { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] } => {
     const firstStepId = `${workflowUid}-auth`;
 
@@ -168,9 +170,32 @@ const addConnectorToMatrix = (
 
 export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
 
-const decodeMatrixCoord = (colRow: string): MatrixCoord => {
+export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
     const [colNum, rowNum] = colRow.split(",").map(s => +s);
     return { colNum, rowNum };
+};
+
+/**
+ * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
+ * 
+ * @param nodeCoord
+ * @param parentCoord
+ */
+export const createCoordPairs = (
+    { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
+): { fromCoord: MatrixCoord; toCoord: MatrixCoord }[] => {
+    const nodeIds = Object.keys(parentCoords);
+    let res: { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] = [];
+    for (let i = 0; i < nodeIds.length; i += 1) {
+        const toCoord = decodeMatrixCoord(nodeCoord[nodeIds[i]]);
+        const coords = parentCoords[nodeIds[i]].map(colRow => ({
+            fromCoord: decodeMatrixCoord(colRow),
+            toCoord
+
+        }));
+        res = res.concat(coords);
+    }
+    return res;
 };
 
 const lineHorizes = (
@@ -186,6 +211,12 @@ const lineHorizes = (
     return res;
 };
 
+/**
+ * Creates an array of connectors to place with specific values and locations in the matrix
+ *
+ * @param fromCoord
+ * @param toCoord
+ */
 export const createConnectorsBetweenNodes = (
     { fromCoord, toCoord }: { fromCoord: MatrixCoord; toCoord: MatrixCoord }
 ): ConnectorsToPlace[] => {
@@ -231,28 +262,7 @@ export const createConnectorsBetweenNodes = (
     return lineHorizes({ startCol, endCol, rowNum }).concat(lastEntry);
 };
 
-/**
- * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
- * 
- * @param nodeCoord
- * @param parentCoord
- */
-const createCoordPairs = (
-    { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
-): { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] => {
-    const nodeIds = Object.keys(parentCoords);
-    let res: { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] = [];
-    for (let i = 0; i < nodeIds.length; i += 1) {
-        const toCoord = decodeMatrixCoord(nodeCoord[nodeIds[i]]);
-        const coords = parentCoords[nodeIds[i]].map(colRow => ({
-            toCoord,
-            fromCoord: decodeMatrixCoord(colRow)
-        }));
-        res = res.concat(coords);
-    }
 
-    return res;
-};
 
 // TODO: We might not need BFS to place the workflowStep into the matrix
 
@@ -309,7 +319,7 @@ export const populateMatrix = (
 
             // Update parentCoord here using nodeCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeCoord
-            // because nextStep's parent is current node
+            // because nextStep's parent is current node, which we just added to nodeCoord above
             const parentCoordsEntry = parentCoords[nextStepId];
             parentCoords[nextStepId] = (parentCoordsEntry ? parentCoordsEntry : []).concat([nodeCoord[id]]);
 
@@ -321,10 +331,17 @@ export const populateMatrix = (
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
-    console.log("--nodeCoord", nodeCoord);
-    console.log("--parentCoords", parentCoords);
+    console.log("--nodeCoord", JSON.stringify(nodeCoord));
+    console.log("--parentCoords", JSON.stringify(parentCoords));
+
     const coordPairs = createCoordPairs({ nodeCoord, parentCoords });
-    const connectorsToPlace = coordPairs.map(coordPair => createConnectorsBetweenNodes(coordPair)).flat();
+
+    // console.log("--coordPairs", coordPairs);
+    console.log("============> FOO ....", JSON.stringify(coordPairs));
+
+    const connectorsToPlace = coordPairs.flatMap(
+        coordPair => createConnectorsBetweenNodes(coordPair)
+    );
     connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace }));
 
     return matrix;

@@ -11,16 +11,16 @@ import WorkflowVis from "./WorkflowVis";
 import { WorkflowStepT } from "../types/workflow";
 
 // Utils
-import { generateWorkflowVisData, populateMatrix } from "../utils/workflowVisUtils";
+import { createWorkflowVisData, populateMatrix } from "../utils/workflowVisUtils";
 
 const WorkflowVisContainer = (
     { workflowUid, workflowSteps, editMode }: {
         workflowUid: string; workflowSteps: WorkflowStepT[]; editMode: boolean;
     }
 ) => {
-    const { workflowVisData, initialMatrix } = generateWorkflowVisData(workflowSteps, workflowUid);
+    const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
 
-    console.log("workflowVisData", workflowVisData, null, 2);
+    console.log("workflowVisData", workflowVisData);
     // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
     console.log("initMatrix", initialMatrix);
 

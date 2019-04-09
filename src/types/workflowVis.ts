@@ -3,7 +3,7 @@ import { WorkflowStepTypeT } from "./workflow";
 export interface WorkflowStepNodeT {
     id: string;
     name: string;
-    type: WorkflowStepTypeT;
+    type: WorkflowStepTypeT | string;
     nextSteps: string[];
     workflowStepOrder: number;
 }
@@ -32,7 +32,7 @@ export interface ConnectorT {
     name: string;
 }
 
-export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT;
+export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT | string;
 
 export interface GenericNodeT {
     type: GenericNodeTypeT;

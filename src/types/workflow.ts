@@ -11,7 +11,7 @@ type ActionType =
 
 interface WorkflowActionT {
     primary: boolean;
-    actionType: ActionType;
+    actionType: ActionType | string;
     nextWorkflowStepUid: string;
 }
 
@@ -31,7 +31,7 @@ export enum WorkflowStepTypeT {
 export interface WorkflowStepT {
     workflowStepUid: string;
     workflowStepName: string;
-    workflowStepType: WorkflowStepTypeT;
+    workflowStepType: WorkflowStepTypeT | string;
     workflowStepOrder: number;
     actions: WorkflowActionT[];
 }
