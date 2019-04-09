@@ -2,19 +2,22 @@
 import { clone } from "ramda";
 
 // Types
-import { WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace } from "../types/workflowVis";
+import {
+    WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace, ColType
+} from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
 // Constants
 const MATRIX_PLACEHOLDER = "empty";
 
-// Utils
-const isPlaceholder = (id: string): boolean => (id.split(".")[1] === MATRIX_PLACEHOLDER);
+export const isPlaceholder = (id: string): boolean => (id.split(".")[1] === MATRIX_PLACEHOLDER);
 
 // Mutable function (mutates matrix) instead of returning
 // a new matrix for performance reasons
-const replaceTile = ({ matrix, replaceBy, coord }: { matrix: Matrix; replaceBy: string; coord: MatrixCoord }): void => {
+const replaceTile = (
+    { matrix, replaceBy, coord }: { matrix: Matrix; replaceBy: string; coord: MatrixCoord }
+): void => {
     const { rowNum, colNum } = coord;
 
     const newCol = clone(matrix[colNum]);
@@ -22,25 +25,35 @@ const replaceTile = ({ matrix, replaceBy, coord }: { matrix: Matrix; replaceBy: 
     matrix[colNum] = newCol;
 };
 
-const initializeMatrix = ({ cols, rows, colTypes }: { cols: number; rows: number; colTypes: string[] }) => {
-    const innerArray: {
-        [id: string]: string[];
-    } = {
-        box: Array(rows).fill(`box.${MATRIX_PLACEHOLDER}`),
-        diamond: Array(rows).fill(`diamond.${MATRIX_PLACEHOLDER}`),
-        standard: Array(rows).fill(`standard.${MATRIX_PLACEHOLDER}`)
-    };
+const initCol = (
+    { numRows, colType }: { numRows: number; colType: ColType }
+): string[] => Array(numRows).fill(`${colType}.${MATRIX_PLACEHOLDER}`);
 
-    let matrix = Array(cols)
-        .fill([])
-        .map((col, i) => innerArray[colTypes[i]]);
-
-    return matrix;
+/**
+ * Creates a numCols x numRows matrix initalized with placeholders (box.empty, diamond.empty, or standard.empty)
+ * 
+ * @param numCols number
+ * @param numRows number
+ * @param colTypes array of ColTypes (string) - box, diamond, or standard
+ * @returns { matrix }
+ */
+export const initMatrix = (
+    { numCols, numRows, colTypes }: { numCols: number; numRows: number; colTypes: ColType[] }
+): Matrix => {
+    return Array.from(Array(numCols).keys())
+        .map(i => initCol({ numRows, colType: colTypes[i] }));
 };
 
+/**
+ * Generates the workflowVisData and initial matrix
+ *
+ * @param workflowSteps 
+ * @param workflowUid 
+ * @returns { WorkflowVisData, initialMatrix }
+ */
 export const generateWorkflowVisData = (
     workflowSteps: WorkflowStepT[], workflowUid: string
-): { workflowVisData: WorkflowVisDataT; initMatrix: string[][] } => {
+): { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] } => {
     const firstStepId = `${workflowUid}-auth`;
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
@@ -94,22 +107,24 @@ export const generateWorkflowVisData = (
         workflowStepNodes
     };
 
-    const cols = Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2 + 1;
-    const rows = Math.max(...Object.values(workflowStepOrderOccur));
-    const colTypes = Array(cols).fill("standard").map((colType: string, i) => {
+    const numCols = Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2 + 1;
+    const numRows = Math.max(...Object.values(workflowStepOrderOccur));
+    const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
         if (i % 2 === 1) return colType;
-        return decisionStepCols.includes(i) ? "diamond" : "box";
+        return decisionStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
     });
 
-    const initMatrix = initializeMatrix({ cols, rows, colTypes });
+    const initialMatrix = initMatrix({ numCols, numRows, colTypes });
 
     return {
         workflowVisData,
-        initMatrix
+        initialMatrix
     };
 };
 
-const addWorkflowStepToMatrix = ({ matrix, colNum, newStepId }: { matrix: Matrix; colNum: number; newStepId: string }): MatrixCoord => {
+const addWorkflowStepToMatrix = (
+    { matrix, colNum, newStepId }: { matrix: Matrix; colNum: number; newStepId: string }
+): MatrixCoord => {
     const col = matrix[colNum];
 
     // Determine rowNum
@@ -121,6 +136,8 @@ const addWorkflowStepToMatrix = ({ matrix, colNum, newStepId }: { matrix: Matrix
     // Best: if no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then
     // we shift col 2 places to the right
     // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
+    // TODO: Need to have a function for replace col type
+    // We also need to change the size of the matrix and shift all the 
     let rowNum = 0;
     for (rowNum = 0; rowNum < col.length; rowNum += 1) {
         if (isPlaceholder(col[rowNum])) {
@@ -149,7 +166,7 @@ const addConnectorToMatrix = (
     });
 };
 
-const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
+export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
 
 const decodeMatrixCoord = (colRow: string): MatrixCoord => {
     const [colNum, rowNum] = colRow.split(",").map(s => +s);
@@ -169,7 +186,7 @@ const lineHorizes = (
     return res;
 };
 
-const createConnectorsBetweenNodes = (
+export const createConnectorsBetweenNodes = (
     { fromCoord, toCoord }: { fromCoord: MatrixCoord; toCoord: MatrixCoord }
 ): ConnectorsToPlace[] => {
     const { colNum: fromCol, rowNum: fromRow } = fromCoord;
@@ -214,9 +231,11 @@ const createConnectorsBetweenNodes = (
     return lineHorizes({ startCol, endCol, rowNum }).concat(lastEntry);
 };
 
-/** createCoordPairs
+/**
  * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
- *
+ * 
+ * @param nodeCoord
+ * @param parentCoord
  */
 const createCoordPairs = (
     { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
@@ -236,12 +255,21 @@ const createCoordPairs = (
 };
 
 // TODO: We might not need BFS to place the workflowStep into the matrix
+
+/**
+ * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
+ * 
+ * @param workflowVisData
+ * @param initialMatrix
+ * @param matrix - populated matrix (may be a different size than initialMatrix)
+ *  
+ */
 export const populateMatrix = (
-    { workflowVisData, initMatrix }: { workflowVisData: WorkflowVisDataT; initMatrix: string[][] }
+    { workflowVisData, initialMatrix }: { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] }
 ): Matrix => {
     console.log("Populate Matrix...");
 
-    const matrix = clone(initMatrix);
+    const matrix = clone(initialMatrix);
 
     // Step 1 - Traverse graph (BFS) and generate parentCoords and nodeCoord
     // together, these hash maps tell us how tiles in the matrix are connected

@@ -12,11 +12,19 @@ export interface WorkflowVisDataT {
     firstStep: string;
     workflowStepNodes: { [id: string]: WorkflowStepNodeT };
 }
+
+export enum ColType {
+    BOX = "box",
+    DIAMOND = "diamond",
+    STANDARD = "standard"
+}
+
 export enum ConnectorTypeT {
     BOX_CONNECTOR = "BOX_CONNECTOR",
     DIAMOND_CONNECTOR = "DIAMOND_CONNECTOR",
     STANDARD_CONNECTOR = "STANDARD_CONNECTOR"
 }
+
 export interface ConnectorT {
     id: string;
     containerName: string;
@@ -25,6 +33,7 @@ export interface ConnectorT {
 }
 
 export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT;
+
 export interface GenericNodeT {
     type: GenericNodeTypeT;
     name: string;
@@ -37,6 +46,7 @@ export interface MatrixCoord {
     colNum: number;
     rowNum: number;
 }
+
 export interface ConnectorsToPlace {
     rowNum: number;
     colNum: number;

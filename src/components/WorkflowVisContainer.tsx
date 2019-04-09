@@ -18,13 +18,13 @@ const WorkflowVisContainer = (
         workflowUid: string; workflowSteps: WorkflowStepT[]; editMode: boolean;
     }
 ) => {
-    const { workflowVisData, initMatrix } = generateWorkflowVisData(workflowSteps, workflowUid);
+    const { workflowVisData, initialMatrix } = generateWorkflowVisData(workflowSteps, workflowUid);
 
     console.log("workflowVisData", workflowVisData, null, 2);
     // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
-    console.log("initMatrix", initMatrix);
+    console.log("initMatrix", initialMatrix);
 
-    let matrix = populateMatrix({ workflowVisData, initMatrix });
+    let matrix = populateMatrix({ workflowVisData, initialMatrix });
     console.log("matrix", matrix);
 
     // pass matrix cols (array length) and height (inner array length) to workflowVis
