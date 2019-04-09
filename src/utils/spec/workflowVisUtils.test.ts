@@ -40,7 +40,11 @@ describe("WorkflowVisUtils", () => {
 
     describe("#initMatrix", () => {
         it("should initialize a matrix of the right size with the right placeholdeers", () => {
-            const matrix = initMatrix({ numCols: 3, numRows: 2, colTypes: [ColType.BOX, ColType.DIAMOND, ColType.STANDARD] });
+            const matrix = initMatrix({
+                numCols: 3,
+                numRows: 2,
+                colTypes: [ColType.BOX, ColType.DIAMOND, ColType.STANDARD]
+            });
             expect(matrix).toEqual([
                 ["box.empty", "box.empty"],
                 ["diamond.empty", "diamond.empty"],
@@ -49,7 +53,7 @@ describe("WorkflowVisUtils", () => {
         });
     });
 
-    describe("#generateWorkflowVisData", () => {
+    describe("#createWorkflowVisData", () => {
     });
 
     // TODO: #addWorkflowStepToMatrix - later
@@ -141,15 +145,11 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#populateMatrix", () => {
-        it("should handle linear workflow case", () => {
-            const { workflowSteps, workflowUid } = BA;
-            const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
 
-            // Results in an error if the following line is run.... flatMap does not
-            // work on arrays of more complex types. See
-            // https://github.com/wmonk/create-react-app-typescript/issues/254
-            // 
-            // const res = populateMatrix({ workflowVisData, initialMatrix });
+        it("should handle linear workflow case", () => {
+            const { workflowSteps, workflowUid } = AA;
+            const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
+            const res = populateMatrix({ workflowVisData, initialMatrix });
 
             const expected = [
                 ["8e00dae32eb6-auth"],
@@ -162,10 +162,27 @@ describe("WorkflowVisUtils", () => {
                 ["standard.arrowRight"],
                 ["6473f65c98fe"]
             ];
-
+            expect(res).toEqual(expected);
         });
         it("should handle simple branching workflow", () => {
+            const { workflowSteps, workflowUid } = BA;
+            const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
+            const res = populateMatrix({ workflowVisData, initialMatrix });
 
+            const expected = [
+                ["5890236e433b-auth", "box.empty"],
+                ["standard.arrowRight", "standard.empty"],
+                ["ba322565b1bf", "diamond.downRight"],
+                ["standard.arrowRight", "standard.arrowRight"],
+                ["09e6110fda58", "b2b5c4c7cfd7"],
+                ["standard.arrowRight", "standard.lineHoriz"],
+                ["297786162f15", "box.rightUpArrow"],
+                ["standard.arrowRight", "standard.empty"],
+                ["492b709fc90a", "box.empty"],
+                ["standard.arrowRight", "standard.empty"],
+                ["a3135bdf3aa3", "box.empty"]
+            ];
+            expect(res).toEqual(expected);
         });
     });
 });

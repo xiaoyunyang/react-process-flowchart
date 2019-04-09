@@ -13,7 +13,7 @@ import { workflowStepConfig } from "../../constants/workflowStepConfig";
 
 configure({ adapter: new Adapter() });
 
-describe("WorkflowVis Spec", () => {
+describe("DecisionStep Spec", () => {
     let decisionStep: any;
 
     beforeEach(() => {
@@ -28,6 +28,7 @@ describe("WorkflowVis Spec", () => {
             const { theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
             expect(decisionStep.childAt(0).hasClass(`theme${theme}`)).toBe(true);
         });
+        // TODO: Add this to main project later
         it("renders correct icon for decisionStep", () => {
             const icon = decisionStep.childAt(0).childAt(0).props().icon;
             const { icon: expectedIcon } = workflowStepConfig[WorkflowStepTypeT.DECISION];

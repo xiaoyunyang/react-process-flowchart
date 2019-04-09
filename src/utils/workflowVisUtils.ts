@@ -1,5 +1,5 @@
 // Utils
-import { clone } from "ramda";
+import { clone, chain } from "ramda";
 
 // Types
 import {
@@ -109,7 +109,8 @@ export const createWorkflowVisData = (
         workflowStepNodes
     };
 
-    const numCols = Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2 + 1;
+    // TODO: add no-mixed type rule to eslint
+    const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2) + 1;
     const numRows = Math.max(...Object.values(workflowStepOrderOccur));
     const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
         if (i % 2 === 1) return colType;
@@ -339,9 +340,8 @@ export const populateMatrix = (
     // console.log("--coordPairs", coordPairs);
     console.log("============> FOO ....", JSON.stringify(coordPairs));
 
-    const connectorsToPlace = coordPairs.flatMap(
-        coordPair => createConnectorsBetweenNodes(coordPair)
-    );
+    const connectorsToPlace = chain(createConnectorsBetweenNodes, coordPairs);
+
     connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace }));
 
     return matrix;

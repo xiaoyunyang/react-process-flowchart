@@ -19,8 +19,8 @@ configure({ adapter: new Adapter() });
 
 describe("WorkflowVis Spec", () => {
     let workflowVis: any;
-    let matrix = matrixBA;
     let props;
+    const matrix = matrixBA;
 
     beforeEach(() => {
         props = {

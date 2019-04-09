@@ -143,7 +143,7 @@ export const connectorComponent: { [id: string]: JSX.Element } = {
     "arrowRight.edit": <ArrowRightEditable />,
     "lineHoriz": <LineHoriz />,
     "lineHoriz.edit": <LineHorizEditable />,
-    "empty": <div className="empty" />
+    "empty": <div />
 };
 
 const Connector = ({ id }: { id: string }) => {

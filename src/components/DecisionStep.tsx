@@ -25,7 +25,6 @@ const DecisionStep = () => {
                 <DiamondIcon icon={icon} />
             </div>
         </div>
-
     );
 };
 

@@ -56,7 +56,7 @@
 .connectorContainerDiamond {
   width: var(--diamond-container-width);
   height: var(--diamond-container-height);
-  margin-top: 0px; /* Fudge factor */
+  margin-top: 0;
 }
 
 .connectorContainerBox {
@@ -179,8 +179,8 @@
 
 .arrowRight .caret {
   position: relative;
-  margin-left: -0.4em; /* <-- Fudge Factor */
-  top: 1.8em; /* <-- Fudge Factor */
+  margin-left: -0.4rem; /* <-- Fudge Factor */
+  top: 1.8rem; /* <-- Fudge Factor */
   color: var(--battleship-grey);
 }
 
@@ -273,19 +273,24 @@
   height: 38px;
   width: calc(var(--box-width)*0.6);
   top: -4.5px;
-  left: 0px;
+  left: 0;
   position: relative;
 }
+
 .rightUp {
   border-bottom: solid 1px #747b7c;
   border-right: solid 1px #747b7c;
   width: 90%;
   height: 99%;
   top: -4px;
-  left: 0px;
+  left: 0;
   position: relative;
 }
 
+.themeDark {
+  background-color: var(--battleship-grey);
+  color: var(--white);
+}
 
 .themeDark {
   background-color: var(--battleship-grey);
@@ -295,6 +300,10 @@
 .themeLight {
   color: var(--charcoal-grey);
   background-color: var(--white);
+}
+
+.themeLight .highlighted {
+  color: var(--tealish)
 }
 
 .themeLight i {
@@ -313,10 +322,10 @@
 }
 
 .box p {
-  margin-block-start: 0px;
-  margin-block-end: 0px;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -327,13 +336,13 @@
 }
 
 .box .caretUp {
-  margin-left: 0.6em;
+  margin-left: 0.6rem;
   margin-bottom: -3px;
 }
 
 .box .caretDown {
-  margin-left: 0.6em;
-  margin-bottom: 0.3em;
+  margin-left: 0.6rem;
+  margin-bottom: 0.3rem;
 }
 
 .iconContainer {

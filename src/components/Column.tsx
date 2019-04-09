@@ -17,7 +17,7 @@ interface PropsT {
 }
 
 export default class Column extends React.PureComponent<PropsT> {
-    renderNode({ node, editMode }: {
+    static renderNode({ node, editMode }: {
         node: GenericNodeT; editMode: boolean;
     }) {
         if (Object.values(ConnectorTypeT).includes(node.type)) {
@@ -39,7 +39,7 @@ export default class Column extends React.PureComponent<PropsT> {
         return nodes.map((node: GenericNodeT, i: number) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={`${node.id}-${colNum}-${i}`}>
-                {this.renderNode({ node, editMode })}
+                {Column.renderNode({ node, editMode })}
             </div>
         ));
     }
