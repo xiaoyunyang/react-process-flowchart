@@ -140,7 +140,7 @@ const addWorkflowStepToMatrix = (
     // we shift col 2 places to the right
     // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
     // TODO: Need to have a function for replace col type
-    // We also need to change the size of the matrix and shift all the 
+    // We also need to change the size of the matrix and shift all the nodes to the right and down
     let rowNum = 0;
     for (rowNum = 0; rowNum < col.length; rowNum += 1) {
         if (isPlaceholder(col[rowNum])) {

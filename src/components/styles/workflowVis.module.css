@@ -4,6 +4,10 @@
 @import "./box.css";
 @import "./colors.css";
 
+/* TODO:
+Make grid-template-columns less manually generated.
+Instead of create .col1, .col2, ... classes, specify the col number and row number inline instead.
+*/
 .wrapper {
   display: grid;
   grid-template-columns: 

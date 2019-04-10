@@ -39,7 +39,13 @@ The visualization component ([`WorkflowVis`](/src/components/WorkflowVis.tsx)) t
 `matrix` is created from `workflowVisData`. ([WorkflowVisContainer](/src/components/WorkflowVisContainer.tsx)) creates `matrix` as follows:
 
 1. Initialize a N x M `matrix`. N is longest path in the DAG (`workflowStepOrder` is pre-calculated for each node in the graph which provides the path of the node from the root node). M is calculated from the largest frequency of `workflowStepOrder`. `matrix` is initialized with `empty`.
-2. Populate `matrix` with nodes (BFS of on the `workflowVisData`). The column number of the node is `workflowStepOrder * 2`. The row number of the node is **`TBD`** (currently, the naive approach is implemented whereby each node is placed into the next empty spot in the column array). During this process, a hash map is created that maps `col #, row #` of the node is mapped to the `col #, row #` its sucessor nodes.
+2. Populate `matrix` with nodes (BFS of on the `workflowVisData`). The column number of the node is `workflowStepOrder * 2`. The row number of the node is determined as follows:
+
+    - Naive: `rowNum` is the first unoccupied
+    - Better: If no parent, `rowNum` is the first unoccupied. If has parent, `rowNum` is parent `rowNum`
+    - Even Better: If no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then we shift col 2 places to the right.
+
+    currently, the naive approach is implemented whereby each node is placed into the next empty spot in the column array.  During this process, a hash map is created that maps `colNum, rowNum` of the node is mapped to the `colNum, rowNum`, its sucessor nodes.
 3. Populate `matrix` with [connectors](/src/components/connectors.tsx) using the hash map generated from the previous step.
 
 ### Limitations of this visualization engine
