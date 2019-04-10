@@ -10,13 +10,11 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 */
 .wrapper {
   display: grid;
-  grid-template-columns: 
-    2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr
-    2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr 1fr;
-    min-height: var(--workflow-wrapper-min-height);
-    overflow-x: scroll;
-    overflow-y: hidden;
-    padding-bottom: var(--workflow-wrapper-padding-bottom);
+  grid-template-columns: repeat(1000, 2fr 1fr);
+  min-height: var(--workflow-wrapper-min-height);
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-bottom: var(--workflow-wrapper-padding-bottom);
 }
 
 .boxContainer {
@@ -378,7 +376,7 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 
 .flowchartContainer button {
   font-size: 18px;
-  border: var(--box-border);
+  border: var(--node-border);
   margin-left: 50%;
   margin-top: 20px;
   margin-bottom: 20px;

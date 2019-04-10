@@ -33,16 +33,20 @@ describe("WorkflowVis Spec", () => {
     });
 
     describe("render", () => {
+        let columns: any;
+        beforeEach(() => {
+            columns = workflowVis.find(Column);
+        });
+
         it("renders correct number of Columns", () => {
-            const columns = workflowVis.find(Column);
             expect(columns).toHaveLength(matrix.length);
         });
         it("renders Authorize in the first Column", () => {
-            const column = workflowVis.find(".col1").childAt(0);
+            const column = columns.at(0);
             expect(column.props().nodes[0].type).toBe(WorkflowStepTypeT.AUTHORIZE);
         });
         it("renders arrowRight connector in the second Column", () => {
-            const column = workflowVis.find(".col2").childAt(0);
+            const column = columns.at(1);
             const connectorId = matrix[1][0];
             expect(column.props().nodes[0]).toBe(connectors[connectorId]);
         });
