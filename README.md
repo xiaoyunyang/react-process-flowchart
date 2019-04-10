@@ -51,7 +51,7 @@ The visualization component ([`WorkflowVis`](/src/components/WorkflowVis.tsx)) t
 ### Limitations of this visualization engine
 
 - The flowchart has to be a DAG
-- The longest path cannot be greater than **1000** (limitation of the grid column template [specified in the css](https://github.com/xiaoyunyang/css-grid-flowchart/blob/492615aa19da89874bcaa48c46141ddd2dc4d41a/src/components/styles/workflowVis.module.css#L13))
+- The longest path cannot be greater than **1000** (limitation of the grid column template [specified in the css](https://github.com/xiaoyunyang/css-grid-flowchart/blob/994b5842a214cd0d57046239c8dce69ec69e87d5/src/components/styles/workflowVis.module.css#L13))
 
 ### Run the Project
 
