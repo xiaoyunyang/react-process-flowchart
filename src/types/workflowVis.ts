@@ -19,6 +19,11 @@ export enum ColType {
     STANDARD = "standard"
 }
 
+export interface CoordPairT {
+    fromCoord: MatrixCoord;
+    toCoord: MatrixCoord;
+}
+
 export enum ConnectorTypeT {
     BOX_CONNECTOR = "BOX_CONNECTOR",
     DIAMOND_CONNECTOR = "DIAMOND_CONNECTOR",

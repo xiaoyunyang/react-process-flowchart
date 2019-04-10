@@ -145,7 +145,6 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#populateMatrix", () => {
-
         it("should handle linear workflow case", () => {
             const { workflowSteps, workflowUid } = AA;
             const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });

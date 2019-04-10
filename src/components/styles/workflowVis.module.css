@@ -27,9 +27,8 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 .box {
   margin-top: 18px;
   width: var(--box-width);
-  border: var(--box-border);
+  border: var(--node-border);
   border-radius: var(--box-border-radius);
-  border-width: var(--box-border-width);
   height: var(--box-height);
   padding: var(--box-padding);
   align-self: auto;
@@ -45,7 +44,7 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 .diamond {
   width: var(--diamond-width);
   height: var(--diamond-width);
-  border: 1px solid var(--silver-five);
+  border: var(--node-border);
   border-radius: var(--diamond-border-radius);
   transform: rotate(45deg);
   z-index: 2;
@@ -186,7 +185,6 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
   position: relative;
   margin-left: -0.4rem; /* <-- Fudge Factor */
   top: 1.8rem; /* <-- Fudge Factor */
-  color: var(--battleship-grey);
 }
 
 .flexContainer {
@@ -197,7 +195,7 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 
 .line {
   align-self: auto;
-  border-bottom: solid 1px #747b7c;
+  border-bottom: var(--connector-border);
   position: relative;
   height: 57%;
 }
@@ -232,6 +230,10 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
   border-right: var(--caret-width) solid;
 }
 
+.box .caret {
+  color: var(--dark-grey-two);
+}
+
 .caretRight {
   transform: rotate(45deg);
 }
@@ -244,12 +246,8 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
   transform: rotate(315deg);
 }
 
-.box .caret {
-  color: var(--dark-grey-two);
-}
-
 .connectorContainerBox .rightUpArrow {
-  width: calc(var(--box-width)/1.8);
+  width: calc(var(--box-width) / 1.8);
   margin-top: 18px;
 }
 
@@ -259,8 +257,8 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 }
 
 .downRight {
-  border-bottom: solid 1px #747b7c;
-  border-left: solid 1px #747b7c;
+  border-bottom: var(--connector-border);
+  border-left: var(--connector-border);
   height: 100%;
   width: 58%;
 }
@@ -269,22 +267,22 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
   height: 74px;
   margin-top: -2px;
   top: -20px; /* Fudge factor */
-  left: calc(var(--diamond-container-width)*0.58);
+  left: calc(var(--diamond-container-width) * 0.58);
   position: relative;
   z-index: 1;
 }
 
 .connectorContainerBox .rightUpArrow {
   height: 38px;
-  width: calc(var(--box-width)*0.6);
+  width: calc(var(--box-width) * 0.6);
   top: -4.5px;
   left: 0;
   position: relative;
 }
 
 .rightUp {
-  border-bottom: solid 1px #747b7c;
-  border-right: solid 1px #747b7c;
+  border-bottom: var(--connector-border);
+  border-right: var(--connector-border);
   width: 90%;
   height: 99%;
   top: -4px;

@@ -3,7 +3,7 @@ import { clone, chain } from "ramda";
 
 // Types
 import {
-    WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace, ColType
+    WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace, ColType, CoordPairT
 } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
@@ -184,19 +184,15 @@ export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
  */
 export const createCoordPairs = (
     { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
-): { fromCoord: MatrixCoord; toCoord: MatrixCoord }[] => {
+): CoordPairT[] => {
     const nodeIds = Object.keys(parentCoords);
-    let res: { toCoord: MatrixCoord; fromCoord: MatrixCoord }[] = [];
-    for (let i = 0; i < nodeIds.length; i += 1) {
-        const toCoord = decodeMatrixCoord(nodeCoord[nodeIds[i]]);
-        const coords = parentCoords[nodeIds[i]].map(colRow => ({
-            fromCoord: decodeMatrixCoord(colRow),
-            toCoord
 
-        }));
-        res = res.concat(coords);
-    }
-    return res;
+    const newCoord = (nodeId: string): CoordPairT[] => parentCoords[nodeId].map(colRow => ({
+        fromCoord: decodeMatrixCoord(colRow),
+        toCoord: decodeMatrixCoord(nodeCoord[nodeId])
+    }));
+
+    return chain(nodeId => newCoord(nodeId), nodeIds);
 };
 
 const lineHorizes = (
@@ -335,12 +331,12 @@ export const populateMatrix = (
     console.log("--nodeCoord", JSON.stringify(nodeCoord));
     console.log("--parentCoords", JSON.stringify(parentCoords));
 
-    const coordPairs = createCoordPairs({ nodeCoord, parentCoords });
+    const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, parentCoords });
 
     // console.log("--coordPairs", coordPairs);
     console.log("============> FOO ....", JSON.stringify(coordPairs));
 
-    const connectorsToPlace = chain(createConnectorsBetweenNodes, coordPairs);
+    const connectorsToPlace: ConnectorsToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
     connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace }));
 

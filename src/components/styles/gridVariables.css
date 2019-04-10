@@ -1,4 +1,5 @@
 @import "./colors.css";
+@import "./box.css";
 
 :root {
     --workflow-wrapper-min-height: 80px;
@@ -6,7 +7,8 @@
     --connector-standard-width: 75px;
     --box-border-width: 1px;
     --box-border-radius: 8px;
-    --box-border: 1px solid var(--silver-five);
+    --node-border: var(--border-width) solid var(--silver-five);
+    --connector-border: var(--border-width) solid var(--battleship-grey);
     --box-width: 150px;
     --box-height: 55px;
     --box-padding: 10px;

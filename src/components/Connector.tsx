@@ -14,12 +14,15 @@ export const ArrowRight = () => (
     </div>
 );
 
+const EditButton = () => (
+    <span className={styles.circle}>
+        <i className="fas fa-plus" />
+    </span>
+);
 export const ArrowRightEditable = () => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
         <div className={classNames(styles.line, styles.lineShort)} />
-        <span className={styles.circle}>
-            <i className="fas fa-plus" />
-        </span>
+        <EditButton />
         <div className={classNames(styles.line, styles.lineShort)} />
         <i className={classNames(styles.caret, styles.caretRight)} />
     </div>
@@ -30,9 +33,7 @@ export const LineHoriz = () => <div className={classNames(styles.line, styles.li
 export const LineHorizEditable = () => (
     <div className={classNames(styles.lineHoriz, styles.flexContainer)}>
         <div className={classNames(styles.line, styles.lineShort)} />
-        <span className={styles.circle}>
-            <i className="fas fa-plus" />
-        </span>
+        <EditButton />
         <div className={classNames(styles.line, styles.lineShort)} />
     </div>
 );
