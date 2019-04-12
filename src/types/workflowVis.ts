@@ -8,6 +8,8 @@ export interface WorkflowStepNodeT {
     workflowStepOrder: number;
 }
 
+export interface WorkflowStepNodes { [id: string]: WorkflowStepNodeT }
+
 export interface WorkflowVisDataT {
     firstStep: string;
     workflowStepNodes: { [id: string]: WorkflowStepNodeT };
@@ -30,11 +32,21 @@ export enum ConnectorTypeT {
     STANDARD_CONNECTOR = "STANDARD_CONNECTOR"
 }
 
+export enum ConnectorName {
+    DOWN_RIGHT = "downRight",
+    RIGHT_UP_ARROW = "rightUpArrow",
+    ARROW_RIGHT = "arrowRight",
+    ARROW_RIGHT_EDIT = "arrowRight.edit",
+    LINE_HORIZ = "lineHoriz",
+    LINE_HORIZ_EDIT = "lineHoriz.edit",
+    EMPTY = "empty"
+}
+
 export interface ConnectorT {
     id: string;
     containerName: string;
     type: ConnectorTypeT;
-    name: string;
+    name: ConnectorName;
 }
 
 export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT | string;
@@ -55,7 +67,7 @@ export interface MatrixCoord {
 export interface ConnectorsToPlace {
     rowNum: number;
     colNum: number;
-    connectorId: string;
+    connectorName: ConnectorName;
     parentCoord: MatrixCoord;
 }
 

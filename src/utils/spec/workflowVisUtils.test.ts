@@ -11,7 +11,7 @@ import {
 } from "../workflowVisUtils";
 
 // Types
-import { ColType } from "../../types/workflowVis";
+import { ColType, ConnectorName } from "../../types/workflowVis";
 
 // Mocks
 import { AA, BA } from "../../components/spec/mockWorkflowsData";
@@ -114,8 +114,8 @@ describe("WorkflowVisUtils", () => {
             const toCoord = { colNum: 3, rowNum: 0 };
             const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
             const expected = [
-                { colNum: 1, rowNum: 0, connectorId: "lineHoriz" },
-                { colNum: 2, rowNum: 0, connectorId: "arrowRight" },
+                { colNum: 1, rowNum: 0, connectorName: ConnectorName.LINE_HORIZ },
+                { colNum: 2, rowNum: 0, connectorName: ConnectorName.ARROW_RIGHT }
             ];
             expect(res).toEqual(expected);
         });
@@ -124,10 +124,10 @@ describe("WorkflowVisUtils", () => {
             const toCoord = { colNum: 6, rowNum: 2 };
             const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
             const expected = [
-                { colNum: 2, rowNum: 2, connectorId: "downRight" },
-                { colNum: 3, rowNum: 2, connectorId: "lineHoriz" },
-                { colNum: 4, rowNum: 2, connectorId: "lineHoriz" },
-                { colNum: 5, rowNum: 2, connectorId: "arrowRight" },
+                { colNum: 2, rowNum: 2, connectorName: ConnectorName.DOWN_RIGHT },
+                { colNum: 3, rowNum: 2, connectorName: ConnectorName.LINE_HORIZ },
+                { colNum: 4, rowNum: 2, connectorName: ConnectorName.LINE_HORIZ },
+                { colNum: 5, rowNum: 2, connectorName: ConnectorName.ARROW_RIGHT }
             ];
             expect(res).toEqual(expected);
         });
@@ -136,14 +136,36 @@ describe("WorkflowVisUtils", () => {
             const toCoord = { colNum: 5, rowNum: 0 };
             const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
             const expected = [
-                { colNum: 3, rowNum: 4, connectorId: "lineHoriz" },
-                { colNum: 4, rowNum: 4, connectorId: "lineHoriz" },
-                { colNum: 5, rowNum: 4, connectorId: "rightUpArrow" }
+                { colNum: 3, rowNum: 4, connectorName: ConnectorName.LINE_HORIZ },
+                { colNum: 4, rowNum: 4, connectorName: ConnectorName.LINE_HORIZ },
+                { colNum: 5, rowNum: 4, connectorName: ConnectorName.RIGHT_UP_ARROW }
             ];
             expect(res).toEqual(expected);
         });
     });
-
+    describe("#createWorkflowVisData", () => {
+        it("should create worlflowVisData and initial matrix", () => {
+            const { workflowSteps, workflowUid } = BA;
+            const { initialMatrix } = createWorkflowVisData({
+                workflowSteps, workflowUid
+            });
+            expect(initialMatrix).toEqual(
+                [
+                    ["box.empty", "box.empty"],
+                    ["standard.empty", "standard.empty"],
+                    ["diamond.empty", "diamond.empty"],
+                    ["standard.empty", "standard.empty"],
+                    ["box.empty", "box.empty"],
+                    ["standard.empty", "standard.empty"],
+                    ["box.empty", "box.empty"],
+                    ["standard.empty", "standard.empty"],
+                    ["box.empty", "box.empty"],
+                    ["standard.empty", "standard.empty"],
+                    ["box.empty", "box.empty"]
+                ]
+            );
+        });
+    });
     describe("#populateMatrix", () => {
         it("should handle linear workflow case", () => {
             const { workflowSteps, workflowUid } = AA;

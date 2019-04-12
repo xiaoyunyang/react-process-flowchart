@@ -2,22 +2,22 @@
 @import "./box.css";
 
 :root {
-    --workflow-wrapper-min-height: 80px;
-    --workflow-wrapper-padding-bottom: 15px;
-    --connector-standard-width: 75px;
-    --box-border-width: 1px;
-    --box-border-radius: 8px;
+    --workflow-wrapper-min-height: calc(var(--base-unit) * 20);
+    --workflow-wrapper-padding-bottom: calc(var(--base-unit) * 3.75);
+    --connector-standard-width: calc(var(--base-unit) * 18.75);
+    --box-border-radius: calc(var(--border-radius) * 4);
     --node-border: var(--border-width) solid var(--silver-five);
     --connector-border: var(--border-width) solid var(--battleship-grey);
-    --box-width: 150px;
-    --box-height: 55px;
-    --box-padding: 10px;
+    --box-width: calc(var(--base-unit) * 37.5);
+    --box-height: calc(var(--base-unit) * 13.75);
+    --box-padding: calc(var(--base-unit) * 2.5);
     --box-line-height: 1.33;
-    --diamond-container-width: 50px;
-    --diamond-container-height: 75px;
-    --diamond-width: 43px;
-    --diamond-border-radius: 3px;
-    --caret-width: 5px;
-    --connector-container-margin-top: 13px;
-    --box-connector-container-height: 60px;
+    --diamond-container-width: calc(var(--base-unit) * 12.5);
+    --diamond-container-height: calc(var(--base-unit) * 18.75);
+    --diamond-width: calc(var(--base-unit) * 10.75);
+    --diamond-border-radius: calc(var(--border-radius) * 1.5);
+    --caret-width: calc(var(--base-unit) * 1.3);
+    --connector-container-margin-top: calc(var(--base-unit) * 3.25);
+    --box-connector-container-height: calc(var(--base-unit) * 15);
+    --max-columns: 1000;
 }

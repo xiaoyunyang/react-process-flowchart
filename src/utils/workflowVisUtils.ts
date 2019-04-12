@@ -3,7 +3,8 @@ import { clone, chain } from "ramda";
 
 // Types
 import {
-    WorkflowVisDataT, WorkflowStepNodeT, Matrix, MatrixCoord, ConnectorsToPlace, ColType, CoordPairT
+    WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
+    MatrixCoord, ConnectorsToPlace, ColType, CoordPairT, ConnectorName
 } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
@@ -18,6 +19,10 @@ export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
     return { colNum, rowNum };
 };
 
+export const isPlaceholder = (id: string): boolean =>
+    (Object.values(ColType).includes(id.split(".")[0])) && (id.split(".")[1] === MATRIX_PLACEHOLDER);
+
+
 /**
  * Decodes connector info from the matrixEntry string for a conenctor
  * @param matrixEntry
@@ -29,10 +34,6 @@ export const getConnectorInfo = ({ matrixEntry }: { matrixEntry: string }
     const connectorId = `${connectorType}.${connectorName}`;
     return { connectorType, connectorId, encodedOwnCoord, encodedParentCoord };
 };
-
-export const isPlaceholder = (id: string): boolean =>
-    (Object.values(ColType).includes(id.split(".")[0])) && (id.split(".")[1] === MATRIX_PLACEHOLDER);
-
 
 // Mutable function (mutates matrix) instead of returning
 // a new matrix for performance reasons
@@ -46,21 +47,22 @@ const replaceTile = (
     matrix[colNum] = newCol;
 };
 
-const emptyMatrixEntry = ({ colNum, rowNum, colType }: { colNum: number; rowNum: number; colType: ColType }) => {
+const emptyMatrixEntry = (
+    { colNum, rowNum, colType }: { colNum: number; rowNum: number; colType: ColType }
+) => {
     const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
     return `${colType}.${MATRIX_PLACEHOLDER}.${encodedOwnCoord}`;
 };
 
 export const initCol = (
     { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
-): string[] => {
-    return Array.from(Array(numRows).keys()).map(rowNum => emptyMatrixEntry({ colNum, rowNum, colType }));
-};
+): string[] => Array.from(Array(numRows)
+    .keys())
+    .map(rowNum => emptyMatrixEntry({ colNum, rowNum, colType }));
 
 /**
  * Creates a numCols x numRows matrix initalized with placeholders (box.empty, diamond.empty, or standard.empty)
  * 
- * @param numCols number
  * @param numRows number
  * @param colTypes array of ColTypes (string) - box, diamond, or standard
  * @returns { matrix }
@@ -72,31 +74,48 @@ export const initMatrix = (
 }));
 
 
-/**
- * creates the workflowVisData and initial matrix
- *
- * @param workflowSteps 
- * @param workflowUid 
- * @returns { WorkflowVisData, initialMatrix }
- */
-export const createWorkflowVisData = (
-    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
-): { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] } => {
+const getPrevSteps = ({
+    workflowSteps, workflowStepOrder
+}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
+): WorkflowStepT[] => workflowSteps.filter(wfStep =>
+    wfStep.workflowStepType !== WorkflowStepTypeT.DECISION &&
+    wfStep.workflowStepOrder < workflowStepOrder
+);
+
+const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
+    workflowUid: string; workflowSteps: WorkflowStepT[];
+}): {
+    workflowStepNodes: WorkflowStepNodes;
+    workflowStepOrderOccur: OccurenceDict;
+    firstStepId: string;
+    decisionStepCols: number[];
+} => {
     const firstStepId = `${workflowUid}-auth`;
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
     let authorizeNextSteps: string[] = [];
     let decisionStepCols: number[] = [];
 
-    let workflowStepOrderOccur: OccurenceDict = {};
+    const workflowStepOrderOccur: OccurenceDict = {};
     for (let i = 0; i < workflowSteps.length; i += 1) {
         const workflowStep = workflowSteps[i];
 
-        const { workflowStepOrder, workflowStepUid, workflowStepName, workflowStepType, actions } = workflowStep;
+        const {
+            workflowStepOrder,
+            workflowStepUid,
+            workflowStepName,
+            workflowStepType,
+            actions
+        } = workflowStep;
 
-        workflowStepOrderOccur[String(workflowStepOrder)] = (
-            workflowStepOrderOccur[String(workflowStepOrder)] ? workflowStepOrderOccur[String(workflowStepOrder)] : 0
-        ) + 1;
+        // We need to convert all keys for dictionaries to a string because key of a dictionary
+        // must be string as we defined it in types/generics
+        const stringifiedWorkflowStepOrder = String(workflowStepOrder);
+
+        workflowStepOrderOccur[stringifiedWorkflowStepOrder] = (
+            workflowStepOrderOccur[stringifiedWorkflowStepOrder]
+                ? workflowStepOrderOccur[stringifiedWorkflowStepOrder]
+                : 0) + 1;
 
         if (workflowStepType === WorkflowStepTypeT.DECISION) {
             decisionStepCols = decisionStepCols.concat(workflowStepOrder * 2);
@@ -105,6 +124,7 @@ export const createWorkflowVisData = (
         if (workflowStepOrder === 1) {
             authorizeNextSteps = [workflowStepUid];
         }
+        const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
 
         const nextSteps = actions
             .filter(action => action.actionType !== "REJECT")
@@ -130,12 +150,28 @@ export const createWorkflowVisData = (
         }
     };
 
+    return { firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols };
+};
+
+
+/**
+ * creates the workflowVisData and initial matrix
+ *
+ * @param workflowSteps 
+ * @param workflowUid 
+ * @returns { WorkflowVisData, initialMatrix }
+ */
+export const createWorkflowVisData = (
+    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
+): { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] } => {
+    const {
+        firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols
+    } = createWorkflowStepNodes({ workflowSteps, workflowUid });
     const workflowVisData = {
         firstStep: firstStepId,
         workflowStepNodes
     };
 
-    // TODO: add no-mixed type rule to eslint
     const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2) + 1;
     const numRows = Math.max(...Object.values(workflowStepOrderOccur));
     const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
@@ -167,12 +203,7 @@ const addWorkflowStepToMatrix = (
     // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
     // TODO: Need to have a function for replace col type
     // We also need to change the size of the matrix and shift all the nodes to the right and down
-    let rowNum = 0;
-    for (rowNum = 0; rowNum < col.length; rowNum += 1) {
-        if (isPlaceholder(col[rowNum])) {
-            break;
-        }
-    }
+    const rowNum = col.findIndex((matrixElem: string) => isPlaceholder(matrixElem));
 
     replaceTile({
         coord: { colNum, rowNum },
@@ -187,7 +218,7 @@ const addConnectorToMatrix = (
         matrix: Matrix; connectorToPlace: ConnectorsToPlace; nodeCoord: EndomorphDict;
     }
 ): void => {
-    const { colNum, rowNum, connectorId, parentCoord } = connectorToPlace;
+    const { colNum, rowNum, connectorName, parentCoord } = connectorToPlace;
 
     const { connectorType } = getConnectorInfo({ matrixEntry: matrix[colNum][rowNum] });
 
@@ -203,7 +234,7 @@ const addConnectorToMatrix = (
 
     replaceTile({
         matrix,
-        replaceBy: `${connectorType}.${connectorId}.${encodedOwnCoord}${encodedParentNodeCoord}`,
+        replaceBy: `${connectorType}.${connectorName}.${encodedOwnCoord}${encodedParentNodeCoord}`,
         coord: { colNum, rowNum }
     });
 };
@@ -235,7 +266,7 @@ const lineHorizes = (
     let lines: ConnectorsToPlace[] = [];
     let currParentCoord = parentCoord;
     for (let colNum = startCol; colNum < endCol; colNum += 1) {
-        const newEntry = { colNum, rowNum, connectorId: "lineHoriz", parentCoord: currParentCoord };
+        const newEntry = { colNum, rowNum, connectorName: ConnectorName.LINE_HORIZ, parentCoord: currParentCoord };
         lines = lines.concat(newEntry);
         currParentCoord = { colNum, rowNum };
     }
@@ -272,7 +303,7 @@ export const createConnectorsBetweenNodes = (
         const lastEntry = {
             colNum: endCol,
             rowNum,
-            connectorId: "arrowRight",
+            connectorName: ConnectorName.ARROW_RIGHT,
             parentCoord: lastLineCoord
         };
 
@@ -296,7 +327,7 @@ export const createConnectorsBetweenNodes = (
         const firstEntry = {
             colNum: startCol,
             rowNum,
-            connectorId: "downRight",
+            connectorName: ConnectorName.DOWN_RIGHT,
             parentCoord: { colNum: fromCol - 1, rowNum: rowNum }
         };
         const { lines, lastLineCoord } = lineHorizes({
@@ -310,7 +341,7 @@ export const createConnectorsBetweenNodes = (
         const lastEntry = {
             colNum: endCol,
             rowNum,
-            connectorId: "arrowRight",
+            connectorName: ConnectorName.ARROW_RIGHT,
             parentCoord: lastLineCoord
         };
         console.log("Case 2....lastEntry", lastEntry);
@@ -332,7 +363,7 @@ export const createConnectorsBetweenNodes = (
     const lastEntry = {
         colNum: endCol,
         rowNum,
-        connectorId: "rightUpArrow",
+        connectorName: ConnectorName.RIGHT_UP_ARROW,
         parentCoord: lastLineCoord
     };
 

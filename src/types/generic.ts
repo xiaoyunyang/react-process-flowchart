@@ -1,15 +1,7 @@
-export interface OccurenceDict {
-    [id: string]: number;
-}
+export interface OccurenceDict { [key: string]: number }
 
-export interface ExistentialDict {
-    [id: string]: boolean;
-}
+export interface ExistentialDict { [key: string]: boolean }
 
-export interface EndomorphDict {
-    [id: string]: string;
-}
+export interface EndomorphDict { [key: string]: string }
 
-export interface PolymorphDict {
-    [id: string]: string[];
-}
+export interface PolymorphDict { [id: string]: string[] }
