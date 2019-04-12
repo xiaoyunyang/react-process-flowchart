@@ -8,7 +8,7 @@ import './App.css';
 import styles from "./components/styles/workflowVis.module.css";
 
 // Data
-import { AA, BA, BB, BC } from "./components/spec/mockWorkflowsData";
+import { AA, BA, BB, BC, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -27,8 +27,8 @@ const App = () => (
     <div>
         <div className={classNames(styles.flowchartContainer, styles.debug)}>
             {
-                workflows.map((workflow: any) =>
-                    <WorkflowContainer workflow={workflow} />
+                workflows.map((workflow: MockWorkflowsData) =>
+                    <WorkflowContainer key={workflow.workflowUid} workflow={workflow} />
                 )
             }
         </div>

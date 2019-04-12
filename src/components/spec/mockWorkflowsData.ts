@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-object-literal-type-assertion */
 import { WorkflowStepT } from "../../types/workflow";
 
-interface MockWorkflowsData {
+export interface MockWorkflowsData {
     workflowUid: string;
     workflowName: string;
     workflowSteps: WorkflowStepT[];

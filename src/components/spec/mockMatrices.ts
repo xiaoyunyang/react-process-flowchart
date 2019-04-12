@@ -56,6 +56,15 @@ export const workflowVisData = {
                 "297786162f15"
             ]
         },
+        "b2b5c4c7cfd8": {
+            "id": "b2b5c4c7cfd7",
+            "name": "Translation2",
+            "type": WorkflowStepTypeT.TRANSLATION,
+            "workflowStepOrder": 2,
+            "nextSteps": [
+                "297786162f15"
+            ]
+        },
         "5890236e433b-auth": {
             "id": "5890236e433b-auth",
             "name": "Authorize",
@@ -69,95 +78,95 @@ export const workflowVisData = {
 };
 
 export const matrixA = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,1"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2.1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow"]
+    ["standard.arrowRight.5,0", "standard.lineHoriz.5,1"],
+    ["a3135bdf3aa3", "box.rightUpArrow.6,1"]
 ];
 
 export const matrixBA = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,0"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2,1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["297786162f15", "box.rightUpArrow"],
-    ["standard.arrowRight", "standard.empty"],
-    ["492b709fc90a", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["a3135bdf3aa3", "box.empty"]
+    ["standard.arrowRight.5,0", "standard.lineHoriz.5,1"],
+    ["297786162f15", "box.rightUpArrow.6,1"],
+    ["standard.arrowRight.7,0", "standard.empty.7,1"],
+    ["492b709fc90a", "box.empty.8,1"],
+    ["standard.arrowRight.9,0", "standard.empty.9,1"],
+    ["a3135bdf3aa3", "box.empty.10,1"]
 ];
 
 export const matrixBB = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,1"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2,1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["297786162f15", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["492b709fc90a", "box.rightUpArrow"],
-    ["standard.arrowRight", "standard.empty"],
-    ["a3135bdf3aa3", "box.empty"]
+    ["standard.arrowRight.5,0", "standard.lineHoriz.5,1"],
+    ["297786162f15", "box.lineHoriz.6,1"],
+    ["standard.arrowRight.7,0", "standard.lineHoriz.7,1"],
+    ["492b709fc90a", "box.rightUpArrow.8,1"],
+    ["standard.arrowRight.9,0", "standard.empty.9,1"],
+    ["a3135bdf3aa3", "box.empty.10,1"]
 ];
 const matrixBC = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,1"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2,1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["297786162f15", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["492b709fc90a", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow"]
+    ["standard.arrowRight.5,0", "standard.lineHoriz.5,1"],
+    ["297786162f15", "box.lineHoriz.6,1"],
+    ["standard.arrowRight.7,0", "standard.lineHoriz.7,1"],
+    ["492b709fc90a", "box.lineHoriz.8,1"],
+    ["standard.arrowRight.9,0", "standard.lineHoriz.9,1"],
+    ["a3135bdf3aa3", "box.rightUpArrow.10,1"]
 ];
 
 export const matrixBD = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,1"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2,1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.lineHoriz", "standard.arrowRight"],
-    ["box.lineHoriz", "297786162f15"],
-    ["standard.lineHoriz", "standard.lineHoriz"],
-    ["492b709fc90a", "box.lineHoriz"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow"]
+    ["standard.lineHoriz.5,0", "standard.arrowRight.5,1"],
+    ["box.lineHoriz.6,0", "297786162f15"],
+    ["standard.lineHoriz.7,0", "standard.lineHoriz.7,1"],
+    ["492b709fc90a", "box.lineHoriz.8,1"],
+    ["standard.arrowRight.9,0", "standard.lineHoriz.9,1"],
+    ["a3135bdf3aa3", "box.rightUpArrow.10,1"]
 ];
 const matrixBE = [
-    ["5890236e433b-auth", "box.empty"],
-    ["standard.arrowRight", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight"],
-    ["standard.arrowRight", "standard.arrowRight"],
+    ["5890236e433b-auth", "box.empty.0,1"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1"],
+    ["ba322565b1bf", "diamond.downRight.2,1"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard.lineHoriz", "standard.arrowRight"],
-    ["box.lineHoriz", "297786162f15"],
-    ["standard.lineHoriz", "standard.arrowRight"],
-    ["box.lineHoriz", "492b709fc90a"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow"]
+    ["standard.lineHoriz.5,0", "standard.arrowRight.5,1"],
+    ["box.lineHoriz.6,0", "297786162f15"],
+    ["standard.lineHoriz.7,0", "standard.arrowRight.7,1"],
+    ["box.lineHoriz.8,0", "492b709fc90a"],
+    ["standard.arrowRight.9,0", "standard.lineHoriz.9,1"],
+    ["a3135bdf3aa3", "box.rightUpArrow.10,1"]
 ];
 
 export const matrixBF = [
-    ["5890236e433b-auth", "box.empty", "box.empty"],
-    ["standard.arrowRight", "standard.empty", "standard.empty"],
-    ["ba322565b1bf", "diamond.downRight", "diamond.downRight"], // TODO: fix style for diamond.downRight
-    ["standard.arrowRight", "standard.arrowRight", "standard.arrowRight"],
-    ["09e6110fda58", "b2b5c4c7cfd7", "b2b5c4c7cfd7"],
-    ["standard.lineHoriz", "standard.arrowRight", "standard.lineHoriz"],
-    ["box.lineHoriz", "297786162f15", "box.lineHoriz"],
-    ["standard.lineHoriz", "standard.arrowRight", "standard.lineHoriz"],
-    ["box.lineHoriz", "492b709fc90a", "box.rightUpArrow"],
-    ["standard.arrowRight", "standard.lineHoriz"],
-    ["a3135bdf3aa3", "box.rightUpArrow", "box.empty"]
+    ["5890236e433b-auth", "box.empty.0,1", "box.empty.0,2"],
+    ["standard.arrowRight.1,0", "standard.empty.1,1", "standard.empty.1,2"],
+    ["ba322565b1bf", "diamond.downRight.2,1", "diamond.downRight.2,2"],
+    ["standard.arrowRight.3,0", "standard.arrowRight.3,1", "standard.arrowRight.3,2"],
+    ["09e6110fda58", "b2b5c4c7cfd7", "b2b5c4c7cfd8"],
+    ["standard.lineHoriz.5,0", "standard.arrowRight.5,1", "standard.lineHoriz.5,2"],
+    ["box.lineHoriz.6,0", "297786162f15", "box.lineHoriz.6,2"],
+    ["standard.lineHoriz.7,0", "standard.arrowRight.7,1", "standard.lineHoriz.7,2"],
+    ["box.lineHoriz.8,0", "492b709fc90a", "box.rightUpArrow.8,2"],
+    ["standard.arrowRight.9,0", "standard.lineHoriz.9,1", "standard.empty.9,2"],
+    ["a3135bdf3aa3", "box.rightUpArrow.10,1", "box.empty.10,2"]
 ];
 
 // const gridTestBP = [

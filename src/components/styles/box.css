@@ -1,5 +1,5 @@
 :root {
-    --base-unit: 0.25rem;
+    --base-unit: 0.25rem; /* equals 4px */
     --border-width: 1px;
     --border-radius: 2px;
     --text-padding: calc(var(--base-unit)) calc(var(--base-unit) * 2) var(--base-unit);

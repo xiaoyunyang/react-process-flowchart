@@ -11,6 +11,25 @@ import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "..
 // Constants
 const MATRIX_PLACEHOLDER = "empty";
 
+export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
+
+export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
+    const [colNum, rowNum] = colRow.split(",").map(s => +s);
+    return { colNum, rowNum };
+};
+
+/**
+ * Decodes connector info from the matrixEntry string for a conenctor
+ * @param matrixEntry
+ * @returns {connectorType, connectorId, encodedOwnCoord, encodedParentCoord }
+ */
+export const getConnectorInfo = ({ matrixEntry }: { matrixEntry: string }
+): { connectorType: string; connectorId: string; encodedOwnCoord: string; encodedParentCoord: string } => {
+    const [connectorType, connectorName, encodedOwnCoord, encodedParentCoord] = matrixEntry.split(".");
+    const connectorId = `${connectorType}.${connectorName}`;
+    return { connectorType, connectorId, encodedOwnCoord, encodedParentCoord };
+};
+
 export const isPlaceholder = (id: string): boolean =>
     (Object.values(ColType).includes(id.split(".")[0])) && (id.split(".")[1] === MATRIX_PLACEHOLDER);
 
@@ -27,9 +46,16 @@ const replaceTile = (
     matrix[colNum] = newCol;
 };
 
+const emptyMatrixEntry = ({ colNum, rowNum, colType }: { colNum: number; rowNum: number; colType: ColType }) => {
+    const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
+    return `${colType}.${MATRIX_PLACEHOLDER}.${encodedOwnCoord}`;
+};
+
 export const initCol = (
-    { numRows, colType }: { numRows: number; colType: ColType }
-): string[] => Array(numRows).fill(`${colType}.${MATRIX_PLACEHOLDER}`);
+    { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
+): string[] => {
+    return Array.from(Array(numRows).keys()).map(rowNum => emptyMatrixEntry({ colNum, rowNum, colType }));
+};
 
 /**
  * Creates a numCols x numRows matrix initalized with placeholders (box.empty, diamond.empty, or standard.empty)
@@ -40,11 +66,11 @@ export const initCol = (
  * @returns { matrix }
  */
 export const initMatrix = (
-    { numCols, numRows, colTypes }: { numCols: number; numRows: number; colTypes: ColType[] }
-): Matrix => {
-    return Array.from(Array(numCols).keys())
-        .map(i => initCol({ numRows, colType: colTypes[i] }));
-};
+    { numRows, colTypes }: { numRows: number; colTypes: ColType[] }
+): Matrix => colTypes.map((colType: ColType, i: number) => initCol({
+    numRows, colNum: i, colType
+}));
+
 
 /**
  * creates the workflowVisData and initial matrix
@@ -117,7 +143,7 @@ export const createWorkflowVisData = (
         return decisionStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
     });
 
-    const initialMatrix = initMatrix({ numCols, numRows, colTypes });
+    const initialMatrix = initMatrix({ numRows, colTypes });
 
     return {
         workflowVisData,
@@ -157,23 +183,29 @@ const addWorkflowStepToMatrix = (
 };
 
 const addConnectorToMatrix = (
-    { matrix, connectorToPlace }: { matrix: Matrix; connectorToPlace: ConnectorsToPlace }
+    { matrix, connectorToPlace, nodeCoord }: {
+        matrix: Matrix; connectorToPlace: ConnectorsToPlace; nodeCoord: EndomorphDict;
+    }
 ): void => {
-    const { colNum, rowNum, connectorId } = connectorToPlace;
-    const columnType = matrix[colNum][rowNum].split(".")[0];
+    const { colNum, rowNum, connectorId, parentCoord } = connectorToPlace;
+
+    const { connectorType } = getConnectorInfo({ matrixEntry: matrix[colNum][rowNum] });
+
+    const nodeCoords: string[] = Object.values(nodeCoord);
+
+    // TODO: verify that you are in path of the connected nodes
+
+    const encodedParentCoord = encodeMatrixCoord(parentCoord);
+    const encodedOwnCoord: string = encodeMatrixCoord({ colNum, rowNum });
+
+    const encodedParentNodeCoord: string = nodeCoords.includes(encodedParentCoord) ?
+        `.${encodedParentCoord}` : "";
 
     replaceTile({
         matrix,
-        replaceBy: `${columnType}.${connectorId}`,
+        replaceBy: `${connectorType}.${connectorId}.${encodedOwnCoord}${encodedParentNodeCoord}`,
         coord: { colNum, rowNum }
     });
-};
-
-export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
-
-export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
-    const [colNum, rowNum] = colRow.split(",").map(s => +s);
-    return { colNum, rowNum };
 };
 
 /**
@@ -196,16 +228,19 @@ export const createCoordPairs = (
 };
 
 const lineHorizes = (
-    { startCol, endCol, rowNum }: { startCol: number; endCol: number; rowNum: number }
-): ConnectorsToPlace[] => {
-
-    let res: ConnectorsToPlace[] = [];
+    { startCol, endCol, rowNum, parentCoord }: {
+        startCol: number; endCol: number; rowNum: number; parentCoord: MatrixCoord;
+    }
+): { lines: ConnectorsToPlace[]; lastLineCoord: MatrixCoord } => {
+    let lines: ConnectorsToPlace[] = [];
+    let currParentCoord = parentCoord;
     for (let colNum = startCol; colNum < endCol; colNum += 1) {
-        const newEntry = { colNum, rowNum, connectorId: "lineHoriz" };
-        res = res.concat(newEntry);
+        const newEntry = { colNum, rowNum, connectorId: "lineHoriz", parentCoord: currParentCoord };
+        lines = lines.concat(newEntry);
+        currParentCoord = { colNum, rowNum };
     }
 
-    return res;
+    return { lines, lastLineCoord: currParentCoord };
 };
 
 /**
@@ -219,6 +254,7 @@ export const createConnectorsBetweenNodes = (
 ): ConnectorsToPlace[] => {
     const { colNum: fromCol, rowNum: fromRow } = fromCoord;
     const { colNum: toCol, rowNum: toRow } = toCoord;
+    const parentNodeCoord = { colNum: fromCol, rowNum: fromRow };
 
     // Case 1: fromRow = toRow
     // should be lineHoriz, ..., arrowRight
@@ -228,9 +264,19 @@ export const createConnectorsBetweenNodes = (
         const startCol = fromCol + 1;
         const endCol = toCol - 1;
         const rowNum = fromRow;
-        const lastEntry = { colNum: endCol, rowNum, connectorId: "arrowRight" };
 
-        return lineHorizes({ startCol, endCol, rowNum }).concat(lastEntry);
+        const { lines, lastLineCoord } = lineHorizes({
+            startCol, endCol, rowNum, parentCoord: parentNodeCoord
+        });
+
+        const lastEntry = {
+            colNum: endCol,
+            rowNum,
+            connectorId: "arrowRight",
+            parentCoord: lastLineCoord
+        };
+
+        return lines.concat(lastEntry);
     }
 
     // Case 2: fromRow < toRow
@@ -241,10 +287,35 @@ export const createConnectorsBetweenNodes = (
         const startCol = fromCol;
         const endCol = toCol - 1;
         const rowNum = toRow;
-        const firstEntry = { colNum: startCol, rowNum, connectorId: "downRight" };
-        const lastEntry = { colNum: endCol, rowNum, connectorId: "arrowRight" };
 
-        return [firstEntry].concat(lineHorizes({ startCol: startCol + 1, endCol, rowNum })).concat(lastEntry);
+        // NOTE: Although downRight's parent is really the node, parentCoord is used to
+        // Support rendering of the plus sign. Only the connector that renders the plus sign
+        // can have its parentCol to be the parent node's col. Since we don't want to render
+        // the plus sign on the downRight connector, we need to make sure this connector's
+        // parentCoord is pointing to an empty slot in the matrix
+        const firstEntry = {
+            colNum: startCol,
+            rowNum,
+            connectorId: "downRight",
+            parentCoord: { colNum: fromCol - 1, rowNum: rowNum }
+        };
+        const { lines, lastLineCoord } = lineHorizes({
+            startCol: startCol + 1, endCol, rowNum, parentCoord: parentNodeCoord
+        });
+
+        console.log("Case 2....parentNodeCoord", parentNodeCoord);
+        console.log("Case 2....lastLineCoord", lastLineCoord);
+
+
+        const lastEntry = {
+            colNum: endCol,
+            rowNum,
+            connectorId: "arrowRight",
+            parentCoord: lastLineCoord
+        };
+        console.log("Case 2....lastEntry", lastEntry);
+
+        return [firstEntry].concat(lines).concat(lastEntry);
     }
 
     // Case 3: fromRow > toRow
@@ -254,11 +325,19 @@ export const createConnectorsBetweenNodes = (
     const startCol = fromCol + 1;
     const endCol = toCol;
     const rowNum = fromRow;
-    const lastEntry = { colNum: endCol, rowNum, connectorId: "rightUpArrow" };
+    const { lines, lastLineCoord } = lineHorizes({
+        startCol, endCol, rowNum, parentCoord: parentNodeCoord
+    });
 
-    return lineHorizes({ startCol, endCol, rowNum }).concat(lastEntry);
+    const lastEntry = {
+        colNum: endCol,
+        rowNum,
+        connectorId: "rightUpArrow",
+        parentCoord: lastLineCoord
+    };
+
+    return lines.concat(lastEntry);
 };
-
 
 
 // TODO: We might not need BFS to place the workflowStep into the matrix
@@ -328,17 +407,15 @@ export const populateMatrix = (
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
-    console.log("--nodeCoord", JSON.stringify(nodeCoord));
-    console.log("--parentCoords", JSON.stringify(parentCoords));
+    console.log("--nodeCoord", nodeCoord);
+    console.log("--parentCoords", parentCoords);
 
     const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, parentCoords });
-
-    // console.log("--coordPairs", coordPairs);
-    console.log("============> FOO ....", JSON.stringify(coordPairs));
-
     const connectorsToPlace: ConnectorsToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
-    connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace }));
+    // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?
+    // The addConnectorToMatrix function should return a new matrix
+    connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoord }));
 
     return matrix;
 };

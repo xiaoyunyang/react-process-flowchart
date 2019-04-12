@@ -56,4 +56,10 @@ export interface ConnectorsToPlace {
     rowNum: number;
     colNum: number;
     connectorId: string;
+    parentCoord: MatrixCoord;
+}
+
+export interface ColEntry {
+    node: GenericNodeT;
+    matrixEntry: string;
 }

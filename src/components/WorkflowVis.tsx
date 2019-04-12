@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 
 // Styles
@@ -9,7 +8,10 @@ import { connectors } from "./Connector";
 import Column from "./Column";
 
 // Types
-import { Matrix, WorkflowVisDataT } from "../types/workflowVis";
+import { Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, ConnectorT } from "../types/workflowVis";
+
+// Utils
+import { getConnectorInfo } from "../utils/workflowVisUtils";
 
 const CSS_GRID_OFFSET = 1;
 const getStyleForCol = (i: number) => ({
@@ -17,13 +19,35 @@ const getStyleForCol = (i: number) => ({
     gridRow: 1
 });
 
+
+const newColEntry = (
+    { workflowStepNodes, connectors, matrixEntry }: {
+        matrixEntry: string;
+        workflowStepNodes: { [id: string]: WorkflowStepNodeT };
+        connectors: { [id: string]: ConnectorT };
+    }
+): ColEntry => {
+    let node;
+    if (workflowStepNodes[matrixEntry]) {
+        node = workflowStepNodes[matrixEntry];
+    } else {
+        const { connectorId } = getConnectorInfo({ matrixEntry });
+        node = connectors[connectorId];
+    }
+
+    return { matrixEntry, node };
+};
+
+
 const WorkflowsVis = ({
     workflowVisData, matrix, editMode }: { workflowVisData: WorkflowVisDataT; matrix: Matrix; editMode: boolean }
 ) => {
     const { workflowStepNodes } = workflowVisData;
-    let cols = matrix.map(colNodes =>
-        colNodes.map(node => workflowStepNodes[node] ? workflowStepNodes[node] : connectors[node])
-    );
+
+    const cols: ColEntry[][] = matrix.map((colNodes: string[]) =>
+        colNodes.map((matrixEntry: string) => newColEntry({ workflowStepNodes, connectors, matrixEntry })));
+
+    // console.log("cols", cols);
 
     // TODO: className is not necessary. Inline style determines row and col. Only there for debugging
     return (
@@ -32,7 +56,7 @@ const WorkflowsVis = ({
                 cols.map((col, i) =>
                     (
                         <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
-                            <Column colNum={CSS_GRID_OFFSET + i} nodes={col} editMode={editMode} />
+                            <Column col={col} editMode={editMode} />
                         </div>
                     )
                 )
