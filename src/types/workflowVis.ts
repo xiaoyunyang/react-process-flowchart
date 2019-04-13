@@ -27,9 +27,9 @@ export interface CoordPairT {
 }
 
 export enum ConnectorTypeT {
-    BOX_CONNECTOR = "BOX_CONNECTOR",
-    DIAMOND_CONNECTOR = "DIAMOND_CONNECTOR",
-    STANDARD_CONNECTOR = "STANDARD_CONNECTOR"
+    BOX_CONNECTOR = "box",
+    DIAMOND_CONNECTOR = "diamond",
+    STANDARD_CONNECTOR = "standard"
 }
 
 export enum ConnectorName {
@@ -49,10 +49,10 @@ export interface ConnectorT {
     name: ConnectorName;
 }
 
-export type GenericNodeTypeT = ConnectorTypeT | WorkflowStepTypeT | string;
+export type GenericTileType = ConnectorTypeT | WorkflowStepTypeT | string;
 
-export interface GenericNodeT {
-    type: GenericNodeTypeT;
+export interface GenericTile {
+    type: GenericTileType;
     name: string;
     id: string;
 }
@@ -64,14 +64,13 @@ export interface MatrixCoord {
     rowNum: number;
 }
 
-export interface ConnectorsToPlace {
-    rowNum: number;
-    colNum: number;
+export interface ConnectorToPlace {
     connectorName: ConnectorName;
-    parentCoord: MatrixCoord;
+    ownCoord: string;
+    parentCoord: string;
 }
 
 export interface ColEntry {
-    node: GenericNodeT;
+    tile: GenericTile;
     matrixEntry: string;
 }

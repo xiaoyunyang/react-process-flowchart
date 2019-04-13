@@ -1,17 +1,16 @@
-// Components
+// Libraries
 import React from 'react';
 import classNames from "classnames";
 
-// Style
-import styles from './styles/workflowVis.module.css';
-
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
+import { GenericTileType } from "../types/workflowVis";
 
 // Constants
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
-// eslint-disable-next-line import/named
-import { GenericNodeTypeT } from "../types/workflowVis";
+
+// Style
+import styles from './styles/workflowVis.module.css';
 
 const TRUNCATE_WORDS_CUTOFF = 10;
 
@@ -23,7 +22,7 @@ const Icon = ({ icon }: { icon: string }) => (
 
 interface PropsT {
     name: string;
-    type: GenericNodeTypeT;
+    type: GenericTileType;
 }
 interface State {
     dropdownMenuOpened: boolean;

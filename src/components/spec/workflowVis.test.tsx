@@ -13,7 +13,7 @@ import { workflowVisData, matrixBA } from "./mockMatrices";
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Constants
-import { connectors } from "../Connector";
+import { ConnectorName } from "../../types/workflowVis";
 
 configure({ adapter: new Adapter() });
 
@@ -37,18 +37,19 @@ describe("WorkflowVis Spec", () => {
         beforeEach(() => {
             columns = workflowVis.find(Column);
         });
-
         it("renders correct number of Columns", () => {
             expect(columns).toHaveLength(matrix.length);
         });
         it("renders Authorize in the first Column", () => {
             const column = columns.at(0);
-            expect(column.props().nodes[0].type).toBe(WorkflowStepTypeT.AUTHORIZE);
+            const { colEntries } = column.props();
+
+            expect(colEntries[0].tile.type).toBe(WorkflowStepTypeT.AUTHORIZE);
         });
         it("renders arrowRight connector in the second Column", () => {
             const column = columns.at(1);
-            const connectorId = matrix[1][0];
-            expect(column.props().nodes[0]).toBe(connectors[connectorId]);
+            const { colEntries } = column.props();
+            expect(colEntries[0].tile.name).toBe(ConnectorName.ARROW_RIGHT);
         });
     });
 });

@@ -1,3 +1,4 @@
+// Libraries
 import React from 'react';
 
 // Styles
@@ -8,46 +9,44 @@ import { connectors } from "./Connector";
 import Column from "./Column";
 
 // Types
-import { Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, ConnectorT } from "../types/workflowVis";
+import {
+    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, ConnectorT
+} from "../types/workflowVis";
 
 // Utils
-import { getConnectorInfo } from "../utils/workflowVisUtils";
+import { decodeMatrixEntry } from "../utils/workflowVisUtils";
 
 const CSS_GRID_OFFSET = 1;
+
 const getStyleForCol = (i: number) => ({
     gridColumn: CSS_GRID_OFFSET + i,
     gridRow: 1
 });
 
-
 const newColEntry = (
-    { workflowStepNodes, connectors, matrixEntry }: {
+    { matrixEntry, workflowStepNodes }: {
         matrixEntry: string;
         workflowStepNodes: { [id: string]: WorkflowStepNodeT };
-        connectors: { [id: string]: ConnectorT };
     }
 ): ColEntry => {
-    let node;
-    if (workflowStepNodes[matrixEntry]) {
-        node = workflowStepNodes[matrixEntry];
-    } else {
-        const { connectorId } = getConnectorInfo({ matrixEntry });
-        node = connectors[connectorId];
-    }
+    const { tileId } = decodeMatrixEntry(matrixEntry);
+    const tile = (workflowStepNodes[tileId]) ? workflowStepNodes[tileId] : connectors[tileId];
 
-    return { matrixEntry, node };
+    return { matrixEntry, tile };
 };
 
 
-const WorkflowsVis = ({
-    workflowVisData, matrix, editMode }: { workflowVisData: WorkflowVisDataT; matrix: Matrix; editMode: boolean }
+const WorkflowsVis = (
+    { workflowVisData, matrix, editMode }: {
+        workflowVisData: WorkflowVisDataT; matrix: Matrix; editMode: boolean;
+    }
 ) => {
     const { workflowStepNodes } = workflowVisData;
 
-    const cols: ColEntry[][] = matrix.map((colNodes: string[]) =>
-        colNodes.map((matrixEntry: string) => newColEntry({ workflowStepNodes, connectors, matrixEntry })));
+    const cols: ColEntry[][] = matrix.map(
+        (colNodes: string[]) => colNodes.map(
+            (matrixEntry: string) => newColEntry({ workflowStepNodes, matrixEntry })));
 
-    // console.log("cols", cols);
 
     // TODO: className is not necessary. Inline style determines row and col. Only there for debugging
     return (
@@ -56,7 +55,10 @@ const WorkflowsVis = ({
                 cols.map((col, i) =>
                     (
                         <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
-                            <Column col={col} editMode={editMode} />
+                            <Column
+                                colEntries={col}
+                                editMode={editMode}
+                            />
                         </div>
                     )
                 )

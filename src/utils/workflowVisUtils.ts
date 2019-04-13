@@ -4,35 +4,101 @@ import { clone, chain } from "ramda";
 // Types
 import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
-    MatrixCoord, ConnectorsToPlace, ColType, CoordPairT, ConnectorName
+    MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
+    GenericTileType, ConnectorTypeT
 } from "../types/workflowVis";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
 // Constants
-const MATRIX_PLACEHOLDER = "empty";
+const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
 
+/**
+ * Determines if a tileType is a member of ConnectorTypeT
+ *
+ * @param {GenericTileType} tileType
+ * @return {boolean} true if tileType is a member of ConnectorTypeT
+ */
+export const isConnector = (tileType: GenericTileType): tileType is ConnectorTypeT =>
+    Object.values(ConnectorTypeT).includes(tileType);
+
+/**
+ * Encodes colNum and rowNum as comma delimited string
+ *
+ * @param {number} colNum
+ * @param {number} rowNum
+ * @returns {string} a comma delimited string encoding colNum and rowNum
+ */
 export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `${colNum},${rowNum}`;
 
+/**
+ * Decodes colNum and rowNum from comma delimited string
+ *
+ * @param {string} colRow a comma delimited string encoding colNum and rowNum
+ * @returns {number} colNum
+ * @returns {number} rowNum
+ */
 export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
     const [colNum, rowNum] = colRow.split(",").map(s => +s);
     return { colNum, rowNum };
 };
 
-export const isPlaceholder = (id: string): boolean =>
-    (Object.values(ColType).includes(id.split(".")[0])) && (id.split(".")[1] === MATRIX_PLACEHOLDER);
-
+/**
+ * Creates a string from the given parameters encoding information about the matrix entry
+ *
+ * @param {number} colNum
+ * @param {number} rowNum
+ * @param {string} entryName
+ * @param {ColType} colType
+ * @return {string} matrixEntry - a period delimited string that encodes all the params
+ */
+export const encodeMatrixEntry = (
+    { colNum, rowNum, entryName, colType }: {
+        colNum: number;
+        rowNum: number;
+        entryName: string;
+        colType: ColType;
+    }
+): string => {
+    const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
+    return `${colType}.${entryName}.${encodedOwnCoord}`;
+};
 
 /**
- * Decodes connector info from the matrixEntry string for a conenctor
- * @param matrixEntry
- * @returns {connectorType, connectorId, encodedOwnCoord, encodedParentCoord }
+ * Get info about the tile from the matrixEntry string
+ *
+ * @param {string} matrixEntry
+ * @returns {string} tileType
+ * @returns {string} tileId
+ * @returns {(string|undefined)} tileName
+ * @returns {(string|undefined)} encodedOwnCoord
+ * @returns {(string|undefined)} encodedParentNodeCoord - coord of a workflowStep
  */
-export const getConnectorInfo = ({ matrixEntry }: { matrixEntry: string }
-): { connectorType: string; connectorId: string; encodedOwnCoord: string; encodedParentCoord: string } => {
-    const [connectorType, connectorName, encodedOwnCoord, encodedParentCoord] = matrixEntry.split(".");
-    const connectorId = `${connectorType}.${connectorName}`;
-    return { connectorType, connectorId, encodedOwnCoord, encodedParentCoord };
+export const decodeMatrixEntry = (matrixEntry: string): {
+    tileType: string;
+    tileId: string;
+    tileName: string | undefined;
+    encodedOwnCoord: string | undefined;
+    encodedParentNodeCoord: string | undefined;
+} => {
+    const [tileType, tileName, encodedOwnCoord, encodedParentNodeCoord] = matrixEntry.split(".");
+
+    // If matrixEntry is a workflowStep, nodeType is the id because matrixEntry for 
+    // a workflowStep is simply the workflowStepUid
+    const tileId = isConnector(tileType) ? `${tileType}.${tileName}` : tileType;
+
+    return { tileType, tileId, tileName, encodedOwnCoord, encodedParentNodeCoord };
+};
+
+/**
+ * Determine if a matrixEntry string is a connector with the name "empty"
+ *
+ * @param {string} matrixEntry 
+ * @returns {boolean} true if matrixEntry represents a placeholder
+ */
+export const isPlaceholder = (matrixEntry: string): boolean => {
+    const { tileType, tileName } = decodeMatrixEntry(matrixEntry);
+    return isConnector(tileType) && tileName === MATRIX_PLACEHOLDER_NAME;
 };
 
 // Mutable function (mutates matrix) instead of returning
@@ -47,25 +113,27 @@ const replaceTile = (
     matrix[colNum] = newCol;
 };
 
-const emptyMatrixEntry = (
-    { colNum, rowNum, colType }: { colNum: number; rowNum: number; colType: ColType }
-) => {
-    const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
-    return `${colType}.${MATRIX_PLACEHOLDER}.${encodedOwnCoord}`;
-};
-
+/**
+ * 
+ * @param {number} numRows number of rows
+ * @param {number} colNum column number
+ * @param {colType} colType
+ * @returns {Array} an array of matrixEntries 
+ */
 export const initCol = (
     { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
 ): string[] => Array.from(Array(numRows)
     .keys())
-    .map(rowNum => emptyMatrixEntry({ colNum, rowNum, colType }));
+    .map(rowNum => encodeMatrixEntry({
+        colNum, rowNum, entryName: MATRIX_PLACEHOLDER_NAME, colType
+    }));
 
 /**
  * Creates a numCols x numRows matrix initalized with placeholders (box.empty, diamond.empty, or standard.empty)
  * 
- * @param numRows number
- * @param colTypes array of ColTypes (string) - box, diamond, or standard
- * @returns { matrix }
+ * @param {number} numRows
+ * @param {ColType} colTypes array of ColTypes (string) - box, diamond, or standard
+ * @returns {Matrix} a 2D array of matrixEntries
  */
 export const initMatrix = (
     { numRows, colTypes }: { numRows: number; colTypes: ColType[] }
@@ -124,7 +192,9 @@ const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
         if (workflowStepOrder === 1) {
             authorizeNextSteps = [workflowStepUid];
         }
-        const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
+
+        // Not sure if we need prevSteps...?
+        // const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
 
         const nextSteps = actions
             .filter(action => action.actionType !== "REJECT")
@@ -155,15 +225,16 @@ const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
 
 
 /**
- * creates the workflowVisData and initial matrix
+ * Creates the workflowVisData and initial matrix
  *
- * @param workflowSteps 
- * @param workflowUid 
- * @returns { WorkflowVisData, initialMatrix }
+ * @param {Array} workflowSteps 
+ * @param {string} workflowUid 
+ * @returns {WorkflowVisDataT} workflowVisData
+ * @returns {Matrix} initialMatrix
  */
 export const createWorkflowVisData = (
     { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
-): { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] } => {
+): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix } => {
     const {
         firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols
     } = createWorkflowStepNodes({ workflowSteps, workflowUid });
@@ -203,7 +274,7 @@ const addWorkflowStepToMatrix = (
     // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
     // TODO: Need to have a function for replace col type
     // We also need to change the size of the matrix and shift all the nodes to the right and down
-    const rowNum = col.findIndex((matrixElem: string) => isPlaceholder(matrixElem));
+    const rowNum = col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
 
     replaceTile({
         coord: { colNum, rowNum },
@@ -213,37 +284,44 @@ const addWorkflowStepToMatrix = (
     return { rowNum, colNum };
 };
 
-const addConnectorToMatrix = (
-    { matrix, connectorToPlace, nodeCoord }: {
-        matrix: Matrix; connectorToPlace: ConnectorsToPlace; nodeCoord: EndomorphDict;
+/**
+ * Mutates the matrix by replacing tiles with connectors
+ *
+ * @param {Matrix} matrix initial matrix with workflowSteps already placed
+ * @param {ConnectorToPlace} connectorToPlace instruction for how to place a connectors into matrix
+ * @param {Array} nodeCoords an array of matrix coords for all the nodes (i.e., workflowSteps) are
+ * @returns {string} replaceBy - string for the new connector matrixEntry
+ */
+export const addConnectorToMatrix = (
+    { matrix, connectorToPlace, nodeCoords }: {
+        matrix: Matrix; connectorToPlace: ConnectorToPlace; nodeCoords: string[];
     }
-): void => {
-    const { colNum, rowNum, connectorName, parentCoord } = connectorToPlace;
+): { replaceBy: string } => {
+    const { ownCoord, parentCoord, connectorName } = connectorToPlace;
+    const { colNum, rowNum } = decodeMatrixCoord(ownCoord);
+    const { tileType } = decodeMatrixEntry(matrix[colNum][rowNum]);
 
-    const { connectorType } = getConnectorInfo({ matrixEntry: matrix[colNum][rowNum] });
+    const parentNodeCoord: string = nodeCoords.includes(parentCoord) ?
+        `.${parentCoord}` : "";
 
-    const nodeCoords: string[] = Object.values(nodeCoord);
-
-    // TODO: verify that you are in path of the connected nodes
-
-    const encodedParentCoord = encodeMatrixCoord(parentCoord);
-    const encodedOwnCoord: string = encodeMatrixCoord({ colNum, rowNum });
-
-    const encodedParentNodeCoord: string = nodeCoords.includes(encodedParentCoord) ?
-        `.${encodedParentCoord}` : "";
+    const replaceBy = `${tileType}.${connectorName}.${ownCoord}${parentNodeCoord}`;
 
     replaceTile({
         matrix,
-        replaceBy: `${connectorType}.${connectorName}.${encodedOwnCoord}${encodedParentNodeCoord}`,
+        replaceBy,
         coord: { colNum, rowNum }
     });
+
+    return { replaceBy };
 };
 
+// TODO: rename parentCoord -> node2ParentCoords because plural and dict
 /**
  * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
  * 
- * @param nodeCoord
- * @param parentCoord
+ * @param {EndomorphDict} nodeCoord
+ * @param {PolymorphDict} parentCoord
+ * @returns {Array} an array of pairs of coords (fromNode and toNode)
  */
 export const createCoordPairs = (
     { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
@@ -258,34 +336,52 @@ export const createCoordPairs = (
     return chain(nodeId => newCoord(nodeId), nodeIds);
 };
 
-const lineHorizes = (
+/**
+ * Create a sequence of LineHoriz and returns the coordinate of the last LineHoriz 
+ *
+ * @param {number} startCol
+ * @param {number} endCol
+ * @param {number} rowNum
+ * @param {string} parentCoord
+ * @returns {Array} lines - an array of ConnectorToPlace for lineHoriz
+ * @returns {string} lastLineCoord - the coord of the last lineHoriz in the series
+ */
+export const createLineHorizes = (
     { startCol, endCol, rowNum, parentCoord }: {
-        startCol: number; endCol: number; rowNum: number; parentCoord: MatrixCoord;
+        startCol: number; endCol: number; rowNum: number; parentCoord: string;
     }
-): { lines: ConnectorsToPlace[]; lastLineCoord: MatrixCoord } => {
-    let lines: ConnectorsToPlace[] = [];
+): { lines: ConnectorToPlace[]; lastLineCoord: string } => {
+    let lines: ConnectorToPlace[] = [];
     let currParentCoord = parentCoord;
     for (let colNum = startCol; colNum < endCol; colNum += 1) {
-        const newEntry = { colNum, rowNum, connectorName: ConnectorName.LINE_HORIZ, parentCoord: currParentCoord };
+        const ownCoord = encodeMatrixCoord({ colNum, rowNum });
+        const newEntry = {
+            ownCoord,
+            parentCoord: currParentCoord,
+            connectorName: ConnectorName.LINE_HORIZ
+        };
         lines = lines.concat(newEntry);
-        currParentCoord = { colNum, rowNum };
+        currParentCoord = encodeMatrixCoord({ colNum, rowNum });
     }
 
     return { lines, lastLineCoord: currParentCoord };
 };
 
+
+// TODO: rename fromCoord -> parentCoord and toCoord -> childCoord
 /**
  * Creates an array of connectors to place with specific values and locations in the matrix
  *
- * @param fromCoord
- * @param toCoord
+ * @param {MatrixCoord} fromCoord
+ * @param {MatrixCoord} toCoord
+ * @returns {Array} an array of ConnectorToPlace for between the colNums of parent and child nodes
  */
 export const createConnectorsBetweenNodes = (
     { fromCoord, toCoord }: { fromCoord: MatrixCoord; toCoord: MatrixCoord }
-): ConnectorsToPlace[] => {
+): ConnectorToPlace[] => {
     const { colNum: fromCol, rowNum: fromRow } = fromCoord;
     const { colNum: toCol, rowNum: toRow } = toCoord;
-    const parentNodeCoord = { colNum: fromCol, rowNum: fromRow };
+    const parentNodeCoord = encodeMatrixCoord({ colNum: fromCol, rowNum: fromRow });
 
     // Case 1: fromRow = toRow
     // should be lineHoriz, ..., arrowRight
@@ -296,13 +392,12 @@ export const createConnectorsBetweenNodes = (
         const endCol = toCol - 1;
         const rowNum = fromRow;
 
-        const { lines, lastLineCoord } = lineHorizes({
+        const { lines, lastLineCoord } = createLineHorizes({
             startCol, endCol, rowNum, parentCoord: parentNodeCoord
         });
 
         const lastEntry = {
-            colNum: endCol,
-            rowNum,
+            ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
             connectorName: ConnectorName.ARROW_RIGHT,
             parentCoord: lastLineCoord
         };
@@ -325,12 +420,11 @@ export const createConnectorsBetweenNodes = (
         // the plus sign on the downRight connector, we need to make sure this connector's
         // parentCoord is pointing to an empty slot in the matrix
         const firstEntry = {
-            colNum: startCol,
-            rowNum,
-            connectorName: ConnectorName.DOWN_RIGHT,
-            parentCoord: { colNum: fromCol - 1, rowNum: rowNum }
+            ownCoord: encodeMatrixCoord({ colNum: startCol, rowNum }),
+            parentCoord: encodeMatrixCoord({ colNum: fromCol - 1, rowNum: rowNum }),
+            connectorName: ConnectorName.DOWN_RIGHT
         };
-        const { lines, lastLineCoord } = lineHorizes({
+        const { lines, lastLineCoord } = createLineHorizes({
             startCol: startCol + 1, endCol, rowNum, parentCoord: parentNodeCoord
         });
 
@@ -339,10 +433,9 @@ export const createConnectorsBetweenNodes = (
 
 
         const lastEntry = {
-            colNum: endCol,
-            rowNum,
-            connectorName: ConnectorName.ARROW_RIGHT,
-            parentCoord: lastLineCoord
+            ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
+            parentCoord: lastLineCoord,
+            connectorName: ConnectorName.ARROW_RIGHT
         };
         console.log("Case 2....lastEntry", lastEntry);
 
@@ -356,13 +449,12 @@ export const createConnectorsBetweenNodes = (
     const startCol = fromCol + 1;
     const endCol = toCol;
     const rowNum = fromRow;
-    const { lines, lastLineCoord } = lineHorizes({
+    const { lines, lastLineCoord } = createLineHorizes({
         startCol, endCol, rowNum, parentCoord: parentNodeCoord
     });
 
     const lastEntry = {
-        colNum: endCol,
-        rowNum,
+        ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
         connectorName: ConnectorName.RIGHT_UP_ARROW,
         parentCoord: lastLineCoord
     };
@@ -375,14 +467,14 @@ export const createConnectorsBetweenNodes = (
 
 /**
  * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
- * 
- * @param workflowVisData
- * @param initialMatrix
- * @param matrix - populated matrix (may be a different size than initialMatrix)
- *  
+ *
+ * @param {WorkflowVisDataT} workflowVisData
+ * @param {Matrix} initialMatrix
+ * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
+ *
  */
 export const populateMatrix = (
-    { workflowVisData, initialMatrix }: { workflowVisData: WorkflowVisDataT; initialMatrix: string[][] }
+    { workflowVisData, initialMatrix }: { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix }
 ): Matrix => {
     console.log("Populate Matrix...");
 
@@ -442,11 +534,14 @@ export const populateMatrix = (
     console.log("--parentCoords", parentCoords);
 
     const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, parentCoords });
-    const connectorsToPlace: ConnectorsToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
+    const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
     // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?
     // The addConnectorToMatrix function should return a new matrix
-    connectorsToPlace.forEach(connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoord }));
+    const nodeCoords: string[] = Object.values(nodeCoord);
+    connectorsToPlace.forEach(
+        connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
+    );
 
     return matrix;
 };
