@@ -26,16 +26,16 @@ describe("Column Spec", () => {
             tile: { id: "09e6110fda58", name: "Translation", type: WorkflowStepTypeT.TRANSLATION }
         },
         {
-            matrixEntry: "box.empty.0,1",
-            tile: { id: "box.empty", name: "empty", containerName: "connectorContainerBox", type: ConnectorTypeT.BOX_CONNECTOR }
+            matrixEntry: "box|empty|0,1",
+            tile: { id: "box|empty", name: "empty", containerName: "connectorContainerBox", type: ConnectorTypeT.BOX_CONNECTOR }
         },
         {
-            matrixEntry: "diamond.lineHoriz.3,3.2,2",
-            tile: { id: "diamond.lineHoriz", name: "lineHoriz", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
+            matrixEntry: "diamond|lineHoriz|3,3|2,2",
+            tile: { id: "diamond|lineHoriz", name: "lineHoriz", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
         },
         {
-            matrixEntry: "diamond.arrowRight.3,4.2,4",
-            tile: { id: "diamond.arrowRight", name: "arrowRight", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
+            matrixEntry: "diamond|arrowRight|3,4|2,4",
+            tile: { id: "diamond|arrowRight", name: "arrowRight", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
         }
     ];
     let props: any;
@@ -64,9 +64,9 @@ describe("Column Spec", () => {
         it("renders connector", () => {
             const connectors = column.find(Connector);
 
-            const empty = column.find({ id: "box.empty" });
-            const lineHoriz = column.find({ id: "diamond.lineHoriz" });
-            const arrowRight = column.find({ id: "diamond.arrowRight" });
+            const empty = column.find({ id: "box|empty" });
+            const lineHoriz = column.find({ id: "diamond|lineHoriz" });
+            const arrowRight = column.find({ id: "diamond|arrowRight" });
             expect(connectors).toHaveLength(3);
             expect(empty).toHaveLength(1);
             expect(lineHoriz).toHaveLength(1);
@@ -78,8 +78,8 @@ describe("Column Spec", () => {
         it("renders edit button for connectors with parentCoord when editMode is enabled", () => {
             props = { ...props, editMode: true };
             column = shallow(<Column {...props} />);
-            const lineHorizEdit = column.find({ id: "diamond.lineHoriz.edit" });
-            const arrowRightEdit = column.find({ id: "diamond.arrowRight.edit" });
+            const lineHorizEdit = column.find({ id: "diamond|lineHoriz.edit" });
+            const arrowRightEdit = column.find({ id: "diamond|arrowRight.edit" });
             expect(lineHorizEdit).toHaveLength(1);
             expect(arrowRightEdit).toHaveLength(1);
         });

@@ -39,13 +39,13 @@ describe("WorkflowVisUtils", () => {
 
     describe("#isPlaceholder", () => {
         it("should return true for placeholders", () => {
-            expect(isPlaceholder("standard.empty")).toBe(true);
-            expect(isPlaceholder("box.empty")).toBe(true);
-            expect(isPlaceholder("diamond.empty")).toBe(true);
+            expect(isPlaceholder("standard|empty")).toBe(true);
+            expect(isPlaceholder("box|empty")).toBe(true);
+            expect(isPlaceholder("diamond|empty")).toBe(true);
         });
         it("should return false for not placeholders", () => {
-            expect(isPlaceholder("foo.empty")).toBe(false);
-            expect(isPlaceholder("box.1234")).toBe(false);
+            expect(isPlaceholder("foo|empty")).toBe(false);
+            expect(isPlaceholder("box|1234")).toBe(false);
             expect(isPlaceholder("empty")).toBe(false);
         });
     });
@@ -53,7 +53,7 @@ describe("WorkflowVisUtils", () => {
     describe("#initCol", () => {
         it("should initialize an array with placeholders with the right colType and own matrix coordinate", () => {
             const col = initCol({ numRows: 3, colNum: 0, colType: ColType.BOX });
-            expect(col).toEqual(["box.empty.0,0", "box.empty.0,1", "box.empty.0,2"]);
+            expect(col).toEqual(["box|empty|0,0", "box|empty|0,1", "box|empty|0,2"]);
         });
     });
 
@@ -64,9 +64,9 @@ describe("WorkflowVisUtils", () => {
                 colTypes: [ColType.BOX, ColType.DIAMOND, ColType.STANDARD]
             });
             expect(matrix).toEqual([
-                ["box.empty.0,0", "box.empty.0,1"],
-                ["diamond.empty.1,0", "diamond.empty.1,1"],
-                ["standard.empty.2,0", "standard.empty.2,1"],
+                ["box|empty|0,0", "box|empty|0,1"],
+                ["diamond|empty|1,0", "diamond|empty|1,1"],
+                ["standard|empty|2,0", "standard|empty|2,1"]
             ]);
         });
     });
@@ -88,14 +88,22 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#encodeMatrixEntry", () => {
-        it("should encode matrix entry information into a string", () => {
+        it("should encode matrix entry information into a string when encodedParentCoord is undefined", () => {
             const matrixEntry = encodeMatrixEntry({
-                colNum: 2,
-                rowNum: 3,
+                colType: ColType.STANDARD,
                 entryName: ConnectorName.EMPTY,
-                colType: ColType.STANDARD
+                encodedOwnCoord: "2,3"
             });
-            expect(matrixEntry).toBe("standard.empty.2,3");
+            expect(matrixEntry).toBe("standard|empty|2,3");
+        });
+        it("should encode matrix entry information into a string when encodedParentCoord is defined", () => {
+            const matrixEntry = encodeMatrixEntry({
+                colType: ColType.STANDARD,
+                entryName: ConnectorName.EMPTY,
+                encodedOwnCoord: "2,3",
+                encodedParentCoord: "1,3"
+            });
+            expect(matrixEntry).toBe("standard|empty|2,3|1,3");
         });
     });
 
@@ -112,22 +120,22 @@ describe("WorkflowVisUtils", () => {
             });
         });
         it("should decode connector from a matrixEntry representing a connector with no parent", () => {
-            const matrixEntry = "standard.lineHoriz.1,1";
+            const matrixEntry = "standard|lineHoriz|1,1";
             const decodedMatrixEntry = decodeMatrixEntry(matrixEntry);
             expect(decodedMatrixEntry).toEqual({
                 tileType: "standard",
-                tileId: "standard.lineHoriz",
+                tileId: "standard|lineHoriz",
                 tileName: "lineHoriz",
                 encodedOwnCoord: "1,1",
                 encodedParentNodeCoord: undefined
             });
         });
         it("should decode connector from a matrixEntry representing a connector with a parent node", () => {
-            const matrixEntry = "standard.lineHoriz.1,1.2,2";
+            const matrixEntry = "standard|lineHoriz|1,1|2,2";
             const decodedMatrixEntry = decodeMatrixEntry(matrixEntry);
             expect(decodedMatrixEntry).toEqual({
                 tileType: "standard",
-                tileId: "standard.lineHoriz",
+                tileId: "standard|lineHoriz",
                 tileName: "lineHoriz",
                 encodedOwnCoord: "1,1",
                 encodedParentNodeCoord: "2,2"
@@ -232,17 +240,17 @@ describe("WorkflowVisUtils", () => {
             });
             expect(initialMatrix).toEqual(
                 [
-                    ["box.empty.0,0", "box.empty.0,1"],
-                    ["standard.empty.1,0", "standard.empty.1,1"],
-                    ["diamond.empty.2,0", "diamond.empty.2,1"],
-                    ["standard.empty.3,0", "standard.empty.3,1"],
-                    ["box.empty.4,0", "box.empty.4,1"],
-                    ["standard.empty.5,0", "standard.empty.5,1"],
-                    ["box.empty.6,0", "box.empty.6,1"],
-                    ["standard.empty.7,0", "standard.empty.7,1"],
-                    ["box.empty.8,0", "box.empty.8,1"],
-                    ["standard.empty.9,0", "standard.empty.9,1"],
-                    ["box.empty.10,0", "box.empty.10,1"]
+                    ["box|empty|0,0", "box|empty|0,1"],
+                    ["standard|empty|1,0", "standard|empty|1,1"],
+                    ["diamond|empty|2,0", "diamond|empty|2,1"],
+                    ["standard|empty|3,0", "standard|empty|3,1"],
+                    ["box|empty|4,0", "box|empty|4,1"],
+                    ["standard|empty|5,0", "standard|empty|5,1"],
+                    ["box|empty|6,0", "box|empty|6,1"],
+                    ["standard|empty|7,0", "standard|empty|7,1"],
+                    ["box|empty|8,0", "box|empty|8,1"],
+                    ["standard|empty|9,0", "standard|empty|9,1"],
+                    ["box|empty|10,0", "box|empty|10,1"]
                 ]
             );
         });
@@ -252,17 +260,18 @@ describe("WorkflowVisUtils", () => {
         it("should handle linear workflow case", () => {
             const { workflowSteps, workflowUid } = AA;
             const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const res = populateMatrix({ workflowVisData, initialMatrix });
+            const decisionStepCols: number[] = []; // TODO: actually test this
+            const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
             const expected = [
                 ["8e00dae32eb6-auth"],
-                ["standard.arrowRight.1,0.0,0"],
+                ["standard|arrowRight|1,0|0,0"],
                 ["64735f9f64c8"],
-                ["standard.arrowRight.3,0.2,0"],
+                ["standard|arrowRight|3,0|2,0"],
                 ["6473fda8a603"],
-                ["standard.arrowRight.5,0.4,0"],
+                ["standard|arrowRight|5,0|4,0"],
                 ["647384536514"],
-                ["standard.arrowRight.7,0.6,0"],
+                ["standard|arrowRight|7,0|6,0"],
                 ["6473f65c98fe"]
             ];
             expect(res).toEqual(expected);
@@ -270,20 +279,21 @@ describe("WorkflowVisUtils", () => {
         it("should handle simple branching workflow", () => {
             const { workflowSteps, workflowUid } = BA;
             const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const res = populateMatrix({ workflowVisData, initialMatrix });
+            const decisionStepCols: number[] = []; // TODO: actually test this
+            const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
             const expected = [
-                ["5890236e433b-auth", "box.empty.0,1"],
-                ["standard.arrowRight.1,0.0,0", "standard.empty.1,1"],
-                ["ba322565b1bf", "diamond.downRight.2,1"],
-                ["standard.arrowRight.3,0.2,0", "standard.arrowRight.3,1.2,0"],
+                ["5890236e433b-auth", "box|empty|0,1"],
+                ["standard|arrowRight|1,0|0,0", "standard|empty|1,1"],
+                ["ba322565b1bf", "diamond|downRight|2,1"],
+                ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0"],
                 ["09e6110fda58", "b2b5c4c7cfd7"],
-                ["standard.arrowRight.5,0.4,0", "standard.lineHoriz.5,1.4,1"],
-                ["297786162f15", "box.rightUpArrow.6,1"],
-                ["standard.arrowRight.7,0.6,0", "standard.empty.7,1"],
-                ["492b709fc90a", "box.empty.8,1"],
-                ["standard.arrowRight.9,0.8,0", "standard.empty.9,1"],
-                ["a3135bdf3aa3", "box.empty.10,1"]
+                ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1"],
+                ["297786162f15", "box|rightUpArrow|6,1"],
+                ["standard|arrowRight|7,0|6,0", "standard|empty|7,1"],
+                ["492b709fc90a", "box|empty|8,1"],
+                ["standard|arrowRight|9,0|8,0", "standard|empty|9,1"],
+                ["a3135bdf3aa3", "box|empty|10,1"]
             ];
             expect(res).toEqual(expected);
         });
@@ -295,10 +305,10 @@ describe("WorkflowVisUtils", () => {
         beforeEach(() => {
             matrix = [
                 ["1234"],
-                ["standard.empty.1,0"],
-                ["box.empty.2,0"],
-                ["standard.empty.3,0"],
-                ["5678"],
+                ["standard|empty|1,0"],
+                ["box|empty|2,0"],
+                ["standard|empty|3,0"],
+                ["5678"]
             ];
         });
         it("should replace the tile of the matrix with connector whose parent is a workflowStep", () => {
@@ -309,12 +319,12 @@ describe("WorkflowVisUtils", () => {
             };
 
             const { replaceBy } = addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords });
-            const expectedReplaceBy = "standard.lineHoriz.1,0.0,0";
+            const expectedReplaceBy = "standard|lineHoriz|1,0|0,0";
             expect(matrix).toEqual([
                 ["1234"],
                 [expectedReplaceBy],
-                ["box.empty.2,0"],
-                ["standard.empty.3,0"],
+                ["box|empty|2,0"],
+                ["standard|empty|3,0"],
                 ["5678"]
             ]);
             expect(replaceBy).toBe(expectedReplaceBy);
@@ -326,11 +336,11 @@ describe("WorkflowVisUtils", () => {
                 connectorName: ConnectorName.ARROW_RIGHT
             };
             const { replaceBy } = addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords });
-            const expectedReplaceBy = "standard.arrowRight.3,0";
+            const expectedReplaceBy = "standard|arrowRight|3,0";
             expect(matrix).toEqual([
                 ["1234"],
-                ["standard.empty.1,0"],
-                ["box.empty.2,0"],
+                ["standard|empty|1,0"],
+                ["box|empty|2,0"],
                 [expectedReplaceBy],
                 ["5678"]
             ]);

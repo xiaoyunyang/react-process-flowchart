@@ -46,48 +46,50 @@ export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
 /**
  * Creates a string from the given parameters encoding information about the matrix entry
  *
- * @param {number} colNum
- * @param {number} rowNum
- * @param {string} entryName
  * @param {ColType} colType
+ * @param {string} entryName
+ * @param {string} encodedOwnCoord
+ * @param {string} encodedParentCoord
  * @return {string} matrixEntry - a period delimited string that encodes all the params
  */
 export const encodeMatrixEntry = (
-    { colNum, rowNum, entryName, colType }: {
-        colNum: number;
-        rowNum: number;
-        entryName: string;
+    { colType, entryName, encodedOwnCoord, encodedParentCoord }: {
         colType: ColType;
+        entryName: string;
+        encodedOwnCoord: string;
+        encodedParentCoord?: string;
     }
 ): string => {
-    const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
-    return `${colType}.${entryName}.${encodedOwnCoord}`;
+    const parentCoord = encodedParentCoord ? `|${encodedParentCoord}` : "";
+    return `${colType}|${entryName}|${encodedOwnCoord}${parentCoord}`;
 };
 
 /**
  * Get info about the tile from the matrixEntry string
  *
  * @param {string} matrixEntry
- * @returns {string} tileType
+ * @returns {ColType} tileType
  * @returns {string} tileId
  * @returns {(string|undefined)} tileName
  * @returns {(string|undefined)} encodedOwnCoord
  * @returns {(string|undefined)} encodedParentNodeCoord - coord of a workflowStep
  */
 export const decodeMatrixEntry = (matrixEntry: string): {
-    tileType: string;
+    tileType: ColType;
     tileId: string;
     tileName: string | undefined;
     encodedOwnCoord: string | undefined;
     encodedParentNodeCoord: string | undefined;
 } => {
-    const [tileType, tileName, encodedOwnCoord, encodedParentNodeCoord] = matrixEntry.split(".");
+    const [tileType, tileName, encodedOwnCoord, encodedParentNodeCoord] = matrixEntry.split("|");
 
-    // If matrixEntry is a workflowStep, nodeType is the id because matrixEntry for 
+    // If matrixEntry is a workflowStep, nodeType is the id because matrixEntry for
     // a workflowStep is simply the workflowStepUid
-    const tileId = isConnector(tileType) ? `${tileType}.${tileName}` : tileType;
+    const tileId = isConnector(tileType) ? `${tileType}|${tileName}` : tileType;
 
-    return { tileType, tileId, tileName, encodedOwnCoord, encodedParentNodeCoord };
+    return {
+        tileType: tileType as ColType, tileId, tileName, encodedOwnCoord, encodedParentNodeCoord
+    };
 };
 
 /**
@@ -114,18 +116,20 @@ const replaceTile = (
 };
 
 /**
- * 
+ *
  * @param {number} numRows number of rows
  * @param {number} colNum column number
  * @param {colType} colType
- * @returns {Array} an array of matrixEntries 
+ * @returns {Array} an array of matrixEntries
  */
 export const initCol = (
     { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
 ): string[] => Array.from(Array(numRows)
     .keys())
     .map(rowNum => encodeMatrixEntry({
-        colNum, rowNum, entryName: MATRIX_PLACEHOLDER_NAME, colType
+        colType,
+        entryName: MATRIX_PLACEHOLDER_NAME,
+        encodedOwnCoord: encodeMatrixCoord({ colNum, rowNum })
     }));
 
 /**
@@ -309,10 +313,15 @@ export const addConnectorToMatrix = (
     const { colNum, rowNum } = decodeMatrixCoord(ownCoord);
     const { tileType } = decodeMatrixEntry(matrix[colNum][rowNum]);
 
-    const parentNodeCoord: string = nodeCoords.includes(parentCoord) ?
-        `.${parentCoord}` : "";
+    const parentNodeCoord: string | undefined = nodeCoords.includes(parentCoord) ?
+        parentCoord : undefined;
 
-    const replaceBy = `${tileType}.${connectorName}.${ownCoord}${parentNodeCoord}`;
+    const replaceBy = encodeMatrixEntry({
+        colType: tileType,
+        entryName: connectorName,
+        encodedOwnCoord: ownCoord,
+        encodedParentCoord: parentNodeCoord
+    });
 
     replaceTile({
         matrix,

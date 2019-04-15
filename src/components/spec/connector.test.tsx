@@ -12,7 +12,7 @@ describe("Connector Spec", () => {
     let props;
 
     beforeEach(() => {
-        props = { id: "diamond.empty" };
+        props = { id: "diamond|empty" };
 
         connector = shallow(<Connector {...props} />);
     });

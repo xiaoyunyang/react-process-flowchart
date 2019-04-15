@@ -54,103 +54,104 @@ export const DownRightDashEditable = () => (
 );
 
 export const connectors: { [id: string]: ConnectorT } = {
-    "diamond.downRight": {
-        id: "diamond.downRight",
+    "diamond|downRight": {
+        id: "diamond|downRight",
         name: ConnectorName.DOWN_RIGHT,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "diamond.downRightDash": {
-        id: "diamond.downRightDash",
+    "box|downRight": {
+        id: "box|downRight",
+        name: ConnectorName.DOWN_RIGHT,
+        containerName: "connectorContainerDiamond",
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
+    },
+    "diamond|downRightDash": {
+        id: "diamond|downRightDash",
         name: ConnectorName.DOWN_RIGHT_DASH,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "diamond.downRightDash.edit": {
-        id: "diamond.downRightDash.edit",
+    "diamond|downRightDash.edit": {
+        id: "diamond|downRightDash.edit",
         name: ConnectorName.DOWN_RIGHT_DASH_EDIT,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "box.downRight": {
-        id: "box.downRight",
-        name: ConnectorName.DOWN_RIGHT,
-        containerName: "connectorContainerDiamond",
-        type: ConnectorTypeT.DIAMOND_CONNECTOR
-    },
-    "box.rightUpArrow": {
-        id: "box.rightUpArrow",
+    "box|rightUpArrow": {
+        id: "box|rightUpArrow",
         name: ConnectorName.RIGHT_UP_ARROW,
         containerName: "connectorContainerBox",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "standard.arrowRight": {
-        id: "standard.arrowRight",
+    "standard|arrowRight": {
+        id: "standard|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "standard.arrowRight.edit": {
-        id: "standard.arrowRight.edit",
+    "standard|arrowRight.edit": {
+        id: "standard|arrowRight.edit",
         name: ConnectorName.ARROW_RIGHT_EDIT,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "box.arrowRight": {
-        id: "box.arrowRight",
+    "box|arrowRight": {
+        id: "box|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
         containerName: "connectorContainerBox",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "box.lineHoriz": {
-        id: "box.lineHoriz",
+    "box|lineHoriz": {
+        id: "box|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
         containerName: "connectorContainerBox",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "standard.lineHoriz": {
-        id: "standard.lineHoriz",
+    "standard|lineHoriz": {
+        id: "standard|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "standard.lineHoriz.edit": {
-        id: "standard.lineHoriz.edit",
+    "standard|lineHoriz.edit": {
+        id: "standard|lineHoriz.edit",
         name: ConnectorName.LINE_HORIZ_EDIT,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
-    "diamond.lineHoriz": {
-        id: "diamond.lineHoriz",
+    "diamond|lineHoriz": {
+        id: "diamond|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "diamond.lineHoriz.edit": {
-        id: "diamond.lineHoriz.edit",
+    "diamond|lineHoriz.edit": {
+        id: "diamond|lineHoriz.edit",
         name: ConnectorName.LINE_HORIZ_EDIT,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "diamond.empty": {
-        id: "diamond.empty",
+    "diamond|empty": {
+        id: "diamond|empty",
         name: ConnectorName.EMPTY,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "box.empty": {
-        id: "box.empty",
+    "box|empty": {
+        id: "box|empty",
         name: ConnectorName.EMPTY,
         containerName: "connectorContainerBox",
         type: ConnectorTypeT.BOX_CONNECTOR
     },
-    "standard.empty": {
-        id: "standard.empty",
+    "standard|empty": {
+        id: "standard|empty",
         name: ConnectorName.EMPTY,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
     }
 };
+
 
 // TODO: revert change to arrowRight: <ArrowRightEditable />
 export const connectorComponent: { [id in ConnectorName]: JSX.Element } = {
