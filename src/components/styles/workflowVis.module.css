@@ -4,10 +4,6 @@
 @import "./box.css";
 @import "./colors.css";
 
-/* TODO:
-Make grid-template-columns less manually generated.
-Instead of create .col1, .col2, ... classes, specify the col number and row number inline instead.
-*/
 .wrapper {
   display: grid;
   grid-template-columns: repeat(var(--max-columns), 2fr 1fr);
@@ -89,8 +85,8 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 .circle {
   position: relative;
   background-color: var(--tealish);
-  height: 20px;
-  width: 20px;
+  height: var(--circle-diameter);
+  width: var(--circle-diameter);
   border-radius: 50%;
   display: flex;
 }
@@ -103,7 +99,7 @@ Instead of create .col1, .col2, ... classes, specify the col number and row numb
 }
 
 .connectorContainerStandard .circle {
-  margin-top: calc(var(--box-height)/2.4);
+  margin-top: calc(var(--box-height) / 2.4);
 }
 
 .arrowRight .caret {

@@ -22,8 +22,8 @@ export enum ColType {
 }
 
 export interface CoordPairT {
-    fromCoord: MatrixCoord;
-    toCoord: MatrixCoord;
+    parentCoord: MatrixCoord;
+    childCoord: MatrixCoord;
 }
 
 export enum ConnectorTypeT {

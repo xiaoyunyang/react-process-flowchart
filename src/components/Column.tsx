@@ -8,7 +8,7 @@ import Connector from "./Connector";
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
-import { ColEntry } from "../types/workflowVis";
+import { ColEntry } from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";

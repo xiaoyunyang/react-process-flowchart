@@ -16,7 +16,7 @@ import {
 } from "../workflowVisUtils";
 
 // Types
-import { ColType, ConnectorName, Matrix, ConnectorTypeT } from "../../types/workflowVis";
+import { ColType, ConnectorName, Matrix, ConnectorTypeT } from "../../types/workflowVisTypes";
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Mocks
@@ -147,7 +147,7 @@ describe("WorkflowVisUtils", () => {
                 "a3135bdf3aa3": "10,0",
 
             };
-            const parentCoords = {
+            const nodeToParentCoords = {
                 "ba322565b1bf": ["0,0"],
                 "09e6110fda58": ["2,0"],
                 "b2b5c4c7cfd7": ["2,0"],
@@ -157,15 +157,15 @@ describe("WorkflowVisUtils", () => {
                 "a3135bdf3aa3": ["8,0"]
             };
 
-            const res = createCoordPairs({ nodeCoord, parentCoords });
+            const res = createCoordPairs({ nodeCoord, nodeToParentCoords });
             const expected = [
-                { fromCoord: { colNum: 0, rowNum: 0 }, toCoord: { colNum: 2, rowNum: 0 } },
-                { fromCoord: { colNum: 2, rowNum: 0 }, toCoord: { colNum: 4, rowNum: 0 } },
-                { fromCoord: { colNum: 2, rowNum: 0 }, toCoord: { colNum: 4, rowNum: 1 } },
-                { fromCoord: { colNum: 4, rowNum: 0 }, toCoord: { colNum: 6, rowNum: 0 } },
-                { fromCoord: { colNum: 4, rowNum: 1 }, toCoord: { colNum: 6, rowNum: 0 } },
-                { fromCoord: { colNum: 6, rowNum: 0 }, toCoord: { colNum: 8, rowNum: 0 } },
-                { fromCoord: { colNum: 8, rowNum: 0 }, toCoord: { colNum: 10, rowNum: 0 } }
+                { parentCoord: { colNum: 0, rowNum: 0 }, childCoord: { colNum: 2, rowNum: 0 } },
+                { parentCoord: { colNum: 2, rowNum: 0 }, childCoord: { colNum: 4, rowNum: 0 } },
+                { parentCoord: { colNum: 2, rowNum: 0 }, childCoord: { colNum: 4, rowNum: 1 } },
+                { parentCoord: { colNum: 4, rowNum: 0 }, childCoord: { colNum: 6, rowNum: 0 } },
+                { parentCoord: { colNum: 4, rowNum: 1 }, childCoord: { colNum: 6, rowNum: 0 } },
+                { parentCoord: { colNum: 6, rowNum: 0 }, childCoord: { colNum: 8, rowNum: 0 } },
+                { parentCoord: { colNum: 8, rowNum: 0 }, childCoord: { colNum: 10, rowNum: 0 } }
             ];
             expect(res).toEqual(expected);
         });
@@ -190,9 +190,9 @@ describe("WorkflowVisUtils", () => {
 
     describe("#createConnectorsBetweenNodes", () => {
         it("creates correct connectors for when parent node is in the same row as child node", () => {
-            const fromCoord = { colNum: 0, rowNum: 0 };
-            const toCoord = { colNum: 3, rowNum: 0 };
-            const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
+            const parentCoord = { colNum: 0, rowNum: 0 };
+            const childCoord = { colNum: 3, rowNum: 0 };
+            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "1,0", parentCoord: "0,0", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "2,0", parentCoord: "1,0", connectorName: ConnectorName.ARROW_RIGHT }
@@ -200,9 +200,9 @@ describe("WorkflowVisUtils", () => {
             expect(res).toEqual(expected);
         });
         it("creates correct connectors for when parent node is above child node", () => {
-            const fromCoord = { colNum: 2, rowNum: 0 };
-            const toCoord = { colNum: 6, rowNum: 2 };
-            const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
+            const parentCoord = { colNum: 2, rowNum: 0 };
+            const childCoord = { colNum: 6, rowNum: 2 };
+            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "2,2", parentCoord: "1,2", connectorName: ConnectorName.DOWN_RIGHT },
                 { ownCoord: "3,2", parentCoord: "2,0", connectorName: ConnectorName.LINE_HORIZ },
@@ -212,9 +212,9 @@ describe("WorkflowVisUtils", () => {
             expect(res).toEqual(expected);
         });
         it("creates correct connectors for when parent node is below child node", () => {
-            const fromCoord = { colNum: 2, rowNum: 4 };
-            const toCoord = { colNum: 5, rowNum: 0 };
-            const res = createConnectorsBetweenNodes({ fromCoord, toCoord });
+            const parentCoord = { colNum: 2, rowNum: 4 };
+            const childCoord = { colNum: 5, rowNum: 0 };
+            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "3,4", parentCoord: "2,4", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "4,4", parentCoord: "3,4", connectorName: ConnectorName.LINE_HORIZ },

@@ -10,8 +10,8 @@ import Column from "./Column";
 
 // Types
 import {
-    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, ConnectorT
-} from "../types/workflowVis";
+    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT
+} from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry } from "../utils/workflowVisUtils";

@@ -6,7 +6,7 @@ import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
     MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
     GenericTileType, ConnectorTypeT
-} from "../types/workflowVis";
+} from "../types/workflowVisTypes";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
@@ -317,20 +317,23 @@ export const addConnectorToMatrix = (
 
 // TODO: rename parentCoord -> node2ParentCoords because plural and dict
 /**
- * Creates an array of fromCoord and toCoord pairs for use by connectorBetweenNodes
- * 
+ * Creates an array of parentCoord/childCoord pairs for use by connectorBetweenNodes
+ *
  * @param {EndomorphDict} nodeCoord
- * @param {PolymorphDict} parentCoord
+ * @param {PolymorphDict} nodeToParentCoords
  * @returns {Array} an array of pairs of coords (fromNode and toNode)
  */
 export const createCoordPairs = (
-    { nodeCoord, parentCoords }: { nodeCoord: EndomorphDict; parentCoords: PolymorphDict }
+    { nodeCoord, nodeToParentCoords }: {
+        nodeCoord: EndomorphDict;
+        nodeToParentCoords: PolymorphDict;
+    }
 ): CoordPairT[] => {
-    const nodeIds = Object.keys(parentCoords);
+    const nodeIds = Object.keys(nodeToParentCoords);
 
-    const newCoord = (nodeId: string): CoordPairT[] => parentCoords[nodeId].map(colRow => ({
-        fromCoord: decodeMatrixCoord(colRow),
-        toCoord: decodeMatrixCoord(nodeCoord[nodeId])
+    const newCoord = (nodeId: string): CoordPairT[] => nodeToParentCoords[nodeId].map(colRow => ({
+        parentCoord: decodeMatrixCoord(colRow),
+        childCoord: decodeMatrixCoord(nodeCoord[nodeId])
     }));
 
     return chain(nodeId => newCoord(nodeId), nodeIds);
@@ -368,19 +371,18 @@ export const createLineHorizes = (
 };
 
 
-// TODO: rename fromCoord -> parentCoord and toCoord -> childCoord
 /**
  * Creates an array of connectors to place with specific values and locations in the matrix
  *
- * @param {MatrixCoord} fromCoord
- * @param {MatrixCoord} toCoord
+ * @param {MatrixCoord} parentCoord
+ * @param {MatrixCoord} childCoord
  * @returns {Array} an array of ConnectorToPlace for between the colNums of parent and child nodes
  */
-export const createConnectorsBetweenNodes = (
-    { fromCoord, toCoord }: { fromCoord: MatrixCoord; toCoord: MatrixCoord }
-): ConnectorToPlace[] => {
-    const { colNum: fromCol, rowNum: fromRow } = fromCoord;
-    const { colNum: toCol, rowNum: toRow } = toCoord;
+export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorToPlace[] => {
+    const { parentCoord, childCoord } = coordPair;
+    const { colNum: fromCol, rowNum: fromRow } = parentCoord;
+    const { colNum: toCol, rowNum: toRow } = childCoord;
+
     const parentNodeCoord = encodeMatrixCoord({ colNum: fromCol, rowNum: fromRow });
 
     // Case 1: fromRow = toRow
@@ -492,7 +494,7 @@ export const populateMatrix = (
     const nodeCoord: EndomorphDict = {};
 
     // connectedNodes is a mapping from (colNum,rowNum) of a node to (colNum, rowNum)[] to its children nodes
-    const parentCoords: PolymorphDict = {};
+    const nodeToParentCoords: PolymorphDict = {};
 
     while (toExplore.length > 0) {
         const [id, ...rest] = toExplore;
@@ -519,8 +521,8 @@ export const populateMatrix = (
             // Update parentCoord here using nodeCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeCoord
             // because nextStep's parent is current node, which we just added to nodeCoord above
-            const parentCoordsEntry = parentCoords[nextStepId];
-            parentCoords[nextStepId] = (parentCoordsEntry ? parentCoordsEntry : []).concat([nodeCoord[id]]);
+            const nodeToParentCoordsEntry = nodeToParentCoords[nextStepId];
+            nodeToParentCoords[nextStepId] = (nodeToParentCoordsEntry ? nodeToParentCoordsEntry : []).concat([nodeCoord[id]]);
 
             if (!explored[nextStepId]) {
                 toExplore = toExplore.concat(nextStepId);
@@ -531,9 +533,9 @@ export const populateMatrix = (
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
     console.log("--nodeCoord", nodeCoord);
-    console.log("--parentCoords", parentCoords);
+    console.log("--nodeToParentCoords", nodeToParentCoords);
 
-    const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, parentCoords });
+    const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, nodeToParentCoords });
     const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
     // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?

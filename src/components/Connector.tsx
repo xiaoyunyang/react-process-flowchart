@@ -5,7 +5,7 @@ import classNames from "classnames";
 import styles from './styles/workflowVis.module.css';
 
 // Types
-import { ConnectorT, ConnectorTypeT, ConnectorName } from "../types/workflowVis";
+import { ConnectorT, ConnectorTypeT, ConnectorName } from "../types/workflowVisTypes";
 
 export const ArrowRight = () => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>

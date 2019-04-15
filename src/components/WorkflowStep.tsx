@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
-import { GenericTileType } from "../types/workflowVis";
+import { GenericTileType } from "../types/workflowVisTypes";
 
 // Constants
 import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";

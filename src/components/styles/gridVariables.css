@@ -20,4 +20,5 @@
     --connector-container-margin-top: calc(var(--base-unit) * 3.25);
     --box-connector-container-height: calc(var(--base-unit) * 15);
     --max-columns: 1000;
+    --circle-diameter: calc(var(--base-unit) * 5);
 }

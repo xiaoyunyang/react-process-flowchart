@@ -13,7 +13,7 @@ import { workflowVisData, matrixBA } from "./mockMatrices";
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Constants
-import { ConnectorName } from "../../types/workflowVis";
+import { ConnectorName } from "../../types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });
 
