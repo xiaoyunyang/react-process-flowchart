@@ -71,6 +71,70 @@ export const AA = {
 } as MockWorkflowsData;
 
 
+export const AB = {
+    workflowUid: "8e00dae32eb7",
+    workflowName: "A-B",
+    workflowSteps: [
+        {
+            workflowStepUid: "6473fda8a603",
+            workflowStepName: "Editing",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: false,
+                    actionType: "REJECT",
+                    nextWorkflowStepUid: "64735f9f64c8"
+                },
+                {
+                    primary: true,
+                    actionType: "EDIT",
+                    nextWorkflowStepUid: "647384536514"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "6473f65c98fe",
+            workflowStepName: "Published",
+            workflowStepType: "PUBLISH",
+            workflowStepOrder: 4,
+            actions: []
+        },
+        {
+            workflowStepUid: "647384536514",
+            workflowStepName: "Review",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 3,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "6473f65c98fe"
+                },
+                {
+                    primary: false,
+                    actionType: "REJECT",
+                    nextWorkflowStepUid: "6473fda8a603"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "64735f9f64c8",
+            workflowStepName: "Decision",
+            workflowStepType: "DECISION",
+            workflowStepOrder: 1,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "6473fda8a603"
+                }
+            ]
+        }
+    ]
+} as MockWorkflowsData;
+
+
 export const BA = {
     workflowUid: "5890236e433b",
     workflowName: "B-A",

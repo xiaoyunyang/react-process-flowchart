@@ -46,10 +46,29 @@ export const RightUpArrow = () => (
     </div>
 );
 
+export const DownRightDashEditable = () => (
+    <div className={classNames(styles.flexContainer, styles.downRightDash)}>
+        <div className={classNames(styles.downRight)} />
+        <EditButton />
+    </div>
+);
+
 export const connectors: { [id: string]: ConnectorT } = {
     "diamond.downRight": {
         id: "diamond.downRight",
         name: ConnectorName.DOWN_RIGHT,
+        containerName: "connectorContainerDiamond",
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
+    },
+    "diamond.downRightDash": {
+        id: "diamond.downRightDash",
+        name: ConnectorName.DOWN_RIGHT_DASH,
+        containerName: "connectorContainerDiamond",
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
+    },
+    "diamond.downRightDash.edit": {
+        id: "diamond.downRightDash.edit",
+        name: ConnectorName.DOWN_RIGHT_DASH_EDIT,
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
@@ -130,17 +149,14 @@ export const connectors: { [id: string]: ConnectorT } = {
         name: ConnectorName.EMPTY,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
-    },
-    "standard.empty.edit": {
-        id: "standard.empty",
-        name: ConnectorName.EMPTY,
-        containerName: "connectorContainerStandard",
-        type: ConnectorTypeT.STANDARD_CONNECTOR
     }
 };
 
+// TODO: revert change to arrowRight: <ArrowRightEditable />
 export const connectorComponent: { [id in ConnectorName]: JSX.Element } = {
     downRight: <div className={styles.downRight} />,
+    "downRightDash": <div />,
+    "downRightDash.edit": <DownRightDashEditable />,
     rightUpArrow: <RightUpArrow />,
     arrowRight: <ArrowRight />,
     "arrowRight.edit": <ArrowRightEditable />,

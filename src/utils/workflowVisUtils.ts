@@ -150,9 +150,11 @@ const getPrevSteps = ({
     wfStep.workflowStepOrder < workflowStepOrder
 );
 
-const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
-    workflowUid: string; workflowSteps: WorkflowStepT[];
-}): {
+const createWorkflowStepNodes = (
+    { workflowSteps, workflowUid }: {
+        workflowUid: string; workflowSteps: WorkflowStepT[];
+    }
+): {
     workflowStepNodes: WorkflowStepNodes;
     workflowStepOrderOccur: OccurenceDict;
     firstStepId: string;
@@ -231,10 +233,11 @@ const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
  * @param {string} workflowUid 
  * @returns {WorkflowVisDataT} workflowVisData
  * @returns {Matrix} initialMatrix
+ * @returns {Array} decisionStepCols - the colNums where decision steps are
  */
 export const createWorkflowVisData = (
     { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
-): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix } => {
+): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix; decisionStepCols: number[] } => {
     const {
         firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols
     } = createWorkflowStepNodes({ workflowSteps, workflowUid });
@@ -244,7 +247,11 @@ export const createWorkflowVisData = (
     };
 
     const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2) + 1;
-    const numRows = Math.max(...Object.values(workflowStepOrderOccur));
+
+    // Naive: if we see at least one decision step, we want to add an additional row to the matrix
+    // to accomodate the dash line add button
+    const numRows = Math.max(...Object.values(workflowStepOrderOccur)) + (+(decisionStepCols.length > 0));
+
     const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
         if (i % 2 === 1) return colType;
         return decisionStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
@@ -254,7 +261,8 @@ export const createWorkflowVisData = (
 
     return {
         workflowVisData,
-        initialMatrix
+        initialMatrix,
+        decisionStepCols
     };
 };
 
@@ -321,7 +329,7 @@ export const addConnectorToMatrix = (
  *
  * @param {EndomorphDict} nodeCoord
  * @param {PolymorphDict} nodeToParentCoords
- * @returns {Array} an array of pairs of coords (fromNode and toNode)
+ * @returns {Array} an array of pairs of coords (parentNode and childNode)
  */
 export const createCoordPairs = (
     { nodeCoord, nodeToParentCoords }: {
@@ -476,7 +484,11 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
  *
  */
 export const populateMatrix = (
-    { workflowVisData, initialMatrix }: { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix }
+    { workflowVisData, initialMatrix, decisionStepCols }: {
+        workflowVisData: WorkflowVisDataT;
+        initialMatrix: Matrix;
+        decisionStepCols: number[];
+    }
 ): Matrix => {
     console.log("Populate Matrix...");
 
@@ -544,6 +556,29 @@ export const populateMatrix = (
     connectorsToPlace.forEach(
         connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
     );
+
+    // Add the decision step dashline plus sign placeholder into the matrix where the decision
+    // steps are
+    // TODO: Need to write a helper function to determine the rowNum of the first unoccupied (empty) tile
+    const downRightDashesToPlace = decisionStepCols.map(colNum => {
+        const rowNum = matrix[0].length - 1;
+        const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
+        const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
+        return {
+            replaceBy: `diamond.downRightDash.${encodedOwnCoord}.${encodedParentNodeCoord}`,
+            coord: { rowNum, colNum }
+        };
+    });
+
+    console.log("decisionStepCols", decisionStepCols);
+    console.log("FOOOOO", downRightDashesToPlace);
+
+    downRightDashesToPlace.forEach(downRightDashToPlace => replaceTile({
+        matrix,
+        replaceBy: downRightDashToPlace.replaceBy,
+        coord: downRightDashToPlace.coord
+    }));
+
 
     return matrix;
 };

@@ -184,6 +184,24 @@
   width: 58%;
 }
 
+.downRightDash {
+  width: 220%;
+}
+
+.downRightDash .downRight {
+  border-bottom: var(--border-width) dashed var(--battleship-grey);
+  border-left: var(--border-width) dashed var(--battleship-grey);
+  height: 100%;
+  width: 65%;
+  z-index: 1;
+}
+
+.downRightDash span {
+  margin-top: 40px;
+  margin-left: calc(var(--base-unit) * 3);
+  z-index: 2;
+}
+
 .connectorContainerDiamond .downRight {
   height: 74px;
   margin-top: -2px;
