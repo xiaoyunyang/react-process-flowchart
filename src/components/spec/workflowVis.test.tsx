@@ -46,10 +46,10 @@ describe("WorkflowVis Spec", () => {
 
             expect(colEntries[0].tile.type).toBe(WorkflowStepTypeT.AUTHORIZE);
         });
-        it("renders arrowRight connector in the second Column", () => {
+        it("renders arrowRight connector in the top of the second Column", () => {
             const column = columns.at(1);
-            const { colEntries } = column.props();
-            expect(colEntries[0].tile.name).toBe(ConnectorName.ARROW_RIGHT);
+            const connectorName = column.prop("colEntries")[0].tile.name;
+            expect(connectorName).toBe(ConnectorName.ARROW_RIGHT);
         });
     });
 });

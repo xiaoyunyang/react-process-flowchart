@@ -95,7 +95,7 @@
   display: block;
   margin: auto;
   color: var(--white);
-  font-size: 10px;
+  font-size: calc(var(--base-unit) * 3);
 }
 
 .connectorContainerStandard .circle {

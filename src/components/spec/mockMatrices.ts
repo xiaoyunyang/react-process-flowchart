@@ -81,20 +81,20 @@ export const matrixA = [
     ["5890236e433b-auth", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
     ["ba322565b1bf", "diamond|downRight|2.1"],
-    ["standard.arrowRight|3,0", "standard.arrowRight|3,1"],
+    ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
     ["09e6110fda58", "b2b5c4c7cfd7"],
     ["standard|arrowRight|5,0", "standard|lineHoriz|5,1"],
-    ["a3135bdf3aa3", "box.rightUpArrow|6,1"]
+    ["a3135bdf3aa3", "box|rightUpArrow|6,1"]
 ];
 
 export const matrixAB = [
-    ["5890236e433b-auth", "box.empty.0,1"],
-    ["standard.arrowRight.1,0", "standard.empty.1,1"],
-    ["ba322565b1bf", "diamond.downRightDash.2.1"],
-    ["standard.arrowRight.3,0", "standard.empty.3,1"],
-    ["09e6110fda58", "box.empty.4.1"],
-    ["standard.arrowRight.5,0", "standard.empty.5,1"],
-    ["a3135bdf3aa3", "box.empty.6,1"]
+    ["5890236e433b-auth", "box|empty|0,1"],
+    ["standard|arrowRight|1,0", "standard|empty|1,1"],
+    ["ba322565b1bf", "diamond|downRightDash|2.1"],
+    ["standard|arrowRight|3,0", "standard|empty|3,1"],
+    ["09e6110fda58", "box|empty|4.1"],
+    ["standard|arrowRight|5,0", "standard|empty|5,1"],
+    ["a3135bdf3aa3", "box|empty|6,1"]
 ];
 
 export const matrixBA = [

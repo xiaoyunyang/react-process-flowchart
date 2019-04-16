@@ -573,8 +573,14 @@ export const populateMatrix = (
         const rowNum = matrix[0].length - 1;
         const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
         const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
+        const replaceBy = encodeMatrixEntry({
+            colType: ColType.DIAMOND,
+            entryName: ConnectorName.DOWN_RIGHT_DASH,
+            encodedOwnCoord,
+            encodedParentCoord: encodedParentNodeCoord
+        });
         return {
-            replaceBy: `diamond.downRightDash.${encodedOwnCoord}.${encodedParentNodeCoord}`,
+            replaceBy,
             coord: { rowNum, colNum }
         };
     });
