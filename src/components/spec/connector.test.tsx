@@ -9,10 +9,14 @@ configure({ adapter: new Adapter() });
 
 describe("Connector Spec", () => {
     let connector: any;
+    const addChildNode = ({ left, top }: { left: number; top: number }) => { };
     let props;
 
     beforeEach(() => {
-        props = { id: "diamond|empty" };
+        props = {
+            id: "diamond|empty",
+            addChildNode
+        };
 
         connector = shallow(<Connector {...props} />);
     });
@@ -24,7 +28,7 @@ describe("Connector Spec", () => {
             connector.setProps({ id });
             const { containerName, name } = connectors[id];
             expect(connector.hasClass(containerName)).toBe(true);
-            expect(connector.contains(connectorComponent[name])).toBe(true);
+            expect(connector.contains(connectorComponent(addChildNode)[name])).toBe(true);
         });
     });
 });

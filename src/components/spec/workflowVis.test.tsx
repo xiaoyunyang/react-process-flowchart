@@ -21,12 +21,14 @@ describe("WorkflowVis Spec", () => {
     let workflowVis: any;
     let props;
     const matrix = matrixBA;
+    const addNodeToVis = () => () => { };
 
     beforeEach(() => {
         props = {
             workflowVisData,
             matrix,
-            editMode: false
+            editMode: false,
+            addNodeToVis
         };
 
         workflowVis = shallow(<WorkflowVis {...props} />);

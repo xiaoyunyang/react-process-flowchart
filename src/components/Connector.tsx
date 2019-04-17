@@ -160,7 +160,7 @@ export const connectors: { [id: string]: ConnectorT } = {
 };
 
 
-export const getConnectorComponent = (addChildNode: AddChildNode
+export const connectorComponent = (addChildNode: AddChildNode
 ): { [name in ConnectorName]: JSX.Element } => {
     const component: { [name in ConnectorName]: JSX.Element } = {
         downRight: <div className={styles.downRight} />,
@@ -181,7 +181,7 @@ const Connector = ({ id, addChildNode }: { id: string; addChildNode: AddChildNod
     const { name, containerName } = connectors[id];
     return (
         <div className={styles[containerName]}>
-            {getConnectorComponent(addChildNode)[name]}
+            {connectorComponent(addChildNode)[name]}
         </div>
     );
 };

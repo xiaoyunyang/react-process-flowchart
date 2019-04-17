@@ -11,6 +11,8 @@ import {
     createCoordPairs,
     createLineHorizes,
     createConnectorsBetweenNodes,
+    invertKeyVal,
+    downRightDashesToPlace,
     populateMatrix,
     addConnectorToMatrix
 } from "../workflowVisUtils";
@@ -145,7 +147,7 @@ describe("WorkflowVisUtils", () => {
 
     describe("#createCoordPairs", () => {
         it("should create an array of pairs of coordinates between parent and child nodes using two hash tables", () => {
-            const nodeCoord = {
+            const nodeIdToCoord = {
                 "5890236e433b-auth": "0,0",
                 "ba322565b1bf": "2,0",
                 "09e6110fda58": "4,0",
@@ -153,19 +155,17 @@ describe("WorkflowVisUtils", () => {
                 "297786162f15": "6,0",
                 "492b709fc90a": "8,0",
                 "a3135bdf3aa3": "10,0",
-
             };
             const nodeToParentCoords = {
                 "ba322565b1bf": ["0,0"],
                 "09e6110fda58": ["2,0"],
                 "b2b5c4c7cfd7": ["2,0"],
-
                 "297786162f15": ["4,0", "4,1"],
                 "492b709fc90a": ["6,0"],
                 "a3135bdf3aa3": ["8,0"]
             };
 
-            const res = createCoordPairs({ nodeCoord, nodeToParentCoords });
+            const res = createCoordPairs({ nodeIdToCoord, nodeToParentCoords });
             const expected = [
                 { parentCoord: { colNum: 0, rowNum: 0 }, childCoord: { colNum: 2, rowNum: 0 } },
                 { parentCoord: { colNum: 2, rowNum: 0 }, childCoord: { colNum: 4, rowNum: 0 } },
@@ -240,30 +240,57 @@ describe("WorkflowVisUtils", () => {
             });
             expect(initialMatrix).toEqual(
                 [
-                    ["box|empty|0,0", "box|empty|0,1"],
-                    ["standard|empty|1,0", "standard|empty|1,1"],
-                    ["diamond|empty|2,0", "diamond|empty|2,1"],
-                    ["standard|empty|3,0", "standard|empty|3,1"],
-                    ["box|empty|4,0", "box|empty|4,1"],
-                    ["standard|empty|5,0", "standard|empty|5,1"],
-                    ["box|empty|6,0", "box|empty|6,1"],
-                    ["standard|empty|7,0", "standard|empty|7,1"],
-                    ["box|empty|8,0", "box|empty|8,1"],
-                    ["standard|empty|9,0", "standard|empty|9,1"],
-                    ["box|empty|10,0", "box|empty|10,1"]
+                    ["box|empty|0,0", "box|empty|0,1", "box|empty|0,2"],
+                    ["standard|empty|1,0", "standard|empty|1,1", "standard|empty|1,2"],
+                    ["diamond|empty|2,0", "diamond|empty|2,1", "diamond|empty|2,2"],
+                    ["standard|empty|3,0", "standard|empty|3,1", "standard|empty|3,2"],
+                    ["box|empty|4,0", "box|empty|4,1", "box|empty|4,2"],
+                    ["standard|empty|5,0", "standard|empty|5,1", "standard|empty|5,2"],
+                    ["box|empty|6,0", "box|empty|6,1", "box|empty|6,2"],
+                    ["standard|empty|7,0", "standard|empty|7,1", "standard|empty|7,2"],
+                    ["box|empty|8,0", "box|empty|8,1", "box|empty|8,2"],
+                    ["standard|empty|9,0", "standard|empty|9,1", "standard|empty|9,2"],
+                    ["box|empty|10,0", "box|empty|10,1", "box|empty|10,2"]
                 ]
             );
         });
     });
 
+    test("#invertKeyVal", () => {
+        const dict = {
+            "a": "1", "b": "2", "c": "3"
+        };
+        expect(invertKeyVal(dict)).toEqual({
+            "1": "a", "2": "b", "3": "c"
+        });
+    });
+
+    test("#downRightDashesToPlace", () => {
+        const decisionStepCols = [2, 4];
+        const matrix = [
+            ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+            ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
+            ["ba322565b1bf", "diamond|downRight|2,1", "diamond|empty|2,2"],
+            ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|empty|3,2"],
+            ["09e6110fda58", "diamond|empty|4,1", "diamond|empty|4,2"],
+        ];
+        const expected = [
+            { replaceBy: "diamond|downRightDash|2,2|2,0", coord: { colNum: 2, rowNum: 2 } },
+            { replaceBy: "diamond|downRightDash|4,1|4,0", coord: { colNum: 4, rowNum: 1 } }
+        ];
+        expect(downRightDashesToPlace({ matrix, decisionStepCols })).toEqual(expected);
+    });
+
     describe("#populateMatrix", () => {
         it("should handle linear workflow case", () => {
             const { workflowSteps, workflowUid } = AA;
-            const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const decisionStepCols: number[] = []; // TODO: actually test this
+            const {
+                workflowVisData, initialMatrix
+            } = createWorkflowVisData({ workflowSteps, workflowUid });
+            const decisionStepCols: number[] = [];
             const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
-            const expected = [
+            const expectedMatrix = [
                 ["8e00dae32eb6-auth"],
                 ["standard|arrowRight|1,0|0,0"],
                 ["64735f9f64c8"],
@@ -274,27 +301,53 @@ describe("WorkflowVisUtils", () => {
                 ["standard|arrowRight|7,0|6,0"],
                 ["6473f65c98fe"]
             ];
+            const expectedNodeIdToCoord = {
+                "8e00dae32eb6-auth": "0,0",
+                "64735f9f64c8": "2,0",
+                "6473fda8a603": "4,0",
+                "647384536514": "6,0",
+                "6473f65c98fe": "8,0"
+            };
+            const expected = {
+                matrix: expectedMatrix,
+                nodeIdToCoord: expectedNodeIdToCoord
+            };
             expect(res).toEqual(expected);
         });
         it("should handle simple branching workflow", () => {
             const { workflowSteps, workflowUid } = BA;
-            const { workflowVisData, initialMatrix } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const decisionStepCols: number[] = []; // TODO: actually test this
+            const {
+                workflowVisData, initialMatrix
+            } = createWorkflowVisData({ workflowSteps, workflowUid });
+            const decisionStepCols: number[] = [2];
             const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
-            const expected = [
-                ["5890236e433b-auth", "box|empty|0,1"],
-                ["standard|arrowRight|1,0|0,0", "standard|empty|1,1"],
-                ["ba322565b1bf", "diamond|downRight|2,1"],
-                ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0"],
-                ["09e6110fda58", "b2b5c4c7cfd7"],
-                ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1"],
-                ["297786162f15", "box|rightUpArrow|6,1"],
-                ["standard|arrowRight|7,0|6,0", "standard|empty|7,1"],
-                ["492b709fc90a", "box|empty|8,1"],
-                ["standard|arrowRight|9,0|8,0", "standard|empty|9,1"],
-                ["a3135bdf3aa3", "box|empty|10,1"]
+            const expectedMatrix = [
+                ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+                ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
+                ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRightDash|2,2|2,0"],
+                ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|empty|3,2"],
+                ["09e6110fda58", "b2b5c4c7cfd7", "box|empty|4,2"],
+                ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|empty|5,2"],
+                ["297786162f15", "box|rightUpArrow|6,1", "box|empty|6,2"],
+                ["standard|arrowRight|7,0|6,0", "standard|empty|7,1", "standard|empty|7,2"],
+                ["492b709fc90a", "box|empty|8,1", "box|empty|8,2"],
+                ["standard|arrowRight|9,0|8,0", "standard|empty|9,1", "standard|empty|9,2"],
+                ["a3135bdf3aa3", "box|empty|10,1", "box|empty|10,2"]
             ];
+            const expectedNodeIdToCoord = {
+                "5890236e433b-auth": "0,0",
+                "ba322565b1bf": "2,0",
+                "09e6110fda58": "4,0",
+                "b2b5c4c7cfd7": "4,1",
+                "297786162f15": "6,0",
+                "492b709fc90a": "8,0",
+                "a3135bdf3aa3": "10,0"
+            };
+            const expected = {
+                matrix: expectedMatrix,
+                nodeIdToCoord: expectedNodeIdToCoord
+            };
             expect(res).toEqual(expected);
         });
     });

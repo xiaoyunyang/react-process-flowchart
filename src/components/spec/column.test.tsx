@@ -38,13 +38,18 @@ describe("Column Spec", () => {
             tile: { id: "diamond|arrowRight", name: "arrowRight", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
         }
     ];
+
+    const addChildNode = ({ left, top }: { left: number; top: number }) => { };
+    const addNodeToVis = (parentCoord: string | undefined) => addChildNode;
+
     let props: any;
 
     beforeEach(() => {
         props = {
             colEntries,
             colNum: 0,
-            editMode: false
+            editMode: false,
+            addNodeToVis
         };
 
         column = shallow(<Column {...props} />);
@@ -83,5 +88,13 @@ describe("Column Spec", () => {
             expect(lineHorizEdit).toHaveLength(1);
             expect(arrowRightEdit).toHaveLength(1);
         });
+    });
+    it("passes correct addChildNode to Connector", () => {
+        const empty = column.find({ id: "box|empty" });
+        const lineHoriz = column.find({ id: "diamond|lineHoriz" });
+        const arrowRight = column.find({ id: "diamond|arrowRight" });
+        expect(empty.prop("addChildNode")).toEqual(addNodeToVis(undefined));
+        expect(lineHoriz.prop("addChildNode")).toEqual(addNodeToVis("2,2"));
+        expect(arrowRight.prop("addChildNode")).toEqual(addNodeToVis("2,4"));
     });
 });

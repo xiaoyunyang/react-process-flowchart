@@ -333,17 +333,16 @@ export const addConnectorToMatrix = (
     return { replaceBy };
 };
 
-// TODO: rename parentCoord -> node2ParentCoords because plural and dict
 /**
  * Creates an array of parentCoord/childCoord pairs for use by connectorBetweenNodes
  *
- * @param {EndomorphDict} nodeCoord
+ * @param {EndomorphDict} nodeIdToCoord
  * @param {PolymorphDict} nodeToParentCoords
  * @returns {Array} an array of pairs of coords (parentNode and childNode)
  */
 export const createCoordPairs = (
-    { nodeCoord, nodeToParentCoords }: {
-        nodeCoord: EndomorphDict;
+    { nodeIdToCoord, nodeToParentCoords }: {
+        nodeIdToCoord: EndomorphDict;
         nodeToParentCoords: PolymorphDict;
     }
 ): CoordPairT[] => {
@@ -351,7 +350,7 @@ export const createCoordPairs = (
 
     const newCoord = (nodeId: string): CoordPairT[] => nodeToParentCoords[nodeId].map(colRow => ({
         parentCoord: decodeMatrixCoord(colRow),
-        childCoord: decodeMatrixCoord(nodeCoord[nodeId])
+        childCoord: decodeMatrixCoord(nodeIdToCoord[nodeId])
     }));
 
     return chain(nodeId => newCoord(nodeId), nodeIds);
@@ -483,7 +482,12 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
 };
 
 
-// TODO: Test this function and add JSDoc
+/**
+ * Takes a dictionary and returns a new dictionary with the key and value swapped
+ *
+ * @param {EndomorphDict} keyToVal 
+ * @param {EndomorphDict} valToKey
+ */
 export const invertKeyVal = (keyToVal: EndomorphDict) =>
     Object.keys(keyToVal).map(key => [key, keyToVal[key]]).reduce((acc, curr) => {
         const [key, val] = curr;
@@ -491,11 +495,19 @@ export const invertKeyVal = (keyToVal: EndomorphDict) =>
         return { ...acc, ...valToKey };
     }, {});
 
-// TODO: Test this function and add JSDoc
+
+
+/**
+ * Provides instruction for where to place a dash line forking from decision step
+ *
+ * @param {Matrix} matrix
+ * @param {Array} decisionStepCols
+ * @returns {Array} {replaceBy, coord}
+ */
 export const downRightDashesToPlace = (
     { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
-) => decisionStepCols.map(colNum => {
-    const rowNum = matrix[0].length - 1;
+): { replaceBy: string; coord: MatrixCoord }[] => decisionStepCols.map(colNum => {
+    const rowNum = matrix[colNum].findIndex((matrixElem: string) => isPlaceholder(matrixElem));
     const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
     const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
     const replaceBy = encodeMatrixEntry({
@@ -506,7 +518,7 @@ export const downRightDashesToPlace = (
     });
     return {
         replaceBy,
-        coord: { rowNum, colNum }
+        coord: { colNum, rowNum }
     };
 });
 
@@ -519,7 +531,7 @@ export const downRightDashesToPlace = (
  * @param {Matrix} initialMatrix
  * @param {Array} decisionStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
- *
+ * @returns {EndomorphDict} nodeIdToCoord - a hashmap of nodeId to its matrix coord
  */
 export const populateMatrix = (
     { workflowVisData, initialMatrix, decisionStepCols }: {
@@ -527,12 +539,12 @@ export const populateMatrix = (
         initialMatrix: Matrix;
         decisionStepCols: number[];
     }
-): { matrix: Matrix; nodeCoord: EndomorphDict } => {
+): { matrix: Matrix; nodeIdToCoord: EndomorphDict } => {
     console.log("Populate Matrix...");
 
     const matrix = clone(initialMatrix);
 
-    // Step 1 - Traverse graph (BFS) and generate parentCoords and nodeCoord
+    // Step 1 - Traverse graph (BFS) and generate nodeToParentCoords and nodeIdToCoord
     // together, these hash maps tell us how tiles in the matrix are connected
 
     const { firstStep, workflowStepNodes } = workflowVisData;
@@ -540,10 +552,11 @@ export const populateMatrix = (
     let toExplore = [firstStep];
     const explored: ExistentialDict = {};
 
-    // id -> (colNum,rowNum)
-    const nodeCoord: EndomorphDict = {};
+    // nodeId -> (colNum,rowNum)
+    const nodeIdToCoord: EndomorphDict = {};
 
-    // connectedNodes is a mapping from (colNum,rowNum) of a node to (colNum, rowNum)[] to its children nodes
+    // connectedNodes is a mapping from (colNum,rowNum) of a
+    // node to (colNum, rowNum)[] to its children nodes
     const nodeToParentCoords: PolymorphDict = {};
 
     while (toExplore.length > 0) {
@@ -561,18 +574,18 @@ export const populateMatrix = (
             newStepId: id
         });
 
-        // Add current node'd coord into nodeCoord
-        nodeCoord[id] = encodeMatrixCoord(coord);
+        // Add current node's coord into nodeIdToCoord
+        nodeIdToCoord[id] = encodeMatrixCoord(coord);
 
         let nextStepId = null;
         for (let i = 0; i < nextSteps.length; i += 1) {
             nextStepId = nextSteps[i];
 
-            // Update parentCoord here using nodeCoord.
-            // We are guaranteed that nextStep's parent's coord  is in nodeCoord
-            // because nextStep's parent is current node, which we just added to nodeCoord above
-            const nodeToParentCoordsEntry = nodeToParentCoords[nextStepId];
-            nodeToParentCoords[nextStepId] = (nodeToParentCoordsEntry ? nodeToParentCoordsEntry : []).concat([nodeCoord[id]]);
+            // Update nodeToParentCoords here using nodeIdToCoord.
+            // We are guaranteed that nextStep's parent's coord  is in nodeIdToCoord
+            // because nextStep's parent is current node, which we just added to nodeIdToCoord above
+            const parentCoordsEntry = nodeToParentCoords[nextStepId];
+            nodeToParentCoords[nextStepId] = (parentCoordsEntry || []).concat(nodeIdToCoord[id]);
 
             if (!explored[nextStepId]) {
                 toExplore = toExplore.concat(nextStepId);
@@ -582,23 +595,27 @@ export const populateMatrix = (
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
-    console.log("--nodeCoord", nodeCoord);
+    console.log("--nodeIdToCoord", nodeIdToCoord);
     console.log("--nodeToParentCoords", nodeToParentCoords);
 
-    const coordPairs: CoordPairT[] = createCoordPairs({ nodeCoord, nodeToParentCoords });
+    const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeToParentCoords });
     const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
     // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?
     // The addConnectorToMatrix function should return a new matrix
-    const nodeCoords: string[] = Object.values(nodeCoord);
-    connectorsToPlace.forEach(
-        connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
-    );
+    const nodeCoords: string[] = Object.values(nodeIdToCoord);
+
+    // Populate matrix with regular connectors
+    connectorsToPlace
+        .forEach(
+            connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
+        );
 
     // Add the decision step dashline plus sign placeholder into the matrix where the decision
     // steps are
     // TODO: Need to write a helper function to determine the rowNum of the first unoccupied (empty) tile
 
+    // Populate matrix with downRight dash line connectors branching from diamond
     downRightDashesToPlace({ matrix, decisionStepCols })
         .forEach(downRightDashToPlace => replaceTile({
             matrix,
@@ -606,5 +623,5 @@ export const populateMatrix = (
             coord: downRightDashToPlace.coord
         }));
 
-    return { matrix, nodeCoord };
+    return { matrix, nodeIdToCoord };
 };

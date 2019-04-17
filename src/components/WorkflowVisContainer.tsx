@@ -32,7 +32,7 @@ const WorkflowVisContainer = (
     // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
     console.log("initMatrix", initialMatrix);
 
-    const { matrix, nodeCoord } = populateMatrix({
+    const { matrix, nodeIdToCoord } = populateMatrix({
         workflowVisData, initialMatrix, decisionStepCols
     });
     console.log("matrix", matrix);
@@ -42,9 +42,7 @@ const WorkflowVisContainer = (
     // matrix cols is based on the largest workflowStepOrder seen
     // matrix rows is based on the greatest number of occurrences of a workflowStepOrder
 
-    // TODO: rename nodeCoord to nodeIdToCoord
-    const coordToNodeId = invertKeyVal(nodeCoord);
-
+    const coordToNodeId = invertKeyVal(nodeIdToCoord);
 
     console.log("coordToNodeId", coordToNodeId);
 
