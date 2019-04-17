@@ -254,7 +254,8 @@ export const createWorkflowVisData = (
 
     // Naive: if we see at least one decision step, we want to add an additional row to the matrix
     // to accomodate the dash line add button
-    const numRows = Math.max(...Object.values(workflowStepOrderOccur)) + (+(decisionStepCols.length > 0));
+    const numRows = Math.max(...Object.values(workflowStepOrderOccur))
+        + (+(decisionStepCols.length > 0));
 
     const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
         if (i % 2 === 1) return colType;
@@ -301,7 +302,7 @@ const addWorkflowStepToMatrix = (
  *
  * @param {Matrix} matrix initial matrix with workflowSteps already placed
  * @param {ConnectorToPlace} connectorToPlace instruction for how to place a connectors into matrix
- * @param {Array} nodeCoords an array of matrix coords for all the nodes (i.e., workflowSteps) are
+ * @param {Array} nodeCoords an array of matrix coords for all the nodes (i.e., workflowSteps)
  * @returns {string} replaceBy - string for the new connector matrixEntry
  */
 export const addConnectorToMatrix = (
@@ -482,6 +483,33 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
 };
 
 
+// TODO: Test this function and add JSDoc
+export const invertKeyVal = (keyToVal: EndomorphDict) =>
+    Object.keys(keyToVal).map(key => [key, keyToVal[key]]).reduce((acc, curr) => {
+        const [key, val] = curr;
+        const valToKey = { [val]: key };
+        return { ...acc, ...valToKey };
+    }, {});
+
+// TODO: Test this function and add JSDoc
+export const downRightDashesToPlace = (
+    { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
+) => decisionStepCols.map(colNum => {
+    const rowNum = matrix[0].length - 1;
+    const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
+    const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
+    const replaceBy = encodeMatrixEntry({
+        colType: ColType.DIAMOND,
+        entryName: ConnectorName.DOWN_RIGHT_DASH,
+        encodedOwnCoord,
+        encodedParentCoord: encodedParentNodeCoord
+    });
+    return {
+        replaceBy,
+        coord: { rowNum, colNum }
+    };
+});
+
 // TODO: We might not need BFS to place the workflowStep into the matrix
 
 /**
@@ -489,6 +517,7 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
  *
  * @param {WorkflowVisDataT} workflowVisData
  * @param {Matrix} initialMatrix
+ * @param {Array} decisionStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
  *
  */
@@ -498,7 +527,7 @@ export const populateMatrix = (
         initialMatrix: Matrix;
         decisionStepCols: number[];
     }
-): Matrix => {
+): { matrix: Matrix; nodeCoord: EndomorphDict } => {
     console.log("Populate Matrix...");
 
     const matrix = clone(initialMatrix);
@@ -569,31 +598,13 @@ export const populateMatrix = (
     // Add the decision step dashline plus sign placeholder into the matrix where the decision
     // steps are
     // TODO: Need to write a helper function to determine the rowNum of the first unoccupied (empty) tile
-    const downRightDashesToPlace = decisionStepCols.map(colNum => {
-        const rowNum = matrix[0].length - 1;
-        const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
-        const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
-        const replaceBy = encodeMatrixEntry({
-            colType: ColType.DIAMOND,
-            entryName: ConnectorName.DOWN_RIGHT_DASH,
-            encodedOwnCoord,
-            encodedParentCoord: encodedParentNodeCoord
-        });
-        return {
-            replaceBy,
-            coord: { rowNum, colNum }
-        };
-    });
 
-    console.log("decisionStepCols", decisionStepCols);
-    console.log("FOOOOO", downRightDashesToPlace);
+    downRightDashesToPlace({ matrix, decisionStepCols })
+        .forEach(downRightDashToPlace => replaceTile({
+            matrix,
+            replaceBy: downRightDashToPlace.replaceBy,
+            coord: downRightDashToPlace.coord
+        }));
 
-    downRightDashesToPlace.forEach(downRightDashToPlace => replaceTile({
-        matrix,
-        replaceBy: downRightDashToPlace.replaceBy,
-        coord: downRightDashToPlace.coord
-    }));
-
-
-    return matrix;
+    return { matrix, nodeCoord };
 };

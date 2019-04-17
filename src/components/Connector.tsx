@@ -5,7 +5,7 @@ import classNames from "classnames";
 import styles from './styles/workflowVis.module.css';
 
 // Types
-import { ConnectorT, ConnectorTypeT, ConnectorName } from "../types/workflowVisTypes";
+import { ConnectorT, ConnectorTypeT, ConnectorName, AddChildNode } from "../types/workflowVisTypes";
 
 export const ArrowRight = () => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
@@ -14,16 +14,23 @@ export const ArrowRight = () => (
     </div>
 );
 
-const EditButton = () => (
-    <span className={styles.circle}>
-        <i className="fas fa-plus" />
-    </span>
-);
+const EditButton = ({ addChildNode }: { addChildNode: AddChildNode }) => {
+    const onClickBound = (e: React.MouseEvent): void => {
+        const { left, top } = e.currentTarget.getBoundingClientRect();
+        return addChildNode({ left, top });
+    };
+    const noop = () => { };
+    return (
+        <span role="button" tabIndex={-1} className={styles.circle} onClick={onClickBound} onKeyPress={noop}>
+            <i className="fas fa-plus" />
+        </span>
+    );
+};
 
-export const ArrowRightEditable = () => (
+export const ArrowRightEditable = ({ addChildNode }: { addChildNode: AddChildNode }) => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
         <div className={classNames(styles.line, styles.lineShort)} />
-        <EditButton />
+        <EditButton addChildNode={addChildNode} />
         <div className={classNames(styles.line, styles.lineShort)} />
         <i className={classNames(styles.caret, styles.caretRight)} />
     </div>
@@ -31,10 +38,10 @@ export const ArrowRightEditable = () => (
 
 export const LineHoriz = () => <div className={classNames(styles.line, styles.lineLong)} />;
 
-export const LineHorizEditable = () => (
+export const LineHorizEditable = ({ addChildNode }: { addChildNode: AddChildNode }) => (
     <div className={classNames(styles.lineHoriz, styles.flexContainer)}>
         <div className={classNames(styles.line, styles.lineShort)} />
-        <EditButton />
+        <EditButton addChildNode={addChildNode} />
         <div className={classNames(styles.line, styles.lineShort)} />
     </div>
 );
@@ -46,10 +53,10 @@ export const RightUpArrow = () => (
     </div>
 );
 
-export const DownRightDashEditable = () => (
+export const DownRightDashEditable = ({ addChildNode }: { addChildNode: AddChildNode }) => (
     <div className={classNames(styles.flexContainer, styles.downRightDash)}>
         <div className={classNames(styles.downRight)} />
-        <EditButton />
+        <EditButton addChildNode={addChildNode} />
     </div>
 );
 
@@ -153,24 +160,28 @@ export const connectors: { [id: string]: ConnectorT } = {
 };
 
 
-// TODO: revert change to arrowRight: <ArrowRightEditable />
-export const connectorComponent: { [id in ConnectorName]: JSX.Element } = {
-    downRight: <div className={styles.downRight} />,
-    "downRightDash": <div />,
-    "downRightDash.edit": <DownRightDashEditable />,
-    rightUpArrow: <RightUpArrow />,
-    arrowRight: <ArrowRight />,
-    "arrowRight.edit": <ArrowRightEditable />,
-    lineHoriz: <LineHoriz />,
-    "lineHoriz.edit": <LineHorizEditable />,
-    empty: <div />
+export const getConnectorComponent = (addChildNode: AddChildNode
+): { [name in ConnectorName]: JSX.Element } => {
+    const component: { [name in ConnectorName]: JSX.Element } = {
+        downRight: <div className={styles.downRight} />,
+        downRightDash: <div />,
+        "downRightDash.edit": <DownRightDashEditable addChildNode={addChildNode} />,
+        rightUpArrow: <RightUpArrow />,
+        arrowRight: <ArrowRight />,
+        "arrowRight.edit": <ArrowRightEditable addChildNode={addChildNode} />,
+        lineHoriz: <LineHoriz />,
+        "lineHoriz.edit": <LineHorizEditable addChildNode={addChildNode} />,
+        empty: <div />
+    };
+
+    return component;
 };
 
-const Connector = ({ id }: { id: string }) => {
+const Connector = ({ id, addChildNode }: { id: string; addChildNode: AddChildNode }) => {
     const { name, containerName } = connectors[id];
     return (
         <div className={styles[containerName]}>
-            {connectorComponent[name]}
+            {getConnectorComponent(addChildNode)[name]}
         </div>
     );
 };

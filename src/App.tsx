@@ -23,6 +23,8 @@ const workflows: any = [AA, AB, BA, BB, BC];
 // It doesn't work because a workflow step is placed in the wrong row
 // of a column that only has one workflow step
 
+const noop = () => () => () => { };
+
 const App = () => (
     <div>
         <div className={classNames(styles.flowchartContainer, styles.debug)}>
@@ -37,7 +39,7 @@ const App = () => (
             {
                 matrices.map((matrix, i) =>
                     // eslint-disable-next-line react/no-array-index-key
-                    <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} />
+                    <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} addNodeToVis={noop} />
                 )
             }
         </div>

@@ -1,4 +1,5 @@
 import { WorkflowStepTypeT } from "./workflow";
+import { EndomorphDict } from "./generic";
 
 export interface WorkflowStepNodeT {
     id: string;
@@ -76,3 +77,9 @@ export interface ColEntry {
     tile: GenericTile;
     matrixEntry: string;
 }
+
+export type AddChildNode = ({ left, top }: { left: number; top: number }) => void;
+
+export type AddNodeToVis = (parentCoord: string | undefined) => AddChildNode;
+
+export type AddNode = (coordToNodeId: EndomorphDict) => AddNodeToVis;

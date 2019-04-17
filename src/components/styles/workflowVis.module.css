@@ -89,6 +89,12 @@
   width: var(--circle-diameter);
   border-radius: 50%;
   display: flex;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.circle:focus {
+  outline: none;
 }
 
 .circle i {
@@ -197,7 +203,7 @@
 }
 
 .downRightDash span {
-  margin-top: 40px;
+  margin-top: calc(var(--base-unit) * 10);
   margin-left: calc(var(--base-unit) * 3);
   z-index: 2;
 }

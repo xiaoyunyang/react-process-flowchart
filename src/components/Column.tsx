@@ -8,7 +8,7 @@ import Connector from "./Connector";
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
-import { ColEntry } from "../types/workflowVisTypes";
+import { ColEntry, AddNodeToVis } from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";
@@ -16,11 +16,12 @@ import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";
 interface PropsT {
     colEntries: ColEntry[];
     editMode: boolean;
+    addNodeToVis: AddNodeToVis;
 }
 
 export default class Column extends React.PureComponent<PropsT> {
-    static renderTile({ colEntry, editMode }: {
-        colEntry: ColEntry; editMode: boolean;
+    static renderTile({ colEntry, editMode, addNodeToVis }: {
+        colEntry: ColEntry; editMode: boolean; addNodeToVis: AddNodeToVis;
     }) {
         const { matrixEntry, tile } = colEntry;
         const connectorId = tile.id;
@@ -42,7 +43,7 @@ export default class Column extends React.PureComponent<PropsT> {
             // to a workflowStep (i.e., the encodedParentNodeCoord lookup in nodeCoord yields a workflowStepUid), then we will
             // bring up a form
             return (
-                <Connector id={id} />
+                <Connector id={id} addChildNode={addNodeToVis(encodedParentNodeCoord)} />
             );
         }
 
@@ -55,11 +56,11 @@ export default class Column extends React.PureComponent<PropsT> {
         return <WorkflowStep name={tile.name} type={tile.type} />;
     }
     render() {
-        const { colEntries, editMode } = this.props;
+        const { colEntries, editMode, addNodeToVis } = this.props;
 
         return colEntries.map((colEntry: ColEntry) => (
             <div key={colEntry.matrixEntry}>
-                {Column.renderTile({ colEntry, editMode })}
+                {Column.renderTile({ colEntry, editMode, addNodeToVis })}
             </div>
         ));
     }
