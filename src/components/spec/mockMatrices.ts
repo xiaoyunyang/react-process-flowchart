@@ -189,4 +189,13 @@ export const matrixBF = [
 //     ["a3135bdf3aa3", "box.lineHoriz"]
 // ];
 
-export const matrices = [matrixA, matrixAB, matrixBA, matrixBB, matrixBC, matrixBD, matrixBE, matrixBF];
+export const matrices = [
+    { name: "A", matrix: matrixA },
+    { name: "A-B", matrix: matrixAB },
+    { name: "B-A", matrix: matrixBA },
+    { name: "B-B", matrix: matrixBB },
+    { name: "B-C", matrix: matrixBC },
+    { name: "B-D", matrix: matrixBD },
+    { name: "B-E", matrix: matrixBE },
+    { name: "B-F", matrix: matrixBF }
+];

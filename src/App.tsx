@@ -35,12 +35,22 @@ const App = () => (
             }
         </div>
         <div className={styles.flowchartContainer}>
-            <h1>Vis Demo</h1>
+            <h1>WorkflowVis Unit Test</h1>
             {
-                matrices.map((matrix, i) =>
-                    // eslint-disable-next-line react/no-array-index-key
-                    <WorkflowVis key={`test-layout-${i}`} matrix={matrix} workflowVisData={workflowVisData} editMode={false} addNodeToVis={noop} />
-                )
+                matrices.map(({ name, matrix }) => {
+                    return (
+                        <div>
+                            <h2>{name}</h2>
+                            <WorkflowVis
+                                key={`test-layout-${name}`}
+                                matrix={matrix}
+                                workflowVisData={workflowVisData}
+                                editMode={false}
+                                addNodeToVis={noop}
+                            />
+                        </div>
+                    );
+                })
             }
         </div>
     </div>

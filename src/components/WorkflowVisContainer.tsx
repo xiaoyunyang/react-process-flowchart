@@ -6,13 +6,13 @@ import WorkflowVis from "./WorkflowVis";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
-import { AddNode, AddChildNode } from "../types/workflowVisTypes";
+import { AddNode } from "../types/workflowVisTypes";
 import { EndomorphDict } from '../types/generic';
 
 // Utils
 import { createWorkflowVisData, populateMatrix, invertKeyVal } from "../utils/workflowVisUtils";
 
-const addNode: AddNode = (coordToNodeId: EndomorphDict) =>
+export const addNode: AddNode = (coordToNodeId: EndomorphDict) =>
     (parentCoord: string | undefined) =>
         ({ left, top }: { left: number; top: number }): void => {
             if (parentCoord) {
