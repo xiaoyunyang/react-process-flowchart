@@ -24,7 +24,7 @@ interface PropsT {
     workflow: WorkflowT;
 }
 
-export default class WorkflowContainer extends React.PureComponent<PropsT, StateT> {
+export default class Workflow extends React.PureComponent<PropsT, StateT> {
     constructor(props: PropsT) {
         super(props);
         this.state = {

@@ -3,12 +3,12 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import WorkflowContainer from "../WorkflowContainer";
+import Workflow from "../Workflow";
 
 configure({ adapter: new Adapter() });
 
-describe("WorkflowContainer Spec", () => {
-    let workflowContainer: any;
+describe("Workflow Spec", () => {
+    let workflow: any;
     let props;
 
     beforeEach(() => {
@@ -16,7 +16,7 @@ describe("WorkflowContainer Spec", () => {
             workflowUid: ""
         };
 
-        // workflowContainer = shallow(<WorkflowContainer {...props} />);
+        // workflow = shallow(<Workflow {...props} />);
     });
 
     describe("render", () => {

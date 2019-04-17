@@ -13,7 +13,7 @@ import { AA, AB, BA, BB, BC, MockWorkflowsData } from "./components/spec/mockWor
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
 // Components
-import WorkflowContainer from "./components/WorkflowContainer";
+import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
 
@@ -30,7 +30,7 @@ const App = () => (
         <div className={classNames(styles.flowchartContainer, styles.debug)}>
             {
                 workflows.map((workflow: MockWorkflowsData) =>
-                    <WorkflowContainer key={workflow.workflowUid} workflow={workflow} />
+                    <Workflow key={workflow.workflowUid} workflow={workflow} />
                 )
             }
         </div>
