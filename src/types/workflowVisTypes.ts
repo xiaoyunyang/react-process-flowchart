@@ -78,7 +78,9 @@ export interface ColEntry {
     matrixEntry: string;
 }
 
-export type AddChildNode = ({ left, top }: { left: number; top: number }) => void;
+export type AddChildNodeCommand = string;
+
+export type AddChildNode = ({ left, top }: { left: number; top: number }) => AddChildNodeCommand;
 
 export type AddNodeToVis = (parentCoord: string | undefined) => AddChildNode;
 

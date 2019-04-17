@@ -5,7 +5,9 @@ import classNames from "classnames";
 import styles from './styles/workflowVis.module.css';
 
 // Types
-import { ConnectorT, ConnectorTypeT, ConnectorName, AddChildNode } from "../types/workflowVisTypes";
+import {
+    ConnectorT, ConnectorTypeT, ConnectorName, AddChildNode, AddChildNodeCommand
+} from "../types/workflowVisTypes";
 
 export const ArrowRight = () => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
@@ -14,18 +16,31 @@ export const ArrowRight = () => (
     </div>
 );
 
-const EditButton = ({ addChildNode }: { addChildNode: AddChildNode }) => {
-    const onClickBound = (e: React.MouseEvent): void => {
+const noop = () => { };
+export class EditButton extends React.PureComponent<{ addChildNode: AddChildNode }> {
+    constructor(props: { addChildNode: AddChildNode }) {
+        super(props);
+        this.addNodeWithLocationBound = this.addNodeWithLocation.bind(this);
+    }
+
+    addNodeWithLocationBound: (e: React.MouseEvent, addChildNodeMock?: AddChildNode) => void;
+
+    addNodeWithLocation(e: React.MouseEvent, addChildNodeMock?: AddChildNode): AddChildNodeCommand {
+        // eslint-disable-next-line react/destructuring-assignment
+        const addChildNode: AddChildNode = addChildNodeMock || this.props.addChildNode;
+
         const { left, top } = e.currentTarget.getBoundingClientRect();
         return addChildNode({ left, top });
-    };
-    const noop = () => { };
-    return (
-        <span role="button" tabIndex={-1} className={styles.circle} onClick={onClickBound} onKeyPress={noop}>
-            <i className="fas fa-plus" />
-        </span>
-    );
-};
+    }
+
+    render() {
+        return (
+            <span role="button" tabIndex={-1} className={styles.circle} onClick={this.addNodeWithLocationBound} onKeyPress={noop}>
+                <i className="fas fa-plus" />
+            </span>
+        );
+    }
+}
 
 export const ArrowRightEditable = ({ addChildNode }: { addChildNode: AddChildNode }) => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>

@@ -23,7 +23,7 @@ const workflows: any = [AA, AB, BA, BB, BC];
 // It doesn't work because a workflow step is placed in the wrong row
 // of a column that only has one workflow step
 
-const noop = () => () => () => { };
+const noop = () => () => "foo";
 
 const App = () => (
     <div>
@@ -39,10 +39,9 @@ const App = () => (
             {
                 matrices.map(({ name, matrix }) => {
                     return (
-                        <div>
+                        <div key={`test-layout-${name}`}>
                             <h2>{name}</h2>
                             <WorkflowVis
-                                key={`test-layout-${name}`}
                                 matrix={matrix}
                                 workflowVisData={workflowVisData}
                                 editMode={false}

@@ -6,7 +6,7 @@ import WorkflowVis from "./WorkflowVis";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
-import { AddNode } from "../types/workflowVisTypes";
+import { AddNode, AddChildNodeCommand } from "../types/workflowVisTypes";
 import { EndomorphDict } from '../types/generic';
 
 // Utils
@@ -14,10 +14,18 @@ import { createWorkflowVisData, populateMatrix, invertKeyVal } from "../utils/wo
 
 export const addNode: AddNode = (coordToNodeId: EndomorphDict) =>
     (parentCoord: string | undefined) =>
-        ({ left, top }: { left: number; top: number }): void => {
+        ({ left, top }: { left: number; top: number }): AddChildNodeCommand => {
             if (parentCoord) {
-                console.log(`add child node to parentNodeId=${coordToNodeId[parentCoord]}. Draw popover modal at left=${left}, top=${top}`);
+
+                // The command to add new child node is set to this string as a placeholder.
+                // You can set it to whatever string or data structure you want
+                const addChildNodeCommand: AddChildNodeCommand =
+                    `User wants to add child to node with nodeId=${coordToNodeId[parentCoord]}. Draw popover modal at left=${left}, top=${top}`;
+                // eslint-disable-next-line no-console
+                console.log(addChildNodeCommand); // For debugging
+                return addChildNodeCommand;
             }
+            return "";
         };
 const WorkflowVisContainer = (
     { workflowUid, workflowSteps, editMode }: {
