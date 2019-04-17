@@ -6,6 +6,11 @@
 
 ![css-grid-flowchart demo for plus sign](/resource/04-04-demo-plus-sign.gif)
 
+![css-grid-flowchart demo for plus sign](/resource/reveal-plus-sign.gif)
+
+![css-grid-flowchart demo for plus sign](/resource/reveal-plus-sign-with-clicking.gif)
+
+
 ## Data-driven Visualization
 
 ```javascript
@@ -29,6 +34,8 @@ becomes
 
 ### Design Approach
 
+#### Layout
+
 ![css-grid-flowchart design approach](/resource/designApproach.png)
 
 The visualization component ([`WorkflowVis`](/src/components/WorkflowVis.tsx)) takes as inputs
@@ -45,8 +52,14 @@ The visualization component ([`WorkflowVis`](/src/components/WorkflowVis.tsx)) t
     - Better: If no parent, `rowNum` is the first unoccupied. If has parent, `rowNum` is parent `rowNum`
     - Even Better: If no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then we shift col 2 places to the right.
 
-    currently, the naive approach is implemented whereby each node is placed into the next empty spot in the column array.  During this process, a hash map is created that maps `colNum, rowNum` of the node is mapped to the `colNum, rowNum`, its sucessor nodes.
+    currently, the naive approach is implemented whereby each node is placed into the next empty spot in the column array.  During this process, two hash maps are created:
+        - `nodeIdToCoord` maps nodeId to its encoded `colNum, rowNum` string representing the node's position in the matrix.  
+        - `nodeToParentCoords` maps nodeId of a node to an array of the coordinates (encoded `colNum, rowNum` string) of all the node's parents in the matrix.
 3. Populate `matrix` with [connectors](/src/components/connectors.tsx) using the hash map generated from the previous step.
+
+#### Interaction
+
+You can add a new node to the flowchart by clicking the plus button. `WorkflowVisContainer` passes a function down to the visualization that gets called when a plus sign is clicked.
 
 ### Limitations of this visualization engine
 
