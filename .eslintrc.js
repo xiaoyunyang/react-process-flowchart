@@ -21,14 +21,15 @@ module.exports = {
         "import/named": 0,
         "react/jsx-indent": [true, 6],
         "react/jsx-indent-props": [false],
-        "react/jsx-filename-extension": false
+        "react/jsx-filename-extension": false,
     },
     overrides: [
         {
             files: ["**/*.ts", "**/*.tsx"],
             rules: {
                 "no-unused-vars": ["off"],
-                "semi": 1
+                "semi": 1,
+                "quote-props": ["error", "as-needed"]
             }
         }
     ],

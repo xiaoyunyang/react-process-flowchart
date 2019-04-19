@@ -1,78 +1,86 @@
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 export const workflowVisData = {
-    "firstStep": "5890236e433b-auth",
-    "workflowStepNodes": {
-        "ba322565b1bf": {
-            "id": "ba322565b1bf",
-            "name": "D",
-            "type": WorkflowStepTypeT.DECISION,
-            "workflowStepOrder": 1,
-            "nextSteps": [
+    firstStep: "5890236e433b-auth",
+    workflowStepNodes: {
+        ba322565b1bf: {
+            id: "ba322565b1bf",
+            name: "D",
+            type: WorkflowStepTypeT.DECISION,
+            workflowStepOrder: 1,
+            nextSteps: [
                 "09e6110fda58",
                 "b2b5c4c7cfd7"
-            ]
+            ],
+            prevSteps: []
         },
         "297786162f15": {
-            "id": "297786162f15",
-            "name": "E",
-            "type": WorkflowStepTypeT.POST_TRANSLATION,
-            "workflowStepOrder": 3,
-            "nextSteps": [
+            id: "297786162f15",
+            name: "E",
+            type: WorkflowStepTypeT.POST_TRANSLATION,
+            workflowStepOrder: 3,
+            nextSteps: [
                 "492b709fc90a"
-            ]
+            ],
+            prevSteps: []
         },
-        "a3135bdf3aa3": {
-            "id": "a3135bdf3aa3",
-            "name": "Published",
-            "type": WorkflowStepTypeT.PUBLISH,
-            "workflowStepOrder": 5,
-            "nextSteps": []
+        a3135bdf3aa3: {
+            id: "a3135bdf3aa3",
+            name: "Published",
+            type: WorkflowStepTypeT.PUBLISH,
+            workflowStepOrder: 5,
+            nextSteps: [],
+            prevSteps: []
         },
         "492b709fc90a": {
-            "id": "492b709fc90a",
-            "name": "R",
-            "type": WorkflowStepTypeT.POST_TRANSLATION,
-            "workflowStepOrder": 4,
-            "nextSteps": [
+            id: "492b709fc90a",
+            name: "R",
+            type: WorkflowStepTypeT.POST_TRANSLATION,
+            workflowStepOrder: 4,
+            nextSteps: [
                 "a3135bdf3aa3"
-            ]
+            ],
+            prevSteps: []
         },
         "09e6110fda58": {
-            "id": "09e6110fda58",
-            "name": "Translation",
-            "type": WorkflowStepTypeT.TRANSLATION,
-            "workflowStepOrder": 2,
-            "nextSteps": [
+            id: "09e6110fda58",
+            name: "Translation",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextSteps: [
                 "297786162f15"
-            ]
+            ],
+            prevSteps: []
         },
-        "b2b5c4c7cfd7": {
-            "id": "b2b5c4c7cfd7",
-            "name": "Translation2",
-            "type": WorkflowStepTypeT.TRANSLATION,
-            "workflowStepOrder": 2,
-            "nextSteps": [
+        b2b5c4c7cfd7: {
+            id: "b2b5c4c7cfd7",
+            name: "Translation2",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextSteps: [
                 "297786162f15"
-            ]
+            ],
+            prevSteps: []
         },
-        "b2b5c4c7cfd8": {
-            "id": "b2b5c4c7cfd7",
-            "name": "Translation2",
-            "type": WorkflowStepTypeT.TRANSLATION,
-            "workflowStepOrder": 2,
-            "nextSteps": [
+        b2b5c4c7cfd8: {
+            id: "b2b5c4c7cfd7",
+            name: "Translation2",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextSteps: [
                 "297786162f15"
-            ]
+            ],
+            prevSteps: []
         },
         "5890236e433b-auth": {
-            "id": "5890236e433b-auth",
-            "name": "Authorize",
-            "type": WorkflowStepTypeT.AUTHORIZE,
-            "nextSteps": [
+            id: "5890236e433b-auth",
+            name: "Authorize",
+            type: WorkflowStepTypeT.AUTHORIZE,
+            workflowStepOrder: 0,
+            nextSteps: [
                 "ba322565b1bf"
             ],
-            "workflowStepOrder": 0
+            prevSteps: []
         }
     }
 };

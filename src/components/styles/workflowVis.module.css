@@ -55,12 +55,17 @@
   width: var(--diamond-container-width);
   height: var(--diamond-container-height);
   margin-top: 0;
+  margin-bottom: calc(var(--base-unit) * -0.5);
 }
 
 .connectorContainerBox {
   width: var(--box-width);
   height: var(--box-connector-container-height);
   margin-top: var(--connector-container-margin-top);
+}
+
+.connectorContainerDiamond .line {
+  height: 63%;
 }
 
 .connectorContainerDiamond .lineLong {

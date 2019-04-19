@@ -8,7 +8,7 @@ import './App.css';
 import styles from "./components/styles/workflowVis.module.css";
 
 // Data
-import { AA, AB, BA, BB, BC, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
+import { AA, AB, BA, BB, BC, BD, BE, BF, CD, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -17,7 +17,11 @@ import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
 
-const workflows: any = [AA, AB, BA, BB, BC];
+// const workflows: any = [AA, AB, BA, BB, BC, BD];
+
+const workflows: any = [AA, AB, BA, BB, BC, BD, BE, BF, CD];
+const enableMatrixUnitTest = true;
+
 // TODO: there's something wrong with visualizing B-D
 // Cannot read property 'id' of undefined
 // It doesn't work because a workflow step is placed in the wrong row
@@ -36,7 +40,7 @@ const App = () => (
         </div>
         <div className={styles.flowchartContainer}>
             <h1>WorkflowVis Unit Test</h1>
-            {
+            {enableMatrixUnitTest &&
                 matrices.map(({ name, matrix }) => {
                     return (
                         <div key={`test-layout-${name}`}>

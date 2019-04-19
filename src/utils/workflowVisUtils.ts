@@ -1,5 +1,5 @@
 // Utils
-import { clone, chain } from "ramda";
+import { clone, chain, sort } from "ramda";
 
 // Types
 import {
@@ -145,7 +145,7 @@ export const initMatrix = (
     numRows, colNum: i, colType
 }));
 
-
+// TODO: test getPrevSteps
 const getPrevSteps = ({
     workflowSteps, workflowStepOrder
 }: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
@@ -200,7 +200,7 @@ const createWorkflowStepNodes = (
         }
 
         // Not sure if we need prevSteps...?
-        // const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
+        const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
 
         const nextSteps = actions
             .filter(action => action.actionType !== "REJECT")
@@ -211,7 +211,8 @@ const createWorkflowStepNodes = (
             name: workflowStepName,
             type: workflowStepType,
             workflowStepOrder,
-            nextSteps
+            nextSteps,
+            prevSteps
         };
     }
 
@@ -221,8 +222,9 @@ const createWorkflowStepNodes = (
             id: firstStepId,
             name: "Authorize",
             type: WorkflowStepTypeT.AUTHORIZE,
+            workflowStepOrder: 0,
             nextSteps: authorizeNextSteps,
-            workflowStepOrder: 0
+            prevSteps: []
         }
     };
 
@@ -271,15 +273,41 @@ export const createWorkflowVisData = (
     };
 };
 
-const addWorkflowStepToMatrix = (
-    { matrix, colNum, newStepId }: { matrix: Matrix; colNum: number; newStepId: string }
+// TODO: test and JSDocs
+export const firstUnoccupiedInCol = (col: string[]) =>
+    col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
+
+/**
+ * Adds a new Node to the matrix. Mutates the original matrix. 
+ *
+ * @param {Matrix} matrix
+ * @param {number} colNum
+ * @param {string} newNodeId
+ * @returns {MatrixCoord} { rowNum, colNum } of the newly added Node in the matrix
+ */
+export const addWorkflowStepToMatrix = (
+    { matrix, colNum, newNodeId, encodedParentCoord }: {
+        matrix: Matrix;
+        colNum: number;
+        newNodeId: string;
+        encodedParentCoord: string | undefined;
+    }
 ): MatrixCoord => {
+    // console.log("encodedParentCoord: ", encodedParentCoord);
     const col = matrix[colNum];
 
     // Determine rowNum
-
     // Naive: rowNum is the first unoccupied
-    // Better: If no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum
+    // Better: If no parent, rowNum is the first unoccupied.
+    // If has parent, rowNum is parent rowNum or firstt unoccupied, whichever is greater
+    const firstUnoccupiedRowNum = firstUnoccupiedInCol(col);
+    let rowNum: number;
+    if (encodedParentCoord) {
+        const { rowNum: parentRowNum } = decodeMatrixCoord(encodedParentCoord);
+        rowNum = Math.max(parentRowNum, firstUnoccupiedRowNum);
+    } else {
+        rowNum = firstUnoccupiedRowNum;
+    }
 
     // TODO:
     // Best: if no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then
@@ -287,12 +315,11 @@ const addWorkflowStepToMatrix = (
     // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
     // TODO: Need to have a function for replace col type
     // We also need to change the size of the matrix and shift all the nodes to the right and down
-    const rowNum = col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
 
     replaceTile({
         coord: { colNum, rowNum },
         matrix,
-        replaceBy: newStepId
+        replaceBy: newNodeId
     });
     return { rowNum, colNum };
 };
@@ -341,14 +368,14 @@ export const addConnectorToMatrix = (
  * @returns {Array} an array of pairs of coords (parentNode and childNode)
  */
 export const createCoordPairs = (
-    { nodeIdToCoord, nodeToParentCoords }: {
+    { nodeIdToCoord, nodeIdToParentCoords }: {
         nodeIdToCoord: EndomorphDict;
-        nodeToParentCoords: PolymorphDict;
+        nodeIdToParentCoords: PolymorphDict;
     }
 ): CoordPairT[] => {
-    const nodeIds = Object.keys(nodeToParentCoords);
+    const nodeIds = Object.keys(nodeIdToParentCoords);
 
-    const newCoord = (nodeId: string): CoordPairT[] => nodeToParentCoords[nodeId].map(colRow => ({
+    const newCoord = (nodeId: string): CoordPairT[] => nodeIdToParentCoords[nodeId].map((colRow: string) => ({
         parentCoord: decodeMatrixCoord(colRow),
         childCoord: decodeMatrixCoord(nodeIdToCoord[nodeId])
     }));
@@ -447,16 +474,11 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
             startCol: startCol + 1, endCol, rowNum, parentCoord: parentNodeCoord
         });
 
-        console.log("Case 2....parentNodeCoord", parentNodeCoord);
-        console.log("Case 2....lastLineCoord", lastLineCoord);
-
-
         const lastEntry = {
             ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
             parentCoord: lastLineCoord,
             connectorName: ConnectorName.ARROW_RIGHT
         };
-        console.log("Case 2....lastEntry", lastEntry);
 
         return [firstEntry].concat(lines).concat(lastEntry);
     }
@@ -496,7 +518,6 @@ export const invertKeyVal = (keyToVal: EndomorphDict) =>
     }, {});
 
 
-
 /**
  * Provides instruction for where to place a dash line forking from decision step
  *
@@ -507,7 +528,7 @@ export const invertKeyVal = (keyToVal: EndomorphDict) =>
 export const downRightDashesToPlace = (
     { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
 ): { replaceBy: string; coord: MatrixCoord }[] => decisionStepCols.map(colNum => {
-    const rowNum = matrix[colNum].findIndex((matrixElem: string) => isPlaceholder(matrixElem));
+    const rowNum = firstUnoccupiedInCol(matrix[colNum]);
     const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
     const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
     const replaceBy = encodeMatrixEntry({
@@ -522,7 +543,29 @@ export const downRightDashesToPlace = (
     };
 });
 
-// TODO: We might not need BFS to place the workflowStep into the matrix
+const getRowNum = ({ nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: EndomorphDict }) =>
+    decodeMatrixCoord(nodeIdToCoord[nodeId]).rowNum;
+
+const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) =>
+    getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
+
+const toExploreSortBy = (workflowStepNodes: WorkflowStepNodes) => (a: string, b: string) => {
+    const { workflowStepOrder: aOrder } = workflowStepNodes[a];
+    const { workflowStepOrder: bOrder } = workflowStepNodes[b];
+    return bOrder - aOrder;
+};
+
+// TODO: Implement priority queue to keep track of toExplore
+// export function PriorityQueue() {
+//     this.front = null;
+//     this.insert = (priority: number) => {
+
+//     };
+//     this.peek = () => {};
+//     this.pull = () => {};
+//     this.isEmpty = () => {};
+// };
+
 
 /**
  * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
@@ -544,7 +587,7 @@ export const populateMatrix = (
 
     const matrix = clone(initialMatrix);
 
-    // Step 1 - Traverse graph (BFS) and generate nodeToParentCoords and nodeIdToCoord
+    // Step 1 - Traverse graph (BFS) and generate nodeIdToParentCoords and nodeIdToCoord
     // together, these hash maps tell us how tiles in the matrix are connected
 
     const { firstStep, workflowStepNodes } = workflowVisData;
@@ -552,26 +595,47 @@ export const populateMatrix = (
     let toExplore = [firstStep];
     const explored: ExistentialDict = {};
 
-    // nodeId -> (colNum,rowNum)
+    // nodeId -> `${colNum},${rowNum}`
     const nodeIdToCoord: EndomorphDict = {};
 
-    // connectedNodes is a mapping from (colNum,rowNum) of a
-    // node to (colNum, rowNum)[] to its children nodes
-    const nodeToParentCoords: PolymorphDict = {};
+    // nodeId -> `${colNum},${rowNum}`[]
+    // nodeIdToParentCoords is a mapping from the id of a
+    // node to an array of (colNum, rowNum) of its parent nodes
+    const nodeIdToParentCoords: PolymorphDict = {};
 
+    // nodeId -> nodeId[]
+    const nodeIdToParentNodeIds: PolymorphDict = {};
+
+    let offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
     while (toExplore.length > 0) {
-        const [id, ...rest] = toExplore;
+        const [id, ...rest] = toExplore; // toExplore needs to be a priority queue
         toExplore = rest;
         const workflowStepNode = workflowStepNodes[id];
         const { nextSteps, workflowStepOrder } = workflowStepNode;
 
         // Place the workflow step id into the matrix
-        // TODO: We need to account for the coord of the parent node when placing a new
+        // We need to account for the coord of the parent node when placing a new
         // node into the matrix
+        // Get Parents' Ids
+        const parentIds = nodeIdToParentNodeIds[id];
+
+        // console.log(">>>>>>> newNodeId", id);
+        // console.log("prevStepIds", parentIds);
+
+        // sort parentIds from smallest rowNum to largest rowNum
+        const orderedParentIds = parentIds && sort(parentIdSortBy(nodeIdToCoord), parentIds);
+        const parentId = parentIds ? orderedParentIds[0] : "";
+        const encodedParentCoord = nodeIdToCoord[parentId];
+
+        // console.log("orderedParentIds", orderedParentIds);
+        // console.log("parentId", parentId);
+        // console.log("encodedParentCoord", nodeIdToCoord[parentId]);
+
         const coord = addWorkflowStepToMatrix({
             matrix,
-            colNum: workflowStepOrder * 2,
-            newStepId: id
+            colNum: workflowStepOrder * 2 + offset,
+            newNodeId: id,
+            encodedParentCoord
         });
 
         // Add current node's coord into nodeIdToCoord
@@ -584,21 +648,33 @@ export const populateMatrix = (
             // Update nodeToParentCoords here using nodeIdToCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeIdToCoord
             // because nextStep's parent is current node, which we just added to nodeIdToCoord above
-            const parentCoordsEntry = nodeToParentCoords[nextStepId];
-            nodeToParentCoords[nextStepId] = (parentCoordsEntry || []).concat(nodeIdToCoord[id]);
+            const parentCoordsEntry = nodeIdToParentCoords[nextStepId];
+            nodeIdToParentCoords[nextStepId] = (parentCoordsEntry || []).concat(nodeIdToCoord[id]);
+
+            const parentNodeIds = nodeIdToParentNodeIds[nextStepId];
+            nodeIdToParentNodeIds[nextStepId] = (parentNodeIds || []).concat(id);
 
             if (!explored[nextStepId]) {
-                toExplore = toExplore.concat(nextStepId);
+                // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
+                // Inefficient to sort everytime for an insert. We can do better on performance by
+                // maintaining toExplore as a priority queue
+                toExplore = sort(
+                    toExploreSortBy(workflowStepNodes),
+                    toExplore.concat(nextStepId)
+                );
                 explored[nextStepId] = true;
             }
+            // console.log("toExplore", toExplore);
+            // console.log("toExplore workflowStepOrder", toExplore.map(nodeId => workflowStepNodes[nodeId].workflowStepOrder));
         }
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
     console.log("--nodeIdToCoord", nodeIdToCoord);
-    console.log("--nodeToParentCoords", nodeToParentCoords);
+    console.log("--nodeToParentCoords", nodeIdToParentCoords);
+    console.log("--nodeIdToParentNodeIds", nodeIdToParentNodeIds);
 
-    const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeToParentCoords });
+    const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeIdToParentCoords });
     const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
 
     // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?

@@ -10,7 +10,7 @@ configure({ adapter: new Adapter() });
 
 describe("Connector Spec", () => {
     let connector: any;
-    const addChildNode = addNode({ "123": "0,0" })("0,0");
+    const addChildNode = addNode({ 123: "0,0" })("0,0");
     let props;
 
     beforeEach(() => {
@@ -34,11 +34,10 @@ describe("Connector Spec", () => {
     });
 
     describe("EditButton Spec", () => {
-        const addChildNode = addNode({ "123": "0,0" })("0,0");
+        const addChildNode = addNode({ 123: "0,0" })("0,0");
         let addChildNodeSpy: any;
         beforeEach(() => {
             addChildNodeSpy = jest.spyOn(EditButton.prototype, "addNodeWithLocation");
-            // editButton.update();
         });
         afterEach(() => {
             jest.restoreAllMocks();

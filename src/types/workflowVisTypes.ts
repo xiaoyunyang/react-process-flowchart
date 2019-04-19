@@ -1,12 +1,13 @@
-import { WorkflowStepTypeT } from "./workflow";
+import { WorkflowStepTypeT, WorkflowStepT } from "./workflow";
 import { EndomorphDict } from "./generic";
 
 export interface WorkflowStepNodeT {
     id: string;
     name: string;
     type: WorkflowStepTypeT | string;
-    nextSteps: string[];
     workflowStepOrder: number;
+    nextSteps: string[];
+    prevSteps: WorkflowStepT[];
 }
 
 export interface WorkflowStepNodes { [id: string]: WorkflowStepNodeT }
