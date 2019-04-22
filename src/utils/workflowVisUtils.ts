@@ -1,5 +1,6 @@
 // Utils
 import { clone, chain, sort } from "ramda";
+import MinHeap from "./MinHeap";
 
 // Types
 import {
@@ -592,7 +593,8 @@ export const populateMatrix = (
 
     const { firstStep, workflowStepNodes } = workflowVisData;
 
-    let toExplore = [firstStep];
+    const toExplore: MinHeap = new MinHeap();
+    toExplore.insert({ val: firstStep, priority: 0 });
     const explored: ExistentialDict = {};
 
     // nodeId -> `${colNum},${rowNum}`
@@ -607,9 +609,9 @@ export const populateMatrix = (
     const nodeIdToParentNodeIds: PolymorphDict = {};
 
     let offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
-    while (toExplore.length > 0) {
-        const [id, ...rest] = toExplore; // toExplore needs to be a priority queue
-        toExplore = rest;
+    while (!toExplore.isEmpty()) {
+        const min = toExplore.deleteMin();
+        const id = min ? min.val : "";
         const workflowStepNode = workflowStepNodes[id];
         const { nextSteps, workflowStepOrder } = workflowStepNode;
 
@@ -640,7 +642,7 @@ export const populateMatrix = (
 
         // Add current node's coord into nodeIdToCoord
         nodeIdToCoord[id] = encodeMatrixCoord(coord);
-
+        console.log("id ---> ", id);
         let nextStepId = null;
         for (let i = 0; i < nextSteps.length; i += 1) {
             nextStepId = nextSteps[i];
@@ -658,10 +660,10 @@ export const populateMatrix = (
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
                 // maintaining toExplore as a priority queue
-                toExplore = sort(
-                    toExploreSortBy(workflowStepNodes),
-                    toExplore.concat(nextStepId)
-                );
+                toExplore.insert({
+                    val: nextStepId,
+                    priority: workflowStepNodes[nextStepId].workflowStepOrder
+                });
                 explored[nextStepId] = true;
             }
             // console.log("toExplore", toExplore);

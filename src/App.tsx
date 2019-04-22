@@ -16,9 +16,6 @@ import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
-
-// const workflows: any = [AA, AB, BA, BB, BC, BD];
-
 const workflows: any = [AA, AB, BA, BB, BC, BD, BE, BF, CD];
 const enableMatrixUnitTest = true;
 

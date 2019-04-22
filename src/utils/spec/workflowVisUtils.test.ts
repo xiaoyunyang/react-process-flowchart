@@ -149,23 +149,23 @@ describe("WorkflowVisUtils", () => {
         it("should create an array of pairs of coordinates between parent and child nodes using two hash tables", () => {
             const nodeIdToCoord = {
                 "5890236e433b-auth": "0,0",
-                "ba322565b1bf": "2,0",
+                ba322565b1bf: "2,0",
                 "09e6110fda58": "4,0",
-                "b2b5c4c7cfd7": "4,1",
+                b2b5c4c7cfd7: "4,1",
                 "297786162f15": "6,0",
                 "492b709fc90a": "8,0",
-                "a3135bdf3aa3": "10,0",
+                a3135bdf3aa3: "10,0",
             };
-            const nodeToParentCoords = {
-                "ba322565b1bf": ["0,0"],
+            const nodeIdToParentCoords = {
+                ba322565b1bf: ["0,0"],
                 "09e6110fda58": ["2,0"],
-                "b2b5c4c7cfd7": ["2,0"],
+                b2b5c4c7cfd7: ["2,0"],
                 "297786162f15": ["4,0", "4,1"],
                 "492b709fc90a": ["6,0"],
-                "a3135bdf3aa3": ["8,0"]
+                a3135bdf3aa3: ["8,0"]
             };
 
-            const res = createCoordPairs({ nodeIdToCoord, nodeToParentCoords });
+            const res = createCoordPairs({ nodeIdToCoord, nodeIdToParentCoords });
             const expected = [
                 { parentCoord: { colNum: 0, rowNum: 0 }, childCoord: { colNum: 2, rowNum: 0 } },
                 { parentCoord: { colNum: 2, rowNum: 0 }, childCoord: { colNum: 4, rowNum: 0 } },
@@ -258,10 +258,10 @@ describe("WorkflowVisUtils", () => {
 
     test("#invertKeyVal", () => {
         const dict = {
-            "a": "1", "b": "2", "c": "3"
+            a: "1", b: "2", c: "3"
         };
         expect(invertKeyVal(dict)).toEqual({
-            "1": "a", "2": "b", "3": "c"
+            1: "a", 2: "b", 3: "c"
         });
     });
 
@@ -305,7 +305,7 @@ describe("WorkflowVisUtils", () => {
                 "8e00dae32eb6-auth": "0,0",
                 "64735f9f64c8": "2,0",
                 "6473fda8a603": "4,0",
-                "647384536514": "6,0",
+                647384536514: "6,0",
                 "6473f65c98fe": "8,0"
             };
             const expected = {
@@ -337,12 +337,12 @@ describe("WorkflowVisUtils", () => {
             ];
             const expectedNodeIdToCoord = {
                 "5890236e433b-auth": "0,0",
-                "ba322565b1bf": "2,0",
+                ba322565b1bf: "2,0",
                 "09e6110fda58": "4,0",
-                "b2b5c4c7cfd7": "4,1",
+                b2b5c4c7cfd7: "4,1",
                 "297786162f15": "6,0",
                 "492b709fc90a": "8,0",
-                "a3135bdf3aa3": "10,0"
+                a3135bdf3aa3: "10,0"
             };
             const expected = {
                 matrix: expectedMatrix,
