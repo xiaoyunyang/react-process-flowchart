@@ -94,15 +94,24 @@ export const decodeMatrixEntry = (matrixEntry: string): {
 };
 
 /**
- * Determine if a matrixEntry string is a connector with the name "empty"
+ * Determines the rowNum of the first unoccupied (empty) tile
  *
- * @param {string} matrixEntry 
- * @returns {boolean} true if matrixEntry represents a placeholder
+ * @param {string[]} col
+ * @return {number} rowNum
  */
 export const isPlaceholder = (matrixEntry: string): boolean => {
     const { tileType, tileName } = decodeMatrixEntry(matrixEntry);
     return isConnector(tileType) && tileName === MATRIX_PLACEHOLDER_NAME;
 };
+
+/**
+ * Determines the rowNum of the first empty slot in a column
+ * @param {string[]} col
+ * @return {number} rowNum
+ */
+export const firstUnoccupiedInCol = (col: string[]) =>
+    col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
+
 
 // Mutable function (mutates matrix) instead of returning
 // a new matrix for performance reasons
@@ -274,10 +283,6 @@ export const createWorkflowVisData = (
     };
 };
 
-// TODO: test and JSDocs
-export const firstUnoccupiedInCol = (col: string[]) =>
-    col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
-
 /**
  * Adds a new Node to the matrix. Mutates the original matrix. 
  *
@@ -286,7 +291,7 @@ export const firstUnoccupiedInCol = (col: string[]) =>
  * @param {string} newNodeId
  * @returns {MatrixCoord} { rowNum, colNum } of the newly added Node in the matrix
  */
-export const addWorkflowStepToMatrix = (
+export const addNodeToMatrix = (
     { matrix, colNum, newNodeId, encodedParentCoord }: {
         matrix: Matrix;
         colNum: number;
@@ -300,7 +305,11 @@ export const addWorkflowStepToMatrix = (
     // Determine rowNum
     // Naive: rowNum is the first unoccupied
     // Better: If no parent, rowNum is the first unoccupied.
-    // If has parent, rowNum is parent rowNum or firstt unoccupied, whichever is greater
+    // If has parent, rowNum is parent rowNum or first unoccupied, whichever is greater
+    // Note, in this iteration, we are assuming that the tile at parent's rowNum is unoccupied
+    // but that's not necessarily true. In a future iteration, we want to also check that the
+    // tile at parent's rowNum is unoccupied. If it's occupied, we want to change the size of
+    // of the matrix.
     const firstUnoccupiedRowNum = firstUnoccupiedInCol(col);
     let rowNum: number;
     if (encodedParentCoord) {
@@ -595,6 +604,7 @@ export const populateMatrix = (
 
     const toExplore: MinHeap = new MinHeap();
     toExplore.insert({ val: firstStep, priority: 0 });
+
     const explored: ExistentialDict = {};
 
     // nodeId -> `${colNum},${rowNum}`
@@ -633,9 +643,9 @@ export const populateMatrix = (
         // console.log("parentId", parentId);
         // console.log("encodedParentCoord", nodeIdToCoord[parentId]);
 
-        const coord = addWorkflowStepToMatrix({
+        const coord = addNodeToMatrix({
             matrix,
-            colNum: workflowStepOrder * 2 + offset,
+            colNum: (workflowStepOrder * 2) + offset,
             newNodeId: id,
             encodedParentCoord
         });
@@ -647,7 +657,7 @@ export const populateMatrix = (
         for (let i = 0; i < nextSteps.length; i += 1) {
             nextStepId = nextSteps[i];
 
-            // Update nodeToParentCoords here using nodeIdToCoord.
+            // Update nodeIdToParentCoords here using nodeIdToCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeIdToCoord
             // because nextStep's parent is current node, which we just added to nodeIdToCoord above
             const parentCoordsEntry = nodeIdToParentCoords[nextStepId];
@@ -691,8 +701,6 @@ export const populateMatrix = (
 
     // Add the decision step dashline plus sign placeholder into the matrix where the decision
     // steps are
-    // TODO: Need to write a helper function to determine the rowNum of the first unoccupied (empty) tile
-
     // Populate matrix with downRight dash line connectors branching from diamond
     downRightDashesToPlace({ matrix, decisionStepCols })
         .forEach(downRightDashToPlace => replaceTile({

@@ -5,6 +5,7 @@ import {
     encodeMatrixEntry,
     decodeMatrixEntry,
     isPlaceholder,
+    firstUnoccupiedInCol,
     initCol,
     initMatrix,
     createWorkflowVisData,
@@ -12,6 +13,7 @@ import {
     createLineHorizes,
     createConnectorsBetweenNodes,
     invertKeyVal,
+    addNodeToMatrix,
     downRightDashesToPlace,
     populateMatrix,
     addConnectorToMatrix
@@ -49,6 +51,17 @@ describe("WorkflowVisUtils", () => {
             expect(isPlaceholder("foo|empty")).toBe(false);
             expect(isPlaceholder("box|1234")).toBe(false);
             expect(isPlaceholder("empty")).toBe(false);
+        });
+    });
+
+    describe("#firstUnoccupiedInCol", () => {
+        it("should return the rowNum of the first placeholder empty tile", () => {
+            const col = ["1234", "box|empty|0,1", "box|empty|0,2"];
+            expect(firstUnoccupiedInCol(col)).toBe(1);
+        });
+        it("should return -1 if the column has no empty slots", () => {
+            const col = ["1234", "1234", "1234"];
+            expect(firstUnoccupiedInCol(col)).toBe(-1);
         });
     });
 
@@ -279,6 +292,33 @@ describe("WorkflowVisUtils", () => {
             { replaceBy: "diamond|downRightDash|4,1|4,0", coord: { colNum: 4, rowNum: 1 } }
         ];
         expect(downRightDashesToPlace({ matrix, decisionStepCols })).toEqual(expected);
+    });
+
+    describe("#addNodeToMatrix", () => {
+        let matrix: Matrix;
+
+        beforeEach(() => {
+            matrix = initMatrix({
+                numRows: 3,
+                colTypes: [ColType.BOX, ColType.STANDARD, ColType.DIAMOND]
+            });
+        });
+        it("should add node to the first unoccupied position equals parent rowNum", () => {
+            const newNodeId = "1234";
+            const encodedParentCoord = "0,0";
+            const colNum = 1;
+            const { rowNum } = addNodeToMatrix({ matrix, colNum, newNodeId, encodedParentCoord });
+            expect(rowNum).toBe(0);
+            expect(matrix[1]).toEqual(["1234", "standard|empty|1,1", "standard|empty|1,2"]);
+        });
+        it("should add node to the first unoccupied position is less than the parent rowNum", () => {
+            const newNodeId = "1234";
+            const encodedParentCoord = "0,1";
+            const colNum = 1;
+            const { rowNum } = addNodeToMatrix({ matrix, colNum, newNodeId, encodedParentCoord });
+            expect(rowNum).toBe(1);
+            expect(matrix[1]).toEqual(["standard|empty|1,0", "1234", "standard|empty|1,2"]);
+        });
     });
 
     describe("#populateMatrix", () => {
