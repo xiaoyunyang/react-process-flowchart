@@ -634,10 +634,10 @@ export const populateMatrix = (
         // console.log(">>>>>>> newNodeId", id);
         // console.log("prevStepIds", parentIds);
 
-        // sort parentIds from smallest rowNum to largest rowNum
+        // sort parentIds by rowNum in ascending order
         const orderedParentIds = parentIds && sort(parentIdSortBy(nodeIdToCoord), parentIds);
         const parentId = parentIds ? orderedParentIds[0] : "";
-        const encodedParentCoord = nodeIdToCoord[parentId];
+        const encodedParentCoord = nodeIdToCoord[parentId]; // smallest rowNum
 
         // console.log("orderedParentIds", orderedParentIds);
         // console.log("parentId", parentId);

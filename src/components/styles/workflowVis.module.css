@@ -142,7 +142,12 @@
 }
 
 .arrowRight .lineShort {
-  width: 33%;
+  width: 36.5%;
+  margin-top: 33px;
+}
+
+.arrowRight .lineShortArrow {
+  width: 30%;
   margin-top: 33px;
 }
 

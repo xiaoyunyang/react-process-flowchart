@@ -46,7 +46,7 @@ export const ArrowRightEditable = ({ addChildNode }: { addChildNode: AddChildNod
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
         <div className={classNames(styles.line, styles.lineShort)} />
         <EditButton addChildNode={addChildNode} />
-        <div className={classNames(styles.line, styles.lineShort)} />
+        <div className={classNames(styles.line, styles.lineShortArrow)} />
         <i className={classNames(styles.caret, styles.caretRight)} />
     </div>
 );
