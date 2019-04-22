@@ -6,21 +6,30 @@ import WorkflowVis from "./WorkflowVis";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
-import { AddNode, AddChildNodeCommand } from "../types/workflowVisTypes";
+import { AddNode, AddChildNodeCommand, WorkflowStepNodes } from "../types/workflowVisTypes";
 import { EndomorphDict } from '../types/generic';
 
 // Utils
 import { createWorkflowVisData, populateMatrix, invertKeyVal } from "../utils/workflowVisUtils";
 
-export const addNode: AddNode = (coordToNodeId: EndomorphDict) =>
+export const addNode: AddNode = ({
+    coordToNodeId, workflowStepNodes
+}: {
+    coordToNodeId: EndomorphDict; workflowStepNodes: WorkflowStepNodes;
+}) =>
     (parentCoord: string | undefined) =>
         ({ left, top }: { left: number; top: number }): AddChildNodeCommand => {
             if (parentCoord) {
 
                 // The command to add new child node is set to this string as a placeholder.
                 // You can set it to whatever string or data structure you want
+
+                const prevNodeId = coordToNodeId[parentCoord];
+                const nextNodeIds = workflowStepNodes[prevNodeId].nextSteps;
+
                 const addChildNodeCommand: AddChildNodeCommand =
-                    `User wants to add child to node with nodeId=${coordToNodeId[parentCoord]}. Draw popover modal at left=${left}, top=${top}`;
+                    `User clicked plus sign between prevNodeId = ${prevNodeId} and nextNodeIds = ${String(nextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
+
                 // eslint-disable-next-line no-console
                 console.log(addChildNodeCommand); // For debugging
                 return addChildNodeCommand;
@@ -53,13 +62,13 @@ const WorkflowVisContainer = (
     const coordToNodeId = invertKeyVal(nodeIdToCoord);
 
     console.log("coordToNodeId", coordToNodeId);
-
+    const { workflowStepNodes } = workflowVisData;
     return (
         <WorkflowVis
             workflowVisData={workflowVisData}
             matrix={matrix}
             editMode={editMode}
-            addNodeToVis={addNode(coordToNodeId)}
+            addNodeToVis={addNode({ coordToNodeId, workflowStepNodes })}
         />
     );
 };

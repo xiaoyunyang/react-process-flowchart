@@ -6,11 +6,16 @@ import Adapter from "enzyme-adapter-react-16";
 import Connector, { connectors, connectorComponent, EditButton } from "../Connector";
 import { addNode } from "../WorkflowVisContainer";
 
+// Type
+import { WorkflowStepTypeT } from "../../types/workflow";
+
 configure({ adapter: new Adapter() });
 
 describe("Connector Spec", () => {
     let connector: any;
-    const addChildNode = addNode({ 123: "0,0" })("0,0");
+    const coordToNodeId = { "0,0": "123" };
+    const workflowStepNodes = {};
+    const addChildNode = addNode({ coordToNodeId, workflowStepNodes })("0,0");
     let props;
 
     beforeEach(() => {
@@ -34,7 +39,19 @@ describe("Connector Spec", () => {
     });
 
     describe("EditButton Spec", () => {
-        const addChildNode = addNode({ 123: "0,0" })("0,0");
+        const coordToNodeId = { "0,0": "123" };
+        const workflowStepNodes = {
+            123: {
+                id: "123",
+                workflowUid: "123",
+                name: "foo",
+                type: WorkflowStepTypeT.PUBLISH,
+                workflowStepOrder: 3,
+                nextSteps: ["456"],
+                prevSteps: []
+            }
+        };
+        const addChildNode = addNode({ coordToNodeId, workflowStepNodes })("0,0");
         let addChildNodeSpy: any;
         beforeEach(() => {
             addChildNodeSpy = jest.spyOn(EditButton.prototype, "addNodeWithLocation");

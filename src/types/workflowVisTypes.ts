@@ -85,4 +85,7 @@ export type AddChildNode = ({ left, top }: { left: number; top: number }) => Add
 
 export type AddNodeToVis = (parentCoord: string | undefined) => AddChildNode;
 
-export type AddNode = (coordToNodeId: EndomorphDict) => AddNodeToVis;
+export type AddNode = ({ coordToNodeId, workflowStepNodes }: {
+    coordToNodeId: EndomorphDict; workflowStepNodes: WorkflowStepNodes;
+}) => AddNodeToVis;
+
