@@ -7,35 +7,36 @@ import WorkflowVis from "./WorkflowVis";
 // Types
 import { WorkflowStepT } from "../types/workflow";
 import { AddNode, AddChildNodeCommand, WorkflowStepNodes } from "../types/workflowVisTypes";
-import { EndomorphDict } from '../types/generic';
+import { EndomorphDict, PolymorphDict } from '../types/generic';
 
 // Utils
 import { createWorkflowVisData, populateMatrix, invertKeyVal } from "../utils/workflowVisUtils";
 
 export const addNode: AddNode = ({
-    coordToNodeId, workflowStepNodes
+    coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds
 }: {
-    coordToNodeId: EndomorphDict; workflowStepNodes: WorkflowStepNodes;
+    coordToNodeId: EndomorphDict;
+    workflowStepNodes: WorkflowStepNodes;
+    nodeIdToParentNodeIds: PolymorphDict;
 }) =>
     (parentCoord: string | undefined) =>
         ({ left, top }: { left: number; top: number }): AddChildNodeCommand => {
             if (parentCoord) {
-
                 // The command to add new child node is set to this string as a placeholder.
                 // You can set it to whatever string or data structure you want
-
-                const prevNodeId = coordToNodeId[parentCoord];
-                const nextNodeIds = workflowStepNodes[prevNodeId].nextSteps;
+                const parentNodeId = coordToNodeId[parentCoord];
+                const prevNodeIds = nodeIdToParentNodeIds[parentNodeId];
+                const nextNodeIds = workflowStepNodes[parentNodeId].nextSteps;
 
                 const addChildNodeCommand: AddChildNodeCommand =
-                    `User clicked plus sign between prevNodeId = ${prevNodeId} and nextNodeIds = ${String(nextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
+                    `User clicked plus sign following nodeId = ${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} nextNodeIds = ${String(nextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
 
-                // eslint-disable-next-line no-console
-                console.log(addChildNodeCommand); // For debugging
+                console.log(addChildNodeCommand);
                 return addChildNodeCommand;
             }
             return "";
         };
+
 const WorkflowVisContainer = (
     { workflowUid, workflowSteps, editMode }: {
         workflowUid: string; workflowSteps: WorkflowStepT[]; editMode: boolean;
@@ -49,7 +50,7 @@ const WorkflowVisContainer = (
     // console.log("workflowVisData", JSON.stringify(workflowVisData, null, 2))
     console.log("initMatrix", initialMatrix);
 
-    const { matrix, nodeIdToCoord } = populateMatrix({
+    const { matrix, nodeIdToCoord, nodeIdToParentNodeIds } = populateMatrix({
         workflowVisData, initialMatrix, decisionStepCols
     });
     console.log("matrix", matrix);
@@ -68,7 +69,7 @@ const WorkflowVisContainer = (
             workflowVisData={workflowVisData}
             matrix={matrix}
             editMode={editMode}
-            addNodeToVis={addNode({ coordToNodeId, workflowStepNodes })}
+            addNodeToVis={addNode({ coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds })}
         />
     );
 };

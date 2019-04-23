@@ -42,7 +42,11 @@ describe("WorkflowVisContainer Spec", () => {
                 "8,0": "492b709fc90a",
                 "10,0": "a3135bdf3aa3"
             };
-            const addNodeToVis = addNode({ coordToNodeId, workflowStepNodes: {} });
+            const addNodeToVis = addNode({
+                coordToNodeId,
+                workflowStepNodes: {},
+                nodeIdToParentNodeIds: {}
+            });
             expect(workflowVis.prop("addNodeToVis").toString()).toBe(addNodeToVis.toString());
         });
     });

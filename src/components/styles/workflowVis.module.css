@@ -214,7 +214,7 @@
 
 .downRightDash span {
   margin-top: calc(var(--base-unit) * 10);
-  margin-left: calc(var(--base-unit) * 3);
+  margin-left: calc(var(--base-unit) * 3.5);
   z-index: 2;
 }
 

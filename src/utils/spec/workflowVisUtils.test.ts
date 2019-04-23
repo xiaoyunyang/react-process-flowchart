@@ -348,9 +348,17 @@ describe("WorkflowVisUtils", () => {
                 647384536514: "6,0",
                 "6473f65c98fe": "8,0"
             };
+            const expectedNodeIdToParentNodeIds = {
+                "8e00dae32eb6-auth": undefined,
+                "64735f9f64c8": ["8e00dae32eb6-auth"],
+                "6473fda8a603": ["64735f9f64c8"],
+                647384536514: ["6473fda8a603"],
+                "6473f65c98fe": ["647384536514"]
+            };
             const expected = {
                 matrix: expectedMatrix,
-                nodeIdToCoord: expectedNodeIdToCoord
+                nodeIdToCoord: expectedNodeIdToCoord,
+                nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
             };
             expect(res).toEqual(expected);
         });
@@ -384,9 +392,19 @@ describe("WorkflowVisUtils", () => {
                 "492b709fc90a": "8,0",
                 a3135bdf3aa3: "10,0"
             };
+            const expectedNodeIdToParentNodeIds = {
+                "5890236e433b-auth": undefined,
+                ba322565b1bf: ["5890236e433b-auth"],
+                "09e6110fda58": ["ba322565b1bf"],
+                b2b5c4c7cfd7: ["ba322565b1bf"],
+                "297786162f15": ["09e6110fda58", "b2b5c4c7cfd7"],
+                "492b709fc90a": ["297786162f15"],
+                a3135bdf3aa3: ["492b709fc90a"]
+            };
             const expected = {
                 matrix: expectedMatrix,
-                nodeIdToCoord: expectedNodeIdToCoord
+                nodeIdToCoord: expectedNodeIdToCoord,
+                nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
             };
             expect(res).toEqual(expected);
         });

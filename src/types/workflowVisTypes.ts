@@ -1,5 +1,5 @@
 import { WorkflowStepTypeT, WorkflowStepT } from "./workflow";
-import { EndomorphDict } from "./generic";
+import { EndomorphDict, PolymorphDict } from "./generic";
 
 export interface WorkflowStepNodeT {
     id: string;
@@ -85,7 +85,11 @@ export type AddChildNode = ({ left, top }: { left: number; top: number }) => Add
 
 export type AddNodeToVis = (parentCoord: string | undefined) => AddChildNode;
 
-export type AddNode = ({ coordToNodeId, workflowStepNodes }: {
-    coordToNodeId: EndomorphDict; workflowStepNodes: WorkflowStepNodes;
+export type AddNode = ({
+    coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds
+}: {
+    coordToNodeId: EndomorphDict;
+    workflowStepNodes: WorkflowStepNodes;
+    nodeIdToParentNodeIds: PolymorphDict;
 }) => AddNodeToVis;
 

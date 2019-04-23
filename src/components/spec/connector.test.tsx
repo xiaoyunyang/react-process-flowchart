@@ -12,10 +12,14 @@ import { WorkflowStepTypeT } from "../../types/workflow";
 configure({ adapter: new Adapter() });
 
 describe("Connector Spec", () => {
-    let connector: any;
     const coordToNodeId = { "0,0": "123" };
-    const workflowStepNodes = {};
-    const addChildNode = addNode({ coordToNodeId, workflowStepNodes })("0,0");
+    const addChildNode = addNode({
+        coordToNodeId,
+        workflowStepNodes: {},
+        nodeIdToParentNodeIds: {}
+    })("0,0");
+
+    let connector: any;
     let props;
 
     beforeEach(() => {
@@ -51,14 +55,25 @@ describe("Connector Spec", () => {
                 prevSteps: []
             }
         };
-        const addChildNode = addNode({ coordToNodeId, workflowStepNodes })("0,0");
+        const nodeIdToParentNodeIds = {
+            123: ["012"]
+        };
+
+        const addChildNode = addNode({
+            coordToNodeId,
+            workflowStepNodes,
+            nodeIdToParentNodeIds
+        })("0,0");
+
         let addChildNodeSpy: any;
         beforeEach(() => {
             addChildNodeSpy = jest.spyOn(EditButton.prototype, "addNodeWithLocation");
         });
+
         afterEach(() => {
             jest.restoreAllMocks();
         });
+
         it("should call addNode with the right event params applied if EditButton is clicked", () => {
             const editButton = shallow(<EditButton addChildNode={addChildNode} />);
 

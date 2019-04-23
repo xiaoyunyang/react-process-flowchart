@@ -559,24 +559,6 @@ const getRowNum = ({ nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: E
 const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) =>
     getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
 
-const toExploreSortBy = (workflowStepNodes: WorkflowStepNodes) => (a: string, b: string) => {
-    const { workflowStepOrder: aOrder } = workflowStepNodes[a];
-    const { workflowStepOrder: bOrder } = workflowStepNodes[b];
-    return bOrder - aOrder;
-};
-
-// TODO: Implement priority queue to keep track of toExplore
-// export function PriorityQueue() {
-//     this.front = null;
-//     this.insert = (priority: number) => {
-
-//     };
-//     this.peek = () => {};
-//     this.pull = () => {};
-//     this.isEmpty = () => {};
-// };
-
-
 /**
  * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
  *
@@ -585,6 +567,7 @@ const toExploreSortBy = (workflowStepNodes: WorkflowStepNodes) => (a: string, b:
  * @param {Array} decisionStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
  * @returns {EndomorphDict} nodeIdToCoord - a hashmap of nodeId to its matrix coord
+ * @returns {PolymorphDict} nodeIdToParentNodeIds
  */
 export const populateMatrix = (
     { workflowVisData, initialMatrix, decisionStepCols }: {
@@ -592,7 +575,7 @@ export const populateMatrix = (
         initialMatrix: Matrix;
         decisionStepCols: number[];
     }
-): { matrix: Matrix; nodeIdToCoord: EndomorphDict } => {
+): { matrix: Matrix; nodeIdToCoord: EndomorphDict; nodeIdToParentNodeIds: PolymorphDict } => {
     console.log("Populate Matrix...");
 
     const matrix = clone(initialMatrix);
@@ -652,7 +635,7 @@ export const populateMatrix = (
 
         // Add current node's coord into nodeIdToCoord
         nodeIdToCoord[id] = encodeMatrixCoord(coord);
-        console.log("id ---> ", id);
+        console.log("visiting id ---> ", id);
         let nextStepId = null;
         for (let i = 0; i < nextSteps.length; i += 1) {
             nextStepId = nextSteps[i];
@@ -665,7 +648,7 @@ export const populateMatrix = (
 
             const parentNodeIds = nodeIdToParentNodeIds[nextStepId];
             nodeIdToParentNodeIds[nextStepId] = (parentNodeIds || []).concat(id);
-
+            // console.log("nodeIdToParentNodeIds = ", JSON.stringify(nodeIdToParentNodeIds, null, 2));
             if (!explored[nextStepId]) {
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
@@ -709,5 +692,5 @@ export const populateMatrix = (
             coord: downRightDashToPlace.coord
         }));
 
-    return { matrix, nodeIdToCoord };
+    return { matrix, nodeIdToCoord, nodeIdToParentNodeIds };
 };
