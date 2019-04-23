@@ -6,6 +6,8 @@ import {
     decodeMatrixEntry,
     isPlaceholder,
     firstUnoccupiedInCol,
+    lastNodeInCol,
+    lastOccupiedInCol,
     initCol,
     initMatrix,
     createWorkflowVisData,
@@ -62,6 +64,32 @@ describe("WorkflowVisUtils", () => {
         it("should return -1 if the column has no empty slots", () => {
             const col = ["1234", "1234", "1234"];
             expect(firstUnoccupiedInCol(col)).toBe(-1);
+        });
+    });
+
+    describe("#lastNodeInCol", () => {
+        it("should return the rowNum of the last Node in col", () => {
+            const col = ["1234", "5678", "box|empty|0,2"];
+            expect(lastNodeInCol(col)).toBe(1);
+        });
+        it("should return -1 if the column has no nodes", () => {
+            const col = ["box|empty|0,0", "box|lineHoriz|0,1", "box|empty|0,2"];
+            expect(lastNodeInCol(col)).toBe(-1);
+        });
+    });
+
+    describe("#lastOccupiedInCol", () => {
+        it("should return the rowNum of the last occupied (non-empty) tile in col that's a connector", () => {
+            const col = ["1234", "box|lineHoriz|0,1", "box|empty|0,2"];
+            expect(lastOccupiedInCol(col)).toBe(1);
+        });
+        it("should return the rowNum of the last occupied (non-empty) tile in col that's a node", () => {
+            const col = ["box|lineHoriz|0,0", "1234", "box|empty|0,2"];
+            expect(lastOccupiedInCol(col)).toBe(1);
+        });
+        it("should return -1 if the column is all empty", () => {
+            const col = ["box|empty|0,0", "box|empty|0,1", "box|empty|0,2"];
+            expect(lastOccupiedInCol(col)).toBe(-1);
         });
     });
 
@@ -285,7 +313,7 @@ describe("WorkflowVisUtils", () => {
             ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
             ["ba322565b1bf", "diamond|downRight|2,1", "diamond|empty|2,2"],
             ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|empty|3,2"],
-            ["09e6110fda58", "diamond|empty|4,1", "diamond|empty|4,2"],
+            ["09e6110fda58", "diamond|empty|4,1", "diamond|empty|4,2"]
         ];
         const expected = [
             { replaceBy: "diamond|downRightDash|2,2|2,0", coord: { colNum: 2, rowNum: 2 } },

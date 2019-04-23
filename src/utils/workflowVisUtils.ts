@@ -109,9 +109,37 @@ export const isPlaceholder = (matrixEntry: string): boolean => {
  * @param {string[]} col
  * @return {number} rowNum
  */
-export const firstUnoccupiedInCol = (col: string[]) =>
+export const firstUnoccupiedInCol = (col: string[]): number =>
     col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
 
+/**
+ * Determines the rowNum of the last non-empty slot in a column that's a node
+ * @param {string[]} col
+ * @return {number} rowNum
+ */
+export const lastNodeInCol = (col: string[]): number => {
+    for (let i = col.length - 1; i >= 0; i -= 1) {
+        const matrixEntry = col[i];
+        const { tileType } = decodeMatrixEntry(matrixEntry);
+
+        if (!isConnector(tileType)) return i;
+    }
+    return -1;
+};
+
+/**
+ * Determines the rowNum of the last non-empty slot in a column
+ * @param {string[]} col
+ * @return {number} rowNum
+ */
+export const lastOccupiedInCol = (col: string[]): number => {
+    for (let i = col.length - 1; i >= 0; i -= 1) {
+        const matrixEntry = col[i];
+
+        if (!isPlaceholder(matrixEntry)) return i;
+    }
+    return -1;
+};
 
 // Mutable function (mutates matrix) instead of returning
 // a new matrix for performance reasons
@@ -538,9 +566,12 @@ export const invertKeyVal = (keyToVal: EndomorphDict) =>
 export const downRightDashesToPlace = (
     { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
 ): { replaceBy: string; coord: MatrixCoord }[] => decisionStepCols.map(colNum => {
-    const rowNum = firstUnoccupiedInCol(matrix[colNum]);
+    const col = matrix[colNum];
+    const parentRowNum = lastNodeInCol(col);
+    const rowNum = lastOccupiedInCol(col) + 1;
     const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
-    const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: 0 });
+    const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: parentRowNum });
+
     const replaceBy = encodeMatrixEntry({
         colType: ColType.DIAMOND,
         entryName: ConnectorName.DOWN_RIGHT_DASH,

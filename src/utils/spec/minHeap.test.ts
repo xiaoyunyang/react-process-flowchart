@@ -37,28 +37,45 @@ const verifyInvariant = (
     const rightChild = heapArr[rightChildInd];
 
     if (!leftChild && !rightChild) return true;
-    if (leftChild && leftChild < curr) return false;
-    if (rightChild && rightChild < curr) return false;
-
-    if (!leftChild && rightChild) {
-        return rightChild >= curr && verifyInvariant(heapArr, rightChildInd);
+    let leftHeapValid = true;
+    let rightHeapValid = true;
+    if (leftChild) {
+        if (leftChild.priority < curr.priority) return false;
+        leftHeapValid = verifyInvariant(heapArr, leftChildInd);
     }
-    if (!rightChild && leftChild) {
-        return leftChild >= curr && verifyInvariant(heapArr, leftChildInd);
+    if (rightChild) {
+        if (rightChild.priority < curr.priority) return false;
+        rightHeapValid = verifyInvariant(heapArr, leftChildInd);
     }
 
-    return leftChild >= curr && verifyInvariant(heapArr, leftChildInd)
-        && rightChild >= curr && verifyInvariant(heapArr, rightChildInd);
+    return leftHeapValid && rightHeapValid;
 };
 
-describe("MinHeap", () => {
-    let h: MinHeap;
-    let mins: (HeapElemT | undefined)[];
-    beforeEach(() => {
-        h = new MinHeap();
-        mins = [];
+describe("verifyInvariant", () => {
+    it("should verify min heap properties correctly for not a min heap", () => {
+        const heap = [
+            { val: 'a', priority: 0 },
+            { val: 'a', priority: 12 },
+            { val: 'a', priority: 13 },
+            { val: 'a', priority: 1 },
+        ];
+        expect(verifyInvariant(heap, 1)).toBe(false);
     });
+    it("should verify min heap properties correctly for a min heap", () => {
+        const heap = [
+            { val: 'a', priority: 0 },
+            { val: 'a', priority: 1 },
+            { val: 'a', priority: 2 },
+            { val: 'a', priority: 3 },
+        ];
+        expect(verifyInvariant(heap, 1)).toBe(true);
+    });
+});
+
+describe("MinHeap", () => {
     describe("Insert and remove randomized testing", () => {
+        let h: MinHeap = new MinHeap();
+        let mins: (HeapElemT | undefined)[] = [];
         const elems = [
             { val: "a", priority: 0 },
             { val: "a1", priority: 0 },
@@ -92,6 +109,13 @@ describe("MinHeap", () => {
     });
 
     describe("Edge Cases", () => {
+        let h: MinHeap;
+        let mins: (HeapElemT | undefined)[];
+
+        beforeEach(() => {
+            h = new MinHeap();
+            mins = [];
+        });
         it("should remove in the same order as insertion for elements of same priority", () => {
             const elems = [
                 { val: "a", priority: 0 },
