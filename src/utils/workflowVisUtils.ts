@@ -2,6 +2,7 @@
 import { clone, chain, sort } from "ramda";
 import MinHeap from "./MinHeap";
 
+
 // Types
 import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
@@ -10,6 +11,7 @@ import {
 } from "../types/workflowVisTypes";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
+
 
 // Constants
 const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
@@ -158,7 +160,7 @@ const replaceTile = (
  * @param {number} numRows number of rows
  * @param {number} colNum column number
  * @param {colType} colType
- * @returns {Array} an array of matrixEntries
+ * @returns {string[]} an array of matrixEntries
  */
 export const initCol = (
     { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
@@ -273,11 +275,11 @@ const createWorkflowStepNodes = (
 /**
  * Creates the workflowVisData and initial matrix
  *
- * @param {Array} workflowSteps 
+ * @param {string[]} workflowSteps 
  * @param {string} workflowUid 
  * @returns {WorkflowVisDataT} workflowVisData
  * @returns {Matrix} initialMatrix
- * @returns {Array} decisionStepCols - the colNums where decision steps are
+ * @returns {number[]} decisionStepCols - the colNums where decision steps are
  */
 export const createWorkflowVisData = (
     { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
@@ -367,7 +369,7 @@ export const addNodeToMatrix = (
  *
  * @param {Matrix} matrix initial matrix with workflowSteps already placed
  * @param {ConnectorToPlace} connectorToPlace instruction for how to place a connectors into matrix
- * @param {Array} nodeCoords an array of matrix coords for all the nodes (i.e., workflowSteps)
+ * @param {string[]} nodeCoords an array of matrix coords for all the nodes (i.e., workflowSteps)
  * @returns {string} replaceBy - string for the new connector matrixEntry
  */
 export const addConnectorToMatrix = (
@@ -403,7 +405,7 @@ export const addConnectorToMatrix = (
  *
  * @param {EndomorphDict} nodeIdToCoord
  * @param {PolymorphDict} nodeToParentCoords
- * @returns {Array} an array of pairs of coords (parentNode and childNode)
+ * @returns {CoordPairT[]} an array of pairs of coords (parentNode and childNode)
  */
 export const createCoordPairs = (
     { nodeIdToCoord, nodeIdToParentCoords }: {
@@ -428,7 +430,7 @@ export const createCoordPairs = (
  * @param {number} endCol
  * @param {number} rowNum
  * @param {string} parentCoord
- * @returns {Array} lines - an array of ConnectorToPlace for lineHoriz
+ * @returns {ConnectorToPlace[]} lines - an array of ConnectorToPlace for lineHoriz
  * @returns {string} lastLineCoord - the coord of the last lineHoriz in the series
  */
 export const createLineHorizes = (
@@ -458,7 +460,7 @@ export const createLineHorizes = (
  *
  * @param {MatrixCoord} parentCoord
  * @param {MatrixCoord} childCoord
- * @returns {Array} an array of ConnectorToPlace for between the colNums of parent and child nodes
+ * @returns {ConnectorToPlace[]} an array of ConnectorToPlace for between the colNums of parent and child nodes
  */
 export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorToPlace[] => {
     const { parentCoord, childCoord } = coordPair;
@@ -548,7 +550,7 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
  * @param {EndomorphDict} keyToVal 
  * @param {EndomorphDict} valToKey
  */
-export const invertKeyVal = (keyToVal: EndomorphDict) =>
+export const invertKeyVal = (keyToVal: EndomorphDict): EndomorphDict =>
     Object.keys(keyToVal).map(key => [key, keyToVal[key]]).reduce((acc, curr) => {
         const [key, val] = curr;
         const valToKey = { [val]: key };
@@ -560,8 +562,8 @@ export const invertKeyVal = (keyToVal: EndomorphDict) =>
  * Provides instruction for where to place a dash line forking from decision step
  *
  * @param {Matrix} matrix
- * @param {Array} decisionStepCols
- * @returns {Array} {replaceBy, coord}
+ * @param {number[]} decisionStepCols
+ * @returns {Array} {replaceBy, coord}[]
  */
 export const downRightDashesToPlace = (
     { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
@@ -595,7 +597,7 @@ const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) 
  *
  * @param {WorkflowVisDataT} workflowVisData
  * @param {Matrix} initialMatrix
- * @param {Array} decisionStepCols - the columns where decision steps reside
+ * @param {number[]} decisionStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
  * @returns {EndomorphDict} nodeIdToCoord - a hashmap of nodeId to its matrix coord
  * @returns {PolymorphDict} nodeIdToParentNodeIds
@@ -666,7 +668,7 @@ export const populateMatrix = (
 
         // Add current node's coord into nodeIdToCoord
         nodeIdToCoord[id] = encodeMatrixCoord(coord);
-        console.log("visiting id ---> ", id);
+        // console.log("visiting id ---> ", id);
         let nextStepId = null;
         for (let i = 0; i < nextSteps.length; i += 1) {
             nextStepId = nextSteps[i];
@@ -696,9 +698,9 @@ export const populateMatrix = (
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
-    console.log("--nodeIdToCoord", nodeIdToCoord);
-    console.log("--nodeToParentCoords", nodeIdToParentCoords);
-    console.log("--nodeIdToParentNodeIds", nodeIdToParentNodeIds);
+    // console.log("--nodeIdToCoord", nodeIdToCoord);
+    // console.log("--nodeToParentCoords", nodeIdToParentCoords);
+    // console.log("--nodeIdToParentNodeIds", nodeIdToParentNodeIds);
 
     const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeIdToParentCoords });
     const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
@@ -725,3 +727,30 @@ export const populateMatrix = (
 
     return { matrix, nodeIdToCoord, nodeIdToParentNodeIds };
 };
+
+/**
+ * Given plusBtn coordinate and a list of candidate coordinates for where the next nodes could be,
+ * determine the next node (there can only be one next node)
+ * 
+ * @param {MatrixCoord} plusBtnCoord
+ * @param {EndomorphDict} coordToNodeId
+ * @param {string[]} candidateNodeIds 
+ */
+export const findNexNode = ({
+    plusBtnCoord, coordToNodeId, candidateNodeIds
+}: { plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNodeIds: string[] }
+): string => {
+    const { rowNum: plusBtnRowNum } = plusBtnCoord;
+
+    const nodeIdToCoord = invertKeyVal(coordToNodeId);
+    // keep going to the right until you see empty. Then go up.
+    const candidateCoords: MatrixCoord[] = candidateNodeIds
+        .map((nodeId: string) => nodeIdToCoord[nodeId])
+        .map((encodedCoord: string) => decodeMatrixCoord(encodedCoord));
+    const nextNodeCoord = candidateCoords
+        .filter(({ rowNum }: { rowNum: number }) => rowNum <= plusBtnRowNum)
+        .sort((a: MatrixCoord, b: MatrixCoord) => b.rowNum - a.rowNum)[0];
+
+    return coordToNodeId[encodeMatrixCoord(nextNodeCoord)];
+};
+

@@ -28,7 +28,7 @@ export default class Column extends React.PureComponent<PropsT> {
 
         // Connector
         if (isConnector(tile.type)) {
-            const { encodedParentNodeCoord } = decodeMatrixEntry(matrixEntry);
+            const { encodedOwnCoord, encodedParentNodeCoord } = decodeMatrixEntry(matrixEntry);
             const shouldRenderEditButton = editMode && !!encodedParentNodeCoord;
             const id = shouldRenderEditButton ? `${connectorId}.edit` : connectorId;
 
@@ -44,7 +44,13 @@ export default class Column extends React.PureComponent<PropsT> {
             // to a workflowStep (i.e., the encodedParentNodeCoord lookup in nodeCoord yields a workflowStepUid), then we will
             // bring up a form
             return (
-                <Connector id={id} addChildNode={addNodeToVis(encodedParentNodeCoord)} />
+                <Connector
+                    id={id}
+                    addChildNode={addNodeToVis({
+                        ownCoord: encodedOwnCoord,
+                        parentCoord: encodedParentNodeCoord
+                    })}
+                />
             );
         }
 

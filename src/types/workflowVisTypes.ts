@@ -81,9 +81,12 @@ export interface ColEntry {
 
 export type AddChildNodeCommand = string;
 
-export type AddChildNode = ({ left, top }: { left: number; top: number }) => AddChildNodeCommand;
+export type AddChildNode = ({ left, top, isEmptyBranch
+}: { left: number; top: number; isEmptyBranch: boolean }) => AddChildNodeCommand;
 
-export type AddNodeToVis = (parentCoord: string | undefined) => AddChildNode;
+export type AddNodeToVis = ({ ownCoord, parentCoord }: {
+    ownCoord: string | undefined; parentCoord: string | undefined;
+}) => AddChildNode;
 
 export type AddNode = ({
     coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds
@@ -91,5 +94,5 @@ export type AddNode = ({
     coordToNodeId: EndomorphDict;
     workflowStepNodes: WorkflowStepNodes;
     nodeIdToParentNodeIds: PolymorphDict;
+    updatePlusBtnClickParams: Function;
 }) => AddNodeToVis;
-
