@@ -46,7 +46,7 @@ const App = () => (
                                 matrix={matrix}
                                 workflowVisData={workflowVisData}
                                 editMode={false}
-                                addNodeToVis={noop}
+                                addNodeParams={noop}
                             />
                         </div>
                     );

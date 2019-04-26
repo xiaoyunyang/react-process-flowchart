@@ -736,10 +736,12 @@ export const populateMatrix = (
  * @param {EndomorphDict} coordToNodeId
  * @param {string[]} candidateNodeIds 
  */
-export const findNexNode = ({
+export const findNextNode = ({
     plusBtnCoord, coordToNodeId, candidateNodeIds
 }: { plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNodeIds: string[] }
 ): string => {
+    // NOTE: It's assumed all candidateNextNodeIds are to the right of the plus button so their
+    // colNum is irrelevant
     const { rowNum: plusBtnRowNum } = plusBtnCoord;
 
     const nodeIdToCoord = invertKeyVal(coordToNodeId);

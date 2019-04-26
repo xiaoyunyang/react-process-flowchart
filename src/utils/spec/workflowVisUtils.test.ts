@@ -18,7 +18,8 @@ import {
     addNodeToMatrix,
     downRightDashesToPlace,
     populateMatrix,
-    addConnectorToMatrix
+    addConnectorToMatrix,
+    findNextNode
 } from "../workflowVisUtils";
 
 // Types
@@ -484,6 +485,21 @@ describe("WorkflowVisUtils", () => {
                 ["5678"]
             ]);
             expect(replaceBy).toBe(expectedReplaceBy);
+        });
+    });
+    describe("#findNextNode", () => {
+        test("It should return the first node to the right and above the the plus button", () => {
+            const plusBtnCoord = { colNum: 0, rowNum: 3 };
+            const coordToNodeId = {
+                "2,2": "789",
+                "1,0": "123",
+                "2,1": "456",
+                "2,4": "789"
+            };
+            const candidateNextNodeIds = ["123", "456", "789"];
+            expect(
+                findNextNode({ plusBtnCoord, coordToNodeId, candidateNextNodeIds })
+            ).toBe("456");
         });
     });
 });

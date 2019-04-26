@@ -3,7 +3,7 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import WorkflowVisContainer, { addNode } from "../WorkflowVisContainer";
+import WorkflowVisContainer, { createAddNodeParams } from "../WorkflowVisContainer";
 import WorkflowVis from "../WorkflowVis";
 
 // Mock
@@ -42,12 +42,13 @@ describe("WorkflowVisContainer Spec", () => {
                 "8,0": "492b709fc90a",
                 "10,0": "a3135bdf3aa3"
             };
-            const addNodeToVis = addNode({
+            const addNodeToVis = createAddNodeParams({
                 coordToNodeId,
                 workflowStepNodes: {},
-                nodeIdToParentNodeIds: {}
+                nodeIdToParentNodeIds: {},
+                updatePlusBtnClickParams: () => { }
             });
-            expect(workflowVis.prop("addNodeToVis").toString()).toBe(addNodeToVis.toString());
+            expect(workflowVis.prop("addNodeParams").toString()).toBe(addNodeToVis.toString());
         });
     });
 });

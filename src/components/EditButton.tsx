@@ -5,13 +5,13 @@ import styles from './styles/workflowVis.module.css';
 
 // Types
 import {
-    AddChildNode, AddChildNodeCommand
+    CreateAddChildNodeCommand, AddChildNodeCommand
 } from "../types/workflowVisTypes";
 
 const noop = () => { };
 
 interface PropsT {
-    addChildNode: AddChildNode;
+    createAddChildNodeCommand: CreateAddChildNodeCommand;
     isEmptyBranch?: boolean;
 }
 
@@ -21,16 +21,33 @@ export default class EditButton extends React.PureComponent<PropsT> {
         this.addNodeWithLocationBound = this.addNodeWithLocation.bind(this);
     }
 
-    addNodeWithLocationBound: (e: React.MouseEvent, addChildNodeMock?: AddChildNode) => void;
+    addNodeWithLocationBound: (e: React.MouseEvent, mock?: {
+        addChildNodeMock: CreateAddChildNodeCommand; isEmptyBranchMock: boolean;
+    }) => void;
 
-    addNodeWithLocation(e: React.MouseEvent, addChildNodeMock?: AddChildNode): AddChildNodeCommand {
-        // eslint-disable-next-line react/destructuring-assignment
-        const addChildNode: AddChildNode = addChildNodeMock || this.props.addChildNode;
-        const { isEmptyBranch = false } = this.props;
-
-        console.log(e.currentTarget.getBoundingClientRect());
+    addNodeWithLocation(
+        e: React.MouseEvent,
+        mock?: {
+            addChildNodeMock: CreateAddChildNodeCommand; isEmptyBranchMock: boolean;
+        }
+    ): AddChildNodeCommand {
         const { left, top } = e.currentTarget.getBoundingClientRect();
-        return addChildNode({ left: e.clientX - left, top: e.clientY - top, isEmptyBranch });
+        let createAddChildNodeCommand: CreateAddChildNodeCommand;
+        let isEmptyBranch: boolean;
+        if (mock) {
+            const { addChildNodeMock, isEmptyBranchMock = false } = mock;
+            createAddChildNodeCommand = addChildNodeMock;
+            isEmptyBranch = isEmptyBranchMock;
+            return createAddChildNodeCommand({ left: e.clientX - left, top: e.clientY - top, isEmptyBranch });
+        }
+        const {
+            createAddChildNodeCommand: createAddChildNodeCommandProps,
+            isEmptyBranch: isEmptyBranchProps = false
+        } = this.props;
+
+        createAddChildNodeCommand = createAddChildNodeCommandProps;
+        isEmptyBranch = isEmptyBranchProps;
+        return createAddChildNodeCommand({ left: e.clientX - left, top: e.clientY - top, isEmptyBranch });
     }
 
     render() {

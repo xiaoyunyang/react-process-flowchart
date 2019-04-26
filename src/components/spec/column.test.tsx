@@ -39,8 +39,15 @@ describe("Column Spec", () => {
         }
     ];
 
-    const addChildNode = ({ left, top }: { left: number; top: number }) => { };
-    const addNodeToVis = (parentCoord: string | undefined) => addChildNode;
+    const createAddChildNodeCommand = ({ isEmptyBranch }: { isEmptyBranch: boolean }) => { };
+
+    const addNodeParams = (
+        {
+            ownCoord, parentCoord
+        }: {
+            ownCoord: string | undefined;
+            parentCoord: string | undefined;
+        }) => createAddChildNodeCommand;
 
     let props: any;
 
@@ -49,7 +56,7 @@ describe("Column Spec", () => {
             colEntries,
             colNum: 0,
             editMode: false,
-            addNodeToVis
+            addNodeParams
         };
 
         column = shallow(<Column {...props} />);
@@ -89,12 +96,27 @@ describe("Column Spec", () => {
             expect(arrowRightEdit).toHaveLength(1);
         });
     });
-    it("passes correct addChildNode to Connector", () => {
+    it("passes correct props to Connector", () => {
         const empty = column.find({ id: "box|empty" });
         const lineHoriz = column.find({ id: "diamond|lineHoriz" });
         const arrowRight = column.find({ id: "diamond|arrowRight" });
-        expect(empty.prop("addChildNode")).toEqual(addNodeToVis(undefined));
-        expect(lineHoriz.prop("addChildNode")).toEqual(addNodeToVis("2,2"));
-        expect(arrowRight.prop("addChildNode")).toEqual(addNodeToVis("2,4"));
+
+        expect(
+            empty.prop("createAddChildNodeCommand")
+        ).toEqual(
+            addNodeParams({ ownCoord: "0,1", parentCoord: undefined })
+        );
+
+        expect(
+            lineHoriz.prop("createAddChildNodeCommand")
+        ).toEqual(
+            addNodeParams({ ownCoord: "3,3", parentCoord: "2,2" })
+        );
+
+        expect(
+            arrowRight.prop("createAddChildNodeCommand")
+        ).toEqual(
+            addNodeParams({ ownCoord: "3,4", parentCoord: "2,4" })
+        );
     });
 });

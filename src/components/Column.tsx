@@ -8,7 +8,7 @@ import Connector from "./Connector";
 
 // Types
 import { WorkflowStepTypeT } from "../types/workflow";
-import { ColEntry, AddNodeToVis } from "../types/workflowVisTypes";
+import { ColEntry, AddNodeParams } from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";
@@ -16,14 +16,15 @@ import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";
 interface PropsT {
     colEntries: ColEntry[];
     editMode: boolean;
-    addNodeToVis: AddNodeToVis;
+    addNodeParams: AddNodeParams;
 }
 
 export default class Column extends React.PureComponent<PropsT> {
-    static renderTile({ colEntry, editMode, addNodeToVis }: {
-        colEntry: ColEntry; editMode: boolean; addNodeToVis: AddNodeToVis;
+    static renderTile({ colEntry, editMode, addNodeParams }: {
+        colEntry: ColEntry; editMode: boolean; addNodeParams: AddNodeParams;
     }) {
         const { matrixEntry, tile } = colEntry;
+        console.log("tile\n", tile)
         const connectorId = tile.id;
 
         // Connector
@@ -46,7 +47,7 @@ export default class Column extends React.PureComponent<PropsT> {
             return (
                 <Connector
                     id={id}
-                    addChildNode={addNodeToVis({
+                    createAddChildNodeCommand={addNodeParams({
                         ownCoord: encodedOwnCoord,
                         parentCoord: encodedParentNodeCoord
                     })}
@@ -63,11 +64,11 @@ export default class Column extends React.PureComponent<PropsT> {
         return <WorkflowStep name={tile.name} type={tile.type} />;
     }
     render() {
-        const { colEntries, editMode, addNodeToVis } = this.props;
+        const { colEntries, editMode, addNodeParams } = this.props;
 
         return colEntries.map((colEntry: ColEntry) => (
             <div key={colEntry.matrixEntry}>
-                {Column.renderTile({ colEntry, editMode, addNodeToVis })}
+                {Column.renderTile({ colEntry, editMode, addNodeParams })}
             </div>
         ));
     }

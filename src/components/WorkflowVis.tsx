@@ -10,7 +10,7 @@ import Column from "./Column";
 
 // Types
 import {
-    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, AddNodeToVis
+    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, AddNodeParams
 } from "../types/workflowVisTypes";
 
 // Utils
@@ -36,11 +36,11 @@ const newColEntry = (
 };
 
 const WorkflowsVis = (
-    { workflowVisData, matrix, editMode, addNodeToVis }: {
+    { workflowVisData, matrix, editMode, addNodeParams }: {
         workflowVisData: WorkflowVisDataT;
         matrix: Matrix;
         editMode: boolean;
-        addNodeToVis: AddNodeToVis;
+        addNodeParams: AddNodeParams;
     }
 ) => {
     const { workflowStepNodes } = workflowVisData;
@@ -60,7 +60,7 @@ const WorkflowsVis = (
                             <Column
                                 colEntries={col}
                                 editMode={editMode}
-                                addNodeToVis={addNodeToVis}
+                                addNodeParams={addNodeParams}
                             />
                         </div>
                     )

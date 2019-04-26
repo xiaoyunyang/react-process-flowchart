@@ -7,7 +7,7 @@ import WorkflowStepAddPopover from "./WorkflowStepAddPopover";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
-import { AddNode, AddChildNodeCommand, WorkflowStepNodes, MatrixCoord } from "../types/workflowVisTypes";
+import { CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes, MatrixCoord } from "../types/workflowVisTypes";
 import { EndomorphDict, PolymorphDict } from '../types/generic';
 
 // Utils
@@ -16,13 +16,13 @@ import {
     populateMatrix,
     invertKeyVal,
     decodeMatrixCoord,
-    findNexNode
+    findNextNode
 } from "../utils/workflowVisUtils";
 
 // Styles
 import styles from "./styles/workflowVis.module.css";
 
-export const addNode: AddNode = ({
+export const createAddNodeParams: CreateAddNodeParams = ({
     coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds, updatePlusBtnClickParams
 }: {
     coordToNodeId: EndomorphDict;
@@ -48,7 +48,7 @@ export const addNode: AddNode = ({
 
                 const ownMatrixCoord = decodeMatrixCoord(ownCoord);
 
-                const nextNodeId = isEmptyBranch ? null : findNexNode({
+                const nextNodeId = isEmptyBranch ? null : findNextNode({
                     plusBtnCoord: ownMatrixCoord, coordToNodeId, candidateNodeIds
                 });
 
@@ -122,7 +122,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
         const coordToNodeId = invertKeyVal(nodeIdToCoord);
         const { workflowStepNodes } = workflowVisData;
-
+        console.log("workflowStepNodes", workflowStepNodes);
 
         const { tetheredNodeId, nextNodeId, plusBtnClickPos } = this.state;
         const { left, top } = plusBtnClickPos;
@@ -132,7 +132,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                     workflowVisData={workflowVisData}
                     matrix={matrix}
                     editMode={editMode}
-                    addNodeToVis={addNode({
+                    addNodeParams={createAddNodeParams({
                         coordToNodeId,
                         workflowStepNodes,
                         nodeIdToParentNodeIds,
