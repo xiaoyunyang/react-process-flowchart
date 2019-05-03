@@ -38,7 +38,7 @@ export default class EditButton extends React.PureComponent<PropsT> {
             const { addChildNodeMock, isEmptyBranchMock = false } = mock;
             createAddChildNodeCommand = addChildNodeMock;
             isEmptyBranch = isEmptyBranchMock;
-            return createAddChildNodeCommand({ left: e.clientX - left, top: e.clientY - top, isEmptyBranch });
+            return createAddChildNodeCommand({ left: left, top: top, isEmptyBranch });
         }
         const {
             createAddChildNodeCommand: createAddChildNodeCommandProps,

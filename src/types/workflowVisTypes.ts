@@ -43,6 +43,8 @@ export enum ConnectorName {
     ARROW_RIGHT_EDIT = "arrowRight.edit",
     LINE_HORIZ = "lineHoriz",
     LINE_HORIZ_EDIT = "lineHoriz.edit",
+    LINE_VERT = "lineVert",
+    UP_RIGHT = "upRight",
     EMPTY = "empty"
 }
 

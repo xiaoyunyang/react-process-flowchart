@@ -49,7 +49,6 @@ const WorkflowsVis = (
         (colNodes: string[]) => colNodes.map(
             (matrixEntry: string) => newColEntry({ workflowStepNodes, matrixEntry })));
 
-
     // TODO: className is not necessary. Inline style determines row and col. Only there for debugging
     return (
         <div className={style.wrapper}>

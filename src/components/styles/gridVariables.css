@@ -12,7 +12,7 @@
     --box-height: calc(var(--base-unit) * 13.75);
     --box-padding: calc(var(--base-unit) * 2.5);
     --box-line-height: 1.33;
-    --diamond-container-width: calc(var(--base-unit) * 12.5);
+    --diamond-container-width: calc(var(--base-unit) * 14.6);
     --diamond-container-height: calc(var(--base-unit) * 18.75);
     --diamond-width: calc(var(--base-unit) * 10.75);
     --diamond-border-radius: calc(var(--border-radius) * 1.5);

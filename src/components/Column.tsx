@@ -24,7 +24,7 @@ export default class Column extends React.PureComponent<PropsT> {
         colEntry: ColEntry; editMode: boolean; addNodeParams: AddNodeParams;
     }) {
         const { matrixEntry, tile } = colEntry;
-        console.log("tile\n", tile)
+        // console.log("tile\n", tile)
         const connectorId = tile.id;
 
         // Connector

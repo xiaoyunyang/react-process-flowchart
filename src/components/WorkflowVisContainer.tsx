@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React from "react";
+import { clone } from "ramda";
 
 // Components
 import WorkflowVis from "./WorkflowVis";
@@ -7,7 +8,7 @@ import WorkflowStepAddPopover from "./WorkflowStepAddPopover";
 
 // Types
 import { WorkflowStepT } from "../types/workflow";
-import { CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes, MatrixCoord } from "../types/workflowVisTypes";
+import { CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes, MatrixCoord, ColType } from "../types/workflowVisTypes";
 import { EndomorphDict, PolymorphDict } from '../types/generic';
 
 // Utils
@@ -16,7 +17,8 @@ import {
     populateMatrix,
     invertKeyVal,
     decodeMatrixCoord,
-    findNextNode
+    findNextNode,
+    encodeMatrixEntry
 } from "../utils/workflowVisUtils";
 
 // Styles
@@ -44,7 +46,7 @@ export const createAddNodeParams: CreateAddNodeParams = ({
                 const addChildNodeCommand: AddChildNodeCommand =
                     `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
 
-                // console.log(addChildNodeCommand);
+                // console.log("MOOOOOOOOOOOOOOOOOO\n", addChildNodeCommand);
 
                 const ownMatrixCoord = decodeMatrixCoord(ownCoord);
 
@@ -112,6 +114,34 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
             workflowVisData, initialMatrix, decisionStepCols
         } = createWorkflowVisData({ workflowSteps, workflowUid });
 
+        // TODO: remove block ----
+        const bottomMatrix = clone(initialMatrix);
+        bottomMatrix[6][1] = encodeMatrixEntry({
+            colType: ColType.DIAMOND,
+            entryName: "lineVert",
+            encodedOwnCoord: "6,1"
+        });
+
+        bottomMatrix[6][0] = encodeMatrixEntry({
+            colType: ColType.DIAMOND,
+            entryName: "upRight",
+            encodedOwnCoord: "6,0"
+        });
+        // bottomMatrix[6][3] = encodeMatrixEntry({
+        //     colType: ColType.DIAMOND,
+        //     entryName: "lineVert",
+        //     encodedOwnCoord: "6,0"
+        // });
+        bottomMatrix[7][0] = encodeMatrixEntry({
+            colType: ColType.STANDARD,
+            entryName: "arrowRight",
+            encodedOwnCoord: "7,0"
+        });
+        console.log(bottomMatrix);
+
+
+        // -----------------------
+
         const { matrix, nodeIdToCoord, nodeIdToParentNodeIds } = populateMatrix({
             workflowVisData, initialMatrix, decisionStepCols
         });
@@ -126,27 +156,67 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
         const { tetheredNodeId, nextNodeId, plusBtnClickPos } = this.state;
         const { left, top } = plusBtnClickPos;
+
         return (
-            <div className={styles.wrapperContainer}>
-                <WorkflowVis
-                    workflowVisData={workflowVisData}
-                    matrix={matrix}
-                    editMode={editMode}
-                    addNodeParams={createAddNodeParams({
-                        coordToNodeId,
-                        workflowStepNodes,
-                        nodeIdToParentNodeIds,
-                        updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                    })}
-                />
-                {/* <WorkflowStepAddPopover
-                    left={left}
-                    top={top}
-                    tetheredNodeId={tetheredNodeId}
-                    nextNodeIds={nextNodeIds}
-                    prevNodeIds={prevNodeIds}
-                /> */}
+            <div style={{ position: "relative" }}>
+                {
+                    <div className={styles.top}>
+                        <div className={styles.wrapperContainer}>
+                            <WorkflowVis
+                                workflowVisData={workflowVisData}
+                                matrix={matrix}
+                                editMode={editMode}
+                                addNodeParams={createAddNodeParams({
+                                    coordToNodeId,
+                                    workflowStepNodes,
+                                    nodeIdToParentNodeIds,
+                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                                })}
+                            />
+                        </div>
+                    </div>
+                }
+                <div className={styles.bottom}>
+                    <div className={styles.wrapperContainer}>
+                        <WorkflowVis
+                            workflowVisData={workflowVisData}
+                            matrix={bottomMatrix}
+                            editMode={editMode}
+                            addNodeParams={createAddNodeParams({
+                                coordToNodeId,
+                                workflowStepNodes,
+                                nodeIdToParentNodeIds,
+                                updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                            })}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.foundation}>
+                    <div className={styles.wrapperContainer}>
+                        <WorkflowVis
+                            workflowVisData={workflowVisData}
+                            matrix={initialMatrix}
+                            editMode={false}
+                            addNodeParams={createAddNodeParams({
+                                coordToNodeId,
+                                workflowStepNodes,
+                                nodeIdToParentNodeIds,
+                                updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                            })}
+                        />
+                    </div>
+                </div>
+                {
+                    // <WorkflowStepAddPopover
+                    //     left={left}
+                    //     top={top}
+                    //     tetheredNodeId={tetheredNodeId}
+                    //     nextNodeId={nextNodeId}
+                    // />
+                }
             </div>
+
         );
     }
 }

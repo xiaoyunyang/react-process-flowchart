@@ -22,15 +22,16 @@ export const ArrowRight = () => (
 export const ArrowRightEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
 ) => (
-    <div className={classNames(styles.arrowRight, styles.flexContainer)}>
-        <div className={classNames(styles.line, styles.lineShort)} />
-        <EditButton createAddChildNodeCommand={createAddChildNodeCommand} />
-        <div className={classNames(styles.line, styles.lineShortArrow)} />
-        <i className={classNames(styles.caret, styles.caretRight)} />
-    </div>
-);
+        <div className={classNames(styles.arrowRight, styles.flexContainer)}>
+            <div className={classNames(styles.line, styles.lineShort)} />
+            <EditButton createAddChildNodeCommand={createAddChildNodeCommand} />
+            <div className={classNames(styles.line, styles.lineShortArrow)} />
+            <i className={classNames(styles.caret, styles.caretRight)} />
+        </div>
+    );
 
 export const LineHoriz = () => <div className={classNames(styles.line, styles.lineLong)} />;
+export const LineVert = () => <div className={classNames(styles.lineVert, styles.lineLong)} />;
 
 export const LineHorizEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
@@ -136,6 +137,18 @@ export const connectors: { [id: string]: ConnectorT } = {
         containerName: "connectorContainerDiamond",
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
+    "diamond|lineVert": {
+        id: "diamond|lineVert",
+        name: ConnectorName.LINE_VERT,
+        containerName: "connectorContainerDiamond",
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
+    },
+    "diamond|upRight": {
+        id: "diamond|upRight",
+        name: ConnectorName.UP_RIGHT,
+        containerName: "connectorContainerDiamond",
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
+    },
     "diamond|empty": {
         id: "diamond|empty",
         name: ConnectorName.EMPTY,
@@ -161,12 +174,14 @@ export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNode
 ): { [name in ConnectorName]: JSX.Element } => {
     const component: { [name in ConnectorName]: JSX.Element } = {
         downRight: <div className={styles.downRight} />,
+        upRight: <div className={styles.upRight} />,
         downRightDash: <div />,
         "downRightDash.edit": <DownRightDashEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         rightUpArrow: <RightUpArrow />,
         arrowRight: <ArrowRight />,
         "arrowRight.edit": <ArrowRightEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         lineHoriz: <LineHoriz />,
+        lineVert: <LineVert />,
         "lineHoriz.edit": <LineHorizEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         empty: <div />
     };

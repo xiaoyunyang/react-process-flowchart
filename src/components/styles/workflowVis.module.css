@@ -13,6 +13,24 @@
   padding-bottom: var(--workflow-wrapper-padding-bottom);
 }
 
+.top {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.bottom {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+.foundation {
+  position: relative;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
 .boxContainer {
   width: var(--box-width);
   height: var(--box-height);
@@ -30,9 +48,8 @@
 }
   
 .diamondContainer {
-  width: var(--diamond-container-width);
-  margin-top: calc(var(--base-unit) * 6.25);
-  margin-left: calc(var(--base-unit) * 2);
+  margin: calc(var(--base-unit) * 6.25) calc(var(--base-unit) * 2) 0;
+  transform: rotate(45deg);
 }
   
 .diamond {
@@ -40,7 +57,6 @@
   height: var(--diamond-width);
   border: var(--node-border);
   border-radius: var(--diamond-border-radius);
-  transform: rotate(45deg);
   z-index: 2;
   position: relative;
 }
@@ -85,6 +101,16 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+}
+.lineVert {
+  height: 120%;
+  margin-left: 50%;
+  margin-top: -80%;
+  border-left: var(--connector-border);
+}
+
+.lineVert .lineLong {
+  border-left: var(--connector-border);
 }
 
 .circle {
@@ -197,11 +223,21 @@
   border-bottom: var(--connector-border);
   border-left: var(--connector-border);
   height: 100%;
-  width: 58%;
+  width: 59%;
+  z-index: -1;
+}
+.upRight {
+  position:relative;
+  border-top: var(--connector-border);
+  border-left: var(--connector-border);
+  height: 42%;
+  width: 50%;
+  margin-left: 50%;
+  margin-top: 79%;
 }
 
 .downRightDash {
-  width: 220%;
+  width: 190%;
 }
 
 .downRightDash .downRight {
@@ -209,7 +245,7 @@
   border-left: var(--border-width) dashed var(--battleship-grey);
   height: 100%;
   width: 65%;
-  z-index: 1;
+  z-index: -1;
 }
 
 .downRightDash span {
@@ -222,9 +258,9 @@
   height: 74px;
   margin-top: -2px;
   top: -20px; /* Fudge factor */
-  left: calc(var(--diamond-container-width) * 0.58);
+  left: calc(var(--diamond-container-width) * 0.5);
   position: relative;
-  z-index: 1;
+  z-index: -1;
 }
 
 .connectorContainerBox .rightUpArrow {
@@ -286,7 +322,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  -webkit-user-select: none;      
+  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -365,44 +401,47 @@
   margin-left: 5%;
   margin-right: 5%;
 }
-.debug .col1 {
+.debug .top .col1 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col2 {
+.debug .bottom .col2 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col3 {
+.debug .top .col3 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col4 {
+.debug .bottom .col4 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col5 {
+.debug .top .col5 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col6 {
+.debug .bottom .col6 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col7 {
+.debug .top .col7 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col8 {
+.debug .bottom .col8 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col9 {
+.debug .top .col9 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col10 {
+.debug .bottom .col10 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col11 {
+.debug .top .col11 {
   background-color: rgba(88, 88, 233, 0.5);
 }
-.debug .col12 {
+.debug .bottom .col12 {
   background-color: rgba(233, 233, 88, 0.5);
 }
-.debug .col13 {
+.debug .top .col13 {
   background-color: rgba(88, 88, 233, 0.5);
+}
+.debug .bottom .col14 {
+  background-color: rgba(233, 233, 88, 0.5);
 }
 
 /* DEBUGGING CODE END */
