@@ -52,9 +52,12 @@ export default class EditButton extends React.PureComponent<PropsT> {
 
     render() {
         return (
-            <span role="button" tabIndex={-1} className={styles.circle} onClick={this.addNodeWithLocationBound} onKeyPress={noop}>
-                <i className="fas fa-plus" />
-            </span>
+            <div className={styles.hoverable}>
+                <span role="button" tabIndex={-1} className={styles.circle} onClick={this.addNodeWithLocationBound} onKeyPress={noop}>
+                    <i className="fas fa-plus" />
+                </span>
+            </div>
+
         );
     }
 }
