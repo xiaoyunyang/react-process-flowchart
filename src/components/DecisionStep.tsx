@@ -21,7 +21,7 @@ const DiamondIcon = ({ icon }: { icon: string }) => {
 const DecisionStep = () => {
     const { icon, theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
     return (
-        <div className={styles.diamondContainer}>
+        <div className={classNames(styles.diamondContainer, styles.hoverable)}>
             <div className={classNames(styles.diamond, styles.flexContainer, styles[`theme${theme}`])}>
                 <DiamondIcon icon={icon} />
             </div>

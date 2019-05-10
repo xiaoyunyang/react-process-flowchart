@@ -28,30 +28,96 @@ interface State {
     dropdownMenuOpened: boolean;
 }
 
-const WorkflowStep = ({ name, type }: PropsT) => {
-    const { icon, theme } = workflowStepConfig[type];
+export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
+    constructor(props: PropsT) {
+        super(props);
 
-    // truncate name if too long
-    const displayName = name.length > TRUNCATE_WORDS_CUTOFF
-        ? `${name.substring(0, TRUNCATE_WORDS_CUTOFF)}...` : name;
+        this.state = {
+            dropdownMenuOpened: false
+        };
+    }
 
-    // TODO: We would like to pass down a noDropDown from props to specify all the workflow
-    // types that don't want have dropdown
-    const arrowHeadDown = type === WorkflowStepTypeT.AUTHORIZE ? null : <span className={classNames(styles.caret, styles.caretDown)} />;
+    renderWorkflowStep({
+        displayName,
+        type,
+        isClickable
+    }: {
+        displayName: string;
+        type: GenericTileType;
+        isClickable: boolean;
+    }) {
+        const { icon, theme, canEdit, canDelete } = workflowStepConfig[type];
+        const { dropdownMenuOpened } = this.state;
 
-    return (
-        <div className={styles.boxContainer}>
-            <div className={classNames(styles.box, styles.flexContainer, styles[`theme${theme}`])}>
-                <Icon icon={icon} />
-                <div className={styles.workflowStepDisplayName}>
-                    <p>
-                        {displayName}
-                        {arrowHeadDown}
-                    </p>
+
+        const caretDirClassName = dropdownMenuOpened
+            ? classNames(styles.caretUp, styles.highlighted)
+            : styles.caretDown;
+
+        if (!isClickable) {
+            return (
+                <div className={styles.boxContainer}>
+                    <div
+                        className={classNames(
+                            styles.box,
+                            styles.flexContainer,
+                            styles[`theme${theme}`]
+                        )}
+                    >
+                        <Icon icon={icon} />
+                        <div className={styles.workflowStepDisplayName}>
+                            <p>{displayName}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className={classNames(styles.boxContainer, styles.hoverable)}>
+                <div
+                    className={classNames(
+                        styles.box,
+                        styles.flexContainer,
+                        styles[`theme${theme}`]
+                    )}
+                >
+                    <Icon icon={icon} />
+                    <div className={styles.workflowStepDisplayName}>
+                        <p>
+                            {displayName}
+                            {(canEdit || canDelete) &&
+                                <span className={classNames(styles.caret, caretDirClassName)} />
+                            }
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    }
+    render() {
+        const { name, type } = this.props;
+        const { canEdit, canDelete } = workflowStepConfig[type];
 
-export default WorkflowStep;
+        // truncate name if too long
+        const displayName = name.length > TRUNCATE_WORDS_CUTOFF
+            ? `${name.substring(0, TRUNCATE_WORDS_CUTOFF)}...` : name;
+
+
+        if (!canEdit && !canDelete) {
+            return this.renderWorkflowStep({
+                displayName,
+                type,
+                isClickable: false
+            });
+        }
+
+        return (
+            this.renderWorkflowStep({
+                displayName,
+                type,
+                isClickable: true
+            })
+        );
+    }
+}

@@ -286,13 +286,31 @@
   color: var(--white);
 }
 
+.hoverable .themeDark:hover {
+  background-color: var(--gunmetal);
+  color: var(--light-grey);
+}
+
+.themeDark i {
+  color: var(--white) !important;
+}
+
 .themeLight .highlighted {
   color: var(--tealish)
 }
 
 .themeLight {
-  color: var(--charcoal-grey);
   background-color: var(--white);
+  color: var(--charcoal-grey);
+}
+
+.hoverable {
+  cursor: pointer;
+}
+
+.hoverable .themeLight:hover {
+  background-color: var(--light-grey);
+  color: var(--gunmetal);
 }
 
 .themeLight .highlighted {
