@@ -16,7 +16,7 @@ import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
-const workflows: any = [CD];
+const workflows: any = [AA, AB, BA, BB, BC, BD, BE, BF, CD];
 const enableMatrixUnitTest = true;
 
 // TODO: there's something wrong with visualizing B-D

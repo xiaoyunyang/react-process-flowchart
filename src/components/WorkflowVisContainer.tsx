@@ -176,7 +176,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                         </div>
                     </div>
                 }
-                <div className={styles.bottom}>
+                {/* <div className={styles.bottom}>
                     <div className={styles.wrapperContainer}>
                         <WorkflowVis
                             workflowVisData={workflowVisData}
@@ -190,7 +190,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                             })}
                         />
                     </div>
-                </div>
+                </div> */}
 
                 <div className={styles.foundation}>
                     <div className={styles.wrapperContainer}>

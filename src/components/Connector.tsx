@@ -21,7 +21,8 @@ export const ArrowRight = () => (
 
 export const ArrowRightEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
-) => (
+) =>
+    (
         <div className={classNames(styles.arrowRight, styles.flexContainer)}>
             <div className={classNames(styles.line, styles.lineShort)} />
             <EditButton createAddChildNodeCommand={createAddChildNodeCommand} />

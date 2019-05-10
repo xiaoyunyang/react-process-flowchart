@@ -163,22 +163,22 @@
 }
 
 .arrowRight .lineLong {
-  width: 93%;
+  width: 90%;
   margin-top: 33px;
 }
 
 .arrowRight .lineShort {
-  width: 36.5%;
+  width: 25%;
   margin-top: 33px;
 }
 
 .arrowRight .lineShortArrow {
-  width: 30%;
+  width: 21%;
   margin-top: 33px;
 }
 
 .lineHoriz .lineShort {
-  width: 36.5%;
+  width: 27%;
   margin-top: 33px;
 }
 
@@ -244,7 +244,7 @@
   border-bottom: var(--border-width) dashed var(--battleship-grey);
   border-left: var(--border-width) dashed var(--battleship-grey);
   height: 100%;
-  width: 65%;
+  width: 51%;
   z-index: -1;
 }
 

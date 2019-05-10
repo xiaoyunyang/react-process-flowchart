@@ -4,7 +4,7 @@
 :root {
     --workflow-wrapper-min-height: calc(var(--base-unit) * 20);
     --workflow-wrapper-padding-bottom: calc(var(--base-unit) * 3.75);
-    --connector-standard-width: calc(var(--base-unit) * 18.75);
+    --connector-standard-width: calc(var(--base-unit) * 11);
     --box-border-radius: calc(var(--border-radius) * 4);
     --node-border: var(--border-width) solid var(--silver-five);
     --connector-border: var(--border-width) solid var(--battleship-grey);
