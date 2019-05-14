@@ -311,6 +311,10 @@
   cursor: pointer;
 }
 
+.hoverable:focus {
+  outline: none;
+}
+
 .hoverable .themeLight:hover {
   background-color: var(--light-grey);
   color: var(--gunmetal);
