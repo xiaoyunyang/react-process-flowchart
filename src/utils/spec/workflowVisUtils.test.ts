@@ -261,14 +261,25 @@ describe("WorkflowVisUtils", () => {
             ];
             expect(res).toEqual(expected);
         });
-        it("creates correct connectors for when parent node is below child node", () => {
+        it("creates correct connectors for when parent node is one row below child node", () => {
+            const parentCoord = { colNum: 2, rowNum: 4 };
+            const childCoord = { colNum: 5, rowNum: 3 };
+            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
+            const expected = [
+                { ownCoord: "3,4", parentCoord: "2,4", connectorName: ConnectorName.LINE_HORIZ },
+                { ownCoord: "4,4", parentCoord: "3,4", connectorName: ConnectorName.LINE_HORIZ },
+                { ownCoord: "5,4", parentCoord: "4,4", connectorName: ConnectorName.RIGHT_UP_ARROW }
+            ];
+            expect(res).toEqual(expected);
+        });
+        it("creates correct connectors for when parent node is two or more rows below child node", () => {
             const parentCoord = { colNum: 2, rowNum: 4 };
             const childCoord = { colNum: 5, rowNum: 0 };
             const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "3,4", parentCoord: "2,4", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "4,4", parentCoord: "3,4", connectorName: ConnectorName.LINE_HORIZ },
-                { ownCoord: "5,4", parentCoord: "4,4", connectorName: ConnectorName.RIGHT_UP_ARROW }
+                { ownCoord: "5,4", parentCoord: "4,4", connectorName: ConnectorName.RIGHT_UP }
             ];
             expect(res).toEqual(expected);
         });

@@ -28,12 +28,12 @@ describe("WorkflowVisContainer Spec", () => {
     });
 
     describe("render", () => {
-        it("should render workflowVis with the right addNodeToVis prop", () => {
+        it("should render two workflowVis layers with the right addNodeToVis prop", () => {
             // NOTE: We are not testing the other props like workflowVisData
             // and matrix because those are already covered by the test for
             // populateMatrix and createWorkflowVisData
             const workflowVis = workflowVisContainer.find(WorkflowVis);
-            expect(workflowVis).toHaveLength(1);
+            expect(workflowVis).toHaveLength(2);
             const coordToNodeId = {
                 "2,0": "ba322565b1bf",
                 "4,0": "09e6110fda58",
@@ -48,7 +48,7 @@ describe("WorkflowVisContainer Spec", () => {
                 nodeIdToParentNodeIds: {},
                 updatePlusBtnClickParams: () => { }
             });
-            expect(workflowVis.prop("addNodeParams").toString()).toBe(addNodeToVis.toString());
+            expect(workflowVis.at(0).prop("addNodeParams").toString()).toBe(addNodeToVis.toString());
         });
     });
 });

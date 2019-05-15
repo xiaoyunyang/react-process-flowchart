@@ -534,9 +534,11 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
         startCol, endCol, rowNum, parentCoord: parentNodeCoord
     });
 
+    const lastConnectorName = ((fromRow - toRow) > 1) ? ConnectorName.RIGHT_UP :
+        ConnectorName.RIGHT_UP_ARROW;
     const lastEntry = {
         ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
-        connectorName: ConnectorName.RIGHT_UP_ARROW,
+        connectorName: lastConnectorName,
         parentCoord: lastLineCoord
     };
 
@@ -737,8 +739,8 @@ export const populateMatrix = (
  * @param {string[]} candidateNodeIds 
  */
 export const findNextNode = ({
-    plusBtnCoord, coordToNodeId, candidateNodeIds
-}: { plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNodeIds: string[] }
+    plusBtnCoord, coordToNodeId, candidateNextNodeIds
+}: { plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNextNodeIds: string[] }
 ): string => {
     // NOTE: It's assumed all candidateNextNodeIds are to the right of the plus button so their
     // colNum is irrelevant
@@ -746,7 +748,7 @@ export const findNextNode = ({
 
     const nodeIdToCoord = invertKeyVal(coordToNodeId);
     // keep going to the right until you see empty. Then go up.
-    const candidateCoords: MatrixCoord[] = candidateNodeIds
+    const candidateCoords: MatrixCoord[] = candidateNextNodeIds
         .map((nodeId: string) => nodeIdToCoord[nodeId])
         .map((encodedCoord: string) => decodeMatrixCoord(encodedCoord));
     const nextNodeCoord = candidateCoords

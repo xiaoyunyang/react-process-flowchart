@@ -3,7 +3,6 @@ import React from 'react';
 import classNames from "classnames";
 
 // Types
-import { WorkflowStepTypeT } from "../types/workflow";
 import { GenericTileType } from "../types/workflowVisTypes";
 
 // Constants

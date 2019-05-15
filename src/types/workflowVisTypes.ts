@@ -38,6 +38,7 @@ export enum ConnectorName {
     DOWN_RIGHT = "downRight",
     DOWN_RIGHT_DASH = "downRightDash",
     DOWN_RIGHT_DASH_EDIT = "downRightDash.edit",
+    RIGHT_UP = "rightUp",
     RIGHT_UP_ARROW = "rightUpArrow",
     ARROW_RIGHT = "arrowRight",
     ARROW_RIGHT_EDIT = "arrowRight.edit",

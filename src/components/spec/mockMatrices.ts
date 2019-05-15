@@ -85,17 +85,8 @@ export const workflowVisData = {
     }
 };
 
-export const matrixA = [
-    ["5890236e433b-auth", "box|empty|0,1"],
-    ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2.1"],
-    ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
-    ["standard|arrowRight|5,0", "standard|lineHoriz|5,1"],
-    ["a3135bdf3aa3", "box|rightUpArrow|6,1"]
-];
 
-export const matrixAB = [
+export const matrixAA = [
     ["5890236e433b-auth", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
     ["ba322565b1bf", "diamond|downRightDash|2.1"],
@@ -103,6 +94,35 @@ export const matrixAB = [
     ["09e6110fda58", "box|empty|4.1"],
     ["standard|arrowRight|5,0", "standard|empty|5,1"],
     ["a3135bdf3aa3", "box|empty|6,1"]
+];
+
+export const matrixAB = [
+    ["5890236e433b-auth", "box|empty|0,1"],
+    ["standard|arrowRight|1,0|0,0", "standard|empty|1,1"],
+    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["standard|arrowRight|3,0", "standard|arrowRight|3,1|2,0"],
+    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1"],
+    ["a3135bdf3aa3", "box|rightUpArrow|6,1"]
+];
+
+export const matrixAC = [
+    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+    ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
+    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2"],
+    ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,1", "standard|arrowRight|3,2|2,2"],
+    ["09e6110fda58", "b2b5c4c7cfd7", "297786162f15"],
+    ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2"],
+    ["a3135bdf3aa3", "box|rightUpArrow|6,1", "box|rightUp|6,2"]
+];
+export const matrixAD = [
+    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2", "box|empty|0,3"],
+    ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2", "standard|empty|1,3"],
+    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
+    ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,1", "standard|arrowRight|3,2|2,2", "standard|arrowRight|3,3|2,3"],
+    ["09e6110fda58", "b2b5c4c7cfd7", "297786162f15", "492b709fc90a"],
+    ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2", "standard|lineHoriz|5,3|4,3"],
+    ["a3135bdf3aa3", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|rightUp|6,3"]
 ];
 
 export const matrixBA = [
@@ -198,8 +218,10 @@ export const matrixBF = [
 // ];
 
 export const matrices = [
-    { name: "A", matrix: matrixA },
+    { name: "A-A", matrix: matrixAA },
     { name: "A-B", matrix: matrixAB },
+    { name: "A-C", matrix: matrixAC },
+    { name: "A-D", matrix: matrixAD },
     { name: "B-A", matrix: matrixBA },
     { name: "B-B", matrix: matrixBB },
     { name: "B-C", matrix: matrixBC },

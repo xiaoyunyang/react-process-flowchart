@@ -51,6 +51,11 @@ export const RightUpArrow = () => (
         <i className={classNames(styles.caret, styles.caretUp)} />
     </div>
 );
+export const RightUp = () => (
+    <div className={classNames(styles.rightUpContainer)}>
+        <div className={styles.rightUp} />
+    </div>
+);
 
 export const DownRightDashEditable = ({ createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }) => (
     <div className={classNames(styles.flexContainer, styles.downRightDash)}>
@@ -59,6 +64,8 @@ export const DownRightDashEditable = ({ createAddChildNodeCommand }: { createAdd
     </div>
 );
 
+// TODO: type's value is irrelevant as long as they come from a ConnectorTypeT.
+// Can we simplify this?
 export const connectors: { [id: string]: ConnectorT } = {
     "diamond|downRight": {
         id: "diamond|downRight",
@@ -70,7 +77,7 @@ export const connectors: { [id: string]: ConnectorT } = {
         id: "box|downRight",
         name: ConnectorName.DOWN_RIGHT,
         containerName: "connectorContainerDiamond",
-        type: ConnectorTypeT.DIAMOND_CONNECTOR
+        type: ConnectorTypeT.BOX_CONNECTOR
     },
     "diamond|downRightDash": {
         id: "diamond|downRightDash",
@@ -88,7 +95,13 @@ export const connectors: { [id: string]: ConnectorT } = {
         id: "box|rightUpArrow",
         name: ConnectorName.RIGHT_UP_ARROW,
         containerName: "connectorContainerBox",
-        type: ConnectorTypeT.DIAMOND_CONNECTOR
+        type: ConnectorTypeT.BOX_CONNECTOR
+    },
+    "box|rightUp": {
+        id: "box|rightUp",
+        name: ConnectorName.RIGHT_UP,
+        containerName: "connectorContainerBox",
+        type: ConnectorTypeT.BOX_CONNECTOR
     },
     "standard|arrowRight": {
         id: "standard|arrowRight",
@@ -106,13 +119,13 @@ export const connectors: { [id: string]: ConnectorT } = {
         id: "box|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
         containerName: "connectorContainerBox",
-        type: ConnectorTypeT.STANDARD_CONNECTOR
+        type: ConnectorTypeT.BOX_CONNECTOR
     },
     "box|lineHoriz": {
         id: "box|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
         containerName: "connectorContainerBox",
-        type: ConnectorTypeT.STANDARD_CONNECTOR
+        type: ConnectorTypeT.BOX_CONNECTOR
     },
     "standard|lineHoriz": {
         id: "standard|lineHoriz",
@@ -179,6 +192,7 @@ export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNode
         downRightDash: <div />,
         "downRightDash.edit": <DownRightDashEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         rightUpArrow: <RightUpArrow />,
+        rightUp: <RightUp />,
         arrowRight: <ArrowRight />,
         "arrowRight.edit": <ArrowRightEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         lineHoriz: <LineHoriz />,

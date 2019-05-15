@@ -135,6 +135,101 @@ export const AB = {
 } as MockWorkflowsData;
 
 
+export const AC = {
+    workflowUid: "28fb8c360359",
+    workflowName: "A-C",
+    workflowSteps: [
+        {
+            workflowStepUid: "b5e96430cba5",
+            workflowStepName: "D",
+            workflowStepType: "DECISION",
+            workflowStepOrder: 1,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "863319b51a3f"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "cb12d6198c7c"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "e0405f577ddb"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "e0405f577ddc"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "41d3942a7566",
+            workflowStepName: "Published",
+            workflowStepType: "PUBLISH",
+            workflowStepOrder: 3,
+            actions: []
+        },
+        {
+            workflowStepUid: "863319b51a3f",
+            workflowStepName: "Translation",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "41d3942a7566"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "cb12d6198c7c",
+            workflowStepName: "T2",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "41d3942a7566"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "e0405f577ddb",
+            workflowStepName: "T3",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "41d3942a7566"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "e0405f577ddc",
+            workflowStepName: "T4",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "41d3942a7566"
+                }
+            ]
+        }
+    ]
+} as MockWorkflowsData;
+
+
 export const BA = {
     workflowUid: "5890236e433b",
     workflowName: "B-A",

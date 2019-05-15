@@ -56,7 +56,6 @@ describe("EditButton Spec", () => {
         };
 
         editButton.simulate("click", event);
-
         expect(createAddChildNodeCommandSpy).toHaveBeenCalledTimes(1);
 
         const mock = {

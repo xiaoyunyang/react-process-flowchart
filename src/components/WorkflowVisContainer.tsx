@@ -41,17 +41,17 @@ export const createAddNodeParams: CreateAddNodeParams = ({
                 // parentNode = the node that's thethered to the plus sign
                 const parentNodeId = coordToNodeId[parentCoord];
                 const prevNodeIds = nodeIdToParentNodeIds[parentNodeId];
-                const { nextSteps: candidateNodeIds } = workflowStepNodes[parentNodeId];
+                const { nextSteps: candidateNextNodeIds } = workflowStepNodes[parentNodeId];
 
                 const addChildNodeCommand: AddChildNodeCommand =
-                    `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
+                    `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
 
                 // console.log("MOOOOOOOOOOOOOOOOOO\n", addChildNodeCommand);
 
                 const ownMatrixCoord = decodeMatrixCoord(ownCoord);
 
                 const nextNodeId = isEmptyBranch ? null : findNextNode({
-                    plusBtnCoord: ownMatrixCoord, coordToNodeId, candidateNodeIds
+                    plusBtnCoord: ownMatrixCoord, coordToNodeId, candidateNextNodeIds
                 });
 
                 console.log("tetheredNodeId", parentNodeId);
@@ -115,29 +115,29 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
         } = createWorkflowVisData({ workflowSteps, workflowUid });
 
         // TODO: remove block ----
-        const bottomMatrix = clone(initialMatrix);
-        bottomMatrix[6][1] = encodeMatrixEntry({
-            colType: ColType.DIAMOND,
-            entryName: "lineVert",
-            encodedOwnCoord: "6,1"
-        });
+        // const bottomMatrix = clone(initialMatrix);
+        // bottomMatrix[6][1] = encodeMatrixEntry({
+        //     colType: ColType.DIAMOND,
+        //     entryName: "lineVert",
+        //     encodedOwnCoord: "6,1"
+        // });
 
-        bottomMatrix[6][0] = encodeMatrixEntry({
-            colType: ColType.DIAMOND,
-            entryName: "upRight",
-            encodedOwnCoord: "6,0"
-        });
+        // bottomMatrix[6][0] = encodeMatrixEntry({
+        //     colType: ColType.DIAMOND,
+        //     entryName: "upRight",
+        //     encodedOwnCoord: "6,0"
+        // });
         // bottomMatrix[6][3] = encodeMatrixEntry({
         //     colType: ColType.DIAMOND,
         //     entryName: "lineVert",
         //     encodedOwnCoord: "6,0"
         // });
-        bottomMatrix[7][0] = encodeMatrixEntry({
-            colType: ColType.STANDARD,
-            entryName: "arrowRight",
-            encodedOwnCoord: "7,0"
-        });
-        console.log(bottomMatrix);
+        // bottomMatrix[7][0] = encodeMatrixEntry({
+        //     colType: ColType.STANDARD,
+        //     entryName: "arrowRight",
+        //     encodedOwnCoord: "7,0"
+        // });
+        // console.log(bottomMatrix);
 
 
         // -----------------------
