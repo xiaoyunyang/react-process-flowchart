@@ -80,13 +80,11 @@
   margin-top: var(--connector-container-margin-top);
 }
 
-.connectorContainerDiamond .line {
-  height: calc(var(--box-connector-container-height) * 0.78);
-}
-
 .connectorContainerDiamond .lineLong {
   width: calc(var(--diamond-container-width) * 1.16);
+  height: calc(var(--base-unit) * 11.75);
 }
+
 
 .hidden {
   visibility: hidden;
@@ -155,11 +153,16 @@
   flex-direction: row;
 }
 
+/** 
+ * TODO: every dimension in this file that's calculated from
+ * base-unit should be revised to be calculated from container
+ * dimensions insteasd (make visualization scalable)
+ */
 .line {
   align-self: auto;
   border-bottom: var(--connector-border);
   position: relative;
-  height: 57%;
+  height: calc(var(--base-unit) * 8.5);
 }
 
 .lineLong {
@@ -168,22 +171,22 @@
 
 .connectorContainerStandard .arrowRight .lineLong {
   width: calc(var(--connector-standard-width) * 0.91);
-  margin-top: calc(var(--box-connector-container-height) * 0.55);
+  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .connectorContainerStandard .arrowRight .lineShort {
   width: calc(var(--connector-standard-width) * 0.25);
-  margin-top: calc(var(--box-connector-container-height) * 0.55);
+  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .connectorContainerStandard .arrowRight .lineShortArrow {
   width: calc(var(--connector-standard-width) * 0.21);
-  margin-top: calc(var(--box-connector-container-height) * 0.55);
+  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .connectorContainerStandard .lineHoriz .lineShort {
   width: calc(var(--connector-standard-width) * 0.27);
-  margin-top: calc(var(--box-connector-container-height) * 0.55);
+  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .caret {
