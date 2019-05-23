@@ -32,6 +32,7 @@ export const ArrowRightEditable = (
     );
 
 export const LineHoriz = () => <div className={classNames(styles.line, styles.lineLong)} />;
+
 export const LineVert = () => <div className={classNames(styles.lineVert, styles.lineLong)} />;
 
 export const LineHorizEditable = (
@@ -51,9 +52,17 @@ export const RightUpArrow = () => (
         <i className={classNames(styles.caret, styles.caretUp)} />
     </div>
 );
+
 export const RightUp = () => (
     <div className={classNames(styles.rightUpContainer)}>
         <div className={styles.rightUp} />
+    </div>
+);
+
+export const ArrowUp = () => (
+    <div className={classNames(styles.flexContainer, styles.arrowUp)}>
+        <div className={styles.lineVert} />
+        <i className={classNames(styles.caret, styles.caretUp)} />
     </div>
 );
 
@@ -103,6 +112,12 @@ export const connectors: { [id: string]: ConnectorT } = {
         containerName: "connectorContainerBox",
         type: ConnectorTypeT.BOX_CONNECTOR
     },
+    "box|arrowUp": {
+        id: "box|arrowUp",
+        name: ConnectorName.ARROW_UP,
+        containerName: "connectorContainerBox",
+        type: ConnectorTypeT.BOX_CONNECTOR
+    },
     "standard|arrowRight": {
         id: "standard|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
@@ -132,6 +147,12 @@ export const connectors: { [id: string]: ConnectorT } = {
         name: ConnectorName.LINE_HORIZ,
         containerName: "connectorContainerStandard",
         type: ConnectorTypeT.STANDARD_CONNECTOR
+    },
+    "box|lineVert": {
+        id: "box|lineVert",
+        name: ConnectorName.LINE_VERT,
+        containerName: "connectorContainerBox",
+        type: ConnectorTypeT.BOX_CONNECTOR
     },
     "standard|lineHoriz.edit": {
         id: "standard|lineHoriz.edit",
@@ -193,11 +214,12 @@ export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNode
         "downRightDash.edit": <DownRightDashEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         rightUpArrow: <RightUpArrow />,
         rightUp: <RightUp />,
+        arrowUp: <ArrowUp />,
         arrowRight: <ArrowRight />,
         "arrowRight.edit": <ArrowRightEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
         lineHoriz: <LineHoriz />,
-        lineVert: <LineVert />,
         "lineHoriz.edit": <LineHorizEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
+        lineVert: <LineVert />,
         empty: <div />
     };
 

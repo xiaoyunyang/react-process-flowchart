@@ -41,7 +41,9 @@ export const createAddNodeParams: CreateAddNodeParams = ({
                 // parentNode = the node that's thethered to the plus sign
                 const parentNodeId = coordToNodeId[parentCoord];
                 const prevNodeIds = nodeIdToParentNodeIds[parentNodeId];
-                const { nextSteps: candidateNextNodeIds } = workflowStepNodes[parentNodeId];
+                const { nextNodes } = workflowStepNodes[parentNodeId];
+
+                const candidateNextNodeIds = nextNodes.map((nextNode: any) => nextNode.id);
 
                 const addChildNodeCommand: AddChildNodeCommand =
                     `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
@@ -51,7 +53,9 @@ export const createAddNodeParams: CreateAddNodeParams = ({
                 const ownMatrixCoord = decodeMatrixCoord(ownCoord);
 
                 const nextNodeId = isEmptyBranch ? null : findNextNode({
-                    plusBtnCoord: ownMatrixCoord, coordToNodeId, candidateNextNodeIds
+                    plusBtnCoord: ownMatrixCoord,
+                    coordToNodeId,
+                    candidateNextNodeIds
                 });
 
                 console.log("tetheredNodeId", parentNodeId);

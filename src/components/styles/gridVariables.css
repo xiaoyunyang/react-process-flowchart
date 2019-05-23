@@ -11,14 +11,11 @@
     --box-width: calc(var(--base-unit) * 37.5);
     --box-height: calc(var(--base-unit) * 13.75);
     --box-padding: calc(var(--base-unit) * 2.5);
+    --row-margin-top: calc(var(--base-unit) * 4.5);
     --box-line-height: 1.33;
-    --diamond-container-width: calc(var(--base-unit) * 14.6);
-    --diamond-container-height: calc(var(--base-unit) * 18.75);
+    --diamond-container-width: calc(var(--base-unit) * 12.75);
     --diamond-width: calc(var(--base-unit) * 10.75);
-    --diamond-border-radius: calc(var(--border-radius) * 1.5);
     --caret-width: calc(var(--base-unit) * 1.3);
-    --connector-container-margin-top: calc(var(--base-unit) * 3.25);
-    --box-connector-container-height: calc(var(--base-unit) * 15);
     --max-columns: 1000;
     --circle-diameter: calc(var(--base-unit) * 5);
 }

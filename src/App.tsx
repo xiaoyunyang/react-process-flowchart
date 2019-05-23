@@ -8,7 +8,7 @@ import './App.css';
 import styles from "./components/styles/workflowVis.module.css";
 
 // Data
-import { AA, AB, AC, BA, BB, BC, BD, BE, BF, CD, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
+import { AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -16,10 +16,12 @@ import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
-const workflows: any = [AA, AB, AC, BA, BB, BC, BD, BE, BF, CD];
-const enableMatrixUnitTest = true;
-const enableMatrixUnitTestEditMode = true;
+const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA];
+// const workflows: any = [DA];
 
+const enableMatrixUnitTest = false;
+const enableMatrixUnitTestEditMode = true;
+const enableAcceptanceTest = true;
 const debugModeOn = false;
 
 // TODO: there's something wrong with visualizing B-D
@@ -31,18 +33,20 @@ const noop = () => () => "foo";
 
 const App = () => (
     <div>
-        <div className={
-            classNames(
-                styles.flowchartContainer,
-                { [styles.debug]: debugModeOn }
-            )}
-        >
-            {
-                workflows.map((workflow: MockWorkflowsData) =>
-                    <Workflow key={workflow.workflowUid} workflow={workflow} />
-                )
-            }
-        </div>
+        {enableAcceptanceTest && (
+            <div className={
+                classNames(
+                    styles.flowchartContainer,
+                    { [styles.debug]: debugModeOn }
+                )}
+            >
+                {
+                    workflows.map((workflow: MockWorkflowsData) =>
+                        <Workflow key={workflow.workflowUid} workflow={workflow} />
+                    )
+                }
+            </div>
+        )}
         <div className={styles.flowchartContainer}>
             <h1>WorkflowVis Unit Test</h1>
             {enableMatrixUnitTest &&

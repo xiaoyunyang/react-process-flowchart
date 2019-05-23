@@ -6,10 +6,7 @@
 
 ![css-grid-flowchart demo for plus sign](/resource/04-04-demo-plus-sign.gif)
 
-![css-grid-flowchart demo for plus sign](/resource/reveal-plus-sign.gif)
-
 ![css-grid-flowchart demo for plus sign](/resource/reveal-plus-sign-with-clicking.gif)
-
 
 ## Data-driven Visualization
 
@@ -77,3 +74,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 `npm test` launches the test runner in the interactive watch mode.<br>
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+## TODOs
+
+1. [x] Render connectors for step merge from 2 or more rows away
+2. [ ] Sort workflow steps with the same WorkflowStepOrder - encode that in priority
+3. [ ] Support for when a decision step has the same distance from the root node as another node - need to shift things to the right

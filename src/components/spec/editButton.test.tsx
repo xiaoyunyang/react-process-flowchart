@@ -17,15 +17,15 @@ const mockWorkflowStepNode = {
     name: "lWveC",
     type: WorkflowStepTypeT.ADMIN_APPROVAL,
     workflowStepOrder: 2,
-    nextSteps: ["456"],
+    nextNodes: [{ id: "456", primary: false }],
     prevSteps: []
 };
 
 describe("EditButton Spec", () => {
     const createAddChildNodeCommand = createAddNodeParams({
         workflowStepNodes: {
-            123: { ...mockWorkflowStepNode, nextSteps: ["456"] },
-            456: { ...mockWorkflowStepNode, nextSteps: ["789"] }
+            123: { ...mockWorkflowStepNode, nextNodes: [{ id: "456", primary: false }] },
+            456: { ...mockWorkflowStepNode, nextNodes: [{ id: "789", primary: false }] }
         },
         coordToNodeId: { "0,0": "123", "2,0": "456" },
         nodeIdToParentNodeIds: {},

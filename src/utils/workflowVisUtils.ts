@@ -155,6 +155,7 @@ const replaceTile = (
     matrix[colNum] = newCol;
 };
 
+
 /**
  *
  * @param {number} numRows number of rows
@@ -207,7 +208,7 @@ const createWorkflowStepNodes = (
     const firstStepId = `${workflowUid}-auth`;
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
-    let authorizeNextSteps: string[] = [];
+    let authorizeNextNodes: { id: string; primary: boolean }[] = [];
     let decisionStepCols: number[] = [];
 
     const workflowStepOrderOccur: OccurenceDict = {};
@@ -236,22 +237,22 @@ const createWorkflowStepNodes = (
         }
 
         if (workflowStepOrder === 1) {
-            authorizeNextSteps = [workflowStepUid];
+            authorizeNextNodes = [{ id: workflowStepUid, primary: true }];
         }
 
         // Not sure if we need prevSteps...?
         const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
 
-        const nextSteps = actions
+        const nextNodes = actions
             .filter(action => action.actionType !== "REJECT")
-            .map(action => action.nextWorkflowStepUid);
+            .map(action => ({ id: action.nextWorkflowStepUid, primary: action.primary }));
 
         workflowStepNodes[workflowStepUid] = {
             id: workflowStepUid,
             name: workflowStepName,
             type: workflowStepType,
             workflowStepOrder,
-            nextSteps,
+            nextNodes,
             prevSteps
         };
     }
@@ -263,7 +264,7 @@ const createWorkflowStepNodes = (
             name: "Authorize",
             type: WorkflowStepTypeT.AUTHORIZE,
             workflowStepOrder: 0,
-            nextSteps: authorizeNextSteps,
+            nextNodes: authorizeNextNodes,
             prevSteps: []
         }
     };
@@ -365,6 +366,17 @@ export const addNodeToMatrix = (
 };
 
 /**
+ * get rightUpCoords from connectors to place
+ * 
+ * @param {ConnectorToPlace} connectorToPlace
+ * @returns {MatrixCoord[]} rightUpCoords - coords for where all the rightUp connectors go
+ */
+export const getRightUpCoords = (connectorsToPlace: ConnectorToPlace[]): MatrixCoord[] =>
+    connectorsToPlace
+        .filter(({ connectorName }) => connectorName === ConnectorName.RIGHT_UP)
+        .map(({ ownCoord }) => decodeMatrixCoord(ownCoord));
+
+/**
  * Mutates the matrix by replacing tiles with connectors
  *
  * @param {Matrix} matrix initial matrix with workflowSteps already placed
@@ -457,12 +469,13 @@ export const createLineHorizes = (
 
 /**
  * Creates an array of connectors to place with specific values and locations in the matrix
+ * Only in the horizontal direction
  *
  * @param {MatrixCoord} parentCoord
  * @param {MatrixCoord} childCoord
  * @returns {ConnectorToPlace[]} an array of ConnectorToPlace for between the colNums of parent and child nodes
  */
-export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorToPlace[] => {
+export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorToPlace[] => {
     const { parentCoord, childCoord } = coordPair;
     const { colNum: fromCol, rowNum: fromRow } = parentCoord;
     const { colNum: toCol, rowNum: toRow } = childCoord;
@@ -545,6 +558,40 @@ export const createConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorTo
     return lines.concat(lastEntry);
 };
 
+/**
+ * Adds vertical line and up arrow to a column in the matrix beginning from startCoord
+ *
+ * @param {Matrix} matrix
+ * @param {MatrixCoord} startCoord
+ * @returns void - mutates the matrix
+ */
+export const addVertConnectorsToMatrix = (
+    { matrix, startCoord }: { matrix: Matrix; startCoord: MatrixCoord }
+) => {
+    const { colNum, rowNum } = startCoord;
+    const col = clone(matrix[colNum]); // we elems of col in the loop
+
+    for (let i = rowNum - 1; i >= 1; i -= 1) {
+        const curr = col[i];
+        const above = col[i - 1];
+        if (!isPlaceholder(curr)) {
+            break;
+        }
+
+        const { tileType, encodedOwnCoord, encodedParentNodeCoord } = decodeMatrixEntry(curr);
+        const entryName = (isPlaceholder(above)) ? ConnectorName.LINE_VERT : ConnectorName.ARROW_UP;
+        const replaceBy = encodeMatrixEntry({
+            colType: tileType,
+            entryName: entryName,
+            encodedOwnCoord: encodedOwnCoord as string,
+            encodedParentCoord: encodedParentNodeCoord as string
+        });
+        col[i] = replaceBy;
+    }
+
+    // mutate matrix
+    matrix[colNum] = col;
+};
 
 /**
  * Takes a dictionary and returns a new dictionary with the key and value swapped
@@ -637,11 +684,13 @@ export const populateMatrix = (
     const nodeIdToParentNodeIds: PolymorphDict = {};
 
     let offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
+
+    // BFS with Min Heap to keep track of toExplore
     while (!toExplore.isEmpty()) {
         const min = toExplore.deleteMin();
         const id = min ? min.val : "";
         const workflowStepNode = workflowStepNodes[id];
-        const { nextSteps, workflowStepOrder } = workflowStepNode;
+        const { nextNodes, workflowStepOrder } = workflowStepNode;
 
         // Place the workflow step id into the matrix
         // We need to account for the coord of the parent node when placing a new
@@ -671,9 +720,13 @@ export const populateMatrix = (
         // Add current node's coord into nodeIdToCoord
         nodeIdToCoord[id] = encodeMatrixCoord(coord);
         // console.log("visiting id ---> ", id);
-        let nextStepId = null;
-        for (let i = 0; i < nextSteps.length; i += 1) {
-            nextStepId = nextSteps[i];
+
+        // TODO: nextNodes - if we are currently looking at a decision step,
+        // there will be multiple steps. we want to sort the nextNodes here or sort it
+        // in createWorkflowVisData to explore it in this order
+        for (let i = 0; i < nextNodes.length; i += 1) {
+            const { id: nextStepId, primary: nextStepPrimary } = nextNodes[i];
+
 
             // Update nodeIdToParentCoords here using nodeIdToCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeIdToCoord
@@ -688,9 +741,21 @@ export const populateMatrix = (
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
                 // maintaining toExplore as a priority queue
+                console.log("inserting next step", workflowStepNodes[nextStepId]);
+
+                // TODO: Create a function for calculating the priority.
+                // If next step is primary, nextStepPriority will be a number between 0 and 1.
+                // We want to explore all the nodes from the primnary branch from left to
+                // right first. Then we want to explore the non-primary branches from left to right.
+                // NOTE, the node with the smaller priority get explored first
+
+                const subWorkflowStepOrder = +`${workflowStepNodes[nextStepId].workflowStepOrder}.${i}`;
+                const nextStepPriority = nextStepPrimary ?
+                    (-1 / subWorkflowStepOrder) : subWorkflowStepOrder;
+
                 toExplore.insert({
                     val: nextStepId,
-                    priority: workflowStepNodes[nextStepId].workflowStepOrder
+                    priority: nextStepPriority
                 });
                 explored[nextStepId] = true;
             }
@@ -704,8 +769,11 @@ export const populateMatrix = (
     // console.log("--nodeToParentCoords", nodeIdToParentCoords);
     // console.log("--nodeIdToParentNodeIds", nodeIdToParentNodeIds);
 
+    // Step 2.1 - place connectors horizontally
     const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeIdToParentCoords });
-    const connectorsToPlace: ConnectorToPlace[] = chain(createConnectorsBetweenNodes, coordPairs);
+    const connectorsToPlace: ConnectorToPlace[] = chain(
+        createHorizConnectorsBetweenNodes, coordPairs
+    );
 
     // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?
     // The addConnectorToMatrix function should return a new matrix
@@ -716,6 +784,22 @@ export const populateMatrix = (
         .forEach(
             connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
         );
+
+
+    // Step 2.2 - If there are right up connectors in the matrix, we want to draw vertLine and arrowUp
+    // above them while the tile is empty.
+
+    // TODO: We will cache the coord of all the rightUp connectors in the matrix
+    // during createHorizConnectorsBetweenNodes. After that's implemented, we can get rid
+    // of the nested for loop below
+
+    // console.log(matrix);
+    getRightUpCoords(connectorsToPlace)
+        .forEach(
+            rightUpCoord => addVertConnectorsToMatrix({ matrix, startCoord: rightUpCoord })
+        );
+
+    // Step 2.3 - Decision Step Dashed line
 
     // Add the decision step dashline plus sign placeholder into the matrix where the decision
     // steps are

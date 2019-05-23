@@ -6,7 +6,7 @@ export interface WorkflowStepNodeT {
     name: string;
     type: WorkflowStepTypeT | string;
     workflowStepOrder: number;
-    nextSteps: string[];
+    nextNodes: { id: string; primary: boolean }[];
     prevSteps: WorkflowStepT[];
 }
 
@@ -40,6 +40,7 @@ export enum ConnectorName {
     DOWN_RIGHT_DASH_EDIT = "downRightDash.edit",
     RIGHT_UP = "rightUp",
     RIGHT_UP_ARROW = "rightUpArrow",
+    ARROW_UP = "arrowUp",
     ARROW_RIGHT = "arrowRight",
     ARROW_RIGHT_EDIT = "arrowRight.edit",
     LINE_HORIZ = "lineHoriz",

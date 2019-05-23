@@ -4,6 +4,13 @@
 @import "./box.css";
 @import "./colors.css";
 
+.wrapperContainer {
+  z-index: 0;
+  position: relative;
+  margin-left: calc(var(--base-unit) * 3);
+}
+
+
 .wrapper {
   display: grid;
   grid-template-columns: repeat(var(--max-columns), 2fr 1fr);
@@ -31,18 +38,17 @@
   top: 0;
   z-index: -1;
 }
+
 .boxContainer {
-  width: var(--box-width);
-  height: var(--box-height);
+  margin-top: var(--row-margin-top);
 }
 
 .box {
-  margin-top: calc(var(--base-unit) * 4.5);
   width: var(--box-width);
-  border: var(--node-border);
-  border-radius: var(--box-border-radius);
   height: var(--box-height);
   padding: var(--box-padding);
+  border: var(--node-border);
+  border-radius: var(--box-border-radius);
   align-self: auto;
   line-height: var(--box-line-height);
 }
@@ -56,33 +62,34 @@
   width: var(--diamond-width);
   height: var(--diamond-width);
   border: var(--node-border);
-  border-radius: var(--diamond-border-radius);
+  border-radius: calc(var(--border-radius) * 1.5);
   z-index: 2;
   position: relative;
 }
 
+/* TODO: Create a more general class to apply the 
+margin-top and height attributes to all three connector classes
+*/
 .connectorContainerStandard {
   width: var(--connector-standard-width);
-  height: var(--box-connector-container-height);
-  margin-top: var(--connector-container-margin-top);
+  height: var(--box-height);
+  margin-top: var(--row-margin-top);
 }
 
 .connectorContainerDiamond {
   width: var(--diamond-container-width);
-  height: var(--diamond-container-height);
-  margin-top: 0;
-  margin-bottom: calc(var(--base-unit) * -0.5);
+  height: var(--box-height);
+  margin-top: var(--row-margin-top);
 }
 
 .connectorContainerBox {
   width: var(--box-width);
-  height: var(--box-connector-container-height);
-  margin-top: var(--connector-container-margin-top);
+  height: var(--box-height);
+  margin-top: var(--row-margin-top);
 }
 
 .connectorContainerDiamond .lineLong {
   width: calc(var(--diamond-container-width) * 1.16);
-  height: calc(var(--base-unit) * 11.75);
 }
 
 
@@ -100,16 +107,36 @@
   flex-wrap: wrap;
   flex-direction: row;
 }
+
 .lineVert {
+  /* TODO: the following styles are for lineVert in diamondContainer
   height: 120%;
   margin-left: 50%;
   margin-top: -80%;
+  border-left: var(--connector-border); */
+
   border-left: var(--connector-border);
 }
 
 .lineVert .lineLong {
   border-left: var(--connector-border);
 }
+
+.connectorContainerBox .arrowUp .lineVert {
+  height: calc(var(--box-height) * 1.6);
+  margin-top: calc(var(--row-margin-top) * -0.8);
+  margin-left: calc(var(--box-width) * 0.49);
+}
+.arrowUp .caret {
+  margin-left: calc(var(--base-unit) * -1.2);
+  margin-top: calc(var(--row-margin-top) * -0.8);
+}
+.connectorContainerBox .lineVert {
+  height: var(--box-height);
+  margin-left: calc(var(--box-width) * 0.49);
+}
+
+
 
 .circle {
   position: relative;
@@ -138,13 +165,13 @@
 }
 
 .connectorContainerStandard .circle {
-  margin-top: calc(var(--box-height) / 2.4);
+  margin-top: calc(var(--box-height) * 0.35);
 }
 
 .arrowRight .caret {
   position: relative;
   margin-left: calc(var(--base-unit) * -2);
-  top: calc(var(--base-unit) * 7);
+  top: calc(var(--box-height) * 0.42);
 }
 
 .flexContainer {
@@ -162,7 +189,7 @@
   align-self: auto;
   border-bottom: var(--connector-border);
   position: relative;
-  height: calc(var(--base-unit) * 8.5);
+  height: calc(var(--box-height) * 0.53);
 }
 
 .lineLong {
@@ -171,22 +198,18 @@
 
 .connectorContainerStandard .arrowRight .lineLong {
   width: calc(var(--connector-standard-width) * 0.91);
-  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .connectorContainerStandard .arrowRight .lineShort {
-  width: calc(var(--connector-standard-width) * 0.25);
-  padding-top: calc(var(--box-connector-container-height) * 0.55);
+  width: calc(var(--connector-standard-width) * 0.24);
 }
 
 .connectorContainerStandard .arrowRight .lineShortArrow {
   width: calc(var(--connector-standard-width) * 0.21);
-  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .connectorContainerStandard .lineHoriz .lineShort {
   width: calc(var(--connector-standard-width) * 0.27);
-  padding-top: calc(var(--box-connector-container-height) * 0.55);
 }
 
 .caret {
@@ -223,7 +246,6 @@
   left: 0;
   position: relative;
   width: calc(var(--box-width) / 1.8);
-  margin-top: calc(var(--base-unit) * 4.5);
 }
 
 .rightUpArrow .rightUp {
@@ -257,6 +279,7 @@
   height: 110%;
 }
 
+/* TODO: Make the following style based on base-unit */
 .rightUpArrow .caret {
   margin-left: -0.36em;
   margin-top: -9px;
@@ -265,12 +288,10 @@
 .downRight {
   border-bottom: var(--connector-border);
   border-left: var(--connector-border);
-  height: 100%;
-  width: 59%;
-  z-index: -1;
 }
+
 .upRight {
-  position:relative;
+  position: relative;
   border-top: var(--connector-border);
   border-left: var(--connector-border);
   height: 42%;
@@ -280,28 +301,27 @@
 }
 
 .downRightDash {
-  width: 190%;
+  width: calc(var(--diamond-container-width) * 2);
 }
 
 .downRightDash .downRight {
   border-bottom: var(--border-width) dashed var(--battleship-grey);
   border-left: var(--border-width) dashed var(--battleship-grey);
-  height: 100%;
-  width: 51%;
+  width: calc(var(--diamond-container-width) * 1.2);
   z-index: -1;
 }
 
 .downRightDash span {
-  margin-top: calc(var(--base-unit) * 10);
-  margin-left: calc(var(--base-unit) * 3.5);
+  margin-top: calc(var(--box-height) * 0.4);
+  margin-left: calc(var(--base-unit) * 2.3);
   z-index: 2;
 }
 
 .connectorContainerDiamond .downRight {
-  height: 74px;
-  margin-top: -2px;
-  top: -20px; /* Fudge factor */
-  left: calc(var(--diamond-container-width) * 0.5);
+  height: calc(var(--box-height) * 1.35);
+  margin-top: 0px;
+  top: calc(var(--base-unit) * -10); /* Fudge factor */
+  left: calc(var(--diamond-container-width) * 0.55);
   position: relative;
   z-index: -1;
 }
@@ -379,6 +399,16 @@
   margin-left: calc(var(--base-unit) * 2.4);
 }
 
+.box .carets {
+  display: inline-block;
+  position: relative;
+}
+
+.box .caretsWrapper {
+  display: inline-block;
+    padding-right: calc(var(--base-unit) * 5);
+}
+
 .box .caretUp {
   margin-bottom: calc(var(--base-unit) * -0.75);
 }
@@ -390,6 +420,10 @@
 .iconContainer {
   width: 100%;
   display: inline-block;
+  text-align: center;
+}
+
+.iconContainer div {
   text-align: center;
 }
 
