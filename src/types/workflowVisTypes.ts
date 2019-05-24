@@ -1,12 +1,18 @@
 import { WorkflowStepTypeT, WorkflowStepT } from "./workflow";
 import { EndomorphDict, PolymorphDict } from "./generic";
 
+
+export interface NextNode {
+    id: string;
+    primary: boolean;
+}
+
 export interface WorkflowStepNodeT {
     id: string;
     name: string;
     type: WorkflowStepTypeT | string;
     workflowStepOrder: number;
-    nextNodes: { id: string; primary: boolean }[];
+    nextNodes: NextNode[];
     prevSteps: WorkflowStepT[];
 }
 

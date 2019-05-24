@@ -8,7 +8,13 @@ import './App.css';
 import styles from "./components/styles/workflowVis.module.css";
 
 // Data
-import { AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, MockWorkflowsData } from "./components/spec/mockWorkflowsData";
+import {
+    AA, AB, AC, AD, AE,
+    BA, BB, BC, BD, BE, BF,
+    CD,
+    DA, DB, DC,
+    MockWorkflowsData
+} from "./components/spec/mockWorkflowsData";
 
 import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 
@@ -16,8 +22,8 @@ import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
-const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA];
-// const workflows: any = [DA];
+// const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, DB, DC];
+const workflows: any = [DA, DB, DC];
 
 const enableMatrixUnitTest = false;
 const enableMatrixUnitTestEditMode = true;

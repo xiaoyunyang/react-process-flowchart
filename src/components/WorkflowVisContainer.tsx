@@ -156,7 +156,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
         const coordToNodeId = invertKeyVal(nodeIdToCoord);
         const { workflowStepNodes } = workflowVisData;
-        console.log("workflowStepNodes", workflowStepNodes);
+        // console.log("workflowStepNodes", workflowStepNodes);
 
         const { tetheredNodeId, nextNodeId, plusBtnClickPos } = this.state;
         const { left, top } = plusBtnClickPos;

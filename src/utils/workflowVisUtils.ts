@@ -7,7 +7,7 @@ import MinHeap from "./MinHeap";
 import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
     MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
-    GenericTileType, ConnectorTypeT
+    GenericTileType, ConnectorTypeT, NextNode
 } from "../types/workflowVisTypes";
 import { WorkflowStepT, WorkflowStepTypeT } from "../types/workflow";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
@@ -641,6 +641,111 @@ const getRowNum = ({ nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: E
 const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) =>
     getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
 
+
+const getPath = ({ node, graph }: { node: string; graph: PolymorphDict }) => {
+    // An important assumption here is all the descendants of
+    // node only has one child
+    let path = [node];
+    let children = graph[node];
+    while (children.length > 0) {
+        const child = children[0];
+        path.push(child);
+        children = graph[child];
+    }
+    return path;
+};
+
+const findClosestKin = (
+    { currPath, nodesToSort, paths }: { currPath: string[]; nodesToSort: string[]; paths: PolymorphDict }
+) => {
+    for (let i = 1; i < currPath.length; i += 1) {
+        const candidatePaths = nodesToSort.map(node => ({
+            head: node,
+            commonAncestorIndex: paths[node].indexOf(currPath[i])
+        })
+        )
+            .filter(
+                ({ commonAncestorIndex }) => (commonAncestorIndex > 0)
+            )
+            .sort(
+                (a, b) => (a.commonAncestorIndex - b.commonAncestorIndex)
+            );
+        // 
+        // console.log("candidatePaths:\n", candidatePaths);
+
+        if (candidatePaths.length > 0) {
+            const nodeToAdd = candidatePaths[0].head;
+            const newNodesToSort = nodesToSort.filter(
+                node => node !== nodeToAdd
+            );
+            return { nodeToAdd, newNodesToSort };
+        }
+    }
+    // TODO: Do we ever expect to get here?
+    return {
+        nodeToAdd: "",
+        newNodesToSort: nodesToSort
+    };
+};
+
+const closestKinSort = (
+    { primaryNode, nodes, graph }: { primaryNode: string; nodes: string[]; graph: PolymorphDict }
+) => {
+    // Step 1:
+    // create decendent arrays for all the nodes
+    const paths: PolymorphDict = {};
+    const pathsArr = nodes.map(node => getPath({ node, graph }));
+    pathsArr.forEach(path => {
+        const head = path[0];
+        paths[head] = path;
+    });
+
+    let sortedNodes = [primaryNode];
+    let currPath = paths[primaryNode];
+    let nodesToSort = nodes.filter(n => n !== primaryNode);
+
+    while (nodesToSort.length > 0) {
+        const {
+            nodeToAdd, newNodesToSort
+        } = findClosestKin({ currPath, nodesToSort, paths });
+
+        sortedNodes.push(nodeToAdd);
+        nodesToSort = newNodesToSort;
+
+        currPath = paths[nodeToAdd];
+    }
+
+    return sortedNodes;
+};
+
+/**
+ * sort by closest Kin
+ *
+ * @param param0 
+ */
+const getSortedNextNodes = (
+    { nextNodes, workflowStepNodes }: { nextNodes: NextNode[]; workflowStepNodes: WorkflowStepNodes }
+): string[] => {
+    if (nextNodes.length < 2) return nextNodes.map(node => node.id);
+    const primaryNode = nextNodes[
+        nextNodes.findIndex(nextNode => nextNode.primary)
+    ].id;
+
+    const nodes = nextNodes.map(nextNode => nextNode.id);
+
+    const graph: PolymorphDict = {};
+
+    Object.keys(workflowStepNodes).forEach(nodeId =>
+        graph[nodeId] = workflowStepNodes[nodeId].nextNodes.map(node => node.id)
+    );
+    // const { id, primary } = nextNodes[i];
+    console.log("FOOO", nextNodes);
+    console.log("primaryNode:", primaryNode);
+    console.log("nodes", nodes);
+    console.log("graph", JSON.stringify(graph, null, 2));
+    return closestKinSort({ primaryNode, nodes, graph });
+};
+
 /**
  * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
  *
@@ -668,7 +773,8 @@ export const populateMatrix = (
     const { firstStep, workflowStepNodes } = workflowVisData;
 
     const toExplore: MinHeap = new MinHeap();
-    toExplore.insert({ val: firstStep, priority: 0 });
+    // NOTE: Priority is between -2 and 0
+    toExplore.insert({ val: firstStep, priority: -2 });
 
     const explored: ExistentialDict = {};
 
@@ -724,8 +830,10 @@ export const populateMatrix = (
         // TODO: nextNodes - if we are currently looking at a decision step,
         // there will be multiple steps. we want to sort the nextNodes here or sort it
         // in createWorkflowVisData to explore it in this order
-        for (let i = 0; i < nextNodes.length; i += 1) {
-            const { id: nextStepId, primary: nextStepPrimary } = nextNodes[i];
+        const sortedNextNodes = getSortedNextNodes({ nextNodes, workflowStepNodes });
+
+        for (let i = 0; i < sortedNextNodes.length; i += 1) {
+            const nextStepId = sortedNextNodes[i];
 
 
             // Update nodeIdToParentCoords here using nodeIdToCoord.
@@ -749,13 +857,15 @@ export const populateMatrix = (
                 // right first. Then we want to explore the non-primary branches from left to right.
                 // NOTE, the node with the smaller priority get explored first
 
-                const subWorkflowStepOrder = +`${workflowStepNodes[nextStepId].workflowStepOrder}.${i}`;
-                const nextStepPriority = nextStepPrimary ?
-                    (-1 / subWorkflowStepOrder) : subWorkflowStepOrder;
+
+                const childOrder = +`${0}.${i}`;
+                const priority = -1 / (
+                    workflowStepNodes[nextStepId].workflowStepOrder + childOrder
+                );
 
                 toExplore.insert({
                     val: nextStepId,
-                    priority: nextStepPriority
+                    priority
                 });
                 explored[nextStepId] = true;
             }
