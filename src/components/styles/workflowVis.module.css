@@ -114,29 +114,40 @@ margin-top and height attributes to all three connector classes
   margin-left: 50%;
   margin-top: -80%;
   border-left: var(--connector-border); */
-
-  border-left: var(--connector-border);
+  border-right: var(--connector-border);
 }
 
-.lineVert .lineLong {
-  border-left: var(--connector-border);
+.connectorContainerBox .lineVert {
+  width: calc(var(--box-width) * 0.52); 
+}
+
+.connectorContainerBox .arrowUp {
+  width: calc(var(--box-width) * 0.6);
 }
 
 .connectorContainerBox .arrowUp .lineVert {
   height: calc(var(--box-height) * 1.6);
   margin-top: calc(var(--row-margin-top) * -0.8);
-  margin-left: calc(var(--box-width) * 0.49);
 }
+
 .arrowUp .caret {
-  margin-left: calc(var(--base-unit) * -1.2);
+  margin-left: calc(var(--base-unit) * -1.4);
   margin-top: calc(var(--row-margin-top) * -0.8);
 }
+
 .connectorContainerBox .lineVert {
   height: var(--box-height);
-  margin-left: calc(var(--box-width) * 0.49);
 }
 
+.connectorContainerBox .lineVertContainer {
+  position: relative;
+}
 
+.connectorContainerBox .lineVertContainer .lineVert {
+  height: calc(var(--box-height) * 2);
+  top: calc(var(--box-height) * -1);
+  position: absolute;
+}
 
 .circle {
   position: relative;
@@ -245,11 +256,10 @@ margin-top and height attributes to all three connector classes
   top: calc(var(--base-unit) * -1.25);
   left: 0;
   position: relative;
-  width: calc(var(--box-width) / 1.8);
 }
 
 .rightUpArrow .rightUp {
-  width: 90%;
+  width: calc(var(--box-width) * 0.52);
   height: 99%;
   top: calc(var(--base-unit) * -1);
   left: 0;
@@ -268,20 +278,19 @@ margin-top and height attributes to all three connector classes
 */
 
 .connectorContainerBox .rightUpContainer {
-  width: calc(var(--box-width) * 0.5);
   height: calc(var(--box-height) * 1.3);
   position: relative;
   top: calc(var(--box-height) * -0.9);
 }
 
 .rightUpContainer .rightUp {
-  width: 100%;
+  width: calc(var(--box-width) * 0.52);
   height: 110%;
 }
 
 /* TODO: Make the following style based on base-unit */
 .rightUpArrow .caret {
-  margin-left: -0.36em;
+  margin-left: -0.35em;
   margin-top: -9px;
 }
 

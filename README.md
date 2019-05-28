@@ -66,7 +66,7 @@ The order in which we explore the nodes is critical to the correctness of the vi
 The `toExplore` queue is maintained as a priority queue (minHeap), with the priority being
 
 ```javascript
-priority = -1 / (workflowStepOrder + childOrder)
+priority = workflowStepOrder + childOrder
 ```
 
 where

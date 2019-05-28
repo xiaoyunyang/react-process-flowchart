@@ -1518,3 +1518,92 @@ export const DC = {
         }
     ]
 } as MockWorkflowsData;
+
+export const DD = {
+    workflowUid: "dd",
+    workflowName: "D-D",
+    workflowSteps: [
+        {
+            workflowStepUid: "dd-d1",
+            workflowStepName: "D",
+            workflowStepType: "DECISION",
+            workflowStepOrder: 1,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans0"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans1"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans2"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans0",
+            workflowStepName: "T0",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans1",
+            workflowStepName: "T1",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "published"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans2",
+            workflowStepName: "T2",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "edit0",
+            workflowStepName: "E0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 3,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "published"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "published",
+            workflowStepName: "Published",
+            workflowStepType: "PUBLISH",
+            workflowStepOrder: 4,
+            actions: []
+        }
+    ]
+} as MockWorkflowsData;

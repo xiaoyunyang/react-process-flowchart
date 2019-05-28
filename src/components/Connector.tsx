@@ -33,7 +33,11 @@ export const ArrowRightEditable = (
 
 export const LineHoriz = () => <div className={classNames(styles.line, styles.lineLong)} />;
 
-export const LineVert = () => <div className={classNames(styles.lineVert, styles.lineLong)} />;
+export const LineVert = () => (
+    <div className={styles.lineVertContainer}>
+        <div className={styles.lineVert} />
+    </div>
+);
 
 export const LineHorizEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
