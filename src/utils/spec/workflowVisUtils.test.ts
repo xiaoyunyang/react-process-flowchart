@@ -14,20 +14,26 @@ import {
     createCoordPairs,
     createLineHorizes,
     createHorizConnectorsBetweenNodes,
+    getRightUpCoords,
+    addVertConnectorsToMatrix,
     invertKeyVal,
     addNodeToMatrix,
     downRightDashesToPlace,
+    getPath,
+    findNodeWithClosestCommonDescendant,
+    closestCommonDescendantSort,
+    getSortedNextNodeIds,
     populateMatrix,
     addConnectorToMatrix,
     findNextNode
 } from "../workflowVisUtils";
 
 // Types
-import { ColType, ConnectorName, Matrix, ConnectorTypeT } from "../../types/workflowVisTypes";
+import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../types/workflowVisTypes";
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Mocks
-import { AA, BA } from "../../components/spec/mockWorkflowsData";
+import { AA, BA, DA, DB, DC, DD } from "../../components/spec/mockWorkflowsData";
 
 describe("WorkflowVisUtils", () => {
 
@@ -285,6 +291,56 @@ describe("WorkflowVisUtils", () => {
         });
     });
 
+    describe("#getRightUpCoords", () => {
+        test("returns coordinates of all rightUp connectors", () => {
+            const connectorsToPlace = [
+                { connectorName: ConnectorName.ARROW_RIGHT, ownCoord: "1,2", parentCoord: "3,4" },
+                { connectorName: ConnectorName.RIGHT_UP, ownCoord: "5,6", parentCoord: "7,8" },
+                { connectorName: ConnectorName.RIGHT_UP_ARROW, ownCoord: "9,10", parentCoord: "11,12" },
+                { connectorName: ConnectorName.RIGHT_UP, ownCoord: "13,14", parentCoord: "15,16" },
+            ];
+            expect(getRightUpCoords(connectorsToPlace)).toEqual([
+                { colNum: 5, rowNum: 6 },
+                { colNum: 13, rowNum: 14 }
+            ]);
+        });
+        test("returns empty array if there are no rightUp connectors", () => {
+            const connectorsToPlace = [
+                { connectorName: ConnectorName.ARROW_RIGHT, ownCoord: "1,2", parentCoord: "3,4" },
+                { connectorName: ConnectorName.LINE_HORIZ, ownCoord: "5,6", parentCoord: "7,8" },
+                { connectorName: ConnectorName.RIGHT_UP_ARROW, ownCoord: "9,10", parentCoord: "11,12" },
+                { connectorName: ConnectorName.LINE_VERT, ownCoord: "13,14", parentCoord: "15,16" },
+            ];
+            expect(getRightUpCoords(connectorsToPlace)).toEqual([]);
+        });
+    });
+
+    describe("addVertConnectorsToMatrix", () => {
+        let matrix: string[][];
+        beforeEach(() => {
+            matrix = [
+                ["1234", "box|empty|0,1", "box|empty|0,2", "box|rightUp|0,3"],
+                ["5678", "box|rightUp|1,1", "box|empty|1,2", "box|rightUp|1,3"]
+            ];
+        });
+        test("populate until node is reached", () => {
+            const startCoord = { colNum: 0, rowNum: 3 };
+            addVertConnectorsToMatrix({ matrix, startCoord });
+            expect(matrix).toEqual([
+                ["1234", "box|arrowUp|0,1", "box|lineVert|0,2", "box|rightUp|0,3"],
+                matrix[1]
+            ]);
+        });
+        test("populate until connector is reached", () => {
+            const startCoord = { colNum: 1, rowNum: 3 };
+            addVertConnectorsToMatrix({ matrix, startCoord });
+            expect(matrix).toEqual([
+                matrix[0],
+                ["5678", "box|rightUp|1,1", "box|lineVert|1,2", "box|rightUp|1,3"]
+            ]);
+        });
+    });
+
     describe("#createWorkflowVisData", () => {
         it("should create worlflowVisData and initial matrix", () => {
             const { workflowSteps, workflowUid } = BA;
@@ -334,6 +390,97 @@ describe("WorkflowVisUtils", () => {
         expect(downRightDashesToPlace({ matrix, decisionStepCols })).toEqual(expected);
     });
 
+    test("#getPath", () => {
+        const workflowStepNodes = {
+            a: { nextNodes: [{ id: "b", primary: true }] },
+            b: { nextNodes: [{ id: "c", primary: true }] },
+            c: { nextNodes: [{ id: "d", primary: true }] },
+            d: { nextNodes: [] },
+        } as any as WorkflowStepNodes;
+
+        expect(getPath({ node: "a", workflowStepNodes, path: ["a"] })).toEqual(["a", "b", "c", "d"]);
+        expect(getPath({ node: "d", workflowStepNodes, path: ["d"] })).toEqual(["d"]);
+    });
+
+    describe("#findNodeWithClosestCommonDescendant", () => {
+        const currPath = ["a0", "a1", "a2", "a3"];
+        const nodesToSort = ["b0", "c0", "d0"];
+        test("converging paths", () => {
+            const paths = {
+                b0: ["b0", "b1", "a3"],
+                c0: ["c0", "d2"],
+                d0: ["d0", "d1", "d2", "a1"]
+            };
+            expect(findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths })).toBe("d0");
+        });
+        test("parallel paths", () => {
+            const paths = {
+                b0: ["b0", "b1", "b2"],
+                c0: ["c0", "c1"],
+                d0: ["d0", "d1", "d2", "d3"]
+            };
+            expect(findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths })).toBe("b0");
+        });
+    });
+
+    describe("#closestCommonDescendantSort", () => {
+        const currPath = ["a0", "a1", "a2", "a3"];
+        const nodesToSort = ["b0", "c0", "d0"];
+        test("converging paths", () => {
+            const paths = {
+                b0: ["b0", "b1", "a3"],
+                c0: ["c0", "c1", "c2", "a1", "a2", "a3"],
+                d0: ["d0", "c2", "a1", "a2", "a3"]
+            };
+            expect(
+                closestCommonDescendantSort({ currPath, sortedNodes: ["a0"], nodesToSort, paths })
+            ).toEqual(["a0", "d0", "c0", "b0"]);
+        });
+        test("parallel paths", () => {
+            const paths = {
+                b0: ["b0", "b1", "b2"],
+                c0: ["c0", "c1"],
+                d0: ["d0", "d1", "d2", "d3"]
+            };
+            expect(
+                closestCommonDescendantSort({ currPath, sortedNodes: ["a0"], nodesToSort, paths })
+            ).toEqual(["a0", "b0", "c0", "d0"]);
+        });
+    });
+
+    describe("#getSortedNextNodeIds", () => {
+        const workflowStepNodes = {
+            a0: { nextNodes: [{ id: "a1", primary: true }] },
+            a1: { nextNodes: [{ id: "a2", primary: true }] },
+            a2: { nextNodes: [{ id: "a3", primary: true }] },
+            a3: { nextNodes: [] },
+            b0: { nextNodes: [{ id: "b1", primary: true }] },
+            b1: { nextNodes: [{ id: "a3", primary: true }] },
+            c0: { nextNodes: [{ id: "c1", primary: true }] },
+            c1: { nextNodes: [{ id: "c2", primary: true }] },
+            c2: { nextNodes: [{ id: "a1", primary: true }] },
+            d0: { nextNodes: [{ id: "c2", primary: true }] }
+        } as any as WorkflowStepNodes;
+
+        test("Only one nextNode", () => {
+            expect(
+                getSortedNextNodeIds({ nextNodes: [{ id: "a", primary: true }], workflowStepNodes })
+            ).toEqual(["a"]);
+            expect(getSortedNextNodeIds({ nextNodes: [], workflowStepNodes })).toEqual([]);
+        });
+        test("Multiple nextNodes", () => {
+            const nextNodes = [
+                { id: "a0", primary: true },
+                { id: "b0", primary: false },
+                { id: "c0", primary: false },
+                { id: "d0", primary: false },
+            ];
+            expect(
+                getSortedNextNodeIds({ nextNodes, workflowStepNodes })
+            ).toEqual(["a0", "d0", "c0", "b0"]);
+        });
+    });
+
     describe("#addNodeToMatrix", () => {
         let matrix: Matrix;
 
@@ -362,7 +509,7 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#populateMatrix", () => {
-        it("should handle linear workflow case", () => {
+        test("Linear workflow case", () => {
             const { workflowSteps, workflowUid } = AA;
             const {
                 workflowVisData, initialMatrix
@@ -402,7 +549,7 @@ describe("WorkflowVisUtils", () => {
             };
             expect(res).toEqual(expected);
         });
-        it("should handle simple branching workflow", () => {
+        test("Simple branching workflow", () => {
             const { workflowSteps, workflowUid } = BA;
             const {
                 workflowVisData, initialMatrix
@@ -441,12 +588,618 @@ describe("WorkflowVisUtils", () => {
                 "492b709fc90a": ["297786162f15"],
                 a3135bdf3aa3: ["492b709fc90a"]
             };
-            const expected = {
+
+            expect(res).toEqual({
                 matrix: expectedMatrix,
                 nodeIdToCoord: expectedNodeIdToCoord,
                 nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
-            };
-            expect(res).toEqual(expected);
+            });
+        });
+        describe("complex workflow with sorting", () => {
+            test("DA", () => {
+                const { workflowSteps, workflowUid } = DA;
+                const {
+                    workflowVisData, initialMatrix
+                } = createWorkflowVisData({ workflowSteps, workflowUid });
+                const decisionStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+
+                const expectedMatrix = [
+                    [
+                        "da-auth",
+                        "box|empty|0,1",
+                        "box|empty|0,2",
+                        "box|empty|0,3",
+                        "box|empty|0,4"
+                    ],
+                    [
+                        "standard|arrowRight|1,0|0,0",
+                        "standard|empty|1,1",
+                        "standard|empty|1,2",
+                        "standard|empty|1,3",
+                        "standard|empty|1,4"
+                    ],
+                    [
+                        "da-d1",
+                        "diamond|downRight|2,1",
+                        "diamond|downRight|2,2",
+                        "diamond|downRight|2,3",
+                        "diamond|downRightDash|2,4|2,0"
+                    ],
+                    [
+                        "standard|arrowRight|3,0|2,0",
+                        "standard|arrowRight|3,1|2,0",
+                        "standard|arrowRight|3,2|2,0",
+                        "standard|arrowRight|3,3|2,0",
+                        "standard|empty|3,4"
+                    ],
+                    [
+                        "pretrans1",
+                        "trans4",
+                        "trans2",
+                        "trans3",
+                        "box|empty|4,4"
+                    ],
+                    [
+                        "standard|arrowRight|5,0|4,0",
+                        "standard|lineHoriz|5,1|4,1",
+                        "standard|lineHoriz|5,2|4,2",
+                        "standard|lineHoriz|5,3|4,3",
+                        "standard|empty|5,4"
+                    ],
+                    [
+                        "trans1",
+                        "box|rightUpArrow|6,1",
+                        "box|lineHoriz|6,2",
+                        "box|lineHoriz|6,3",
+                        "box|empty|6,4"
+                    ],
+                    [
+                        "standard|arrowRight|7,0|6,0",
+                        "standard|empty|7,1",
+                        "standard|lineHoriz|7,2",
+                        "standard|lineHoriz|7,3",
+                        "standard|empty|7,4"
+                    ],
+                    [
+                        "review1",
+                        "box|arrowUp|8,1",
+                        "box|rightUp|8,2",
+                        "box|lineHoriz|8,3",
+                        "box|empty|8,4"
+                    ],
+                    [
+                        "standard|arrowRight|9,0|8,0",
+                        "standard|empty|9,1",
+                        "standard|empty|9,2",
+                        "standard|lineHoriz|9,3",
+                        "standard|empty|9,4"
+                    ],
+                    [
+                        "published",
+                        "box|arrowUp|10,1",
+                        "box|lineVert|10,2",
+                        "box|rightUp|10,3",
+                        "box|empty|10,4"
+                    ]
+                ];
+
+                const expectedNodeIdToCoord = {
+                    "da-auth": "0,0",
+                    "da-d1": "2,0",
+                    pretrans1: "4,0",
+                    trans4: "4,1",
+                    trans2: "4,2",
+                    trans3: "4,3",
+                    trans1: "6,0",
+                    review1: "8,0",
+                    published: "10,0"
+                };
+
+                const expectedNodeIdToParentNodeIds = {
+                    "da-d1": [
+                        "da-auth"
+                    ],
+                    pretrans1: [
+                        "da-d1"
+                    ],
+                    trans4: [
+                        "da-d1"
+                    ],
+                    trans2: [
+                        "da-d1"
+                    ],
+                    trans3: [
+                        "da-d1"
+                    ],
+                    trans1: [
+                        "pretrans1",
+                        "trans4"
+                    ],
+                    review1: [
+                        "trans2",
+                        "trans1"
+                    ],
+                    published: [
+                        "trans3",
+                        "review1"
+                    ]
+                };
+
+                expect(res).toEqual({
+                    matrix: expectedMatrix,
+                    nodeIdToCoord: expectedNodeIdToCoord,
+                    nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
+                });
+            });
+            test("DB", () => {
+                const { workflowSteps, workflowUid } = DB;
+                const {
+                    workflowVisData, initialMatrix
+                } = createWorkflowVisData({ workflowSteps, workflowUid });
+                const decisionStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+
+                const expectedMatrix = [
+                    [
+                        "db-auth",
+                        "box|empty|0,1",
+                        "box|empty|0,2",
+                        "box|empty|0,3",
+                        "box|empty|0,4",
+                        "box|empty|0,5"
+                    ],
+                    [
+                        "standard|arrowRight|1,0|0,0",
+                        "standard|empty|1,1",
+                        "standard|empty|1,2",
+                        "standard|empty|1,3",
+                        "standard|empty|1,4",
+                        "standard|empty|1,5"
+                    ],
+                    [
+                        "db-d1",
+                        "diamond|downRight|2,1",
+                        "diamond|downRight|2,2",
+                        "diamond|downRight|2,3",
+                        "diamond|downRight|2,4",
+                        "diamond|downRightDash|2,5|2,0"
+                    ],
+                    [
+                        "standard|arrowRight|3,0|2,0",
+                        "standard|arrowRight|3,1|2,0",
+                        "standard|arrowRight|3,2|2,0",
+                        "standard|arrowRight|3,3|2,0",
+                        "standard|arrowRight|3,4|2,0",
+                        "standard|empty|3,5"
+                    ],
+                    [
+                        "trans0",
+                        "trans2",
+                        "trans4",
+                        "trans1",
+                        "trans3",
+                        "box|empty|4,5"
+                    ],
+                    [
+                        "standard|lineHoriz|5,0|4,0",
+                        "standard|arrowRight|5,1|4,1",
+                        "standard|lineHoriz|5,2|4,2",
+                        "standard|arrowRight|5,3|4,3",
+                        "standard|lineHoriz|5,4|4,4",
+                        "standard|empty|5,5"
+                    ],
+                    [
+                        "box|lineHoriz|6,0",
+                        "review2",
+                        "box|rightUpArrow|6,2",
+                        "edit1",
+                        "box|rightUpArrow|6,4",
+                        "box|empty|6,5"
+                    ],
+                    [
+                        "standard|arrowRight|7,0",
+                        "standard|lineHoriz|7,1|6,1",
+                        "standard|empty|7,2",
+                        "standard|lineHoriz|7,3|6,3",
+                        "standard|empty|7,4",
+                        "standard|empty|7,5"
+                    ],
+                    [
+                        "review0",
+                        "box|rightUpArrow|8,1",
+                        "box|empty|8,2",
+                        "box|lineHoriz|8,3",
+                        "box|empty|8,4",
+                        "box|empty|8,5"
+                    ],
+                    [
+                        "standard|arrowRight|9,0|8,0",
+                        "standard|empty|9,1",
+                        "standard|empty|9,2",
+                        "standard|lineHoriz|9,3",
+                        "standard|empty|9,4",
+                        "standard|empty|9,5"
+                    ],
+                    [
+                        "published",
+                        "box|arrowUp|10,1",
+                        "box|lineVert|10,2",
+                        "box|rightUp|10,3",
+                        "box|empty|10,4",
+                        "box|empty|10,5"
+                    ]
+                ];
+
+                const expectedNodeIdToCoord = {
+                    "db-auth": "0,0",
+                    "db-d1": "2,0",
+                    trans0: "4,0",
+                    trans2: "4,1",
+                    trans4: "4,2",
+                    trans1: "4,3",
+                    trans3: "4,4",
+                    review2: "6,1",
+                    edit1: "6,3",
+                    review0: "8,0",
+                    published: "10,0"
+                };
+
+                const expectedNodeIdToParentNodeIds = {
+                    "db-d1": [
+                        "db-auth"
+                    ],
+                    trans0: [
+                        "db-d1"
+                    ],
+                    trans2: [
+                        "db-d1"
+                    ],
+                    trans4: [
+                        "db-d1"
+                    ],
+                    trans1: [
+                        "db-d1"
+                    ],
+                    trans3: [
+                        "db-d1"
+                    ],
+                    review0: [
+                        "trans0",
+                        "review2"
+                    ],
+                    review2: [
+                        "trans2",
+                        "trans4"
+                    ],
+                    edit1: [
+                        "trans1",
+                        "trans3"
+                    ],
+                    published: [
+                        "edit1",
+                        "review0"
+                    ]
+                };
+
+                expect(res).toEqual({
+                    matrix: expectedMatrix,
+                    nodeIdToCoord: expectedNodeIdToCoord,
+                    nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
+                });
+            });
+            test("DC", () => {
+                const { workflowSteps, workflowUid } = DC;
+                const {
+                    workflowVisData, initialMatrix
+                } = createWorkflowVisData({ workflowSteps, workflowUid });
+                const decisionStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+
+                const expectedMatrix = [
+                    [
+                        "dc-auth",
+                        "box|empty|0,1",
+                        "box|empty|0,2",
+                        "box|empty|0,3",
+                        "box|empty|0,4",
+                        "box|empty|0,5"
+                    ],
+                    [
+                        "standard|arrowRight|1,0|0,0",
+                        "standard|empty|1,1",
+                        "standard|empty|1,2",
+                        "standard|empty|1,3",
+                        "standard|empty|1,4",
+                        "standard|empty|1,5"
+                    ],
+                    [
+                        "dc-d1",
+                        "diamond|downRight|2,1",
+                        "diamond|downRight|2,2",
+                        "diamond|downRight|2,3",
+                        "diamond|downRight|2,4",
+                        "diamond|downRightDash|2,5|2,0"
+                    ],
+                    [
+                        "standard|arrowRight|3,0|2,0",
+                        "standard|arrowRight|3,1|2,0",
+                        "standard|arrowRight|3,2|2,0",
+                        "standard|arrowRight|3,3|2,0",
+                        "standard|arrowRight|3,4|2,0",
+                        "standard|empty|3,5"
+                    ],
+                    [
+                        "trans0",
+                        "trans1",
+                        "trans3",
+                        "trans2",
+                        "trans4",
+                        "box|empty|4,5"
+                    ],
+                    [
+                        "standard|lineHoriz|5,0|4,0",
+                        "standard|arrowRight|5,1|4,1",
+                        "standard|lineHoriz|5,2|4,2",
+                        "standard|arrowRight|5,3|4,3",
+                        "standard|lineHoriz|5,4|4,4",
+                        "standard|empty|5,5"
+                    ],
+                    [
+                        "box|lineHoriz|6,0",
+                        "edit1",
+                        "box|rightUpArrow|6,2",
+                        "review2",
+                        "box|rightUpArrow|6,4",
+                        "box|empty|6,5"
+                    ],
+                    [
+                        "standard|arrowRight|7,0",
+                        "standard|lineHoriz|7,1|6,1",
+                        "standard|empty|7,2",
+                        "standard|lineHoriz|7,3|6,3",
+                        "standard|empty|7,4",
+                        "standard|empty|7,5"
+                    ],
+                    [
+                        "published",
+                        "box|rightUpArrow|8,1",
+                        "box|lineVert|8,2",
+                        "box|rightUp|8,3",
+                        "box|empty|8,4",
+                        "box|empty|8,5"
+                    ]
+                ];
+
+                const expectedNodeIdToCoord = {
+                    "dc-auth": "0,0",
+                    "dc-d1": "2,0",
+                    trans0: "4,0",
+                    trans1: "4,1",
+                    trans3: "4,2",
+                    trans2: "4,3",
+                    trans4: "4,4",
+                    edit1: "6,1",
+                    review2: "6,3",
+                    published: "8,0"
+                };
+
+                const expectedNodeIdToParentNodeIds = {
+                    "dc-d1": [
+                        "dc-auth"
+                    ],
+                    trans0: [
+                        "dc-d1"
+                    ],
+                    trans1: [
+                        "dc-d1"
+                    ],
+                    trans3: [
+                        "dc-d1"
+                    ],
+                    trans2: [
+                        "dc-d1"
+                    ],
+                    trans4: [
+                        "dc-d1"
+                    ],
+                    published: [
+                        "trans0",
+                        "edit1",
+                        "review2"
+                    ],
+                    edit1: [
+                        "trans1",
+                        "trans3"
+                    ],
+                    review2: [
+                        "trans2",
+                        "trans4"
+                    ]
+                };
+
+                expect(res).toEqual({
+                    matrix: expectedMatrix,
+                    nodeIdToCoord: expectedNodeIdToCoord,
+                    nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
+                });
+            });
+            test("DD", () => {
+                const { workflowSteps, workflowUid } = DD;
+                const {
+                    workflowVisData, initialMatrix
+                } = createWorkflowVisData({ workflowSteps, workflowUid });
+                const decisionStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+
+                const expectedMatrix = [
+                    [
+                        "dd-auth",
+                        "box|empty|0,1",
+                        "box|empty|0,2",
+                        "box|empty|0,3",
+                        "box|empty|0,4"
+                    ],
+                    [
+                        "standard|arrowRight|1,0|0,0",
+                        "standard|empty|1,1",
+                        "standard|empty|1,2",
+                        "standard|empty|1,3",
+                        "standard|empty|1,4"
+                    ],
+                    [
+                        "dd-d1",
+                        "diamond|downRight|2,1",
+                        "diamond|downRight|2,2",
+                        "diamond|downRight|2,3",
+                        "diamond|downRightDash|2,4|2,0"
+                    ],
+                    [
+                        "standard|arrowRight|3,0|2,0",
+                        "standard|arrowRight|3,1|2,0",
+                        "standard|arrowRight|3,2|2,0",
+                        "standard|arrowRight|3,3|2,0",
+                        "standard|empty|3,4"
+                    ],
+                    [
+                        "trans0",
+                        "trans2",
+                        "trans3",
+                        "trans1",
+                        "box|empty|4,4"
+                    ],
+                    [
+                        "standard|lineHoriz|5,0|4,0",
+                        "standard|lineHoriz|5,1|4,1",
+                        "standard|arrowRight|5,2|4,2",
+                        "standard|arrowRight|5,3|4,3",
+                        "standard|empty|5,4"
+                    ],
+                    [
+                        "box|lineHoriz|6,0",
+                        "box|lineHoriz|6,1",
+                        "review3",
+                        "review1",
+                        "box|empty|6,4"
+                    ],
+                    [
+                        "standard|lineHoriz|7,0",
+                        "standard|arrowRight|7,1",
+                        "standard|lineHoriz|7,2|6,2",
+                        "standard|lineHoriz|7,3|6,3",
+                        "standard|empty|7,4"
+                    ],
+                    [
+                        "box|lineHoriz|8,0",
+                        "edit3",
+                        "box|rightUpArrow|8,2",
+                        "box|lineHoriz|8,3",
+                        "box|empty|8,4"
+                    ],
+                    [
+                        "standard|arrowRight|9,0",
+                        "standard|lineHoriz|9,1|8,1",
+                        "standard|empty|9,2",
+                        "standard|lineHoriz|9,3",
+                        "standard|empty|9,4"
+                    ],
+                    [
+                        "edit0",
+                        "box|rightUpArrow|10,1",
+                        "box|empty|10,2",
+                        "box|lineHoriz|10,3",
+                        "box|empty|10,4"
+                    ],
+                    [
+                        "standard|arrowRight|11,0|10,0",
+                        "standard|empty|11,1",
+                        "standard|empty|11,2",
+                        "standard|lineHoriz|11,3",
+                        "standard|empty|11,4"
+                    ],
+                    [
+                        "review0",
+                        "box|empty|12,1",
+                        "box|empty|12,2",
+                        "box|lineHoriz|12,3",
+                        "box|empty|12,4"
+                    ],
+                    [
+                        "standard|arrowRight|13,0|12,0",
+                        "standard|empty|13,1",
+                        "standard|empty|13,2",
+                        "standard|lineHoriz|13,3",
+                        "standard|empty|13,4"
+                    ],
+                    [
+                        "published",
+                        "box|arrowUp|14,1",
+                        "box|lineVert|14,2",
+                        "box|rightUp|14,3",
+                        "box|empty|14,4"
+                    ]
+                ];
+
+                const expectedNodeIdToCoord = {
+                    "dd-auth": "0,0",
+                    "dd-d1": "2,0",
+                    trans0: "4,0",
+                    trans2: "4,1",
+                    trans3: "4,2",
+                    trans1: "4,3",
+                    review3: "6,2",
+                    review1: "6,3",
+                    edit3: "8,1",
+                    edit0: "10,0",
+                    review0: "12,0",
+                    published: "14,0"
+                };
+
+                const expectedNodeIdToParentNodeIds = {
+                    "dd-d1": [
+                        "dd-auth"
+                    ],
+                    trans0: [
+                        "dd-d1"
+                    ],
+                    trans2: [
+                        "dd-d1"
+                    ],
+                    trans3: [
+                        "dd-d1"
+                    ],
+                    trans1: [
+                        "dd-d1"
+                    ],
+                    edit0: [
+                        "trans0",
+                        "edit3"
+                    ],
+                    edit3: [
+                        "trans2",
+                        "review3"
+                    ],
+                    review3: [
+                        "trans3"
+                    ],
+                    review1: [
+                        "trans1"
+                    ],
+                    published: [
+                        "review1",
+                        "review0"
+                    ],
+                    review0: [
+                        "edit0"
+                    ]
+                };
+
+                expect(res).toEqual({
+                    matrix: expectedMatrix,
+                    nodeIdToCoord: expectedNodeIdToCoord,
+                    nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
+                });
+            });
         });
     });
 

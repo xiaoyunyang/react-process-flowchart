@@ -366,17 +366,6 @@ export const addNodeToMatrix = (
 };
 
 /**
- * get rightUpCoords from connectors to place
- * 
- * @param {ConnectorToPlace} connectorToPlace
- * @returns {MatrixCoord[]} rightUpCoords - coords for where all the rightUp connectors go
- */
-export const getRightUpCoords = (connectorsToPlace: ConnectorToPlace[]): MatrixCoord[] =>
-    connectorsToPlace
-        .filter(({ connectorName }) => connectorName === ConnectorName.RIGHT_UP)
-        .map(({ ownCoord }) => decodeMatrixCoord(ownCoord));
-
-/**
  * Mutates the matrix by replacing tiles with connectors
  *
  * @param {Matrix} matrix initial matrix with workflowSteps already placed
@@ -559,6 +548,18 @@ export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): Connec
 };
 
 /**
+ * Get coords of rightUp connectors in the matrix
+ *
+ * @param {ConnectorToPlace} connectorToPlace
+ * @returns {MatrixCoord[]} rightUpCoords - coords for where all the rightUp connectors go
+ */
+export const getRightUpCoords = (connectorsToPlace: ConnectorToPlace[]): MatrixCoord[] =>
+    connectorsToPlace
+        .filter(({ connectorName }) => connectorName === ConnectorName.RIGHT_UP)
+        .map(({ ownCoord }) => decodeMatrixCoord(ownCoord));
+
+
+/**
  * Adds vertical line and up arrow to a column in the matrix beginning from startCoord
  *
  * @param {Matrix} matrix
@@ -581,7 +582,8 @@ export const addVertConnectorsToMatrix = (
         const { tileType, encodedOwnCoord, encodedParentNodeCoord } = decodeMatrixEntry(curr);
         const { tileType: aboveTileType } = decodeMatrixEntry(above);
 
-        const entryName = (isPlaceholder(above) || isConnector(aboveTileType)) ? ConnectorName.LINE_VERT : ConnectorName.ARROW_UP;
+        const entryName = (isPlaceholder(above) || isConnector(aboveTileType))
+            ? ConnectorName.LINE_VERT : ConnectorName.ARROW_UP;
 
         const replaceBy = encodeMatrixEntry({
             colType: tileType,
@@ -741,13 +743,13 @@ export const closestCommonDescendantSort = (
 };
 
 /**
- * sort by closest common descendant
+ * sort nodes which share common parent by closest common descendant
  *
- * @param {Array} nextNodes 
+ * @param {Array} nextNodes - the nodes which share common parent
  * @param {Object} WorkflowStepNodes
  * @param {Array<string>} sortedNextNodeIds
  */
-const getSortedNextNodeIds = (
+export const getSortedNextNodeIds = (
     { nextNodes, workflowStepNodes }: {
         nextNodes: NextNode[]; workflowStepNodes: WorkflowStepNodes;
     }

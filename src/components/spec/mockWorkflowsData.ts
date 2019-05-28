@@ -1543,6 +1543,11 @@ export const DD = {
                     primary: false,
                     actionType: "DECISION",
                     nextWorkflowStepUid: "trans2"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans3"
                 }
             ]
         },
@@ -1568,7 +1573,7 @@ export const DD = {
                 {
                     primary: true,
                     actionType: "TRANSLATION_SUBMITTED",
-                    nextWorkflowStepUid: "published"
+                    nextWorkflowStepUid: "review1"
                 }
             ]
         },
@@ -1581,6 +1586,45 @@ export const DD = {
                 {
                     primary: true,
                     actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit3"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans3",
+            workflowStepName: "T3",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "review3"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "review3",
+            workflowStepName: "R3",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 3,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "edit3"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "edit3",
+            workflowStepName: "E3",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 4,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
                     nextWorkflowStepUid: "edit0"
                 }
             ]
@@ -1588,6 +1632,32 @@ export const DD = {
         {
             workflowStepUid: "edit0",
             workflowStepName: "E0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 5,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "review0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "review0",
+            workflowStepName: "R0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 6,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "published"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "review1",
+            workflowStepName: "R0",
             workflowStepType: "POST_TRANSLATION",
             workflowStepOrder: 3,
             actions: [
@@ -1602,7 +1672,7 @@ export const DD = {
             workflowStepUid: "published",
             workflowStepName: "Published",
             workflowStepType: "PUBLISH",
-            workflowStepOrder: 4,
+            workflowStepOrder: 7,
             actions: []
         }
     ]
