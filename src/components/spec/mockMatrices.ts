@@ -85,7 +85,6 @@ export const workflowVisData = {
     }
 };
 
-
 export const matrixAA = [
     ["5890236e433b-auth", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],

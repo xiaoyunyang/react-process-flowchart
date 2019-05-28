@@ -13,7 +13,7 @@ import {
     createWorkflowVisData,
     createCoordPairs,
     createLineHorizes,
-    createConnectorsBetweenNodes,
+    createHorizConnectorsBetweenNodes,
     invertKeyVal,
     addNodeToMatrix,
     downRightDashesToPlace,
@@ -238,11 +238,11 @@ describe("WorkflowVisUtils", () => {
         });
     });
 
-    describe("#createConnectorsBetweenNodes", () => {
+    describe("#createHorizConnectorsBetweenNodes", () => {
         it("creates correct connectors for when parent node is in the same row as child node", () => {
             const parentCoord = { colNum: 0, rowNum: 0 };
             const childCoord = { colNum: 3, rowNum: 0 };
-            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
+            const res = createHorizConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "1,0", parentCoord: "0,0", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "2,0", parentCoord: "1,0", connectorName: ConnectorName.ARROW_RIGHT }
@@ -252,7 +252,7 @@ describe("WorkflowVisUtils", () => {
         it("creates correct connectors for when parent node is above child node", () => {
             const parentCoord = { colNum: 2, rowNum: 0 };
             const childCoord = { colNum: 6, rowNum: 2 };
-            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
+            const res = createHorizConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "2,2", parentCoord: "1,2", connectorName: ConnectorName.DOWN_RIGHT },
                 { ownCoord: "3,2", parentCoord: "2,0", connectorName: ConnectorName.LINE_HORIZ },
@@ -264,7 +264,7 @@ describe("WorkflowVisUtils", () => {
         it("creates correct connectors for when parent node is one row below child node", () => {
             const parentCoord = { colNum: 2, rowNum: 4 };
             const childCoord = { colNum: 5, rowNum: 3 };
-            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
+            const res = createHorizConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "3,4", parentCoord: "2,4", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "4,4", parentCoord: "3,4", connectorName: ConnectorName.LINE_HORIZ },
@@ -275,7 +275,7 @@ describe("WorkflowVisUtils", () => {
         it("creates correct connectors for when parent node is two or more rows below child node", () => {
             const parentCoord = { colNum: 2, rowNum: 4 };
             const childCoord = { colNum: 5, rowNum: 0 };
-            const res = createConnectorsBetweenNodes({ parentCoord, childCoord });
+            const res = createHorizConnectorsBetweenNodes({ parentCoord, childCoord });
             const expected = [
                 { ownCoord: "3,4", parentCoord: "2,4", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "4,4", parentCoord: "3,4", connectorName: ConnectorName.LINE_HORIZ },

@@ -644,26 +644,47 @@ const getRowNum = ({ nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: E
 const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) =>
     getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
 
+/**
+ * Get an array of nodeIds starting from given starting node until the sink node in the given graph
+ * NOTE: An important assumption here is all the descendants of
+ * node only has one child. This is fine for now as we limit ourselves to
+ * only one decision step per visualization.
+ *
+ * @param {string} node - the starting node's id
+ * @param {WorkflowStepNodes} workflowStepNodes - mapping from nodeId to an array children's nodeIds
+ * @param {Object} path - array of nodeIds beggining with given node
+ * @returns {Array<string>} path - array of nodeIds beggining with given node
+ */
+export const getPath = ({
+    node, workflowStepNodes, path
+}: { node: string; workflowStepNodes: WorkflowStepNodes; path: string[] }): string[] => {
+    const children = workflowStepNodes[node].nextNodes.map(n => n.id);
 
-const getPath = ({ node, graph }: { node: string; graph: PolymorphDict }) => {
-    // An important assumption here is all the descendants of
-    // node only has one child
-    let path = [node];
-    let children = graph[node];
-    while (children.length > 0) {
-        const child = children[0];
-        path = path.concat(child);
-        children = graph[child];
+    if (children.length === 0) {
+        return path;
     }
-    return path;
+    const child = children[0];
+    return getPath({
+        node: child,
+        workflowStepNodes,
+        path: path.concat(child)
+    });
 };
 
-// Find closest point of convergence
-const findClosestCommonDescendant = (
+/**
+ * Find path with the closest common descendant to to the currPath
+ * common descendant marks the point of convergence into the currPath
+ *
+ * @param {Array<string>} currPath
+ * @param {Array<string>} nodesToSort - nodeIds of nodes left to sort
+ * @param {Object} paths - mapping from nodeId of members of nodeToSort to their paths in the graph
+ * @returns {string} nodeToAdd
+ */
+export const findNodeWithClosestCommonDescendant = (
     { currPath, nodesToSort, paths }: {
         currPath: string[]; nodesToSort: string[]; paths: PolymorphDict;
     }
-) => {
+): string => {
     for (let i = 1; i < currPath.length; i += 1) {
         const unsortedCandidatePaths = nodesToSort.map(node => ({
             head: node,
@@ -680,47 +701,43 @@ const findClosestCommonDescendant = (
 
         if (candidatePaths.length > 0) {
             const nodeToAdd = candidatePaths[0].head;
-            const newNodesToSort = nodesToSort.filter(
-                node => node !== nodeToAdd
-            );
-            return { nodeToAdd, newNodesToSort };
+            return nodeToAdd;
         }
     }
     // TODO: Do we ever expect to get here?
-    return {
-        nodeToAdd: "",
-        newNodesToSort: nodesToSort
-    };
+    // We don't expect to ever get here but in case we do, we want to reduce the length of
+    // nodesToSort to prevent infinite recursion.
+    return nodesToSort[0];
 };
 
-const closestCommonDescendantSort = (
-    { primaryNode, nodes, graph }: { primaryNode: string; nodes: string[]; graph: PolymorphDict }
-) => {
-    // Step 1:
-    // create decendent arrays for all the nodes
-    const paths: PolymorphDict = {};
-    const pathsArr = nodes.map(node => getPath({ node, graph }));
-    pathsArr.forEach((path) => {
-        const head = path[0];
-        paths[head] = path;
-    });
-
-    let sortedNodes = [primaryNode];
-    let currPath = paths[primaryNode];
-    let nodesToSort = nodes.filter(n => n !== primaryNode);
-
-    while (nodesToSort.length > 0) {
-        const {
-            nodeToAdd, newNodesToSort
-        } = findClosestCommonDescendant({ currPath, nodesToSort, paths });
-
-        sortedNodes = sortedNodes.concat(nodeToAdd);
-        nodesToSort = newNodesToSort;
-
-        currPath = paths[nodeToAdd];
+/**
+ * Given a collection of nodes to be sorted and a initial primary node, recursively find the
+ * next node based on closest point of convergence of the path beginning from the node into
+ * the primary node. Designate the next node and as the new primary node and remove the
+ * next node from the collection of nodes to be sorted.
+ *
+ * @param {string} primaryNode
+ * @param {Array<string>} nodes
+ * @param {Object} graph
+ * @param {Array<string>} sortedNodes - includes the primaryNode as head of array
+ */
+export const closestCommonDescendantSort = (
+    { currPath, sortedNodes, nodesToSort, paths }: {
+        currPath: string[]; sortedNodes: string[]; nodesToSort: string[]; paths: PolymorphDict;
+    }
+): string[] => {
+    if (nodesToSort.length === 0) {
+        return sortedNodes;
     }
 
-    return sortedNodes;
+    const nodeToAdd = findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths });
+
+    return closestCommonDescendantSort({
+        currPath: paths[nodeToAdd],
+        sortedNodes: sortedNodes.concat(nodeToAdd),
+        nodesToSort: nodesToSort.filter(node => node !== nodeToAdd),
+        paths
+    });
 };
 
 /**
@@ -735,27 +752,31 @@ const getSortedNextNodeIds = (
         nextNodes: NextNode[]; workflowStepNodes: WorkflowStepNodes;
     }
 ): string[] => {
-    if (nextNodes.length < 2) return nextNodes.map(n => n.id);
+    if (nextNodes.length < 2) return nextNodes.map(node => node.id);
     const primaryNode = nextNodes[
         nextNodes.findIndex(nextNode => nextNode.primary)
     ].id;
 
     const nodes: string[] = nextNodes.map(nextNode => nextNode.id);
 
-    const graph: PolymorphDict = {};
+    const pathsArr = nodes.map(node => getPath({
+        node,
+        workflowStepNodes,
+        path: [node]
+    }));
 
-    const nodeIds = Object.keys(workflowStepNodes);
-    for (let i = 0; i < nodeIds.length; i += 1) {
-        const nodeId = nodeIds[i];
-        graph[nodeId] = workflowStepNodes[nodeId].nextNodes.map(n => n.id);
-    }
+    const paths: PolymorphDict = {};
+    pathsArr.forEach((path) => {
+        const head = path[0];
+        paths[head] = path;
+    });
 
-    // const { id, primary } = nextNodes[i];
-    console.log("FOOO", nextNodes);
-    console.log("primaryNode:", primaryNode);
-    console.log("nodes", nodes);
-    console.log("graph", JSON.stringify(graph, null, 2));
-    return closestCommonDescendantSort({ primaryNode, nodes, graph });
+    return closestCommonDescendantSort({
+        currPath: paths[primaryNode],
+        sortedNodes: [primaryNode],
+        nodesToSort: nodes.filter(node => node !== primaryNode),
+        paths
+    });
 };
 
 /**
@@ -785,7 +806,6 @@ export const populateMatrix = (
     const { firstStep, workflowStepNodes } = workflowVisData;
 
     const toExplore: MinHeap = new MinHeap();
-    // NOTE: Priority is between 0 and 1
     toExplore.insert({ val: firstStep, priority: 0 });
 
     const explored: ExistentialDict = {};
