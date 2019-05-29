@@ -200,7 +200,7 @@ margin-top and height attributes to all three connector classes
   align-self: auto;
   border-bottom: var(--connector-border);
   position: relative;
-  height: calc(var(--box-height) * 0.53);
+  height: calc(var(--box-height) * 0.529);
 }
 
 .lineLong {
@@ -327,9 +327,8 @@ margin-top and height attributes to all three connector classes
 }
 
 .connectorContainerDiamond .downRight {
-  height: calc(var(--box-height) * 1.35);
-  margin-top: 0px;
-  top: calc(var(--base-unit) * -10); /* Fudge factor */
+  height: calc(var(--box-height) * 1.318);
+  top: calc(var(--box-height) * -0.698); /* Fudge factor */
   left: calc(var(--diamond-container-width) * 0.55);
   position: relative;
   z-index: -1;
