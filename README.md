@@ -79,7 +79,21 @@ The smaller the priority, the earlier we place the node into the matrix.
 How do we determine `childOrder`? Given a `children` array. There are two cases:
 
 1. When the node is not a decision step, it has exactly one child. so the `childOrder` is `0`.
-2. When the node is a decision step (fork step), it can have multiple children. Each child has an attribute called `primary`, which indicates if it's the master branch and as such, should be place at the very top of the fork (there can only be one `primary` branch per fork). When there are multiple children. This is the case when the node is a decision step. The `childOrder` is `0.x` where `x` is the index of the child node in a sorted `children` array. To sort the `children` array, we look at the graph backward beginning from the sink node where all the branches eventually merge into and creates a tree  in which the sink node is the root. Then we look backwards from the sink node create a tree until all our leaves are nodes in our `children` array. Using the tree and the `primary` attributes, we start sorting. We begin with the node that is the`primary` node and place it at the front of the array. Then we find the next leaf node that shares the closest ancestor as our `primary` node.
+2. When the node is a decision step (fork step), it can have multiple children. Each child has an attribute called `primary`, which indicates if it's the master branch and as such, should be place at the very top of the fork (there can only be one `primary` branch per fork). When there are multiple children. This is the case when the node is a decision step. The `childOrder` is `0.x` where `x` is the index of the child node in a sorted `children` array. To sort the `children` array:
+    - We are given an array of children. We only perform the sort when there are 2 or more children and only one of the children can be primary.
+        > Important Assumptions: The graph begins with a single source node and ends with a single sink node. All branches merge back into the primary branch, so by induction, all branches share a single sink node.
+    - We create paths for each node in the `children` array. A `path` is defined as a sequence of nodes to reach the sink node in the graph beginning with the child node. We set the path containing the primary child node to be `currPrimaryPath`.
+    - We keep track of the other child nodes which we want to sort in an array called `nodesToSort`. We keep track of the sorted child nodes in `sortedNodes`. We initialize:
+        - `nodesToSort` contains all child nodes except fo the the primary child node.
+        - `sortedNodes` contains only the primary child node.
+    - We start looking at the nodes (i.e., descendants) in the `currPrimaryPath` from left to right. For every descendant in `currPrimaryPath`, we determine if any of the paths corresponding to child nodes in `nodesToSort` shares that descendant and if so, where in the path it is encountered.
+        - If multiple paths contain the descendant, the winner is the one which we encounter the descendant earliest in the path. Once we find the winner from the `nodesToSort`, we add that child node to the end of `sortedNodes`, remove that child node from `nodesToSort`, and make that child node's path the new `currPrimaryPath`.
+        - If no paths contains the descendant, we move on to the next descendant until we reach the end of `currPrimaryPath`. At that point, we may choose any child node `nodesToSort` as the winner.
+    - Then, we recursively update `currPrimaryPath`, add next child nodes to `sortedNodes`, and remove child nodes from `nodesToSort` until we have nothing left in `nodesToSort`. 
+
+    Aside: Can we use Dijkstra's?
+    - Yes, O(N * M)
+    - Suppose we build the graph backward beginning from the sink node where all the branches eventually merge into and creates a tree in which the sink node is the root and all our leaves are nodes in our `children` array. Then we look at the descendants of the primary path from left to right. For each descendant, we traverse the tree starting from the descendant until we reach the leaf nodes and label the leaf nodes a number designating the number of hops from the descendant node. Then we get back the subset of leaf nodes branching from that descendant sorted by their distance from the descendant node (in ascending order) and append it to our result. After that, we look at the next descendant of the primary path until we reach the sink node. 
 
 ### Column Number
 

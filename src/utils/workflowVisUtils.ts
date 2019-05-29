@@ -720,28 +720,29 @@ export const findNodeWithClosestCommonDescendant = (
  * collection of nodes to be sorted.
  *
  * @param {Array<string>} currPrimaryPath
- * @param {Array<string>} sortedNodeIds
+ * @param {Array<string>} sortedNodes
  * @param {Array<string>} nodesToSort
  * @param {Object} paths
- * @param {Array<string>} sortedNodeIds - includes the primaryNode as head of array
+ * @param {Array<string>} sortedNodes - includes the primaryNode as head of array
+ * @returns {Array<string>} sortedNodes - updated sortedNodes
  */
 export const closestCommonDescendantSort = (
-    { currPrimaryPath, sortedNodeIds, nodesToSort, paths }: {
+    { currPrimaryPath, sortedNodes, nodesToSort, paths }: {
         currPrimaryPath: string[];
-        sortedNodeIds: string[];
+        sortedNodes: string[];
         nodesToSort: string[];
         paths: PolymorphDict;
     }
 ): string[] => {
     if (nodesToSort.length === 0) {
-        return sortedNodeIds;
+        return sortedNodes;
     }
 
     const nodeToAdd = findNodeWithClosestCommonDescendant({ currPrimaryPath, nodesToSort, paths });
 
     return closestCommonDescendantSort({
         currPrimaryPath: paths[nodeToAdd],
-        sortedNodeIds: sortedNodeIds.concat(nodeToAdd),
+        sortedNodes: sortedNodes.concat(nodeToAdd),
         nodesToSort: nodesToSort.filter(node => node !== nodeToAdd),
         paths
     });
@@ -779,7 +780,7 @@ export const getSortedNextNodeIds = (
 
     return closestCommonDescendantSort({
         currPrimaryPath: paths[primaryNodeId],
-        sortedNodeIds: [primaryNodeId],
+        sortedNodes: [primaryNodeId],
         nodesToSort: nodes.filter(node => node !== primaryNodeId),
         paths
     });

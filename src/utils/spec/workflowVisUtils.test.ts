@@ -434,7 +434,7 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "c2", "a1", "a2", "a3"]
             };
             expect(
-                closestCommonDescendantSort({ currPrimaryPath, sortedNodeIds: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({ currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths })
             ).toEqual(["a0", "d0", "c0", "b0"]);
         });
         test("parallel paths", () => {
@@ -444,7 +444,7 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "d1", "d2", "d3"]
             };
             expect(
-                closestCommonDescendantSort({ currPrimaryPath, sortedNodeIds: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({ currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths })
             ).toEqual(["a0", "b0", "c0", "d0"]);
         });
     });
