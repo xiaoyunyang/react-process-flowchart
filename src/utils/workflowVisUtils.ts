@@ -20,7 +20,7 @@ const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
  * Determines if a tileType is a member of ConnectorTypeT
  *
  * @param {GenericTileType} tileType
- * @return {boolean} true if tileType is a member of ConnectorTypeT
+ * @returns {boolean} true if tileType is a member of ConnectorTypeT
  */
 export const isConnector = (tileType: GenericTileType): tileType is ConnectorTypeT =>
     Object.values(ConnectorTypeT).includes(tileType);
@@ -109,7 +109,7 @@ export const isPlaceholder = (matrixEntry: string): boolean => {
 /**
  * Determines the rowNum of the first empty slot in a column
  * @param {string[]} col
- * @return {number} rowNum
+ * @returns {number} rowNum
  */
 export const firstUnoccupiedInCol = (col: string[]): number =>
     col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
@@ -117,7 +117,7 @@ export const firstUnoccupiedInCol = (col: string[]): number =>
 /**
  * Determines the rowNum of the last non-empty slot in a column that's a node
  * @param {string[]} col
- * @return {number} rowNum
+ * @returns {number} rowNum
  */
 export const lastNodeInCol = (col: string[]): number => {
     for (let i = col.length - 1; i >= 0; i -= 1) {
@@ -132,7 +132,7 @@ export const lastNodeInCol = (col: string[]): number => {
 /**
  * Determines the rowNum of the last non-empty slot in a column
  * @param {string[]} col
- * @return {number} rowNum
+ * @returns {number} rowNum
  */
 export const lastOccupiedInCol = (col: string[]): number => {
     for (let i = col.length - 1; i >= 0; i -= 1) {
@@ -665,7 +665,7 @@ export const getPath = ({
     if (children.length === 0) {
         return path;
     }
-    const child = children[0];
+    const [child] = children;
     return getPath({
         node: child,
         workflowStepNodes,
@@ -753,9 +753,9 @@ export const closestCommonDescendantSort = (
  *
  * @param {Array<{id, primary}>} nextNodes - the nodes which share common parent
  * @param {Object} WorkflowStepNodes
- * @param {Array<string>} sortedNextNodeIds
+ * @returns {Array<string>} sortedNextNodes
  */
-export const getSortedNextNodeIds = (
+export const getSortedNextNodes = (
     { nextNodes, workflowStepNodes }: {
         nextNodes: NextNode[]; workflowStepNodes: WorkflowStepNodes;
     }
@@ -766,17 +766,16 @@ export const getSortedNextNodeIds = (
 
     const nodes: string[] = nextNodes.map(nextNode => nextNode.id);
 
-    const pathsArr = nodes.map(node => getPath({
-        node,
-        workflowStepNodes,
-        path: [node]
-    }));
-
-    const paths: PolymorphDict = {};
-    pathsArr.forEach((path) => {
-        const head = path[0];
-        paths[head] = path;
-    });
+    const paths: PolymorphDict = nodes.reduce((acc: PolymorphDict, node: string) => (
+        {
+            ...acc,
+            [node]: getPath({
+                node,
+                workflowStepNodes,
+                path: [node]
+            })
+        }
+    ), {});
 
     return closestCommonDescendantSort({
         currPrimaryPath: paths[primaryNodeId],
@@ -869,10 +868,10 @@ export const populateMatrix = (
         // TODO: nextNodes - if we are currently looking at a decision step,
         // there will be multiple steps. we want to sort the nextNodes here or sort it
         // in createWorkflowVisData to explore it in this order
-        const sortedNextNodeIds = getSortedNextNodeIds({ nextNodes, workflowStepNodes });
+        const sortedNextNodes = getSortedNextNodes({ nextNodes, workflowStepNodes });
 
-        for (let i = 0; i < sortedNextNodeIds.length; i += 1) {
-            const nextStepId = sortedNextNodeIds[i];
+        for (let i = 0; i < sortedNextNodes.length; i += 1) {
+            const nextStepId = sortedNextNodes[i];
 
 
             // Update nodeIdToParentCoords here using nodeIdToCoord.

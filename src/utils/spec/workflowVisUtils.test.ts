@@ -22,7 +22,7 @@ import {
     getPath,
     findNodeWithClosestCommonDescendant,
     closestCommonDescendantSort,
-    getSortedNextNodeIds,
+    getSortedNextNodes,
     populateMatrix,
     addConnectorToMatrix,
     findNextNode
@@ -37,7 +37,6 @@ import { AA, BA, DA, DB, DC, DD } from "../../components/spec/mockWorkflowsData"
 import { matrixDA, matrixDB, matrixDC, matrixDD } from "../../components/spec/mockMatrices";
 
 describe("WorkflowVisUtils", () => {
-
     describe("#isConnector", () => {
         test.each(
             Object.values(ConnectorTypeT)
@@ -449,7 +448,7 @@ describe("WorkflowVisUtils", () => {
         });
     });
 
-    describe("#getSortedNextNodeIds", () => {
+    describe("#getSortedNextNodes", () => {
         const workflowStepNodes = {
             a0: { nextNodes: [{ id: "a1", primary: true }] },
             a1: { nextNodes: [{ id: "a2", primary: true }] },
@@ -465,9 +464,9 @@ describe("WorkflowVisUtils", () => {
 
         test("Only one nextNode", () => {
             expect(
-                getSortedNextNodeIds({ nextNodes: [{ id: "a", primary: true }], workflowStepNodes })
+                getSortedNextNodes({ nextNodes: [{ id: "a", primary: true }], workflowStepNodes })
             ).toEqual(["a"]);
-            expect(getSortedNextNodeIds({ nextNodes: [], workflowStepNodes })).toEqual([]);
+            expect(getSortedNextNodes({ nextNodes: [], workflowStepNodes })).toEqual([]);
         });
         test("Multiple nextNodes", () => {
             const nextNodes = [
@@ -477,7 +476,7 @@ describe("WorkflowVisUtils", () => {
                 { id: "d0", primary: false },
             ];
             expect(
-                getSortedNextNodeIds({ nextNodes, workflowStepNodes })
+                getSortedNextNodes({ nextNodes, workflowStepNodes })
             ).toEqual(["a0", "d0", "c0", "b0"]);
         });
     });
