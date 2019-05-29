@@ -570,11 +570,11 @@ export const addVertConnectorsToMatrix = (
     { matrix, startCoord }: { matrix: Matrix; startCoord: MatrixCoord }
 ) => {
     const { colNum, rowNum } = startCoord;
-    const col = clone(matrix[colNum]); // we elems of col in the loop
+    const col = clone(matrix[colNum]);
 
-    for (let i = rowNum - 1; i >= 1; i -= 1) {
-        const curr = col[i];
-        const above = col[i - 1];
+    for (let currentRowIndex = rowNum - 1; currentRowIndex >= 1; currentRowIndex -= 1) {
+        const curr = col[currentRowIndex];
+        const above = col[currentRowIndex - 1];
         if (!isPlaceholder(curr)) {
             break;
         }
@@ -591,7 +591,7 @@ export const addVertConnectorsToMatrix = (
             encodedOwnCoord: encodedOwnCoord as string,
             encodedParentCoord: encodedParentNodeCoord as string
         });
-        col[i] = replaceBy;
+        col[currentRowIndex] = replaceBy;
     }
 
     // mutate matrix
@@ -654,8 +654,8 @@ const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) 
  *
  * @param {string} node - the starting node's id
  * @param {WorkflowStepNodes} workflowStepNodes - mapping from nodeId to an array children's nodeIds
- * @param {Object} path - array of nodeIds beggining with given node
- * @returns {Array<string>} path - array of nodeIds beggining with given node
+ * @param {Array<string>} path - array of nodeIds beginning with given node
+ * @returns {Array<string>} path - array of nodeIds beginning with given node
  */
 export const getPath = ({
     node, workflowStepNodes, path
@@ -674,23 +674,23 @@ export const getPath = ({
 };
 
 /**
- * Find path with the closest common descendant to to the currPath
- * common descendant marks the point of convergence into the currPath
+ * Find path with the closest common descendant to to the currPrimaryPath
+ * common descendant marks the point of convergence into the currPrimaryPath
  *
- * @param {Array<string>} currPath
+ * @param {Array<string>} currPrimaryPath
  * @param {Array<string>} nodesToSort - nodeIds of nodes left to sort
  * @param {Object} paths - mapping from nodeId of members of nodeToSort to their paths in the graph
  * @returns {string} nodeToAdd
  */
 export const findNodeWithClosestCommonDescendant = (
-    { currPath, nodesToSort, paths }: {
-        currPath: string[]; nodesToSort: string[]; paths: PolymorphDict;
+    { currPrimaryPath, nodesToSort, paths }: {
+        currPrimaryPath: string[]; nodesToSort: string[]; paths: PolymorphDict;
     }
 ): string => {
-    for (let i = 1; i < currPath.length; i += 1) {
+    for (let i = 1; i < currPrimaryPath.length; i += 1) {
         const unsortedCandidatePaths = nodesToSort.map(node => ({
             head: node,
-            commonAncestorIndex: paths[node].indexOf(currPath[i])
+            commonAncestorIndex: paths[node].indexOf(currPrimaryPath[i])
         })
         ).filter(
             ({ commonAncestorIndex }) => (commonAncestorIndex > 0)
@@ -713,30 +713,35 @@ export const findNodeWithClosestCommonDescendant = (
 };
 
 /**
- * Given a collection of nodes to be sorted and a initial primary node, recursively find the
- * next node based on closest point of convergence of the path beginning from the node into
- * the primary node. Designate the next node and as the new primary node and remove the
- * next node from the collection of nodes to be sorted.
+ * Given a collection of nodes to be sorted, paths drawn from these nodes until the sink node of
+ * the graph, and an initial primaryPath, recursively find the next primaryPath based on closest
+ * point of convergence of the path beginning from the node into the currPrimaryPath.
+ * Designate the next node and as the new primary node and remove the next node from the
+ * collection of nodes to be sorted.
  *
- * @param {string} primaryNode
- * @param {Array<string>} nodes
- * @param {Object} graph
- * @param {Array<string>} sortedNodes - includes the primaryNode as head of array
+ * @param {Array<string>} currPrimaryPath
+ * @param {Array<string>} sortedNodeIds
+ * @param {Array<string>} nodesToSort
+ * @param {Object} paths
+ * @param {Array<string>} sortedNodeIds - includes the primaryNode as head of array
  */
 export const closestCommonDescendantSort = (
-    { currPath, sortedNodes, nodesToSort, paths }: {
-        currPath: string[]; sortedNodes: string[]; nodesToSort: string[]; paths: PolymorphDict;
+    { currPrimaryPath, sortedNodeIds, nodesToSort, paths }: {
+        currPrimaryPath: string[];
+        sortedNodeIds: string[];
+        nodesToSort: string[];
+        paths: PolymorphDict;
     }
 ): string[] => {
     if (nodesToSort.length === 0) {
-        return sortedNodes;
+        return sortedNodeIds;
     }
 
-    const nodeToAdd = findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths });
+    const nodeToAdd = findNodeWithClosestCommonDescendant({ currPrimaryPath, nodesToSort, paths });
 
     return closestCommonDescendantSort({
-        currPath: paths[nodeToAdd],
-        sortedNodes: sortedNodes.concat(nodeToAdd),
+        currPrimaryPath: paths[nodeToAdd],
+        sortedNodeIds: sortedNodeIds.concat(nodeToAdd),
         nodesToSort: nodesToSort.filter(node => node !== nodeToAdd),
         paths
     });
@@ -745,7 +750,7 @@ export const closestCommonDescendantSort = (
 /**
  * sort nodes which share common parent by closest common descendant
  *
- * @param {Array} nextNodes - the nodes which share common parent
+ * @param {Array<{id, primary}>} nextNodes - the nodes which share common parent
  * @param {Object} WorkflowStepNodes
  * @param {Array<string>} sortedNextNodeIds
  */
@@ -755,9 +760,8 @@ export const getSortedNextNodeIds = (
     }
 ): string[] => {
     if (nextNodes.length < 2) return nextNodes.map(node => node.id);
-    const primaryNode = nextNodes[
-        nextNodes.findIndex(nextNode => nextNode.primary)
-    ].id;
+    const primaryNode = nextNodes.find((nextNode: NextNode) => nextNode.primary);
+    const primaryNodeId: string = primaryNode ? primaryNode.id : nextNodes[0].id;
 
     const nodes: string[] = nextNodes.map(nextNode => nextNode.id);
 
@@ -774,9 +778,9 @@ export const getSortedNextNodeIds = (
     });
 
     return closestCommonDescendantSort({
-        currPath: paths[primaryNode],
-        sortedNodes: [primaryNode],
-        nodesToSort: nodes.filter(node => node !== primaryNode),
+        currPrimaryPath: paths[primaryNodeId],
+        sortedNodeIds: [primaryNodeId],
+        nodesToSort: nodes.filter(node => node !== primaryNodeId),
         paths
     });
 };

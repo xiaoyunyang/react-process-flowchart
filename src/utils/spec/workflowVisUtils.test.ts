@@ -34,6 +34,7 @@ import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Mocks
 import { AA, BA, DA, DB, DC, DD } from "../../components/spec/mockWorkflowsData";
+import { matrixDA, matrixDB, matrixDC, matrixDD } from "../../components/spec/mockMatrices";
 
 describe("WorkflowVisUtils", () => {
 
@@ -403,7 +404,7 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#findNodeWithClosestCommonDescendant", () => {
-        const currPath = ["a0", "a1", "a2", "a3"];
+        const currPrimaryPath = ["a0", "a1", "a2", "a3"];
         const nodesToSort = ["b0", "c0", "d0"];
         test("converging paths", () => {
             const paths = {
@@ -411,7 +412,7 @@ describe("WorkflowVisUtils", () => {
                 c0: ["c0", "d2"],
                 d0: ["d0", "d1", "d2", "a1"]
             };
-            expect(findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths })).toBe("d0");
+            expect(findNodeWithClosestCommonDescendant({ currPrimaryPath, nodesToSort, paths })).toBe("d0");
         });
         test("parallel paths", () => {
             const paths = {
@@ -419,12 +420,12 @@ describe("WorkflowVisUtils", () => {
                 c0: ["c0", "c1"],
                 d0: ["d0", "d1", "d2", "d3"]
             };
-            expect(findNodeWithClosestCommonDescendant({ currPath, nodesToSort, paths })).toBe("b0");
+            expect(findNodeWithClosestCommonDescendant({ currPrimaryPath, nodesToSort, paths })).toBe("b0");
         });
     });
 
     describe("#closestCommonDescendantSort", () => {
-        const currPath = ["a0", "a1", "a2", "a3"];
+        const currPrimaryPath = ["a0", "a1", "a2", "a3"];
         const nodesToSort = ["b0", "c0", "d0"];
         test("converging paths", () => {
             const paths = {
@@ -433,7 +434,7 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "c2", "a1", "a2", "a3"]
             };
             expect(
-                closestCommonDescendantSort({ currPath, sortedNodes: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({ currPrimaryPath, sortedNodeIds: ["a0"], nodesToSort, paths })
             ).toEqual(["a0", "d0", "c0", "b0"]);
         });
         test("parallel paths", () => {
@@ -443,7 +444,7 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "d1", "d2", "d3"]
             };
             expect(
-                closestCommonDescendantSort({ currPath, sortedNodes: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({ currPrimaryPath, sortedNodeIds: ["a0"], nodesToSort, paths })
             ).toEqual(["a0", "b0", "c0", "d0"]);
         });
     });
@@ -509,7 +510,7 @@ describe("WorkflowVisUtils", () => {
     });
 
     describe("#populateMatrix", () => {
-        test("Linear workflow case", () => {
+        test("Linear workflow", () => {
             const { workflowSteps, workflowUid } = AA;
             const {
                 workflowVisData, initialMatrix
@@ -595,7 +596,7 @@ describe("WorkflowVisUtils", () => {
                 nodeIdToParentNodeIds: expectedNodeIdToParentNodeIds
             });
         });
-        describe("complex workflow with sorting", () => {
+        describe("Complex workflow with sorting", () => {
             test("DA", () => {
                 const { workflowSteps, workflowUid } = DA;
                 const {
@@ -603,87 +604,7 @@ describe("WorkflowVisUtils", () => {
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
                 const decisionStepCols: number[] = [2];
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
-
-                const expectedMatrix = [
-                    [
-                        "da-auth",
-                        "box|empty|0,1",
-                        "box|empty|0,2",
-                        "box|empty|0,3",
-                        "box|empty|0,4"
-                    ],
-                    [
-                        "standard|arrowRight|1,0|0,0",
-                        "standard|empty|1,1",
-                        "standard|empty|1,2",
-                        "standard|empty|1,3",
-                        "standard|empty|1,4"
-                    ],
-                    [
-                        "da-d1",
-                        "diamond|downRight|2,1",
-                        "diamond|downRight|2,2",
-                        "diamond|downRight|2,3",
-                        "diamond|downRightDash|2,4|2,0"
-                    ],
-                    [
-                        "standard|arrowRight|3,0|2,0",
-                        "standard|arrowRight|3,1|2,0",
-                        "standard|arrowRight|3,2|2,0",
-                        "standard|arrowRight|3,3|2,0",
-                        "standard|empty|3,4"
-                    ],
-                    [
-                        "pretrans1",
-                        "trans4",
-                        "trans2",
-                        "trans3",
-                        "box|empty|4,4"
-                    ],
-                    [
-                        "standard|arrowRight|5,0|4,0",
-                        "standard|lineHoriz|5,1|4,1",
-                        "standard|lineHoriz|5,2|4,2",
-                        "standard|lineHoriz|5,3|4,3",
-                        "standard|empty|5,4"
-                    ],
-                    [
-                        "trans1",
-                        "box|rightUpArrow|6,1",
-                        "box|lineHoriz|6,2",
-                        "box|lineHoriz|6,3",
-                        "box|empty|6,4"
-                    ],
-                    [
-                        "standard|arrowRight|7,0|6,0",
-                        "standard|empty|7,1",
-                        "standard|lineHoriz|7,2",
-                        "standard|lineHoriz|7,3",
-                        "standard|empty|7,4"
-                    ],
-                    [
-                        "review1",
-                        "box|arrowUp|8,1",
-                        "box|rightUp|8,2",
-                        "box|lineHoriz|8,3",
-                        "box|empty|8,4"
-                    ],
-                    [
-                        "standard|arrowRight|9,0|8,0",
-                        "standard|empty|9,1",
-                        "standard|empty|9,2",
-                        "standard|lineHoriz|9,3",
-                        "standard|empty|9,4"
-                    ],
-                    [
-                        "published",
-                        "box|arrowUp|10,1",
-                        "box|lineVert|10,2",
-                        "box|rightUp|10,3",
-                        "box|empty|10,4"
-                    ]
-                ];
-
+                const expectedMatrix = matrixDA;
                 const expectedNodeIdToCoord = {
                     "da-auth": "0,0",
                     "da-d1": "2,0",
@@ -739,98 +660,7 @@ describe("WorkflowVisUtils", () => {
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
                 const decisionStepCols: number[] = [2];
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
-
-                const expectedMatrix = [
-                    [
-                        "db-auth",
-                        "box|empty|0,1",
-                        "box|empty|0,2",
-                        "box|empty|0,3",
-                        "box|empty|0,4",
-                        "box|empty|0,5"
-                    ],
-                    [
-                        "standard|arrowRight|1,0|0,0",
-                        "standard|empty|1,1",
-                        "standard|empty|1,2",
-                        "standard|empty|1,3",
-                        "standard|empty|1,4",
-                        "standard|empty|1,5"
-                    ],
-                    [
-                        "db-d1",
-                        "diamond|downRight|2,1",
-                        "diamond|downRight|2,2",
-                        "diamond|downRight|2,3",
-                        "diamond|downRight|2,4",
-                        "diamond|downRightDash|2,5|2,0"
-                    ],
-                    [
-                        "standard|arrowRight|3,0|2,0",
-                        "standard|arrowRight|3,1|2,0",
-                        "standard|arrowRight|3,2|2,0",
-                        "standard|arrowRight|3,3|2,0",
-                        "standard|arrowRight|3,4|2,0",
-                        "standard|empty|3,5"
-                    ],
-                    [
-                        "trans0",
-                        "trans2",
-                        "trans4",
-                        "trans1",
-                        "trans3",
-                        "box|empty|4,5"
-                    ],
-                    [
-                        "standard|lineHoriz|5,0|4,0",
-                        "standard|arrowRight|5,1|4,1",
-                        "standard|lineHoriz|5,2|4,2",
-                        "standard|arrowRight|5,3|4,3",
-                        "standard|lineHoriz|5,4|4,4",
-                        "standard|empty|5,5"
-                    ],
-                    [
-                        "box|lineHoriz|6,0",
-                        "review2",
-                        "box|rightUpArrow|6,2",
-                        "edit1",
-                        "box|rightUpArrow|6,4",
-                        "box|empty|6,5"
-                    ],
-                    [
-                        "standard|arrowRight|7,0",
-                        "standard|lineHoriz|7,1|6,1",
-                        "standard|empty|7,2",
-                        "standard|lineHoriz|7,3|6,3",
-                        "standard|empty|7,4",
-                        "standard|empty|7,5"
-                    ],
-                    [
-                        "review0",
-                        "box|rightUpArrow|8,1",
-                        "box|empty|8,2",
-                        "box|lineHoriz|8,3",
-                        "box|empty|8,4",
-                        "box|empty|8,5"
-                    ],
-                    [
-                        "standard|arrowRight|9,0|8,0",
-                        "standard|empty|9,1",
-                        "standard|empty|9,2",
-                        "standard|lineHoriz|9,3",
-                        "standard|empty|9,4",
-                        "standard|empty|9,5"
-                    ],
-                    [
-                        "published",
-                        "box|arrowUp|10,1",
-                        "box|lineVert|10,2",
-                        "box|rightUp|10,3",
-                        "box|empty|10,4",
-                        "box|empty|10,5"
-                    ]
-                ];
-
+                const expectedMatrix = matrixDB;
                 const expectedNodeIdToCoord = {
                     "db-auth": "0,0",
                     "db-d1": "2,0",
@@ -895,82 +725,7 @@ describe("WorkflowVisUtils", () => {
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
                 const decisionStepCols: number[] = [2];
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
-
-                const expectedMatrix = [
-                    [
-                        "dc-auth",
-                        "box|empty|0,1",
-                        "box|empty|0,2",
-                        "box|empty|0,3",
-                        "box|empty|0,4",
-                        "box|empty|0,5"
-                    ],
-                    [
-                        "standard|arrowRight|1,0|0,0",
-                        "standard|empty|1,1",
-                        "standard|empty|1,2",
-                        "standard|empty|1,3",
-                        "standard|empty|1,4",
-                        "standard|empty|1,5"
-                    ],
-                    [
-                        "dc-d1",
-                        "diamond|downRight|2,1",
-                        "diamond|downRight|2,2",
-                        "diamond|downRight|2,3",
-                        "diamond|downRight|2,4",
-                        "diamond|downRightDash|2,5|2,0"
-                    ],
-                    [
-                        "standard|arrowRight|3,0|2,0",
-                        "standard|arrowRight|3,1|2,0",
-                        "standard|arrowRight|3,2|2,0",
-                        "standard|arrowRight|3,3|2,0",
-                        "standard|arrowRight|3,4|2,0",
-                        "standard|empty|3,5"
-                    ],
-                    [
-                        "trans0",
-                        "trans1",
-                        "trans3",
-                        "trans2",
-                        "trans4",
-                        "box|empty|4,5"
-                    ],
-                    [
-                        "standard|lineHoriz|5,0|4,0",
-                        "standard|arrowRight|5,1|4,1",
-                        "standard|lineHoriz|5,2|4,2",
-                        "standard|arrowRight|5,3|4,3",
-                        "standard|lineHoriz|5,4|4,4",
-                        "standard|empty|5,5"
-                    ],
-                    [
-                        "box|lineHoriz|6,0",
-                        "edit1",
-                        "box|rightUpArrow|6,2",
-                        "review2",
-                        "box|rightUpArrow|6,4",
-                        "box|empty|6,5"
-                    ],
-                    [
-                        "standard|arrowRight|7,0",
-                        "standard|lineHoriz|7,1|6,1",
-                        "standard|empty|7,2",
-                        "standard|lineHoriz|7,3|6,3",
-                        "standard|empty|7,4",
-                        "standard|empty|7,5"
-                    ],
-                    [
-                        "published",
-                        "box|rightUpArrow|8,1",
-                        "box|lineVert|8,2",
-                        "box|rightUp|8,3",
-                        "box|empty|8,4",
-                        "box|empty|8,5"
-                    ]
-                ];
-
+                const expectedMatrix = matrixDC;
                 const expectedNodeIdToCoord = {
                     "dc-auth": "0,0",
                     "dc-d1": "2,0",
@@ -1031,115 +786,7 @@ describe("WorkflowVisUtils", () => {
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
                 const decisionStepCols: number[] = [2];
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
-
-                const expectedMatrix = [
-                    [
-                        "dd-auth",
-                        "box|empty|0,1",
-                        "box|empty|0,2",
-                        "box|empty|0,3",
-                        "box|empty|0,4"
-                    ],
-                    [
-                        "standard|arrowRight|1,0|0,0",
-                        "standard|empty|1,1",
-                        "standard|empty|1,2",
-                        "standard|empty|1,3",
-                        "standard|empty|1,4"
-                    ],
-                    [
-                        "dd-d1",
-                        "diamond|downRight|2,1",
-                        "diamond|downRight|2,2",
-                        "diamond|downRight|2,3",
-                        "diamond|downRightDash|2,4|2,0"
-                    ],
-                    [
-                        "standard|arrowRight|3,0|2,0",
-                        "standard|arrowRight|3,1|2,0",
-                        "standard|arrowRight|3,2|2,0",
-                        "standard|arrowRight|3,3|2,0",
-                        "standard|empty|3,4"
-                    ],
-                    [
-                        "trans0",
-                        "trans2",
-                        "trans3",
-                        "trans1",
-                        "box|empty|4,4"
-                    ],
-                    [
-                        "standard|lineHoriz|5,0|4,0",
-                        "standard|lineHoriz|5,1|4,1",
-                        "standard|arrowRight|5,2|4,2",
-                        "standard|arrowRight|5,3|4,3",
-                        "standard|empty|5,4"
-                    ],
-                    [
-                        "box|lineHoriz|6,0",
-                        "box|lineHoriz|6,1",
-                        "review3",
-                        "review1",
-                        "box|empty|6,4"
-                    ],
-                    [
-                        "standard|lineHoriz|7,0",
-                        "standard|arrowRight|7,1",
-                        "standard|lineHoriz|7,2|6,2",
-                        "standard|lineHoriz|7,3|6,3",
-                        "standard|empty|7,4"
-                    ],
-                    [
-                        "box|lineHoriz|8,0",
-                        "edit3",
-                        "box|rightUpArrow|8,2",
-                        "box|lineHoriz|8,3",
-                        "box|empty|8,4"
-                    ],
-                    [
-                        "standard|arrowRight|9,0",
-                        "standard|lineHoriz|9,1|8,1",
-                        "standard|empty|9,2",
-                        "standard|lineHoriz|9,3",
-                        "standard|empty|9,4"
-                    ],
-                    [
-                        "edit0",
-                        "box|rightUpArrow|10,1",
-                        "box|empty|10,2",
-                        "box|lineHoriz|10,3",
-                        "box|empty|10,4"
-                    ],
-                    [
-                        "standard|arrowRight|11,0|10,0",
-                        "standard|empty|11,1",
-                        "standard|empty|11,2",
-                        "standard|lineHoriz|11,3",
-                        "standard|empty|11,4"
-                    ],
-                    [
-                        "review0",
-                        "box|empty|12,1",
-                        "box|empty|12,2",
-                        "box|lineHoriz|12,3",
-                        "box|empty|12,4"
-                    ],
-                    [
-                        "standard|arrowRight|13,0|12,0",
-                        "standard|empty|13,1",
-                        "standard|empty|13,2",
-                        "standard|lineHoriz|13,3",
-                        "standard|empty|13,4"
-                    ],
-                    [
-                        "published",
-                        "box|arrowUp|14,1",
-                        "box|lineVert|14,2",
-                        "box|rightUp|14,3",
-                        "box|empty|14,4"
-                    ]
-                ];
-
+                const expectedMatrix = matrixDD;
                 const expectedNodeIdToCoord = {
                     "dd-auth": "0,0",
                     "dd-d1": "2,0",
