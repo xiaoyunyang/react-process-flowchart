@@ -1677,3 +1677,265 @@ export const DD = {
         }
     ]
 } as MockWorkflowsData;
+
+export const DE = {
+    workflowUid: "de",
+    workflowName: "D-E",
+    workflowSteps: [
+        {
+            workflowStepUid: "de-d1",
+            workflowStepName: "D",
+            workflowStepType: "DECISION",
+            workflowStepOrder: 1,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans0"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans1"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans2"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans3"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans4"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans5"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans6"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans7"
+                },
+                {
+                    primary: false,
+                    actionType: "DECISION",
+                    nextWorkflowStepUid: "trans8"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans0",
+            workflowStepName: "T0",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans1",
+            workflowStepName: "T1",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit1"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans2",
+            workflowStepName: "T2",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit2"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans3",
+            workflowStepName: "T3",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans4",
+            workflowStepName: "T4",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "review0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans5",
+            workflowStepName: "T5",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "pmr0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans6",
+            workflowStepName: "T6",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit2"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans7",
+            workflowStepName: "T7",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "edit2"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "trans8",
+            workflowStepName: "T8",
+            workflowStepType: "TRANSLATION",
+            workflowStepOrder: 2,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "TRANSLATION_SUBMITTED",
+                    nextWorkflowStepUid: "review1"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "edit2",
+            workflowStepName: "E3",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 3,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "EDIT",
+                    nextWorkflowStepUid: "edit0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "edit1",
+            workflowStepName: "E1",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 3,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "EDIT",
+                    nextWorkflowStepUid: "review0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "edit0",
+            workflowStepName: "E0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 4,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "EDIT",
+                    nextWorkflowStepUid: "pmr0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "review1",
+            workflowStepName: "R1",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 4,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "published"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "pmr0",
+            workflowStepName: "PMR0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 5,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "EDIT",
+                    nextWorkflowStepUid: "review0"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "review0",
+            workflowStepName: "R0",
+            workflowStepType: "POST_TRANSLATION",
+            workflowStepOrder: 6,
+            actions: [
+                {
+                    primary: true,
+                    actionType: "REVIEW",
+                    nextWorkflowStepUid: "published"
+                }
+            ]
+        },
+        {
+            workflowStepUid: "published",
+            workflowStepName: "Published",
+            workflowStepType: "PUBLISH",
+            workflowStepOrder: 7,
+            actions: []
+        }
+    ]
+} as MockWorkflowsData;

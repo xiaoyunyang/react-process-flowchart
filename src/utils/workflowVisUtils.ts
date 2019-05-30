@@ -873,7 +873,6 @@ export const populateMatrix = (
         for (let i = 0; i < sortedNextNodes.length; i += 1) {
             const nextStepId = sortedNextNodes[i];
 
-
             // Update nodeIdToParentCoords here using nodeIdToCoord.
             // We are guaranteed that nextStep's parent's coord  is in nodeIdToCoord
             // because nextStep's parent is current node, which we just added to nodeIdToCoord above
@@ -888,15 +887,13 @@ export const populateMatrix = (
                 // Inefficient to sort everytime for an insert. We can do better on performance by
                 // maintaining toExplore as a priority queue
                 console.log("inserting next step", workflowStepNodes[nextStepId]);
-
                 // TODO: Create a function for calculating the priority.
                 // If next step is primary, nextStepPriority will be a number between 0 and 1.
                 // We want to explore all the nodes from the primnary branch from left to
                 // right first. Then we want to explore the non-primary branches from left to right.
                 // NOTE, the node with the smaller priority get explored first
 
-
-                const childOrder = +`${0}.${i}`;
+                const childOrder = i / sortedNextNodes.length;
                 const priority = workflowStepNodes[nextStepId].workflowStepOrder + childOrder;
 
                 toExplore.insert({

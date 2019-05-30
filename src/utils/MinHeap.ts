@@ -88,5 +88,6 @@ export default class MinHeap {
 
         this.swap(parentIndex, smallerChildIndex);
         this.bubbleDown(leftChildIndex);
+        this.bubbleDown(rightChildIndex);
     }
 }

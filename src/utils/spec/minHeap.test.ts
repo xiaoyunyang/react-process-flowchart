@@ -73,6 +73,41 @@ describe("verifyInvariant", () => {
 });
 
 describe("MinHeap", () => {
+    describe("Insert and remove special case", () => {
+        const h: MinHeap = new MinHeap();
+        let mins: (HeapElemT | undefined)[] = [];
+        const elems = [
+            { val: "t1", priority: 2.7 },
+            { val: "t2", priority: 2.2 },
+            { val: "t3", priority: 2.1 },
+            { val: "t4", priority: 2.6 },
+            { val: "t5", priority: 2.5 },
+            { val: "t6", priority: 2.3 },
+            { val: "t7", priority: 2.4 },
+            { val: "t8", priority: 2.8 },
+            { val: "e0", priority: 4 }
+        ];
+        test.each(
+            elems
+        )("maintain min heap invariant after inserting element %o", (elem: { val: string; priority: number }) => {
+            h.insert(elem);
+            expect(verifyInvariant(h.getHeap(), 1)).toBe(true);
+        });
+
+        test.each(
+            elems
+        )("maintain min heap invariant after removing element", () => {
+            const min = h.deleteMin();
+            mins = mins.concat(min);
+            expect(verifyInvariant(h.getHeap(), 1)).toBe(true);
+        });
+
+        it("should remove min priority element from heap", () => {
+            const prios = mins.map(min => (min && min.priority) as number);
+            const sortBy = (a: number, b: number) => a - b;
+            expect(prios).toEqual(sort(sortBy, prios));
+        });
+    });
     describe("Insert and remove randomized testing", () => {
         let h: MinHeap = new MinHeap();
         let mins: (HeapElemT | undefined)[] = [];
