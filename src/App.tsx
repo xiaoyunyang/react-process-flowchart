@@ -22,8 +22,8 @@ import { workflowVisData, matrices } from "./components/spec/mockMatrices";
 import Workflow from "./components/Workflow";
 import WorkflowVis from "./components/WorkflowVis";
 
-// const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, DB, DC, DD, DE];
-const workflows: any = [DE];
+const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, DB, DC, DD, DE];
+// const workflows: any = [DE];
 
 const enableMatrixUnitTest = false;
 const enableMatrixUnitTestEditMode = true;

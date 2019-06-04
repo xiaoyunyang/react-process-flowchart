@@ -51,7 +51,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         const caretDirClassName = classNames(
             styles.caret,
             dropdownMenuOpened ? styles.caretUp : styles.caretDown,
-            { [styles.highlighted]: dropdownMenuOpened }
+            { [styles.active]: dropdownMenuOpened }
         );
         return (
             <div className={styles.workflowStepDisplayName}>
