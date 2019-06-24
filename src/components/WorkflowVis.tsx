@@ -35,13 +35,14 @@ const newColEntry = (
     return { matrixEntry, tile };
 };
 
+export interface WorkflowVisPropsT {
+    workflowVisData: WorkflowVisDataT;
+    matrix: Matrix;
+    editMode: boolean;
+    addNodeParams: AddNodeParams;
+}
 const WorkflowsVis = (
-    { workflowVisData, matrix, editMode, addNodeParams }: {
-        workflowVisData: WorkflowVisDataT;
-        matrix: Matrix;
-        editMode: boolean;
-        addNodeParams: AddNodeParams;
-    }
+    { workflowVisData, matrix, editMode, addNodeParams }: WorkflowVisPropsT
 ) => {
     const { workflowStepNodes } = workflowVisData;
 

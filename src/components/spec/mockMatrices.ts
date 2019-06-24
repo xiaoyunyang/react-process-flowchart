@@ -1,4 +1,5 @@
 import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowVisDataT } from "../../types/workflowVisTypes";
 
 // NOTE
 // matrices A through BF correspond to workflowVisData in this file.
@@ -87,7 +88,7 @@ export const workflowVisData = {
             prevSteps: []
         }
     }
-};
+} as any as WorkflowVisDataT;
 
 export const matrixAA = [
     ["5890236e433b-auth", "box|empty|0,1"],

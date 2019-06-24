@@ -3,7 +3,7 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import WorkflowVis from "../WorkflowVis";
+import WorkflowVis, { WorkflowVisPropsT } from "../WorkflowVis";
 import Column from "../Column";
 
 // Mock
@@ -13,22 +13,22 @@ import { workflowVisData, matrixBA } from "./mockMatrices";
 import { WorkflowStepTypeT } from "../../types/workflow";
 
 // Constants
-import { ConnectorName } from "../../types/workflowVisTypes";
+import { ConnectorName, AddNodeParams } from "../../types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });
 
 describe("WorkflowVis Spec", () => {
     let workflowVis: any;
-    let props;
+    let props: WorkflowVisPropsT;
     const matrix = matrixBA;
-    const addNodeToVis = () => () => { };
+    const addNodeParams = () => { };
 
     beforeEach(() => {
         props = {
             workflowVisData,
             matrix,
             editMode: false,
-            addNodeToVis
+            addNodeParams: addNodeParams as any as AddNodeParams
         };
 
         workflowVis = shallow(<WorkflowVis {...props} />);
