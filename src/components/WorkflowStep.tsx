@@ -11,12 +11,7 @@ import { iconClassName, workflowStepConfig } from "../constants/workflowStepConf
 // Style
 import styles from './styles/workflowVis.module.css';
 
-const TRUNCATE_WORDS_CUTOFF = 10;
-
-export const truncateName = (name: string, truncateCutoff: number = TRUNCATE_WORDS_CUTOFF) =>
-    name.length > truncateCutoff
-        ? `${name.substring(0, truncateCutoff)}...`
-        : name;
+const MAX_DISPLAY_NAME_WIDTH = 100;
 
 const Icon = ({ icon }: { icon: string }) => (
     <div className={styles.iconContainer}>
@@ -30,6 +25,7 @@ interface PropsT {
 }
 interface State {
     dropdownMenuOpened: boolean;
+    displayTooltip: boolean;
 }
 
 export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
@@ -37,32 +33,70 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         super(props);
 
         this.state = {
-            dropdownMenuOpened: false
+            dropdownMenuOpened: false,
+            displayTooltip: false
         };
         this.boundToggleDropdownMenu = this.toggleDropdownMenu.bind(this);
     }
+
+    getDisplayNameWidth = (element: HTMLInputElement) => {
+        if (element) {
+            const { width } = element.getBoundingClientRect();
+            if (width >= MAX_DISPLAY_NAME_WIDTH) {
+                this.setState({ displayTooltip: true });
+            }
+        }
+    };
+
     boundToggleDropdownMenu: () => void;
     toggleDropdownMenu() {
         this.setState((state: State) => ({ dropdownMenuOpened: !state.dropdownMenuOpened }));
     }
-    renderDisplayName({ name, isClickable }: { name: string; isClickable: boolean }) {
+    renderDisplayName({ displayName, isClickable }: { displayName: string; isClickable: boolean }) {
         const { dropdownMenuOpened } = this.state;
-        const displayName = truncateName(name);
-        const caretDirClassName = classNames(
-            styles.caret,
-            dropdownMenuOpened ? styles.caretUp : styles.caretDown,
-            { [styles.active]: dropdownMenuOpened }
+
+        const caretUpClassName = classNames(
+            styles.caret, styles.caretUp, styles.active,
+            { [styles.hidden]: !dropdownMenuOpened }
+        );
+        const caretDownClassName = classNames(
+            styles.caret, styles.caretDown,
+            { [styles.hidden]: dropdownMenuOpened }
         );
         return (
-            <div className={styles.workflowStepDisplayName}>
-                <p>
+            <div className={classNames(styles.workflowStepDisplayName, styles.flexContainer)}>
+                <span className={styles.truncatedName} ref={this.getDisplayNameWidth}>
                     {displayName}
-                    {isClickable &&
-                        <span className={classNames(styles.caret, caretDirClassName)} />
-                    }
-                </p>
+                </span>
+                {isClickable && (
+                    <span className={styles.carets}>
+                        <span className={styles.caretsWrapper}>
+                            <span className={caretDownClassName} />
+                            <span className={caretUpClassName} />
+                        </span>
+                    </span>
+                )}
             </div>
         );
+    }
+    renderTooltippedDisplayName({
+        name, isClickable
+    }: {
+        name: string; isClickable: boolean;
+    }) {
+
+        const { displayTooltip } = this.state;
+        if (displayTooltip) {
+            return (
+                <div style={{ color: "red" }}>
+                    {
+                        this.renderDisplayName({ displayName: name, isClickable })
+                    }
+                </div>
+            );
+        }
+
+        return this.renderDisplayName({ displayName: name, isClickable });
     }
 
     renderWorkflowStep({
@@ -95,7 +129,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
                     )}
                 >
                     <Icon icon={icon} />
-                    {this.renderDisplayName({ name, isClickable })}
+                    {this.renderTooltippedDisplayName({ name, isClickable })}
                 </div>
             </div>
         );

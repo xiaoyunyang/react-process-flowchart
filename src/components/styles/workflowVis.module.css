@@ -41,6 +41,7 @@
 
 .boxContainer {
   margin-top: var(--row-margin-top);
+  outline: none;
 }
 
 .box {
@@ -51,6 +52,11 @@
   border-radius: var(--box-border-radius);
   align-self: auto;
   line-height: var(--box-line-height);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: none;
 }
   
 .diamondContainer {
@@ -365,13 +371,13 @@ margin-top and height attributes to all three connector classes
   color: var(--light-grey);
 }
 
-.themeLight .active {
-  color: var(--tealish)
-}
-
 .themeLight {
   background-color: var(--white);
   color: var(--charcoal-grey);
+}
+
+.themeLight .active {
+  color: var(--tealish)
 }
 
 .themeLight i {
@@ -401,24 +407,22 @@ margin-top and height attributes to all three connector classes
   margin-left: auto;
   margin-right: auto;
   height: calc(var(--base-unit) * 5);
+  justify-content: center;
+  text-align: center;
+  display: grid;
+  grid-template-columns: auto auto;
+  width: calc(var(--base-unit) * 28);
 }
 
-.box p {
-  margin-block-start: 0;
-  margin-block-end: 0;
-  margin-inline-start: 0;
-  margin-inline-end: 0;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.truncatedName {
+  white-space: nowrap;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .box .caret {
-  margin-left: calc(var(--base-unit) * 2.4);
+  margin-left: calc(var(--base-unit) * 2);
 }
 
 .box .carets {
@@ -428,15 +432,23 @@ margin-top and height attributes to all three connector classes
 
 .box .caretsWrapper {
   display: inline-block;
-    padding-right: calc(var(--base-unit) * 5);
+  padding-right: calc(var(--base-unit) * 2);
+}
+
+.box .caret {
+  margin-top: calc(var(--base-unit) * 0.75);
 }
 
 .box .caretUp {
-  margin-bottom: calc(var(--base-unit) * -0.75);
+  position: absolute;
+  top: calc(var(--base-unit) * 2);
+  left: 0;
 }
 
 .box .caretDown {
-  margin-bottom: calc(var(--base-unit) * 0.75);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .iconContainer {

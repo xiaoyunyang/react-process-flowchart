@@ -25,9 +25,9 @@ import WorkflowVis from "./components/WorkflowVis";
 const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, DB, DC, DD, DE];
 // const workflows: any = [DE];
 
-const enableMatrixUnitTest = false;
+const enableMatrixUnitTest = true;
 const enableMatrixUnitTestEditMode = true;
-const enableAcceptanceTest = true;
+const enableAcceptanceTest = false;
 const debugModeOn = false;
 
 // TODO: there's something wrong with visualizing B-D

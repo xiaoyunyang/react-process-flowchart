@@ -86,16 +86,57 @@ export const workflowVisData = {
                 { id: "ba322565b1bf", primary: true }
             ],
             prevSteps: []
+        },
+        "m-long": {
+            id: "m-long",
+            name: "MMMMMMMMMMMMMM", // 14 chars
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 1,
+            nextNodes: [
+                { id: "ba322565b1bf", primary: true }
+            ],
+            prevSteps: []
+        },
+        "a-long": {
+            id: "a-long",
+            name: "AAA AAAAAAAAAAA", // 14 chars
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "i-long", primary: true }
+            ],
+            prevSteps: []
+        },
+        "i-long": {
+            id: "i-long",
+            name: "iiiiiiiiiiiiii", // 14 chars
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 3,
+            nextNodes: [],
+            prevSteps: []
         }
+
+
     }
 } as any as WorkflowVisDataT;
+
+
+export const matrixTruncateNameTest = [
+    ["5890236e433b-auth", "box|empty|0,1"],
+    ["standard|arrowRight|1,0", "standard|empty|1,1"],
+    ["m-long|2,0", "standard|empty|2,1"],
+    ["standard|arrowRight|3,0", "standard|empty|3,1"],
+    ["a-long", "box|empty|4,1"],
+    ["standard|arrowRight|5,0", "standard|empty|5,1"],
+    ["i-long", "box|empty|6,1"]
+];
 
 export const matrixAA = [
     ["5890236e433b-auth", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
     ["ba322565b1bf", "diamond|downRightDash|2.1"],
     ["standard|arrowRight|3,0", "standard|empty|3,1"],
-    ["09e6110fda58", "box|empty|4.1"],
+    ["09e6110fda58", "box|empty|4,1"],
     ["standard|arrowRight|5,0", "standard|empty|5,1"],
     ["a3135bdf3aa3", "box|empty|6,1"]
 ];
@@ -596,6 +637,7 @@ export const matrixDD = [
 ];
 
 export const matrices = [
+    { name: "Truncate Name", matrix: matrixTruncateNameTest },
     { name: "A-A", matrix: matrixAA },
     { name: "A-B", matrix: matrixAB },
     { name: "A-C", matrix: matrixAC },
