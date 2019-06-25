@@ -29,6 +29,8 @@ interface State {
 }
 
 export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
+    private displayNameRef: React.RefObject<HTMLInputElement> = React.createRef();
+
     constructor(props: PropsT) {
         super(props);
 
@@ -39,14 +41,20 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         this.boundToggleDropdownMenu = this.toggleDropdownMenu.bind(this);
     }
 
-    getDisplayNameWidth = (element: HTMLInputElement) => {
-        if (element) {
-            const { width } = element.getBoundingClientRect();
-            if (width >= MAX_DISPLAY_NAME_WIDTH) {
-                this.setState({ displayTooltip: true });
-            }
-        }
-    };
+    componentDidMount() {
+        this.updateDisplayTooltip();
+    }
+
+    componentDidUpdate() {
+        this.updateDisplayTooltip();
+    }
+
+    updateDisplayTooltip() {
+        if (!this.displayNameRef.current) return;
+
+        const { width } = this.displayNameRef.current.getBoundingClientRect();
+        this.setState({ displayTooltip: width >= MAX_DISPLAY_NAME_WIDTH });
+    }
 
     boundToggleDropdownMenu: () => void;
     toggleDropdownMenu() {
@@ -65,7 +73,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         );
         return (
             <div className={classNames(styles.workflowStepDisplayName, styles.flexContainer)}>
-                <span className={styles.truncatedName} ref={this.getDisplayNameWidth}>
+                <span className={styles.truncatedName} ref={this.displayNameRef}>
                     {displayName}
                 </span>
                 {isClickable && (
@@ -79,24 +87,16 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </div>
         );
     }
-    renderTooltippedDisplayName({
-        name, isClickable
-    }: {
-        name: string; isClickable: boolean;
-    }) {
-
+    renderTooltippedDisplayName(
+        { name, isClickable }: { name: string; isClickable: boolean }) {
         const { displayTooltip } = this.state;
-        if (displayTooltip) {
-            return (
-                <div style={{ color: "red" }}>
-                    {
-                        this.renderDisplayName({ displayName: name, isClickable })
-                    }
-                </div>
-            );
-        }
 
-        return this.renderDisplayName({ displayName: name, isClickable });
+        return displayTooltip ?
+            (
+                <div style={{ color: "red" }}>
+                    {this.renderDisplayName({ displayName: name, isClickable })}
+                </div>
+            ) : this.renderDisplayName({ displayName: name, isClickable });
     }
 
     renderWorkflowStep({
