@@ -10,7 +10,6 @@
   margin-left: calc(var(--base-unit) * 3);
 }
 
-
 .wrapper {
   display: grid;
   grid-template-columns: repeat(var(--max-columns), 2fr 1fr);
@@ -18,6 +17,8 @@
   overflow-x: scroll;
   overflow-y: hidden;
   padding-bottom: var(--workflow-wrapper-padding-bottom);
+  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .top {
@@ -406,14 +407,15 @@ margin-top and height attributes to all three connector classes
   text-align: center;
   display: grid;
   grid-template-columns: auto auto;
-  width: calc(var(--base-unit) * 28);
+  width: calc(var(--base-unit) * 25);
 }
 
-.truncatedName {
+.tooltip {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   white-space: nowrap;
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: red;
 }
 
 .box .caret {
@@ -423,6 +425,7 @@ margin-top and height attributes to all three connector classes
 .box .carets {
   display: inline-block;
   position: relative;
+  width: calc(var(--base-unit) * 5);
 }
 
 .box .caretsWrapper {
@@ -431,7 +434,7 @@ margin-top and height attributes to all three connector classes
 }
 
 .box .caret {
-  margin-top: calc(var(--base-unit) * 0.75);
+  margin-top: calc(var(--base-unit) * 0.25);
 }
 
 .box .caretUp {
@@ -449,7 +452,9 @@ margin-top and height attributes to all three connector classes
 .iconContainer {
   width: 100%;
   display: inline-block;
-  text-align: center;
+  text-align: center; /* TODO: different from project*/
+  padding: var(--text-padding);
+  margin-top: calc(var(--border-width) * -8);
 }
 
 .iconContainer div {

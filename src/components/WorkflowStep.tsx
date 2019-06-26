@@ -1,6 +1,7 @@
 // Libraries
 import React from 'react';
 import classNames from "classnames";
+import Truncate from "react-truncate";
 
 // Types
 import { GenericTileType } from "../types/workflowVisTypes";
@@ -11,7 +12,11 @@ import { iconClassName, workflowStepConfig } from "../constants/workflowStepConf
 // Style
 import styles from './styles/workflowVis.module.css';
 
-const MAX_DISPLAY_NAME_WIDTH = 100;
+const Tooltip = ({ children }: any) => (
+    <div className={styles.tooltip}>
+        {children}
+    </div>
+);
 
 const Icon = ({ icon }: { icon: string }) => (
     <div className={styles.iconContainer}>
@@ -39,21 +44,13 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             displayTooltip: false
         };
         this.boundToggleDropdownMenu = this.toggleDropdownMenu.bind(this);
+        this.boundHandleTruncate = this.handleTruncate.bind(this);
     }
 
-    componentDidMount() {
-        this.updateDisplayTooltip();
-    }
+    boundHandleTruncate: (truncated: boolean) => void;
 
-    componentDidUpdate() {
-        this.updateDisplayTooltip();
-    }
-
-    updateDisplayTooltip() {
-        if (!this.displayNameRef.current) return;
-
-        const { width } = this.displayNameRef.current.getBoundingClientRect();
-        this.setState({ displayTooltip: width >= MAX_DISPLAY_NAME_WIDTH });
+    handleTruncate(truncated: boolean) {
+        this.setState({ displayTooltip: truncated });
     }
 
     boundToggleDropdownMenu: () => void;
@@ -73,9 +70,9 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         );
         return (
             <div className={classNames(styles.workflowStepDisplayName, styles.flexContainer)}>
-                <span className={styles.truncatedName} ref={this.displayNameRef}>
+                <Truncate onTruncate={this.boundHandleTruncate}>
                     {displayName}
-                </span>
+                </Truncate>
                 {isClickable && (
                     <span className={styles.carets}>
                         <span className={styles.caretsWrapper}>
@@ -93,9 +90,9 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
 
         return displayTooltip ?
             (
-                <div style={{ color: "red" }}>
+                <Tooltip>
                     {this.renderDisplayName({ displayName: name, isClickable })}
-                </div>
+                </Tooltip>
             ) : this.renderDisplayName({ displayName: name, isClickable });
     }
 

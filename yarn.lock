@@ -1041,6 +1041,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-truncate@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react-truncate/-/react-truncate-2.3.3.tgz#76dcea6a4a34db17c981dbe8e7515ae2b09fc997"
+  integrity sha512-wtbubWJSvT+A3zzacmxpXE1nkHKX0nybSXfwNTdHtBfwJEzm1Caau9AGAS6R7uBuYw0sHcK/DoqRALfSOexLew==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^16.8.10":
   version "16.8.10"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.10.tgz#1ccb6fde17f71a62ef055382ec68bdc379d4d8d9"
@@ -8403,6 +8410,11 @@ react-test-renderer@^16.0.0-0:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.13.6"
+
+react-truncate@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-truncate/-/react-truncate-2.4.0.tgz#3cf5ff09ab86f93e3c078d359f4de6d75aa60510"
+  integrity sha512-3QW11/COYwi6iPUaunUhl06DW5NJBJD1WkmxW5YxqqUu6kvP+msB3jfoLg8WRbu57JqgebjVW8Lknw6T5/QZdA==
 
 react@^16.8.4:
   version "16.8.6"
