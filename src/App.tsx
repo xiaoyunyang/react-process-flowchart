@@ -27,7 +27,7 @@ const workflows: any = [AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, DA, DB, 
 
 const enableMatrixUnitTest = true;
 const enableMatrixUnitTestEditMode = true;
-const enableAcceptanceTest = false;
+const enableAcceptanceTest = true;
 const debugModeOn = false;
 
 // TODO: there's something wrong with visualizing B-D

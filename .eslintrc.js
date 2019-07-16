@@ -19,8 +19,9 @@ module.exports = {
         "@typescript-eslint/explicit-member-accessibility": "off",
         "import/extensions": [1, "never", { ts: "never" }],
         "import/named": 0,
-        "react/jsx-indent": [true, 6],
-        "react/jsx-indent-props": [false],
+        "react/jsx-indent": [0],
+        "react/jsx-indent-props": [0],
+        "indent": [0],
         "react/jsx-filename-extension": false,
     },
     overrides: [
