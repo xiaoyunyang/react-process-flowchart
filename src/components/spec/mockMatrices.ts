@@ -6,85 +6,105 @@ import { WorkflowVisDataT } from "../../types/workflowVisTypes";
 // matrices DA through DB correspond to DA and DB in mockWorkflowsData
 
 export const workflowVisData = {
-    firstStep: "5890236e433b-auth",
+    firstStep: "node-start",
     workflowStepNodes: {
-        ba322565b1bf: {
-            id: "ba322565b1bf",
-            name: "D",
-            type: WorkflowStepTypeT.DECISION,
-            workflowStepOrder: 1,
-            nextNodes: [
-                { id: "09e6110fda58", primary: true },
-                { id: "b2b5c4c7cfd7", primary: false }
-            ],
-            prevSteps: []
-        },
-        "297786162f15": {
-            id: "297786162f15",
-            name: "E",
-            type: WorkflowStepTypeT.POST_TRANSLATION,
-            workflowStepOrder: 3,
-            nextNodes: [
-                { id: "492b709fc90a", primary: true }
-            ],
-            prevSteps: []
-        },
-        a3135bdf3aa3: {
-            id: "a3135bdf3aa3",
-            name: "Published",
-            type: WorkflowStepTypeT.PUBLISH,
-            workflowStepOrder: 5,
-            nextNodes: [],
-            prevSteps: []
-        },
-        "492b709fc90a": {
-            id: "492b709fc90a",
-            name: "R",
-            type: WorkflowStepTypeT.POST_TRANSLATION,
-            workflowStepOrder: 4,
-            nextNodes: [
-                { id: "a3135bdf3aa3", primary: true }
-            ],
-            prevSteps: []
-        },
-        "09e6110fda58": {
-            id: "09e6110fda58",
-            name: "Translation",
-            type: WorkflowStepTypeT.TRANSLATION,
-            workflowStepOrder: 2,
-            nextNodes: [
-                { id: "297786162f15", primary: true }
-            ],
-            prevSteps: []
-        },
-        b2b5c4c7cfd7: {
-            id: "b2b5c4c7cfd7",
-            name: "Translation2",
-            type: WorkflowStepTypeT.TRANSLATION,
-            workflowStepOrder: 2,
-            nextNodes: [
-                { id: "297786162f15", primary: true }
-            ],
-            prevSteps: []
-        },
-        b2b5c4c7cfd8: {
-            id: "b2b5c4c7cfd7",
-            name: "Translation2",
-            type: WorkflowStepTypeT.TRANSLATION,
-            workflowStepOrder: 2,
-            nextNodes: [
-                { id: "297786162f15", primary: true }
-            ],
-            prevSteps: []
-        },
-        "5890236e433b-auth": {
-            id: "5890236e433b-auth",
+        "node-start": {
+            id: "node-start",
             name: "Authorize",
             type: WorkflowStepTypeT.AUTHORIZE,
             workflowStepOrder: 0,
             nextNodes: [
-                { id: "ba322565b1bf", primary: true }
+                { id: "node-fork", primary: true }
             ],
+            prevSteps: []
+        },
+        "node-fork": {
+            id: "node-fork",
+            name: "Fork",
+            type: WorkflowStepTypeT.DECISION,
+            workflowStepOrder: 1,
+            nextNodes: [
+                { id: "node-1A", primary: true },
+                { id: "node-2A", primary: false }
+            ],
+            prevSteps: []
+        },
+        "node-1A": {
+            id: "node-1A",
+            name: "Translation",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "node-1B", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-2A": {
+            id: "node-2A",
+            name: "Translation2",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "node-1B", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-3A": {
+            id: "node-3A",
+            name: "Translation3",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "node-1B", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-4A": {
+            id: "node-4A",
+            name: "Translation4",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "node-1B", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-1B": {
+            id: "node-1B",
+            name: "E",
+            type: WorkflowStepTypeT.POST_TRANSLATION,
+            workflowStepOrder: 3,
+            nextNodes: [
+                { id: "node-1C", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-1C": {
+            id: "node-1C",
+            name: "R",
+            type: WorkflowStepTypeT.POST_TRANSLATION,
+            workflowStepOrder: 4,
+            nextNodes: [
+                { id: "node-finish", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-2B": {
+            id: "node-2B",
+            name: "Translation2",
+            type: WorkflowStepTypeT.TRANSLATION,
+            workflowStepOrder: 2,
+            nextNodes: [
+                { id: "node-1B", primary: true }
+            ],
+            prevSteps: []
+        },
+        "node-finish": {
+            id: "node-finish",
+            name: "Published",
+            type: WorkflowStepTypeT.PUBLISH,
+            workflowStepOrder: 5,
+            nextNodes: [],
             prevSteps: []
         },
         "m-long": {
@@ -93,7 +113,7 @@ export const workflowVisData = {
             type: WorkflowStepTypeT.TRANSLATION,
             workflowStepOrder: 1,
             nextNodes: [
-                { id: "ba322565b1bf", primary: true }
+                { id: "node-fork", primary: true }
             ],
             prevSteps: []
         },
@@ -115,14 +135,12 @@ export const workflowVisData = {
             nextNodes: [],
             prevSteps: []
         }
-
-
     }
 } as any as WorkflowVisDataT;
 
 
 export const matrixTruncateNameTest = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
     ["m-long|2,0", "standard|empty|2,1"],
     ["standard|arrowRight|3,0", "standard|empty|3,1"],
@@ -132,154 +150,154 @@ export const matrixTruncateNameTest = [
 ];
 
 export const matrixAA = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRightDash|2.1"],
+    ["node-fork", "diamond|downRightDash|2.1"],
     ["standard|arrowRight|3,0", "standard|empty|3,1"],
-    ["09e6110fda58", "box|empty|4,1"],
+    ["node-1A", "box|empty|4,1"],
     ["standard|arrowRight|5,0", "standard|empty|5,1"],
-    ["a3135bdf3aa3", "box|empty|6,1"]
+    ["node-finish", "box|empty|6,1"]
 ];
 
 export const matrixAB = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0|0,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1|2,0"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1"],
-    ["a3135bdf3aa3", "box|rightUpArrow|6,1"]
+    ["node-finish", "box|rightUpArrow|6,1"]
 ];
 
 
 export const matrixAC = [
-    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2", "box|empty|0,3"],
+    ["node-start", "box|empty|0,1", "box|empty|0,2", "box|empty|0,3"],
     ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2", "standard|empty|1,3"],
-    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
+    ["node-fork", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
     ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|arrowRight|3,2|2,0", "standard|arrowRight|3,3|2,0"],
-    ["09e6110fda58", "b2b5c4c7cfd7", "297786162f15", "492b709fc90a"],
+    ["node-1A", "node-2A", "node-1B", "node-1C"],
     ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2", "standard|lineHoriz|5,3|4,3"],
-    ["a3135bdf3aa3", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|rightUp|6,3"]
+    ["node-finish", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|rightUp|6,3"]
 ];
 
 export const matrixAD = [
-    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+    ["node-start", "box|empty|0,1", "box|empty|0,2"],
     ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
-    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2"],
+    ["node-fork", "diamond|downRight|2,1", "diamond|downRight|2,2"],
     ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|arrowRight|3,2|2,0"],
-    ["09e6110fda58", "b2b5c4c7cfd7", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A", "node-3A"],
     ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2"],
-    ["297786162f15", "box|rightUpArrow|6,1", "box|lineHoriz|6,2"],
+    ["node-1B", "box|rightUpArrow|6,1", "box|lineHoriz|6,2"],
     ["standard|arrowRight|7,0|6,0", "standard|empty|7,1", "standard|lineHoriz|7,2"],
-    ["492b709fc90a", "box|arrowUp|8,1", "box|rightUp|8,2"],
+    ["node-1C", "box|arrowUp|8,1", "box|rightUp|8,2"],
     ["standard|arrowRight|9,0|8,0", "standard|empty|9,1", "standard|empty|9,2"],
-    ["a3135bdf3aa3", "box|empty|10,1", "box|empty|10,2"]
+    ["node-finish", "box|empty|10,1", "box|empty|10,2"]
 ];
 
 export const matrixAE = [
-    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2", "box|empty|0,3"],
+    ["node-start", "box|empty|0,1", "box|empty|0,2", "box|empty|0,3"],
     ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2", "standard|empty|1,3"],
-    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
+    ["node-fork", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
     ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|arrowRight|3,2|2,0", "standard|arrowRight|3,3|2,0"],
-    ["09e6110fda58", "b2b5c4c7cfd7", "b2b5c4c7cfd7", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A", "node-3A", "node-4A"],
     ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2", "standard|lineHoriz|5,3|3,3"],
-    ["297786162f15", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|lineHoriz|6,3"],
+    ["node-1B", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|lineHoriz|6,3"],
     ["standard|arrowRight|7,0|6,0", "standard|empty|7,1", "standard|empty|7,2", "standard|lineHoriz|7,2"],
-    ["492b709fc90a", "box|arrowUp|8,1", "box|lineVert|8,2", "box|rightUp|8,3"],
+    ["node-1C", "box|arrowUp|8,1", "box|lineVert|8,2", "box|rightUp|8,3"],
     ["standard|arrowRight|9,0|8,0", "standard|empty|9,1", "standard|empty|9,2"],
-    ["a3135bdf3aa3", "box|empty|10,1", "box|empty|10,2", "box|empty|10,3"]
+    ["node-finish", "box|empty|10,1", "box|empty|10,2", "box|empty|10,3"]
 ];
 
 export const matrixBA = [
-    ["5890236e433b-auth", "box|empty|0,0"],
+    ["node-start", "box|empty|0,0"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|arrowRight|5,0", "standard|lineHoriz|5,1"],
-    ["297786162f15", "box|rightUpArrow|6,1"],
+    ["node-1B", "box|rightUpArrow|6,1"],
     ["standard|arrowRight|7,0", "standard|empty|7,1"],
-    ["492b709fc90a", "box|empty|8,1"],
+    ["node-1C", "box|empty|8,1"],
     ["standard|arrowRight|9,0", "standard|empty|9,1"],
-    ["a3135bdf3aa3", "box|empty|10,1"]
+    ["node-finish", "box|empty|10,1"]
 ];
 
 export const matrixBB = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|arrowRight|5,0", "standard|lineHoriz|5,1"],
-    ["297786162f15", "box|lineHoriz|6,1"],
+    ["node-1B", "box|lineHoriz|6,1"],
     ["standard|arrowRight|7,0", "standard|lineHoriz|7,1"],
-    ["492b709fc90a", "box|rightUpArrow|8,1"],
+    ["node-1C", "box|rightUpArrow|8,1"],
     ["standard|arrowRight|9,0", "standard|empty|9,1"],
-    ["a3135bdf3aa3", "box|empty|10,1"]
+    ["node-finish", "box|empty|10,1"]
 ];
 const matrixBC = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|arrowRight|5,0", "standard|lineHoriz|5,1"],
-    ["297786162f15", "box|lineHoriz|6,1"],
+    ["node-1B", "box|lineHoriz|6,1"],
     ["standard|arrowRight|7,0", "standard|lineHoriz|7,1"],
-    ["492b709fc90a", "box|lineHoriz|8,1"],
+    ["node-1C", "box|lineHoriz|8,1"],
     ["standard|arrowRight|9,0", "standard|lineHoriz|9,1"],
-    ["a3135bdf3aa3", "box|rightUpArrow|10,1"]
+    ["node-finish", "box|rightUpArrow|10,1"]
 ];
 
 export const matrixBD = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|lineHoriz|5,0", "standard|arrowRight|5,1"],
-    ["box|lineHoriz|6,0", "297786162f15"],
+    ["box|lineHoriz|6,0", "node-1B"],
     ["standard|lineHoriz|7,0", "standard|lineHoriz|7,1"],
-    ["492b709fc90a", "box|lineHoriz|8,1"],
+    ["node-1C", "box|lineHoriz|8,1"],
     ["standard|arrowRight|9,0", "standard|lineHoriz|9,1"],
-    ["a3135bdf3aa3", "box|rightUpArrow|10,1"]
+    ["node-finish", "box|rightUpArrow|10,1"]
 ];
 const matrixBE = [
-    ["5890236e433b-auth", "box|empty|0,1"],
+    ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
-    ["ba322565b1bf", "diamond|downRight|2,1"],
+    ["node-fork", "diamond|downRight|2,1"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1"],
-    ["09e6110fda58", "b2b5c4c7cfd7"],
+    ["node-1A", "node-2A"],
     ["standard|lineHoriz|5,0", "standard|arrowRight|5,1"],
-    ["box|lineHoriz|6,0", "297786162f15"],
+    ["box|lineHoriz|6,0", "node-1B"],
     ["standard|lineHoriz|7,0", "standard|arrowRight|7,1"],
-    ["box|lineHoriz|8,0", "492b709fc90a"],
+    ["box|lineHoriz|8,0", "node-1C"],
     ["standard|arrowRight|9,0", "standard|lineHoriz|9,1"],
-    ["a3135bdf3aa3", "box|rightUpArrow|10,1"]
+    ["node-finish", "box|rightUpArrow|10,1"]
 ];
 
 export const matrixBF = [
-    ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+    ["node-start", "box|empty|0,1", "box|empty|0,2"],
     ["standard|arrowRight|1,0", "standard|empty|1,1", "standard|empty|1,2"],
-    ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRight|2,2"],
+    ["node-fork", "diamond|downRight|2,1", "diamond|downRight|2,2"],
     ["standard|arrowRight|3,0", "standard|arrowRight|3,1", "standard|arrowRight|3,2"],
-    ["09e6110fda58", "b2b5c4c7cfd7", "b2b5c4c7cfd8"],
+    ["node-1A", "node-2A", "node-3A"],
     ["standard|lineHoriz|5,0", "standard|arrowRight|5,1", "standard|lineHoriz|5,2"],
-    ["box|lineHoriz|6,0", "297786162f15", "box|lineHoriz|6,2"],
+    ["box|lineHoriz|6,0", "node-1B", "box|lineHoriz|6,2"],
     ["standard|lineHoriz|7,0", "standard|arrowRight|7,1", "standard|lineHoriz|7,2"],
-    ["box|lineHoriz|8,0", "492b709fc90a", "box|rightUpArrow|8,2"],
+    ["box|lineHoriz|8,0", "node-1C", "box|rightUpArrow|8,2"],
     ["standard|arrowRight|9,0", "standard|lineHoriz|9,1", "standard|empty|9,2"],
-    ["a3135bdf3aa3", "box|rightUpArrow|10,1", "box|empty|10,2"]
+    ["node-finish", "box|rightUpArrow|10,1", "box|empty|10,2"]
 ];
 
 // const gridTestBP = [
-//     ["5890236e433b-auth", "box.downRight"],
+//     ["node-start", "box.downRight"],
 //     ["standard.lineHoriz", "standard.arrowRight"],
-//     ["diamond.lineHoriz", "ba322565b1bf", "diamond.downRight"],
+//     ["diamond.lineHoriz", "node-fork", "diamond.downRight"],
 //     ["standard.arrowRight", "standard.arrowRight", "standard.lineHoriz"],
-//     ["09e6110fda58", "b2b5c4c7cfd7", "rightUpArrow"],
+//     ["node-1A", "node-2A", "rightUpArrow"],
 //     ["standard.arrowRight", "standard.arrowRight"],
-//     ["a3135bdf3aa3", "box.lineHoriz"]
+//     ["node-finish", "box.lineHoriz"]
 // ];
 
 export const matrixDA = [
