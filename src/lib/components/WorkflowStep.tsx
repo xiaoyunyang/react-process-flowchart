@@ -4,7 +4,7 @@ import classNames from "classnames";
 import Truncate from "react-truncate";
 
 // Types
-import { WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig } from "../config";
+import { WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig } from "../../config";
 
 // Style
 import styles from './styles/workflowVis.module.css';

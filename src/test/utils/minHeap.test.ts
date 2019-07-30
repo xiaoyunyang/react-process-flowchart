@@ -1,5 +1,5 @@
 import { sort } from "ramda";
-import MinHeap, { HeapElemT } from "../MinHeap";
+import MinHeap, { HeapElemT } from "../../lib/utils/MinHeap";
 
 // get random int between 0 and max-1
 const getRandomInt = (max: number): number =>

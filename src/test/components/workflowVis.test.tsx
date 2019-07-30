@@ -3,17 +3,17 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import WorkflowVis, { WorkflowVisPropsT } from "../WorkflowVis";
-import Column from "../Column";
+import WorkflowVis, { WorkflowVisPropsT } from "../../lib/components/WorkflowVis";
+import Column from "../../lib/components/Column";
 
 // Mock
-import { workflowVisData, matrixBA } from "./mockMatrices";
+import { workflowVisData, matrixBA } from "../../mocks/mockMatrices";
 
 // Types
 import { WorkflowStepTypeT } from "../../config";
 
 // Constants
-import { ConnectorName, AddNodeParams } from "../../types/workflowVisTypes";
+import { ConnectorName, AddNodeParams } from "../../lib/types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });
 

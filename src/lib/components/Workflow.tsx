@@ -8,7 +8,7 @@ import style from './styles/workflowVis.module.css';
 import WorkflowVisContainer from "./WorkflowVisContainer";
 
 // Types
-import { WorkflowStepT } from "../config";
+import { WorkflowStepT } from "../../config";
 
 
 interface StateT {

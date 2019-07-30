@@ -7,7 +7,7 @@ import DecisionStep from "./DecisionStep";
 import Connector from "./Connector";
 
 // Types
-import { WorkflowStepTypeT } from "../config";
+import { WorkflowStepTypeT } from "../../config";
 import { ColEntry, AddNodeParams } from "../types/workflowVisTypes";
 
 // Utils

@@ -3,14 +3,14 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import Column from "../Column";
-import DecisionStep from "../DecisionStep";
-import WorkflowStep from "../WorkflowStep";
-import Connector from "../Connector";
+import Column from "../../lib/components/Column";
+import DecisionStep from "../../lib/components/DecisionStep";
+import WorkflowStep from "../../lib/components/WorkflowStep";
+import Connector from "../../lib/components/Connector";
 
 // Types
 import { WorkflowStepTypeT } from "../../config";
-import { ConnectorTypeT } from "../../types/workflowVisTypes";
+import { ConnectorTypeT } from "../../lib/types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });
 

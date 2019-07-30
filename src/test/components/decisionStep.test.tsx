@@ -3,10 +3,10 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import DecisionStep from "../DecisionStep";
+import DecisionStep, { DiamondIcon } from "../../lib/components/DecisionStep";
 
 // Types
-import { workflowStepConfig, WorkflowStepTypeT } from "../../config";
+import { workflowStepConfig, WorkflowStepTypeT, ForkIcon } from "../../config";
 
 configure({ adapter: new Adapter() });
 
@@ -25,11 +25,11 @@ describe("DecisionStep Spec", () => {
             const { theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
             expect(decisionStep.childAt(0).hasClass(`theme${theme}`)).toBe(true);
         });
-        // TODO: Add this to main project later
+
         it("renders correct icon for decisionStep", () => {
-            const icon = decisionStep.childAt(0).childAt(0).props().icon;
-            const { icon: expectedIcon } = workflowStepConfig[WorkflowStepTypeT.DECISION];
-            expect(icon).toEqual(expectedIcon);
+            const diamondIcon = decisionStep.find(DiamondIcon);
+            const forkIcon = diamondIcon.dive().find(ForkIcon);
+            expect(forkIcon).toHaveLength(1);
         });
     });
 });

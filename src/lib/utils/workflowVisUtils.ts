@@ -9,7 +9,7 @@ import {
     MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
     GenericTileType, ConnectorTypeT, NextNode
 } from "../types/workflowVisTypes";
-import { WorkflowStepTypeT, WorkflowStepT } from "../config";
+import { WorkflowStepTypeT, WorkflowStepT } from "../../config";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
 

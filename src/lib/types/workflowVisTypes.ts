@@ -1,4 +1,4 @@
-import { WorkflowStepTypeT, WorkflowStepT } from "../config";
+import { WorkflowStepTypeT, WorkflowStepT } from "../../config";
 import { EndomorphDict, PolymorphDict } from "./generic";
 
 

@@ -26,15 +26,15 @@ import {
     populateMatrix,
     addConnectorToMatrix,
     findNextNode
-} from "../workflowVisUtils";
+} from "../../lib/utils/workflowVisUtils";
 
 // Types
-import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../types/workflowVisTypes";
+import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../lib/types/workflowVisTypes";
 import { WorkflowStepTypeT } from "../../config";
 
 // Mocks
-import { AA, BA, DA, DB, DC, DD } from "../../components/spec/mockWorkflowsData";
-import { matrixDA, matrixDB, matrixDC, matrixDD } from "../../components/spec/mockMatrices";
+import { AA, BA, DA, DB, DC, DD } from "../../mocks/mockWorkflowsData";
+import { matrixDA, matrixDB, matrixDC, matrixDD } from "../../mocks/mockMatrices";
 
 describe("WorkflowVisUtils", () => {
     describe("#isConnector", () => {

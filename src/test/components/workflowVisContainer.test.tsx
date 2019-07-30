@@ -3,11 +3,11 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import WorkflowVisContainer, { createAddNodeParams } from "../WorkflowVisContainer";
-import WorkflowVis from "../WorkflowVis";
+import WorkflowVisContainer, { createAddNodeParams } from "../../lib/components/WorkflowVisContainer";
+import WorkflowVis from "../../lib/components/WorkflowVis";
 
 // Mock
-import { BA } from "./mockWorkflowsData";
+import { BA } from "../../mocks/mockWorkflowsData";
 
 configure({ adapter: new Adapter() });
 

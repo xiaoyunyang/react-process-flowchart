@@ -3,8 +3,8 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import Connector, { connectors, connectorComponent } from "../Connector";
-import { createAddNodeParams } from "../WorkflowVisContainer";
+import Connector, { connectors, connectorComponent } from "../../lib/components/Connector";
+import { createAddNodeParams } from "../../lib/components/WorkflowVisContainer";
 
 configure({ adapter: new Adapter() });
 

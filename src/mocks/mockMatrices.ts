@@ -1,5 +1,5 @@
-import { WorkflowStepTypeT } from "../../config";
-import { WorkflowVisDataT } from "../../types/workflowVisTypes";
+import { WorkflowStepTypeT } from "../config";
+import { WorkflowVisDataT } from "../lib/types/workflowVisTypes";
 
 // NOTE
 // matrices A through BF correspond to workflowVisData in this file.

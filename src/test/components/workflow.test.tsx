@@ -3,7 +3,7 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import Workflow from "../Workflow";
+import Workflow from "../../lib/components/Workflow";
 
 configure({ adapter: new Adapter() });
 

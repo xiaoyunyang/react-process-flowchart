@@ -3,8 +3,8 @@ import { configure, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 // Components
-import EditButton from "../EditButton";
-import { createAddNodeParams } from "../WorkflowVisContainer";
+import EditButton from "../../lib/components/EditButton";
+import { createAddNodeParams } from "../../lib/components/WorkflowVisContainer";
 
 // Type
 import { WorkflowStepTypeT } from "../../config";
