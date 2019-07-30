@@ -4,10 +4,8 @@ import Adapter from "enzyme-adapter-react-16";
 
 // Components
 import EditButton from "../../lib/components/EditButton";
-import { createAddNodeParams } from "../../lib/components/WorkflowVisContainer";
 
-// Type
-import { WorkflowStepTypeT } from "../../config";
+import { createAddNodeParams, WorkflowStepTypeT } from "../../config";
 
 configure({ adapter: new Adapter() });
 

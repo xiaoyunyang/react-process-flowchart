@@ -4,7 +4,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 // Components
 import Connector, { connectors, connectorComponent } from "../../lib/components/Connector";
-import { createAddNodeParams } from "../../lib/components/WorkflowVisContainer";
+import { createAddNodeParams } from "../../config";
 
 configure({ adapter: new Adapter() });
 

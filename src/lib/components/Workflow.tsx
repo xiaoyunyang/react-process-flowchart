@@ -5,7 +5,7 @@ import React from 'react';
 import style from './styles/workflowVis.module.css';
 
 // Components
-import WorkflowVisContainer from "./WorkflowVisContainer";
+import WorkflowVisContainer from "../WorkflowVisContainer";
 
 // Types
 import { WorkflowStepT } from "../../config";
