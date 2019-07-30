@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Styles
-import style from './styles/workflowVis.module.css';
+import style from '../styles/workflowVis.module.css';
 
 // Components
 import WorkflowVisContainer from "../WorkflowVisContainer";

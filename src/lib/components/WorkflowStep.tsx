@@ -7,7 +7,7 @@ import Truncate from "react-truncate";
 import { WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig } from "../../config";
 
 // Style
-import styles from './styles/workflowVis.module.css';
+import styles from "../styles/workflowVis.module.css";
 
 const Tooltip = ({ children }: any) => (
     <div className={styles.tooltip}>

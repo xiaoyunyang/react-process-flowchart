@@ -1,8 +1,6 @@
 
 import React, { PureComponent, ReactNode } from "react";
 
-
-
 const WorkflowStepAddPopover = ({
     left, top, tetheredNodeId, nextNodeId
 }: {

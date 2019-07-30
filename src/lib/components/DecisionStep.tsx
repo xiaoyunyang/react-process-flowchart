@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from "classnames";
 
 // Styles
-import styles from './styles/workflowVis.module.css';
+import styles from '../styles/workflowVis.module.css';
 
 // Types
 import { WorkflowStepTypeT, workflowStepConfig, ForkIcon } from "../../config";

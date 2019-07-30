@@ -5,7 +5,7 @@ import classNames from "classnames";
 import EditButton from "./EditButton";
 
 // Styles
-import styles from './styles/workflowVis.module.css';
+import styles from "../styles/workflowVis.module.css";
 
 // Types
 import {

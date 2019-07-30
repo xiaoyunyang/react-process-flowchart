@@ -5,7 +5,7 @@ import logo from './logo.svg';
 
 // Styles
 import './App.css';
-import styles from "./lib/components/styles/workflowVis.module.css";
+import styles from "./lib/styles/workflowVis.module.css";
 
 // Data
 import {

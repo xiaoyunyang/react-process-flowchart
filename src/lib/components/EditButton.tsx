@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Styles
-import styles from './styles/workflowVis.module.css';
+import styles from '../styles/workflowVis.module.css';
 
 // Types
 import {
