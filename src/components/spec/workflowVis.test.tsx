@@ -10,7 +10,7 @@ import Column from "../Column";
 import { workflowVisData, matrixBA } from "./mockMatrices";
 
 // Types
-import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../config";
 
 // Constants
 import { ConnectorName, AddNodeParams } from "../../types/workflowVisTypes";

@@ -7,7 +7,7 @@ import WorkflowVis from "./WorkflowVis";
 import WorkflowStepAddPopover from "./WorkflowStepAddPopover";
 
 // Types
-import { WorkflowStepT } from "../types/workflow";
+import { WorkflowStepT } from "../config";
 import { CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes, MatrixCoord, ColType } from "../types/workflowVisTypes";
 import { EndomorphDict, PolymorphDict } from '../types/generic';
 

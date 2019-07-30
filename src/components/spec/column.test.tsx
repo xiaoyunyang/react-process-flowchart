@@ -9,7 +9,7 @@ import WorkflowStep from "../WorkflowStep";
 import Connector from "../Connector";
 
 // Types
-import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../config";
 import { ConnectorTypeT } from "../../types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });

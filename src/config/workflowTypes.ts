@@ -1,5 +1,7 @@
+// TODO: move this type to workflowStepConfig
 type AutoPrePublishType = "NONE" | "SUBMIT" | "SAVE";
 
+// TODO: move this type to workflowStepConfig
 type ActionType =
     | "TRANSLATION_SUBMITTED"
     | "EDIT"
@@ -9,7 +11,7 @@ type ActionType =
     | "POST_MACHINE_REVISION"
     | "DECISION";
 
-interface WorkflowActionT {
+export interface WorkflowActionT {
     primary: boolean;
     actionType: ActionType | string;
     nextWorkflowStepUid: string;

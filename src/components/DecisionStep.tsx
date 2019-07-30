@@ -6,24 +6,20 @@ import classNames from "classnames";
 import styles from './styles/workflowVis.module.css';
 
 // Types
-import { WorkflowStepTypeT } from "../types/workflow";
+import { WorkflowStepTypeT, workflowStepConfig, ForkIcon } from "../config";
 
-import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
-
-const DiamondIcon = ({ icon }: { icon: string }) => {
-    return (
-        <div className={styles.iconContainerDiamond}>
-            <i className={iconClassName[icon]} />
-        </div>
-    );
-};
+const DiamondIcon = (
+    <div className={styles.iconContainerDiamond}>
+        <ForkIcon />
+    </div>
+);
 
 const DecisionStep = () => {
-    const { icon, theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
+    const { theme } = workflowStepConfig[WorkflowStepTypeT.DECISION];
     return (
         <div className={classNames(styles.diamondContainer, styles.hoverable)}>
             <div className={classNames(styles.diamond, styles.flexContainer, styles[`theme${theme}`])}>
-                <DiamondIcon icon={icon} />
+                {DiamondIcon}
             </div>
         </div>
     );

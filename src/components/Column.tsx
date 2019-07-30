@@ -7,7 +7,7 @@ import DecisionStep from "./DecisionStep";
 import Connector from "./Connector";
 
 // Types
-import { WorkflowStepTypeT } from "../types/workflow";
+import { WorkflowStepTypeT } from "../config";
 import { ColEntry, AddNodeParams } from "../types/workflowVisTypes";
 
 // Utils
@@ -61,7 +61,7 @@ export default class Column extends React.PureComponent<PropsT> {
         }
 
         // WorkflowStep
-        return <WorkflowStep name={tile.name} type={tile.type} />;
+        return <WorkflowStep name={tile.name} type={tile.type as WorkflowStepTypeT} />;
     }
     render() {
         const { colEntries, editMode, addNodeParams } = this.props;

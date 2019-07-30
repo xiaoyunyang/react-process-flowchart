@@ -30,7 +30,7 @@ import {
 
 // Types
 import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../types/workflowVisTypes";
-import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../config";
 
 // Mocks
 import { AA, BA, DA, DB, DC, DD } from "../../components/spec/mockWorkflowsData";

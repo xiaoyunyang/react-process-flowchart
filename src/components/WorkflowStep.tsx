@@ -4,10 +4,7 @@ import classNames from "classnames";
 import Truncate from "react-truncate";
 
 // Types
-import { GenericTileType } from "../types/workflowVisTypes";
-
-// Constants
-import { iconClassName, workflowStepConfig } from "../constants/workflowStepConfig";
+import { WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig } from "../config";
 
 // Style
 import styles from './styles/workflowVis.module.css';
@@ -18,15 +15,15 @@ const Tooltip = ({ children }: any) => (
     </div>
 );
 
-const Icon = ({ icon }: { icon: string }) => (
+export const Icon = ({ type }: { type: string }) => (
     <div className={styles.iconContainer}>
-        <i className={iconClassName[icon]} />
+        <WorkflowStepIcon type={type} />
     </div>
 );
 
 interface PropsT {
     name: string;
-    type: GenericTileType;
+    type: WorkflowStepTypeT;
 }
 interface State {
     dropdownMenuOpened: boolean;
@@ -102,10 +99,10 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         isClickable
     }: {
         name: string;
-        type: GenericTileType;
+        type: WorkflowStepTypeT; // TODO: there's a subtype in actual WF DataStructure
         isClickable: boolean;
     }) {
-        const { icon, theme } = workflowStepConfig[type];
+        const { theme } = workflowStepConfig[type];
         const boxContainerClassName = isClickable ?
             classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
@@ -125,7 +122,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
                         styles[`theme${theme}`]
                     )}
                 >
-                    <Icon icon={icon} />
+                    <Icon type={type} />
                     {this.renderTooltippedDisplayName({ name, isClickable })}
                 </div>
             </div>

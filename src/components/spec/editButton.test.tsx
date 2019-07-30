@@ -7,7 +7,7 @@ import EditButton from "../EditButton";
 import { createAddNodeParams } from "../WorkflowVisContainer";
 
 // Type
-import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../config";
 
 configure({ adapter: new Adapter() });
 

@@ -8,7 +8,8 @@ import style from './styles/workflowVis.module.css';
 import WorkflowVisContainer from "./WorkflowVisContainer";
 
 // Types
-import { WorkflowStepT } from "../types/workflow";
+import { WorkflowStepT } from "../config";
+
 
 interface StateT {
     editMode: boolean;

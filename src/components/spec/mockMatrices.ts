@@ -1,4 +1,4 @@
-import { WorkflowStepTypeT } from "../../types/workflow";
+import { WorkflowStepTypeT } from "../../config";
 import { WorkflowVisDataT } from "../../types/workflowVisTypes";
 
 // NOTE

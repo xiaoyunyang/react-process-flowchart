@@ -6,10 +6,7 @@ import Adapter from "enzyme-adapter-react-16";
 import DecisionStep from "../DecisionStep";
 
 // Types
-import { WorkflowStepTypeT } from "../../types/workflow";
-
-// Constants
-import { workflowStepConfig } from "../../constants/workflowStepConfig";
+import { workflowStepConfig, WorkflowStepTypeT } from "../../config";
 
 configure({ adapter: new Adapter() });
 

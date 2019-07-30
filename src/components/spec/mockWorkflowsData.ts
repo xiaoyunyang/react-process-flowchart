@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-object-literal-type-assertion */
-import { WorkflowStepT } from "../../types/workflow";
+import { WorkflowStepT } from "../../config";
 
 export interface MockWorkflowsData {
     workflowUid: string;
