@@ -1,33 +1,12 @@
-// TODO: move this type to workflowStepConfig
-type AutoPrePublishType = "NONE" | "SUBMIT" | "SAVE";
+import { ActionTypeT, WorkflowStepTypeT } from "./examples/workflowTypes.smartling";
 
-// TODO: move this type to workflowStepConfig
-type ActionType =
-    | "TRANSLATION_SUBMITTED"
-    | "EDIT"
-    | "REVIEW"
-    | "MOVE"
-    | "REJECT"
-    | "POST_MACHINE_REVISION"
-    | "DECISION";
+export * from "./examples/workflowTypes.smartling";
+// export * from "./examples/workflowTypes.cicd";
 
 export interface WorkflowActionT {
     primary: boolean;
-    actionType: ActionType | string;
+    actionType: ActionTypeT | string;
     nextWorkflowStepUid: string;
-}
-
-export enum WorkflowStepTypeT {
-    AUTHORIZE = "AUTHORIZE",
-    DECISION = "DECISION",
-    ADMIN_APPROVAL = "ADMIN_APPROVAL",
-    PRE_TRANSLATION = "PRE_TRANSLATION",
-    TRANSLATION = "TRANSLATION",
-    POST_TRANSLATION = "POST_TRANSLATION",
-    REVIEW = "REVIEW",
-    WORKFLOW_HOLD = "WORKFLOW_HOLD",
-    PUBLISH = "PUBLISH",
-    ANALYSIS = "ANALYSIS"
 }
 
 export interface WorkflowStepT {

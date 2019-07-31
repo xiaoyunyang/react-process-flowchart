@@ -6,10 +6,10 @@
 import React from 'react';
 
 // Types
-import { WorkflowStepTypeT } from "./workflowTypes";
+import { type2IconMapping, encodedWorkflowStepType } from "./workflowTypes";
 import { EndomorphDict, PolymorphDict } from '../lib/types/generic';
 
-import { 
+import {
     CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes
 } from  "../lib/types/workflowVisTypes";
 
@@ -36,17 +36,17 @@ interface StepOptions extends StepBaseOptions {
     canManageUsers: boolean; // TODO: put optional options here
 }
 
-const workflowStepConfig: {[stepType in WorkflowStepTypeT]: StepOptions} = {
-    AUTHORIZE: { theme: ThemeT.DARK, canEdit: false, canDelete: false, canManageUsers: false },
-    DECISION: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    ADMIN_APPROVAL: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    PRE_TRANSLATION: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    TRANSLATION: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    POST_TRANSLATION: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    REVIEW: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    WORKFLOW_HOLD: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    ANALYSIS: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    PUBLISH: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false }
+const workflowStepConfig: {[stepType: string]: StepOptions} = {
+    [encodedWorkflowStepType.start]: { theme: ThemeT.DARK, canEdit: false, canDelete: false, canManageUsers: false },
+    [encodedWorkflowStepType.fork]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[0]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[1]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[2]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[3]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[4]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[5]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
+    [encodedWorkflowStepType[6]]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false },
+    [encodedWorkflowStepType.finish]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false }
 };
 
 interface IconClassName {
@@ -61,19 +61,6 @@ const iconClassName: IconClassName = {
     inbox: "fas fa-inbox",
     branch: "fas fa-code-branch",
     pause: "fas fa-pause-circle"
-};
-
-const type2IconMapping: {[type: string]: string} = {
-    AUTHORIZE:  "inbox",
-    DECISION: "branch",
-    ADMIN_APPROVAL: "inbox",
-    PRE_TRANSLATION: "pause",
-    TRANSLATION: "comment",
-    POST_TRANSLATION: "pencil",
-    REVIEW: "eye",
-    WORKFLOW_HOLD: "pause",
-    ANALYSIS:  "eye",
-    PUBLISH: "check"
 };
 
 const WorkflowStepIcon = ({ type }: { type: string }) => (
@@ -118,8 +105,8 @@ const createAddNodeParams: CreateAddNodeParams = ({
                     candidateNextNodeIds
                 });
 
-                console.log("tetheredNodeId", parentNodeId);
-                console.log("nextNodeId", nextNodeId);
+                // console.log("tetheredNodeId", parentNodeId);
+                // console.log("nextNodeId", nextNodeId);
 
                 updatePlusBtnClickParams({
                     left,

@@ -196,7 +196,7 @@ describe("WorkflowVisUtils", () => {
     describe("#createCoordPairs", () => {
         it("should create an array of pairs of coordinates between parent and child nodes using two hash tables", () => {
             const nodeIdToCoord = {
-                "5890236e433b-auth": "0,0",
+                "wf-ba-auth": "0,0",
                 ba322565b1bf: "2,0",
                 "09e6110fda58": "4,0",
                 b2b5c4c7cfd7: "4,1",
@@ -377,7 +377,7 @@ describe("WorkflowVisUtils", () => {
     test("#downRightDashesToPlace", () => {
         const decisionStepCols = [2, 4];
         const matrix = [
-            ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+            ["wf-ba-auth", "box|empty|0,1", "box|empty|0,2"],
             ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
             ["ba322565b1bf", "diamond|downRight|2,1", "diamond|empty|2,2"],
             ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|empty|3,2"],
@@ -518,7 +518,7 @@ describe("WorkflowVisUtils", () => {
             const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
             const expectedMatrix = [
-                ["8e00dae32eb6-auth"],
+                ["wf-aa-auth"],
                 ["standard|arrowRight|1,0|0,0"],
                 ["64735f9f64c8"],
                 ["standard|arrowRight|3,0|2,0"],
@@ -529,15 +529,15 @@ describe("WorkflowVisUtils", () => {
                 ["6473f65c98fe"]
             ];
             const expectedNodeIdToCoord = {
-                "8e00dae32eb6-auth": "0,0",
+                "wf-aa-auth": "0,0",
                 "64735f9f64c8": "2,0",
                 "6473fda8a603": "4,0",
                 647384536514: "6,0",
                 "6473f65c98fe": "8,0"
             };
             const expectedNodeIdToParentNodeIds = {
-                "8e00dae32eb6-auth": undefined,
-                "64735f9f64c8": ["8e00dae32eb6-auth"],
+                "wf-aa-auth": undefined,
+                "64735f9f64c8": ["wf-aa-auth"],
                 "6473fda8a603": ["64735f9f64c8"],
                 647384536514: ["6473fda8a603"],
                 "6473f65c98fe": ["647384536514"]
@@ -558,7 +558,7 @@ describe("WorkflowVisUtils", () => {
             const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
 
             const expectedMatrix = [
-                ["5890236e433b-auth", "box|empty|0,1", "box|empty|0,2"],
+                ["wf-ba-auth", "box|empty|0,1", "box|empty|0,2"],
                 ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
                 ["ba322565b1bf", "diamond|downRight|2,1", "diamond|downRightDash|2,2|2,0"],
                 ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|empty|3,2"],
@@ -571,7 +571,7 @@ describe("WorkflowVisUtils", () => {
                 ["a3135bdf3aa3", "box|empty|10,1", "box|empty|10,2"]
             ];
             const expectedNodeIdToCoord = {
-                "5890236e433b-auth": "0,0",
+                "wf-ba-auth": "0,0",
                 ba322565b1bf: "2,0",
                 "09e6110fda58": "4,0",
                 b2b5c4c7cfd7: "4,1",
@@ -580,8 +580,8 @@ describe("WorkflowVisUtils", () => {
                 a3135bdf3aa3: "10,0"
             };
             const expectedNodeIdToParentNodeIds = {
-                "5890236e433b-auth": undefined,
-                ba322565b1bf: ["5890236e433b-auth"],
+                "wf-ba-auth": undefined,
+                ba322565b1bf: ["wf-ba-auth"],
                 "09e6110fda58": ["ba322565b1bf"],
                 b2b5c4c7cfd7: ["ba322565b1bf"],
                 "297786162f15": ["09e6110fda58", "b2b5c4c7cfd7"],
@@ -605,7 +605,7 @@ describe("WorkflowVisUtils", () => {
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
                 const expectedMatrix = matrixDA;
                 const expectedNodeIdToCoord = {
-                    "da-auth": "0,0",
+                    "wf-da-auth": "0,0",
                     "da-d1": "2,0",
                     pretrans1: "4,0",
                     trans4: "4,1",
@@ -618,7 +618,7 @@ describe("WorkflowVisUtils", () => {
 
                 const expectedNodeIdToParentNodeIds = {
                     "da-d1": [
-                        "da-auth"
+                        "wf-da-auth"
                     ],
                     pretrans1: [
                         "da-d1"
@@ -661,7 +661,7 @@ describe("WorkflowVisUtils", () => {
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
                 const expectedMatrix = matrixDB;
                 const expectedNodeIdToCoord = {
-                    "db-auth": "0,0",
+                    "wf-db-auth": "0,0",
                     "db-d1": "2,0",
                     trans0: "4,0",
                     trans2: "4,1",
@@ -676,7 +676,7 @@ describe("WorkflowVisUtils", () => {
 
                 const expectedNodeIdToParentNodeIds = {
                     "db-d1": [
-                        "db-auth"
+                        "wf-db-auth"
                     ],
                     trans0: [
                         "db-d1"
@@ -726,7 +726,7 @@ describe("WorkflowVisUtils", () => {
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
                 const expectedMatrix = matrixDC;
                 const expectedNodeIdToCoord = {
-                    "dc-auth": "0,0",
+                    "wf-dc-auth": "0,0",
                     "dc-d1": "2,0",
                     trans0: "4,0",
                     trans1: "4,1",
@@ -740,7 +740,7 @@ describe("WorkflowVisUtils", () => {
 
                 const expectedNodeIdToParentNodeIds = {
                     "dc-d1": [
-                        "dc-auth"
+                        "wf-dc-auth"
                     ],
                     trans0: [
                         "dc-d1"
@@ -787,7 +787,7 @@ describe("WorkflowVisUtils", () => {
                 const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
                 const expectedMatrix = matrixDD;
                 const expectedNodeIdToCoord = {
-                    "dd-auth": "0,0",
+                    "wf-dd-auth": "0,0",
                     "dd-d1": "2,0",
                     trans0: "4,0",
                     trans2: "4,1",
@@ -803,7 +803,7 @@ describe("WorkflowVisUtils", () => {
 
                 const expectedNodeIdToParentNodeIds = {
                     "dd-d1": [
-                        "dd-auth"
+                        "wf-dd-auth"
                     ],
                     trans0: [
                         "dd-d1"

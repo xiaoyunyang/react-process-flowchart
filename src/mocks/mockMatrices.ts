@@ -1,4 +1,4 @@
-import { WorkflowStepTypeT } from "../config";
+import { encodedWorkflowStepType } from "../config";
 import { WorkflowVisDataT } from "../lib/types/workflowVisTypes";
 
 // NOTE
@@ -10,8 +10,8 @@ export const workflowVisData = {
     workflowStepNodes: {
         "node-start": {
             id: "node-start",
-            name: "Authorize",
-            type: WorkflowStepTypeT.AUTHORIZE,
+            name: encodedWorkflowStepType["start"],
+            type: encodedWorkflowStepType["start"],
             workflowStepOrder: 0,
             nextNodes: [
                 { id: "node-fork", primary: true }
@@ -20,8 +20,8 @@ export const workflowVisData = {
         },
         "node-fork": {
             id: "node-fork",
-            name: "Fork",
-            type: WorkflowStepTypeT.DECISION,
+            name: encodedWorkflowStepType["fork"],
+            type: encodedWorkflowStepType["fork"],
             workflowStepOrder: 1,
             nextNodes: [
                 { id: "node-1A", primary: true },
@@ -31,8 +31,8 @@ export const workflowVisData = {
         },
         "node-1A": {
             id: "node-1A",
-            name: "Translation",
-            type: WorkflowStepTypeT.TRANSLATION,
+            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}1`,
+            type: encodedWorkflowStepType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -41,8 +41,8 @@ export const workflowVisData = {
         },
         "node-2A": {
             id: "node-2A",
-            name: "Translation2",
-            type: WorkflowStepTypeT.TRANSLATION,
+            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}2`,
+            type: encodedWorkflowStepType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -51,8 +51,8 @@ export const workflowVisData = {
         },
         "node-3A": {
             id: "node-3A",
-            name: "Translation3",
-            type: WorkflowStepTypeT.TRANSLATION,
+            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}3`,
+            type: encodedWorkflowStepType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -61,8 +61,8 @@ export const workflowVisData = {
         },
         "node-4A": {
             id: "node-4A",
-            name: "Translation4",
-            type: WorkflowStepTypeT.TRANSLATION,
+            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}4`,
+            type: encodedWorkflowStepType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -71,8 +71,8 @@ export const workflowVisData = {
         },
         "node-1B": {
             id: "node-1B",
-            name: "E",
-            type: WorkflowStepTypeT.POST_TRANSLATION,
+            name: `${encodedWorkflowStepType[3].toLocaleLowerCase()}1`,
+            type: encodedWorkflowStepType[3],
             workflowStepOrder: 3,
             nextNodes: [
                 { id: "node-1C", primary: true }
@@ -81,28 +81,18 @@ export const workflowVisData = {
         },
         "node-1C": {
             id: "node-1C",
-            name: "R",
-            type: WorkflowStepTypeT.POST_TRANSLATION,
+            name: `${encodedWorkflowStepType[4].toLocaleLowerCase()}2`,
+            type: encodedWorkflowStepType[4],
             workflowStepOrder: 4,
             nextNodes: [
                 { id: "node-finish", primary: true }
             ],
             prevSteps: []
         },
-        "node-2B": {
-            id: "node-2B",
-            name: "Translation2",
-            type: WorkflowStepTypeT.TRANSLATION,
-            workflowStepOrder: 2,
-            nextNodes: [
-                { id: "node-1B", primary: true }
-            ],
-            prevSteps: []
-        },
         "node-finish": {
             id: "node-finish",
-            name: "Published",
-            type: WorkflowStepTypeT.PUBLISH,
+            name: encodedWorkflowStepType["finish"].toLocaleLowerCase(),
+            type: encodedWorkflowStepType["finish"],
             workflowStepOrder: 5,
             nextNodes: [],
             prevSteps: []
@@ -110,7 +100,7 @@ export const workflowVisData = {
         "m-long": {
             id: "m-long",
             name: "MMMMMMMMMMMMMM", // 14 chars
-            type: WorkflowStepTypeT.TRANSLATION,
+            type: encodedWorkflowStepType[4],
             workflowStepOrder: 1,
             nextNodes: [
                 { id: "node-fork", primary: true }
@@ -120,7 +110,7 @@ export const workflowVisData = {
         "a-long": {
             id: "a-long",
             name: "AAA AAAAAAAAAAA", // 14 chars
-            type: WorkflowStepTypeT.TRANSLATION,
+            type: encodedWorkflowStepType[4],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "i-long", primary: true }
@@ -130,7 +120,7 @@ export const workflowVisData = {
         "i-long": {
             id: "i-long",
             name: "iiiiiiiiiiiiii", // 14 chars
-            type: WorkflowStepTypeT.TRANSLATION,
+            type: encodedWorkflowStepType[4],
             workflowStepOrder: 3,
             nextNodes: [],
             prevSteps: []
@@ -175,7 +165,7 @@ export const matrixAC = [
     ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2", "standard|empty|1,3"],
     ["node-fork", "diamond|downRight|2,1", "diamond|downRight|2,2", "diamond|downRight|2,3"],
     ["standard|arrowRight|3,0|2,0", "standard|arrowRight|3,1|2,0", "standard|arrowRight|3,2|2,0", "standard|arrowRight|3,3|2,0"],
-    ["node-1A", "node-2A", "node-1B", "node-1C"],
+    ["node-1A", "node-2A", "node-3A", "node-4A"],
     ["standard|arrowRight|5,0|4,0", "standard|lineHoriz|5,1|4,1", "standard|lineHoriz|5,2|4,2", "standard|lineHoriz|5,3|4,3"],
     ["node-finish", "box|rightUpArrow|6,1", "box|rightUp|6,2", "box|rightUp|6,3"]
 ];
@@ -235,6 +225,7 @@ export const matrixBB = [
     ["standard|arrowRight|9,0", "standard|empty|9,1"],
     ["node-finish", "box|empty|10,1"]
 ];
+
 const matrixBC = [
     ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
@@ -262,6 +253,7 @@ export const matrixBD = [
     ["standard|arrowRight|9,0", "standard|lineHoriz|9,1"],
     ["node-finish", "box|rightUpArrow|10,1"]
 ];
+
 const matrixBE = [
     ["node-start", "box|empty|0,1"],
     ["standard|arrowRight|1,0", "standard|empty|1,1"],
@@ -302,7 +294,7 @@ export const matrixBF = [
 
 export const matrixDA = [
     [
-        "da-auth",
+        "wf-da-auth",
         "box|empty|0,1",
         "box|empty|0,2",
         "box|empty|0,3",
@@ -382,7 +374,7 @@ export const matrixDA = [
 
 export const matrixDB = [
     [
-        "db-auth",
+        "wf-db-auth",
         "box|empty|0,1",
         "box|empty|0,2",
         "box|empty|0,3",
@@ -473,7 +465,7 @@ export const matrixDB = [
 
 export const matrixDC = [
     [
-        "dc-auth",
+        "wf-dc-auth",
         "box|empty|0,1",
         "box|empty|0,2",
         "box|empty|0,3",
@@ -548,7 +540,7 @@ export const matrixDC = [
 
 export const matrixDD = [
     [
-        "dd-auth",
+        "wf-dd-auth",
         "box|empty|0,1",
         "box|empty|0,2",
         "box|empty|0,3",

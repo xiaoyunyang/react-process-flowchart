@@ -802,7 +802,7 @@ export const populateMatrix = (
         decisionStepCols: number[];
     }
 ): { matrix: Matrix; nodeIdToCoord: EndomorphDict; nodeIdToParentNodeIds: PolymorphDict } => {
-    console.log("Populate Matrix...");
+    // console.log("Populate Matrix...");
 
     const matrix = clone(initialMatrix);
 
@@ -886,7 +886,7 @@ export const populateMatrix = (
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
                 // maintaining toExplore as a priority queue
-                console.log("inserting next step", workflowStepNodes[nextStepId]);
+                // console.log("inserting next step", workflowStepNodes[nextStepId]);
                 // TODO: Create a function for calculating the priority.
                 // If next step is primary, nextStepPriority will be a number between 0 and 1.
                 // We want to explore all the nodes from the primnary branch from left to
