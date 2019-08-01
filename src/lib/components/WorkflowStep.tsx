@@ -1,10 +1,14 @@
 // Libraries
 import React from 'react';
+import { intlShape } from "react-intl";
 import classNames from "classnames";
 import Truncate from "react-truncate";
 
 // Types
-import { WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig } from "../../config";
+import { 
+    WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig,
+    messages, enableIntl
+} from "../../config";
 
 // Style
 import styles from "../styles/workflowVis.module.css";
@@ -31,6 +35,9 @@ interface State {
 }
 
 export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
+    static contextTypes = {
+        intl: intlShape
+    };
     private displayNameRef: React.RefObject<HTMLInputElement> = React.createRef();
 
     constructor(props: PropsT) {
@@ -103,6 +110,16 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         isClickable: boolean;
     }) {
         const { theme } = workflowStepConfig[type];
+        
+        let renderedName;
+
+        // TODO: write test for this later
+        if (enableIntl) {
+            const { intl } = this.context;
+            renderedName = messages[type] ? intl.formatMessage(messages[type]) : name;
+        } else {
+            renderedName = messages[type] ? messages[type] : name;
+        }
         const boxContainerClassName = isClickable ?
             classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
@@ -123,7 +140,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
                     )}
                 >
                     <Icon type={type} />
-                    {this.renderTooltippedDisplayName({ name, isClickable })}
+                    {this.renderTooltippedDisplayName({ name: renderedName, isClickable })}
                 </div>
             </div>
         );

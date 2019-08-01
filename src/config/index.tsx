@@ -4,6 +4,7 @@
 
 // Libraries
 import React from 'react';
+import { defineMessages } from "react-intl";
 
 // Types
 import { type2IconMapping, encodedWorkflowStepType } from "./workflowTypes";
@@ -120,7 +121,9 @@ const createAddNodeParams: CreateAddNodeParams = ({
             return "";
         };
 
+
 export * from "./workflowTypes";
+export * from "./messages";
 
 export {
     WorkflowStepIcon,
