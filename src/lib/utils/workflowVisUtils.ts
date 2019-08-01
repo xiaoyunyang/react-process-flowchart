@@ -1,15 +1,18 @@
+/* eslint-disable import/no-cycle */
+//TODO: figure out why there's a dependency cycle
 // Utils
 import { clone, chain, sort } from "ramda";
 import MinHeap from "./MinHeap";
 
 
 // Types
+import { WorkflowStepT, encodedWorkflowStepType } from "../../config";
 import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
     MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
     GenericTileType, ConnectorTypeT, NextNode
 } from "../types/workflowVisTypes";
-import { WorkflowStepTypeT, WorkflowStepT } from "../../config";
+
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
 
 
@@ -191,7 +194,7 @@ const getPrevSteps = ({
     workflowSteps, workflowStepOrder
 }: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
 ): WorkflowStepT[] => workflowSteps.filter(wfStep =>
-    wfStep.workflowStepType !== WorkflowStepTypeT.DECISION &&
+    wfStep.workflowStepType !== encodedWorkflowStepType.fork &&
     wfStep.workflowStepOrder < workflowStepOrder
 );
 
@@ -203,13 +206,13 @@ const createWorkflowStepNodes = (
     workflowStepNodes: WorkflowStepNodes;
     workflowStepOrderOccur: OccurenceDict;
     firstStepId: string;
-    decisionStepCols: number[];
+    forkStepCols: number[];
 } => {
     const firstStepId = `${workflowUid}-auth`;
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
     let authorizeNextNodes: { id: string; primary: boolean }[] = [];
-    let decisionStepCols: number[] = [];
+    let forkStepCols: number[] = [];
 
     const workflowStepOrderOccur: OccurenceDict = {};
     for (let i = 0; i < workflowSteps.length; i += 1) {
@@ -232,8 +235,8 @@ const createWorkflowStepNodes = (
                 ? workflowStepOrderOccur[stringifiedWorkflowStepOrder]
                 : 0) + 1;
 
-        if (workflowStepType === WorkflowStepTypeT.DECISION) {
-            decisionStepCols = decisionStepCols.concat(workflowStepOrder * 2);
+        if (workflowStepType === encodedWorkflowStepType.fork) {
+            forkStepCols = forkStepCols.concat(workflowStepOrder * 2);
         }
 
         if (workflowStepOrder === 1) {
@@ -261,15 +264,15 @@ const createWorkflowStepNodes = (
         ...workflowStepNodes,
         [firstStepId]: {
             id: firstStepId,
-            name: "Authorize",
-            type: WorkflowStepTypeT.AUTHORIZE,
+            name: "",
+            type: encodedWorkflowStepType.start,
             workflowStepOrder: 0,
             nextNodes: authorizeNextNodes,
             prevSteps: []
         }
     };
 
-    return { firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols };
+    return { firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols };
 };
 
 
@@ -280,13 +283,13 @@ const createWorkflowStepNodes = (
  * @param {string} workflowUid 
  * @returns {WorkflowVisDataT} workflowVisData
  * @returns {Matrix} initialMatrix
- * @returns {number[]} decisionStepCols - the colNums where decision steps are
+ * @returns {number[]} forkStepCols - the colNums where decision steps are
  */
 export const createWorkflowVisData = (
     { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
-): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix; decisionStepCols: number[] } => {
+): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix; forkStepCols: number[] } => {
     const {
-        firstStepId, workflowStepNodes, workflowStepOrderOccur, decisionStepCols
+        firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols
     } = createWorkflowStepNodes({ workflowSteps, workflowUid });
     const workflowVisData = {
         firstStep: firstStepId,
@@ -298,11 +301,11 @@ export const createWorkflowVisData = (
     // Naive: if we see at least one decision step, we want to add an additional row to the matrix
     // to accomodate the dash line add button
     const numRows = Math.max(...Object.values(workflowStepOrderOccur))
-        + (+(decisionStepCols.length > 0));
+        + (+(forkStepCols.length > 0));
 
     const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
         if (i % 2 === 1) return colType;
-        return decisionStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
+        return forkStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
     });
 
     const initialMatrix = initMatrix({ numRows, colTypes });
@@ -310,7 +313,7 @@ export const createWorkflowVisData = (
     return {
         workflowVisData,
         initialMatrix,
-        decisionStepCols
+        forkStepCols
     };
 };
 
@@ -616,12 +619,12 @@ export const invertKeyVal = (keyToVal: EndomorphDict): EndomorphDict =>
  * Provides instruction for where to place a dash line forking from decision step
  *
  * @param {Matrix} matrix
- * @param {number[]} decisionStepCols
+ * @param {number[]} forkStepCols
  * @returns {Array} {replaceBy, coord}[]
  */
 export const downRightDashesToPlace = (
-    { matrix, decisionStepCols }: { matrix: Matrix; decisionStepCols: number[] }
-): { replaceBy: string; coord: MatrixCoord }[] => decisionStepCols.map(colNum => {
+    { matrix, forkStepCols }: { matrix: Matrix; forkStepCols: number[] }
+): { replaceBy: string; coord: MatrixCoord }[] => forkStepCols.map(colNum => {
     const col = matrix[colNum];
     const parentRowNum = lastNodeInCol(col);
     const rowNum = lastOccupiedInCol(col) + 1;
@@ -790,16 +793,16 @@ export const getSortedNextNodes = (
  *
  * @param {WorkflowVisDataT} workflowVisData
  * @param {Matrix} initialMatrix
- * @param {number[]} decisionStepCols - the columns where decision steps reside
+ * @param {number[]} forkStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
  * @returns {EndomorphDict} nodeIdToCoord - a hashmap of nodeId to its matrix coord
  * @returns {PolymorphDict} nodeIdToParentNodeIds
  */
 export const populateMatrix = (
-    { workflowVisData, initialMatrix, decisionStepCols }: {
+    { workflowVisData, initialMatrix, forkStepCols }: {
         workflowVisData: WorkflowVisDataT;
         initialMatrix: Matrix;
-        decisionStepCols: number[];
+        forkStepCols: number[];
     }
 ): { matrix: Matrix; nodeIdToCoord: EndomorphDict; nodeIdToParentNodeIds: PolymorphDict } => {
     // console.log("Populate Matrix...");
@@ -947,7 +950,7 @@ export const populateMatrix = (
     // Add the decision step dashline plus sign placeholder into the matrix where the decision
     // steps are
     // Populate matrix with downRight dash line connectors branching from diamond
-    downRightDashesToPlace({ matrix, decisionStepCols })
+    downRightDashesToPlace({ matrix, forkStepCols })
         .forEach(downRightDashToPlace => replaceTile({
             matrix,
             replaceBy: downRightDashToPlace.replaceBy,

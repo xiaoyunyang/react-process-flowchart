@@ -7,7 +7,7 @@ import DecisionStep from "./DecisionStep";
 import Connector from "./Connector";
 
 // Types
-import { WorkflowStepTypeT } from "../../config";
+import { WorkflowStepTypeT, encodedWorkflowStepType } from "../../config";
 import { ColEntry, AddNodeParams } from "../types/workflowVisTypes";
 
 // Utils
@@ -56,7 +56,7 @@ export default class Column extends React.PureComponent<PropsT> {
         }
 
         // Decision Step
-        if (tile.type === WorkflowStepTypeT.DECISION) {
+        if (tile.type === encodedWorkflowStepType.fork) {
             return <DecisionStep />;
         }
 

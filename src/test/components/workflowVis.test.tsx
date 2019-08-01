@@ -10,7 +10,7 @@ import Column from "../../lib/components/Column";
 import { workflowVisData, matrixBA } from "../../mocks/mockMatrices";
 
 // Types
-import { WorkflowStepTypeT } from "../../config";
+import { encodedWorkflowStepType } from "../../config";
 
 // Constants
 import { ConnectorName, AddNodeParams } from "../../lib/types/workflowVisTypes";
@@ -42,11 +42,11 @@ describe("WorkflowVis Spec", () => {
         it("renders correct number of Columns", () => {
             expect(columns).toHaveLength(matrix.length);
         });
-        it("renders Authorize in the first Column", () => {
+        it("renders start node in the first Column", () => {
             const column = columns.at(0);
             const { colEntries } = column.props();
 
-            expect(colEntries[0].tile.type).toBe(WorkflowStepTypeT.AUTHORIZE);
+            expect(colEntries[0].tile.type).toBe(encodedWorkflowStepType.start);
         });
         it("renders arrowRight connector in the top of the second Column", () => {
             const column = columns.at(1);

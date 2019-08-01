@@ -7,6 +7,10 @@ import Workflow from "../../lib/components/Workflow";
 
 configure({ adapter: new Adapter() });
 
+// TODO: Create test files for workflowStep
+// It should support two modes for messages - one that includes intl and one that does not
+// Both cases need to be tested.
+
 describe("Workflow Spec", () => {
     let workflow: any;
     let props;

@@ -65,7 +65,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
     render() {
         const { workflowUid, workflowSteps, editMode } = this.props;
         const {
-            workflowVisData, initialMatrix, decisionStepCols
+            workflowVisData, initialMatrix, forkStepCols
         } = createWorkflowVisData({ workflowSteps, workflowUid });
 
         // TODO: remove block ----
@@ -97,7 +97,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
         // -----------------------
 
         const { matrix, nodeIdToCoord, nodeIdToParentNodeIds } = populateMatrix({
-            workflowVisData, initialMatrix, decisionStepCols
+            workflowVisData, initialMatrix, forkStepCols
         });
 
         // pass matrix cols (array length) and height (inner array length) to workflowVis

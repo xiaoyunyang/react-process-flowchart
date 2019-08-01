@@ -4,7 +4,6 @@
 
 // Libraries
 import React from 'react';
-import { defineMessages } from "react-intl";
 
 // Types
 import { type2IconMapping, encodedWorkflowStepType } from "./workflowTypes";
@@ -72,6 +71,9 @@ const ForkIcon = () => (
     <i className={iconClassName["branch"]} />
 );
 
+const AddWorkflowStepIcon = () => (
+    <i className="fas fa-plus" />
+);
 const createAddNodeParams: CreateAddNodeParams = ({
     coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds, updatePlusBtnClickParams
 }: {
@@ -128,6 +130,7 @@ export * from "./messages";
 export {
     WorkflowStepIcon,
     ForkIcon,
+    AddWorkflowStepIcon,
     workflowStepConfig,
     createAddNodeParams
 };

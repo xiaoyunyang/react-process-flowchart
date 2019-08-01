@@ -5,7 +5,7 @@ import Adapter from "enzyme-adapter-react-16";
 // Components
 import EditButton from "../../lib/components/EditButton";
 
-import { createAddNodeParams, WorkflowStepTypeT } from "../../config";
+import { createAddNodeParams, encodedWorkflowStepType, AddWorkflowStepIcon } from "../../config";
 
 configure({ adapter: new Adapter() });
 
@@ -13,7 +13,7 @@ const mockWorkflowStepNode = {
     id: "123",
     workflowUid: "JjY1Zwp5i8Royl0ojwk",
     name: "lWveC",
-    type: WorkflowStepTypeT.ADMIN_APPROVAL,
+    type: encodedWorkflowStepType[0],
     workflowStepOrder: 2,
     nextNodes: [{ id: "456", primary: false }],
     prevSteps: []
@@ -33,6 +33,7 @@ describe("EditButton Spec", () => {
     let editButton: any;
     let props: any;
     let createAddChildNodeCommandSpy: any;
+    
     beforeEach(() => {
         props = {
             createAddChildNodeCommand
@@ -43,6 +44,11 @@ describe("EditButton Spec", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    test("It should render icon for adding a workflow step", () => {
+        const plusIcon = editButton.find(AddWorkflowStepIcon);
+        expect(plusIcon).toHaveLength(1);
     });
 
     test("It should call addNode with the right event params applied if EditButton is clicked", () => {

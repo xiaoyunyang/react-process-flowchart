@@ -375,7 +375,7 @@ describe("WorkflowVisUtils", () => {
     });
 
     test("#downRightDashesToPlace", () => {
-        const decisionStepCols = [2, 4];
+        const forkStepCols = [2, 4];
         const matrix = [
             ["wf-ba-auth", "box|empty|0,1", "box|empty|0,2"],
             ["standard|arrowRight|1,0|0,0", "standard|empty|1,1", "standard|empty|1,2"],
@@ -387,7 +387,7 @@ describe("WorkflowVisUtils", () => {
             { replaceBy: "diamond|downRightDash|2,2|2,0", coord: { colNum: 2, rowNum: 2 } },
             { replaceBy: "diamond|downRightDash|4,1|4,0", coord: { colNum: 4, rowNum: 1 } }
         ];
-        expect(downRightDashesToPlace({ matrix, decisionStepCols })).toEqual(expected);
+        expect(downRightDashesToPlace({ matrix, forkStepCols })).toEqual(expected);
     });
 
     test("#getPath", () => {
@@ -514,8 +514,8 @@ describe("WorkflowVisUtils", () => {
             const {
                 workflowVisData, initialMatrix
             } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const decisionStepCols: number[] = [];
-            const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+            const forkStepCols: number[] = [];
+            const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
 
             const expectedMatrix = [
                 ["wf-aa-auth"],
@@ -554,8 +554,8 @@ describe("WorkflowVisUtils", () => {
             const {
                 workflowVisData, initialMatrix
             } = createWorkflowVisData({ workflowSteps, workflowUid });
-            const decisionStepCols: number[] = [2];
-            const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+            const forkStepCols: number[] = [2];
+            const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
 
             const expectedMatrix = [
                 ["wf-ba-auth", "box|empty|0,1", "box|empty|0,2"],
@@ -601,8 +601,8 @@ describe("WorkflowVisUtils", () => {
                 const {
                     workflowVisData, initialMatrix
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
-                const decisionStepCols: number[] = [2];
-                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+                const forkStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
                 const expectedMatrix = matrixDA;
                 const expectedNodeIdToCoord = {
                     "wf-da-auth": "0,0",
@@ -657,8 +657,8 @@ describe("WorkflowVisUtils", () => {
                 const {
                     workflowVisData, initialMatrix
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
-                const decisionStepCols: number[] = [2];
-                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+                const forkStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
                 const expectedMatrix = matrixDB;
                 const expectedNodeIdToCoord = {
                     "wf-db-auth": "0,0",
@@ -722,8 +722,8 @@ describe("WorkflowVisUtils", () => {
                 const {
                     workflowVisData, initialMatrix
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
-                const decisionStepCols: number[] = [2];
-                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+                const forkStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
                 const expectedMatrix = matrixDC;
                 const expectedNodeIdToCoord = {
                     "wf-dc-auth": "0,0",
@@ -783,8 +783,8 @@ describe("WorkflowVisUtils", () => {
                 const {
                     workflowVisData, initialMatrix
                 } = createWorkflowVisData({ workflowSteps, workflowUid });
-                const decisionStepCols: number[] = [2];
-                const res = populateMatrix({ workflowVisData, initialMatrix, decisionStepCols });
+                const forkStepCols: number[] = [2];
+                const res = populateMatrix({ workflowVisData, initialMatrix, forkStepCols });
                 const expectedMatrix = matrixDD;
                 const expectedNodeIdToCoord = {
                     "wf-dd-auth": "0,0",

@@ -3,6 +3,10 @@ import React from 'react';
 // Styles
 import styles from '../styles/workflowVis.module.css';
 
+import {
+    AddWorkflowStepIcon
+} from "../../config";
+
 // Types
 import {
     CreateAddChildNodeCommand, AddChildNodeCommand
@@ -54,7 +58,7 @@ export default class EditButton extends React.PureComponent<PropsT> {
         return (
             <div className={styles.hoverable} role="button" tabIndex={-1} onClick={this.addNodeWithLocationBound} onKeyPress={noop}>
                 <span className={styles.circle}>
-                    <i className="fas fa-plus" />
+                    <AddWorkflowStepIcon />
                 </span>
             </div>
 

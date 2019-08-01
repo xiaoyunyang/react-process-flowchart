@@ -15,8 +15,8 @@ export enum ActionTypeT {
 // TODO: AUTHORIZE and DECISION are hard coded and must be included in the WF step Definition
 // Can we create  a factory function to take in addition types for config?
 export enum WorkflowStepTypeT {
-    AUTHORIZE = "AUTHORIZE",
-    DECISION = "DECISION",
+    START = "START",
+    FORK = "FORK",
     CHECKOUT = "CHECKOUT",
     DEPENDENCIES = "DEPENDENCIES",
     BUILD = "BUILD",
@@ -28,8 +28,8 @@ export enum WorkflowStepTypeT {
 }
 
 export const encodedWorkflowStepType: { [key: string]: WorkflowStepTypeT } = {
-    start: WorkflowStepTypeT.AUTHORIZE,
-    fork: WorkflowStepTypeT.DECISION,
+    start: WorkflowStepTypeT.START,
+    fork: WorkflowStepTypeT.FORK,
     0: WorkflowStepTypeT.CHECKOUT,
     1: WorkflowStepTypeT.DEPENDENCIES,
     2: WorkflowStepTypeT.BUILD,
