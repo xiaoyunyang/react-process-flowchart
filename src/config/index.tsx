@@ -125,7 +125,7 @@ const createAddNodeParams: CreateAddNodeParams = ({
 
 
 export * from "./workflowTypes";
-export * from "./messages";
+export { default as messages } from "./messages";
 
 export {
     WorkflowStepIcon,

@@ -1,2 +1,4 @@
-// export * from "./examples/messages.smartling";
-export * from "./examples/messages.cicd";
+import messages from "./examples/messages.cicd";
+// import messages from "./examples/messages.smartling";
+
+export default messages;

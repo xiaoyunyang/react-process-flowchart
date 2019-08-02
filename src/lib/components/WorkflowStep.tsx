@@ -7,7 +7,7 @@ import Truncate from "react-truncate";
 // Types
 import { 
     WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig,
-    messages, enableIntl
+    messages
 } from "../../config";
 
 // Style
@@ -110,16 +110,10 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         isClickable: boolean;
     }) {
         const { theme } = workflowStepConfig[type];
-        
-        let renderedName;
 
-        // TODO: write test for this later
-        if (enableIntl) {
-            const { intl } = this.context;
-            renderedName = messages[type] ? intl.formatMessage(messages[type]) : name;
-        } else {
-            renderedName = messages[type] ? messages[type] : name;
-        }
+        const renderedName: string = (messages as {[key: string]: string})[type] 
+            ? (messages as {[key: string]: string})[type] : name;
+
         const boxContainerClassName = isClickable ?
             classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
