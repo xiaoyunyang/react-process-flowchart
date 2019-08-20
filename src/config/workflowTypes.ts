@@ -1,6 +1,7 @@
-import { ActionTypeT, WorkflowStepTypeT } from "./examples/workflowTypes.smartling";
-
+// import { ActionTypeT, WorkflowStepTypeT } from "./examples/workflowTypes.smartling";
 // export * from "./examples/workflowTypes.smartling";
+import { ActionTypeT, WorkflowStepTypeT } from "./examples/workflowTypes.cicd";
+
 export * from "./examples/workflowTypes.cicd";
 
 export interface WorkflowActionT {
