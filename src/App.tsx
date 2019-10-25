@@ -40,6 +40,8 @@ const debugModeOn = false;
 
 const noop = () => () => "foo";
 
+// const addNodeParams = ({}) => ({ workflowStepNodes, coordToNodeId }) => noop;
+
 const App = () => (
     <div>
         {enableAcceptanceTest && (

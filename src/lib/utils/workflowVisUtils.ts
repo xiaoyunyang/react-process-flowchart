@@ -26,7 +26,7 @@ const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
  * @returns {boolean} true if tileType is a member of ConnectorTypeT
  */
 export const isConnector = (tileType: GenericTileType): tileType is ConnectorTypeT =>
-    Object.values(ConnectorTypeT).includes(tileType);
+    Object.values(ConnectorTypeT).includes(tileType as ConnectorTypeT);
 
 /**
  * Encodes colNum and rowNum as comma delimited string
@@ -190,6 +190,7 @@ export const initMatrix = (
 }));
 
 // TODO: test getPrevSteps
+// getPrevSteps and get NextSteps are utils
 const getPrevSteps = ({
     workflowSteps, workflowStepOrder
 }: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
@@ -198,6 +199,7 @@ const getPrevSteps = ({
     wfStep.workflowStepOrder < workflowStepOrder
 );
 
+// TODO: Need a huge refactor of this function
 const createWorkflowStepNodes = (
     { workflowSteps, workflowUid }: {
         workflowUid: string; workflowSteps: WorkflowStepT[];
@@ -208,6 +210,7 @@ const createWorkflowStepNodes = (
     firstStepId: string;
     forkStepCols: number[];
 } => {
+    // TODO: need to move this out of the function
     const firstStepId = `${workflowUid}-auth`;
 
     let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
@@ -218,6 +221,9 @@ const createWorkflowStepNodes = (
     for (let i = 0; i < workflowSteps.length; i += 1) {
         const workflowStep = workflowSteps[i];
 
+        // TODO: remove destructuring here
+        // Create a function called `getNodeFromStep` which takes workflowStep
+        // Create a function called `getWorkflowStepOrder` which takes workflowStep
         const {
             workflowStepOrder,
             workflowStepUid,
@@ -239,6 +245,8 @@ const createWorkflowStepNodes = (
             forkStepCols = forkStepCols.concat(workflowStepOrder * 2);
         }
 
+        // TODO: authorizeNextNodes is the next node of `authorize` step
+        // This logic should not be in the visualization lib.
         if (workflowStepOrder === 1) {
             authorizeNextNodes = [{ id: workflowStepUid, primary: true }];
         }
@@ -260,6 +268,8 @@ const createWorkflowStepNodes = (
         };
     }
 
+    // TODO: We should append authorize to the workflowVisData before we go into this function
+    // to derive nodes from workflowVis Data
     workflowStepNodes = {
         ...workflowStepNodes,
         [firstStepId]: {

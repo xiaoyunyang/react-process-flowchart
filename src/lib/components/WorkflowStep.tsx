@@ -1,6 +1,5 @@
 // Libraries
 import React from 'react';
-import { intlShape } from "react-intl";
 import classNames from "classnames";
 import Truncate from "react-truncate";
 
@@ -35,9 +34,6 @@ interface State {
 }
 
 export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
-    static contextTypes = {
-        intl: intlShape
-    };
     private displayNameRef: React.RefObject<HTMLInputElement> = React.createRef();
 
     constructor(props: PropsT) {
