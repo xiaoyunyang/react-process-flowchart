@@ -17,8 +17,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react"
   },
+  "rootDirs": [
+    "src", "stories"
+  ],
   "include": [
     "src"
   ]

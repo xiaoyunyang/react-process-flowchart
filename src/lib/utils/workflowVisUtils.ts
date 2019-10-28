@@ -1,9 +1,6 @@
-/* eslint-disable import/no-cycle */
-//TODO: figure out why there's a dependency cycle
 // Utils
 import { clone, chain, sort } from "ramda";
 import MinHeap from "./MinHeap";
-
 
 // Types
 import { WorkflowStepT, encodedWorkflowStepType } from "../../config";
