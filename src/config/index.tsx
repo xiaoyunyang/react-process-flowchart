@@ -53,6 +53,7 @@ interface IconClassName {
     [id: string]: string;
 }
 
+// TODO: move this into the same file as type2IconMapping
 const iconClassName: IconClassName = {
     pencil: "fas fa-pencil-alt",
     eye: "far fa-eye",
@@ -60,7 +61,11 @@ const iconClassName: IconClassName = {
     comment: "fas fa-comment",
     inbox: "fas fa-inbox",
     branch: "fas fa-code-branch",
-    pause: "fas fa-pause-circle"
+    pause: "fas fa-pause-circle",
+    wrench: "fas fa-wrench",
+    upload: "fas fa-upload",
+    playCircle: "far fa-play-circle",
+    vial: "fas fa-vial"
 };
 
 const WorkflowStepIcon = ({ type }: { type: string }) => (

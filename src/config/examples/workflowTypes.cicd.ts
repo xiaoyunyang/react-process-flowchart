@@ -43,13 +43,15 @@ export const encodedWorkflowStepType: { [key: string]: WorkflowStepTypeT } = {
 export const type2IconMapping: { [type: string]: string } = {
     AUTHORIZE: "check",
     DECISION: "branch",
-    CHECKOUT: "check",
+    CHECKOUT: "eye",
     DEPENDENCIES: "check",
-    BUILD: "check",
-    TEST: "eye",
+    BUILD: "wrench",
+    TEST: "vial",
     TYPE_CHECK: "check",
-    UPLOAD_ASSETS: "inbox",
-    DEPLOY_STG: "check",
+    UPLOAD_ASSETS: "upload",
+    DEPLOY_STG: "inbox",
     APPROVE: "check",
-    DEPLOY_PROD: "check"
+    DEPLOY_PROD: "check",
+    FORK: "branch",
+    START: "playCircle"
 };

@@ -1,6 +1,6 @@
 :root {
-    --base-unit: 0.25rem; /* equals 4px */
-    --border-width: 1px;
-    --border-radius: 2px;
+    --base-unit: 0.25rem; /* 0.25rem equals 4px */
+    --border-width: calc(var(--base-unit) * 0.25);
+    --border-radius: calc(var(--base-unit) * 0.5);
     --text-padding: calc(var(--base-unit)) calc(var(--base-unit) * 2) var(--base-unit);
 }

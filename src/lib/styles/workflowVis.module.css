@@ -4,6 +4,21 @@
 @import "./box.css";
 @import "./colors.css";
 
+* {
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+   box-sizing: border-box; 
+}
+
+.flowchart {
+  margin: 0;
+  padding: 0;
+  font-family: Arial,sans-serif;
+  font-size: 0.875rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .wrapperContainer {
   z-index: 0;
   position: relative;
@@ -54,6 +69,12 @@
   border-radius: var(--box-border-radius);
   align-self: auto;
   line-height: var(--box-line-height);
+}
+
+.boxInner {
+  padding: var(--box-padding);
+  border: var(--node-border);
+  border-radius: var(--box-border-radius);
 }
   
 .diamondContainer {

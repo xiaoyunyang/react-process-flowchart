@@ -11,7 +11,7 @@ module.exports = ({ config }) => {
     test: /\.stories\.tsx?$/,
     use: [
       {
-        loader: require.resolve('awesome-typescript-loader'),
+        loader: require.resolve('awesome-typescript-loader')
       },
       // Optional
       {
@@ -21,4 +21,4 @@ module.exports = ({ config }) => {
   });
   config.resolve.extensions.push('.ts', '.tsx');
   return config;
-  };
+};

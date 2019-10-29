@@ -6,7 +6,7 @@ import Truncate from "react-truncate";
 // Types
 import { 
     WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig,
-    messages
+    messages, ThemeT
 } from "../../config";
 
 // Style
@@ -27,6 +27,7 @@ export const Icon = ({ type }: { type: string }) => (
 interface PropsT {
     name: string;
     type: WorkflowStepTypeT;
+    theme?: ThemeT;
 }
 interface State {
     dropdownMenuOpened: boolean;
@@ -105,7 +106,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         type: WorkflowStepTypeT; // TODO: there's a subtype in actual WF DataStructure
         isClickable: boolean;
     }) {
-        const { theme } = workflowStepConfig[type];
+        const theme = this.props.theme || workflowStepConfig[type].theme;
 
         const renderedName: string = (messages as {[key: string]: string})[type] 
             ? (messages as {[key: string]: string})[type] : name;
