@@ -4,12 +4,6 @@
 @import "./box.css";
 @import "./colors.css";
 
-* {
-  -moz-box-sizing: border-box; 
-  -webkit-box-sizing: border-box; 
-   box-sizing: border-box; 
-}
-
 .flowchart {
   margin: 0;
   padding: 0;
@@ -59,6 +53,15 @@
 .boxContainer {
   margin-top: var(--row-margin-top);
   outline: none;
+}
+
+.boxContainerTooltip {
+  margin-bottom: calc(0 - var(--row-margin-top));
+}
+
+.boxTooltip {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .box {
@@ -360,6 +363,10 @@ margin-top and height attributes to all three connector classes
 
 .hoverable {
   cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .hoverable:focus {
@@ -430,14 +437,7 @@ margin-top and height attributes to all three connector classes
   display: grid;
   grid-template-columns: auto auto;
   width: calc(var(--base-unit) * 25);
-}
-
-.tooltip {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
   white-space: nowrap;
-  color: red;
 }
 
 .box .caret {
@@ -474,7 +474,6 @@ margin-top and height attributes to all three connector classes
 .iconContainer {
   width: 100%;
   display: inline-block;
-  text-align: center; /* TODO: different from project*/
   padding: var(--text-padding);
   margin-top: calc(var(--border-width) * -8);
 }

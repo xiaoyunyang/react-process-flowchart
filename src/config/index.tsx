@@ -5,6 +5,10 @@
 // Libraries
 import React from 'react';
 
+import {
+    Tooltip as UITooltip
+} from '@material-ui/core';
+
 // Types
 import { type2IconMapping, encodedWorkflowStepType } from "./workflowTypes";
 import { EndomorphDict, PolymorphDict } from '../lib/types/generic';
@@ -19,6 +23,16 @@ import {
     findNextNode
 } from "../lib/utils/workflowVisUtils";
 
+
+// Components
+const Tooltip = ({ children, title, placement }: any) => (
+    <UITooltip
+        title={title}
+        placement="top"
+    >
+        {children}
+    </UITooltip>
+);
 
 // TODO: exporting enum as a module is not working
 export enum ThemeT {
@@ -69,7 +83,9 @@ const iconClassName: IconClassName = {
 };
 
 const WorkflowStepIcon = ({ type }: { type: string }) => (
-    <i className={iconClassName[type2IconMapping[type]]} />
+    <div style={{textAlign: "center"}}>
+        <i className={iconClassName[type2IconMapping[type]]} />
+    </div>
 );
 
 const ForkIcon = () => (
@@ -133,6 +149,7 @@ export * from "./workflowTypes";
 export { default as messages } from "./messages";
 
 export {
+    Tooltip,
     WorkflowStepIcon,
     ForkIcon,
     AddWorkflowStepIcon,

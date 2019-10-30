@@ -49,7 +49,7 @@ export const type2IconMapping: { [type: string]: string } = {
     TEST: "vial",
     TYPE_CHECK: "check",
     UPLOAD_ASSETS: "upload",
-    DEPLOY_STG: "inbox",
+    DEPLOY_STG: "pause",
     APPROVE: "check",
     DEPLOY_PROD: "check",
     FORK: "branch",

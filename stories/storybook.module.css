@@ -1,0 +1,9 @@
+.storybookWrapper {
+    padding: 12px;
+}
+
+.storybookWrapper * {
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+}

@@ -3,20 +3,15 @@ import React from 'react';
 import classNames from "classnames";
 import Truncate from "react-truncate";
 
-// Types
-import { 
+// Config
+import {
+    Tooltip,
     WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig,
     messages, ThemeT
 } from "../../config";
 
 // Style
 import styles from "../styles/workflowVis.module.css";
-
-const Tooltip = ({ children }: any) => (
-    <div className={styles.tooltip}>
-        {children}
-    </div>
-);
 
 export const Icon = ({ type }: { type: string }) => (
     <div className={styles.iconContainer}>
@@ -91,7 +86,11 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
 
         return displayTooltip ?
             (
-                <Tooltip>
+                <Tooltip
+                    className={styles.boxTooltip}
+                    placement="top"
+                    title={name}
+                >
                     {this.renderDisplayName({ displayName: name, isClickable })}
                 </Tooltip>
             ) : this.renderDisplayName({ displayName: name, isClickable });
