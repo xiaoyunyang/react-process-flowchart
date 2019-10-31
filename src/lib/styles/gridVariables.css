@@ -10,8 +10,6 @@
     --connector-border: var(--border-width) solid var(--battleship-grey);
     --box-width: calc(var(--base-unit) * 37.5);
     --box-height: calc(var(--base-unit) * 13.75);
-    /* --box-width: 128px;
-    --box-height: 33px; */
     --box-padding: calc(var(--base-unit) * 2.5);
     --row-margin-top: calc(var(--base-unit) * 4.5);
     --box-line-height: 1.33;

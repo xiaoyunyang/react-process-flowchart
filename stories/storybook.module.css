@@ -1,5 +1,10 @@
 .storybookWrapper {
-    padding: 12px;
+    padding: 50px;
+}
+
+.workflowStepWrapper {
+    display: grid;
+    grid-template-columns: repeat(var(--max-columns), 2fr 1fr);
 }
 
 .storybookWrapper * {

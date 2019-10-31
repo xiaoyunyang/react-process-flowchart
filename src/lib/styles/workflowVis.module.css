@@ -413,6 +413,16 @@ margin-top and height attributes to all three connector classes
   color: var(--tealish);
 }
 
+/* TODO: What's the style for disabled dark theme? */
+.themeLight.workflowStepDisabled {
+  cursor: not-allowed;
+  color: var(--silver);
+}
+
+.themeLight.workflowStepDisabled i {
+  color: var(--silver);
+}
+
 .hoverable .themeLight:hover {
   background-color: var(--light-grey);
   color: var(--gunmetal);
@@ -493,6 +503,12 @@ margin-top and height attributes to all three connector classes
   font-size: calc(var(--base-unit) * 5);
   padding: calc(var(--base-unit) * 2.5);
   margin-left: calc(var(--base-unit) * 1.3);
+}
+
+.iconContainerWarning {
+  position: absolute;
+  font-size: var(--font-size-extra-large);
+  color: var(--pale-red);
 }
 
 /* DEBUGGING CODE BEGIN */

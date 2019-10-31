@@ -9,11 +9,19 @@ import { text, boolean, select } from '@storybook/addon-knobs';
 import WorkflowStep from "../src/lib/components/WorkflowStep";
 
 // Config
-import { encodedWorkflowStepType, ThemeT } from "../src/config";
+import { 
+  encodedWorkflowStepType, ThemeT,
+  Utils
+} from "../src/config";
+
 
 // Styles
-import styles from "../src/lib/styles/workflowVis.module.css";
-import storyBoookStyles from "./storybook.module.css";
+// TS complains about module not found when we try to import
+// the css modules without the .d.ts files present. The workaround
+// is to use require.
+const styles = require<any>('../src/lib/styles/workflowVis.module.css');
+const storyBoookStyles = require<any>('./storybook.module.css');
+
 
 export const Button = ({text}: {text: string}) => <button>{text}</button>;
 
@@ -24,13 +32,27 @@ const themeOptions = {
 
 const nodeTypeOptions = encodedWorkflowStepType;
 
+const storyWrapperClass = classNames(
+  styles.flowchart,
+  storyBoookStyles.storybookWrapper,
+  storyBoookStyles.workflowStepWrapper
+);
+
+const displayWarningOptions = {
+  noWarning: "",
+  warning: "foo",
+}
+
 storiesOf("WorkflowStep", module)
   .add("No Popover", () => (
-    <div className={classNames(styles.flowchart, storyBoookStyles.storybookWrapper)}>
+    <div className={storyWrapperClass}>
       <WorkflowStep 
         name={text("name", "Translation")}
         type={select("Node Type", nodeTypeOptions, encodedWorkflowStepType[0])}
         theme={select("Theme", themeOptions, ThemeT.LIGHT)}
+        isDisabled={boolean("isDisabled", false)}
+        stepDisabledMessage={text("disabledMessage", "Step is disabled")}
+        shouldHighlight={boolean("shouldHighlight", false)}
       />
     </div>
   ));

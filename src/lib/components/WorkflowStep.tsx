@@ -1,18 +1,31 @@
 // Libraries
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classNames from "classnames";
 import Truncate from "react-truncate";
 
 // Config
 import {
-    Tooltip,
-    WorkflowStepTypeT, WorkflowStepIcon, workflowStepConfig,
-    messages, ThemeT
+    Tooltip, Dropdown,
+    WorkflowStepEditMenu,
+    WorkflowStepTypeT, ThemeT, WorkflowStepIcon, workflowStepConfig,
+    messages,
+    ExclaimationIcon
 } from "../../config";
 
 // Style
 import styles from "../styles/workflowVis.module.css";
 
+export const WarningIcon = () => (
+    <div className={styles.iconContainerWarning}>
+        <ExclaimationIcon />
+    </div>
+);
+
+
+// TODO: different from project code
+const DropdownComponent = WorkflowStepEditMenu;
+
+// TODO: different from project code
 export const Icon = ({ type }: { type: string }) => (
     <div className={styles.iconContainer}>
         <WorkflowStepIcon type={type} />
@@ -22,6 +35,10 @@ export const Icon = ({ type }: { type: string }) => (
 interface PropsT {
     name: string;
     type: WorkflowStepTypeT;
+    isDisabled: boolean;
+    stepDisabledMessage?: string;
+    shouldHighlight: boolean;
+    displayWarning?: ReactNode;
     theme?: ThemeT;
 }
 interface State {
@@ -39,7 +56,8 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             dropdownMenuOpened: false,
             displayTooltip: false
         };
-        this.boundToggleDropdownMenu = this.toggleDropdownMenu.bind(this);
+        this.boundOpenDropdownMenu = this.toggleDropdownMenu.bind(this, true);
+        this.boundCloseDropdownMenu = this.toggleDropdownMenu.bind(this, false);
         this.boundHandleTruncate = this.handleTruncate.bind(this);
     }
 
@@ -49,9 +67,10 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         this.setState({ displayTooltip: truncated });
     }
 
-    boundToggleDropdownMenu: () => void;
-    toggleDropdownMenu() {
-        this.setState((state: State) => ({ dropdownMenuOpened: !state.dropdownMenuOpened }));
+    boundOpenDropdownMenu: () => void;
+    boundCloseDropdownMenu: () => void;
+    toggleDropdownMenu(dropdownMenuOpened: boolean) {
+        this.setState({ dropdownMenuOpened });
     }
     renderDisplayName({ displayName, isClickable }: { displayName: string; isClickable: boolean }) {
         const { dropdownMenuOpened } = this.state;
@@ -60,23 +79,27 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             styles.caret, styles.caretUp, styles.active,
             { [styles.hidden]: !dropdownMenuOpened }
         );
+
         const caretDownClassName = classNames(
             styles.caret, styles.caretDown,
             { [styles.hidden]: dropdownMenuOpened }
         );
+
         return (
             <div className={classNames(styles.workflowStepDisplayName, styles.flexContainer)}>
                 <Truncate onTruncate={this.boundHandleTruncate}>
                     {displayName}
                 </Truncate>
-                {isClickable && (
-                    <span className={styles.carets}>
-                        <span className={styles.caretsWrapper}>
-                            <span className={caretDownClassName} />
-                            <span className={caretUpClassName} />
+                {
+                    isClickable && (
+                        <span className={styles.carets}>
+                            <span className={styles.caretsWrapper}>
+                                <span className={caretDownClassName} />
+                                <span className={caretUpClassName} />
+                            </span>
                         </span>
-                    </span>
-                )}
+                    )
+                }
             </div>
         );
     }
@@ -89,7 +112,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
                 <Tooltip
                     className={styles.boxTooltip}
                     placement="top"
-                    title={name}
+                    tooltipContent={name}
                 >
                     {this.renderDisplayName({ displayName: name, isClickable })}
                 </Tooltip>
@@ -97,15 +120,15 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
     }
 
     renderWorkflowStep({
-        name,
-        type,
-        isClickable
+        isClickable,
+        isDisabled
     }: {
-        name: string;
-        type: WorkflowStepTypeT; // TODO: there's a subtype in actual WF DataStructure
         isClickable: boolean;
+        isDisabled?: boolean;
     }) {
-        const theme = this.props.theme || workflowStepConfig[type].theme;
+        const { name, type, shouldHighlight, displayWarning } = this.props;
+
+        const theme = this.props.theme || workflowStepConfig[type].theme; // TODO: need to test this
 
         const renderedName: string = (messages as {[key: string]: string})[type] 
             ? (messages as {[key: string]: string})[type] : name;
@@ -113,36 +136,75 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         const boxContainerClassName = isClickable ?
             classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
-
         return (
-            <div
-                role="button"
-                tabIndex={-1}
-                onKeyPress={() => { }}
-                className={boxContainerClassName}
-                onClick={this.boundToggleDropdownMenu}
-            >
+            <div className={boxContainerClassName}>
                 <div
                     className={classNames(
+                        { [styles.workflowStepDisabled]: isDisabled },
+                        { [styles.highlighted]: shouldHighlight },
                         styles.box,
                         styles.flexContainer,
                         styles[`theme${theme}`]
                     )}
                 >
+                    {displayWarning && <WarningIcon />}
                     <Icon type={type} />
                     {this.renderTooltippedDisplayName({ name: renderedName, isClickable })}
                 </div>
             </div>
         );
     }
-    render() {
-        const { name, type } = this.props;
-        const { canEdit, canDelete } = workflowStepConfig[type];
+    renderInDropdownConditionally(children: ReactNode, isClickable: boolean) {
+        const { type, } = this.props;
+        const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
 
-        if (!canEdit && !canDelete) {
-            return this.renderWorkflowStep({ name, type, isClickable: false });
-        }
-
-        return this.renderWorkflowStep({ name, type, isClickable: true });
+        const editMenuProps = {
+            closeOnClick: false,
+            onOpen: this.boundOpenDropdownMenu,
+            onClose: this.boundCloseDropdownMenu
+        };
+        return isClickable ? (
+            <Dropdown
+                closeOnClick={false}
+                onOpen={this.boundOpenDropdownMenu}
+                onClose={this.boundCloseDropdownMenu}
+                component={DropdownComponent}
+            >
+                {children}
+            </Dropdown>
+        ) : children;
+        // return children;
     }
+    renderInTooltipConditionally(children: ReactNode, condition: boolean) {
+        const { displayWarning, stepDisabledMessage } = this.props;
+        
+        let displayWarningMsg = undefined;
+
+        const tooltipContent = displayWarningMsg || stepDisabledMessage || messages.stepIsDisabled;
+        
+        return condition ? (
+            <Tooltip
+                placement="top"
+                tooltipContent={tooltipContent}
+                tooltipTitleClassName={styles.boxContainerTooltip}
+            >
+                {children}
+            </Tooltip>
+        ) : children;
+    }
+    render() {
+        const { type, isDisabled, displayWarning } = this.props;
+        const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
+
+        // TODO: need to change the config so it doesn't explicitly identify what the options are
+        const isClickable = !isDisabled && (canEdit || canDelete || canManageUsers);
+
+        return this.renderInTooltipConditionally(
+            this.renderInDropdownConditionally(
+                this.renderWorkflowStep({ isClickable, isDisabled }),
+                isClickable
+            ),
+            !!displayWarning || isDisabled
+        );
+    };
 }

@@ -61,7 +61,14 @@ export default class Column extends React.PureComponent<PropsT> {
         }
 
         // WorkflowStep
-        return <WorkflowStep name={tile.name} type={tile.type as WorkflowStepTypeT} />;
+        return (
+            <WorkflowStep
+                name={tile.name}
+                type={tile.type as WorkflowStepTypeT}
+                isDisabled={false}
+                shouldHighlight={false}
+            />
+        );
     }
     render() {
         const { colEntries, editMode, addNodeParams } = this.props;

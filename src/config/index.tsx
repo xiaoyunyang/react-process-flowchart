@@ -5,12 +5,8 @@
 // Libraries
 import React from 'react';
 
-import {
-    Tooltip as UITooltip
-} from '@material-ui/core';
-
 // Types
-import { type2IconMapping, encodedWorkflowStepType } from "./workflowTypes";
+import { encodedWorkflowStepType } from "./workflowTypes";
 import { EndomorphDict, PolymorphDict } from '../lib/types/generic';
 
 import {
@@ -23,16 +19,8 @@ import {
     findNextNode
 } from "../lib/utils/workflowVisUtils";
 
+import * as Utils from "./utils";
 
-// Components
-const Tooltip = ({ children, title, placement }: any) => (
-    <UITooltip
-        title={title}
-        placement="top"
-    >
-        {children}
-    </UITooltip>
-);
 
 // TODO: exporting enum as a module is not working
 export enum ThemeT {
@@ -62,35 +50,6 @@ const workflowStepConfig: {[stepType: string]: StepOptions} = {
     [encodedWorkflowStepType[6]]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false },
     [encodedWorkflowStepType.finish]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false }
 };
-
-interface IconClassName {
-    [id: string]: string;
-}
-
-// TODO: move this into the same file as type2IconMapping
-const iconClassName: IconClassName = {
-    pencil: "fas fa-pencil-alt",
-    eye: "far fa-eye",
-    check: "far fa-check-circle",
-    comment: "fas fa-comment",
-    inbox: "fas fa-inbox",
-    branch: "fas fa-code-branch",
-    pause: "fas fa-pause-circle",
-    wrench: "fas fa-wrench",
-    upload: "fas fa-upload",
-    playCircle: "far fa-play-circle",
-    vial: "fas fa-vial"
-};
-
-const WorkflowStepIcon = ({ type }: { type: string }) => (
-    <div style={{textAlign: "center"}}>
-        <i className={iconClassName[type2IconMapping[type]]} />
-    </div>
-);
-
-const ForkIcon = () => (
-    <i className={iconClassName["branch"]} />
-);
 
 const AddWorkflowStepIcon = () => (
     <i className="fas fa-plus" />
@@ -146,14 +105,13 @@ const createAddNodeParams: CreateAddNodeParams = ({
 
 
 export * from "./workflowTypes";
+export * from "./uic";
 export { default as messages } from "./messages";
-
+ 
 export {
-    Tooltip,
-    WorkflowStepIcon,
-    ForkIcon,
     AddWorkflowStepIcon,
     workflowStepConfig,
-    createAddNodeParams
+    createAddNodeParams,
+    Utils
 };
 
