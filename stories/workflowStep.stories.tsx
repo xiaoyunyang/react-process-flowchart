@@ -44,7 +44,7 @@ const displayWarningOptions = {
 }
 
 storiesOf("WorkflowStep", module)
-  .add("No Popover", () => (
+  .add("WorkflowStep", () => (
     <div className={storyWrapperClass}>
       <WorkflowStep 
         name={text("name", "Translation")}

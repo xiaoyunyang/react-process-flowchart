@@ -646,6 +646,8 @@ export const matrixDD = [
     ]
 ];
 
+
+// TODO: something is broken about this matrixAB in editMode
 export const matrices = [
     { name: "Truncate Name", matrix: matrixTruncateNameTest },
     { name: "A-A", matrix: matrixAA },
