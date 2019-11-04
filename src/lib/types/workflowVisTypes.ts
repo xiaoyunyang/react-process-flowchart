@@ -1,6 +1,6 @@
-import { WorkflowStepTypeT, WorkflowStepT } from "../../config";
+import { ReactNode } from "react";
+import { NodeTypeT, WorkflowStepT } from "../../config";
 import { EndomorphDict, PolymorphDict } from "./generic";
-
 
 export interface NextNode {
     id: string;
@@ -9,11 +9,15 @@ export interface NextNode {
 
 export interface WorkflowStepNodeT {
     id: string;
+    workflowUid: string;
     name: string;
-    type: WorkflowStepTypeT | string;
+    type: NodeTypeT;
+    isDisabled: boolean;
     workflowStepOrder: number;
     nextNodes: NextNode[];
+    nextSteps: WorkflowStepT[];
     prevSteps: WorkflowStepT[];
+    displayWarning?: ReactNode;
 }
 
 export interface WorkflowStepNodes { [id: string]: WorkflowStepNodeT }
@@ -58,18 +62,40 @@ export enum ConnectorName {
 
 export interface ConnectorT {
     id: string;
-    containerName: string;
-    type: ConnectorTypeT;
     name: ConnectorName;
+    containerName: ContainerNameT;
+    type: ConnectorTypeT;
 }
 
-export type GenericTileType = ConnectorTypeT | WorkflowStepTypeT | string;
-
-export interface GenericTile {
-    type: GenericTileType;
-    name: string;
+interface BaseTileT<T> {
     id: string;
+    name: string;
+    type: T;
 }
+
+export enum ContainerNameT {
+    DIAMOND = "connectorContainerDiamond",
+    BOX = "connectorContainerBox",
+    STANDARD = "connectorContainerStandard"
+}
+
+interface ConnectorTileT extends BaseTileT<ConnectorTypeT> {
+    containerName: ContainerNameT;
+}
+
+export interface NodeTileT extends BaseTileT<NodeTypeT> {
+    displayWarning?: ReactNode;
+    nextNodes?: NextNode[];
+    nextSteps?: WorkflowStepT[];
+    prevSteps: WorkflowStepT[];
+    isDisabled: boolean;
+    workflowStepOrder: number;
+    workflowUid: string;
+}
+
+export type GenericTileType = ConnectorTypeT | NodeTypeT | string;
+
+export type GenericTile = NodeTileT | ConnectorTileT;
 
 export type Matrix = string[][];
 

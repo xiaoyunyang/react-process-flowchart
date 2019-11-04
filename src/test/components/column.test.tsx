@@ -9,7 +9,7 @@ import WorkflowStep from "../../lib/components/WorkflowStep";
 import Connector from "../../lib/components/Connector";
 
 // Types
-import { encodedWorkflowStepType } from "../../config";
+import { encodedNodeType } from "../../config";
 import { ConnectorTypeT } from "../../lib/types/workflowVisTypes";
 
 configure({ adapter: new Adapter() });
@@ -19,11 +19,11 @@ describe("Column Spec", () => {
     const colEntries = [
         {
             matrixEntry: "ba322565b1bf",
-            tile: { id: "ba322565b1bf", name: "D", type: encodedWorkflowStepType.fork }
+            tile: { id: "ba322565b1bf", name: "D", type: encodedNodeType.fork }
         },
         {
             matrixEntry: "09e6110fda58",
-            tile: { id: "09e6110fda58", name: encodedWorkflowStepType[2], type: encodedWorkflowStepType[2] }
+            tile: { id: "09e6110fda58", name: encodedNodeType[2], type: encodedNodeType[2] }
         },
         {
             matrixEntry: "box|empty|0,1",

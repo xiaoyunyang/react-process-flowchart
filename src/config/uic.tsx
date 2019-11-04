@@ -23,7 +23,7 @@ export const Tooltip = React.forwardRef(
         title={tooltipContent}
         placement={placement}
     >
-        <div ref={ref}>
+        <div style={{marginLeft: "auto", marginRight: "auto"}} ref={ref}>
             { children }
         </div>
     </UITooltip>
@@ -99,9 +99,17 @@ const StyledMenu = withStyles({
   ));
 
 
-export const Dropdown = (props: any) => {
-    return <props.component {...props}/>
-};
+export const Dropdown = (props: any) => 
+    <props.component {...props}/>;
+
+export const DropdownComponent = ({
+    canEdit, canDelete, canManageUsers,
+    type, workflowStepUid, workflowUid,
+    nextSteps, prevSteps,
+    onOpen, onClose, children
+}: any) => <WorkflowStepEditMenu 
+    onClose={onClose} onOpen={onOpen} children={children} 
+    />;
 
 export const WorkflowStepEditMenu = ({
     closeOnClick, onOpen, onClose, children

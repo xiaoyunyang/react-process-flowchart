@@ -1,4 +1,4 @@
-import { encodedWorkflowStepType, ActionTypeT, WorkflowStepT } from "../config";
+import { encodedNodeType, ActionTypeT, WorkflowStepT } from "../config";
 
 const actionTypes = Object.keys(ActionTypeT);
 
@@ -14,8 +14,8 @@ export const AA = {
     workflowSteps: [
         {
             workflowStepUid: "6473fda8a603",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -32,15 +32,15 @@ export const AA = {
         },
         {
             workflowStepUid: "6473f65c98fe",
-            workflowStepName: encodedWorkflowStepType.finish.toLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 4,
             actions: []
         },
         {
             workflowStepUid: "647384536514",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -57,8 +57,8 @@ export const AA = {
         },
         {
             workflowStepUid: "64735f9f64c8",
-            workflowStepName: encodedWorkflowStepType[2].toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: encodedNodeType[2].toLocaleLowerCase(),
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 1,
             actions: [
                 {
@@ -78,8 +78,8 @@ export const AB = {
     workflowSteps: [
         {
             workflowStepUid: "6473fda8a603",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -96,15 +96,15 @@ export const AB = {
         },
         {
             workflowStepUid: "6473f65c98fe",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 4,
             actions: []
         },
         {
             workflowStepUid: "647384536514",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -121,8 +121,8 @@ export const AB = {
         },
         {
             workflowStepUid: "64735f9f64c8",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -143,8 +143,8 @@ export const AC = {
     workflowSteps: [
         {
             workflowStepUid: "b5e96430cba5",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -172,15 +172,15 @@ export const AC = {
         },
         {
             workflowStepUid: "41d3942a7566",
-            workflowStepName: encodedWorkflowStepType.finish,
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish,
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 3,
             actions: []
         },
         {
             workflowStepUid: "863319b51a3f",
-            workflowStepName: `${encodedWorkflowStepType[2].toLowerCase()}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].toLowerCase()}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -192,8 +192,8 @@ export const AC = {
         },
         {
             workflowStepUid: "cb12d6198c7c",
-            workflowStepName: `${encodedWorkflowStepType[2].toLowerCase()}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].toLowerCase()}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -205,8 +205,8 @@ export const AC = {
         },
         {
             workflowStepUid: "e0405f577ddb",
-            workflowStepName: `${encodedWorkflowStepType[2].toLowerCase()}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].toLowerCase()}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -218,8 +218,8 @@ export const AC = {
         },
         {
             workflowStepUid: "e0405f577ddc",
-            workflowStepName: `${encodedWorkflowStepType[2].toLowerCase()}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].toLowerCase()}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -238,8 +238,8 @@ export const AD = {
     workflowSteps: [
         {
             workflowStepUid: "b5e96430cba5",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -267,8 +267,8 @@ export const AD = {
         },
         {
             workflowStepUid: "c1f18b8739ab",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -280,8 +280,8 @@ export const AD = {
         },
         {
             workflowStepUid: "edit1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -293,15 +293,15 @@ export const AD = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -313,8 +313,8 @@ export const AD = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -326,8 +326,8 @@ export const AD = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -339,8 +339,8 @@ export const AD = {
         },
         {
             workflowStepUid: "trans4",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -360,8 +360,8 @@ export const AE = {
     workflowSteps: [
         {
             workflowStepUid: "ae-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -384,8 +384,8 @@ export const AE = {
         },
         {
             workflowStepUid: "review1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 4)}`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 4)}`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -397,15 +397,15 @@ export const AE = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "pretrans1",
-            workflowStepName: encodedWorkflowStepType[1].toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType[1],
+            workflowStepName: encodedNodeType[1].toLocaleLowerCase(),
+            workflowStepType: encodedNodeType[1],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -417,8 +417,8 @@ export const AE = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -430,8 +430,8 @@ export const AE = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -443,8 +443,8 @@ export const AE = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -463,8 +463,8 @@ export const BA = {
     workflowSteps: [
         {
             workflowStepUid: "ba322565b1bf",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -482,8 +482,8 @@ export const BA = {
         },
         {
             workflowStepUid: "297786162f15",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -495,15 +495,15 @@ export const BA = {
         },
         {
             workflowStepUid: "a3135bdf3aa3",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "492b709fc90a",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -515,8 +515,8 @@ export const BA = {
         },
         {
             workflowStepUid: "09e6110fda58",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -528,8 +528,8 @@ export const BA = {
         },
         {
             workflowStepUid: "b2b5c4c7cfd7",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -548,8 +548,8 @@ export const BB = {
     workflowSteps: [
         {
             workflowStepUid: "cd9bc63c262d",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -567,8 +567,8 @@ export const BB = {
         },
         {
             workflowStepUid: "c97272b8e6be",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -580,15 +580,15 @@ export const BB = {
         },
         {
             workflowStepUid: "f13b94b131fb",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "c1f18b8739ab",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -600,8 +600,8 @@ export const BB = {
         },
         {
             workflowStepUid: "7ee144915e8c",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -613,8 +613,8 @@ export const BB = {
         },
         {
             workflowStepUid: "9c39ebe89888",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -633,8 +633,8 @@ export const BC = {
     workflowSteps: [
         {
             workflowStepUid: "0839ff2c552a",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -652,8 +652,8 @@ export const BC = {
         },
         {
             workflowStepUid: "9768e7a2faf6",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -665,15 +665,15 @@ export const BC = {
         },
         {
             workflowStepUid: "d965cb873e4c",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "3681192441e5",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -685,8 +685,8 @@ export const BC = {
         },
         {
             workflowStepUid: "0fc524233120",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -698,8 +698,8 @@ export const BC = {
         },
         {
             workflowStepUid: "a565cf48051d",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -718,8 +718,8 @@ export const BD = {
     workflowSteps: [
         {
             workflowStepUid: "694f1ab5da72",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -737,8 +737,8 @@ export const BD = {
         },
         {
             workflowStepUid: "96e54d0aca1e",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -750,15 +750,15 @@ export const BD = {
         },
         {
             workflowStepUid: "b36696d03ae1",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "ce31ae78ef65",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -770,8 +770,8 @@ export const BD = {
         },
         {
             workflowStepUid: "545d1240c3f5",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -783,8 +783,8 @@ export const BD = {
         },
         {
             workflowStepUid: "099b821803b1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -803,8 +803,8 @@ export const BE = {
     workflowSteps: [
         {
             workflowStepUid: "eba3f5263651",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -822,8 +822,8 @@ export const BE = {
         },
         {
             workflowStepUid: "66da7510548b",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -835,15 +835,15 @@ export const BE = {
         },
         {
             workflowStepUid: "c4f14340ebb6",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "2fc061474e7d",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -855,8 +855,8 @@ export const BE = {
         },
         {
             workflowStepUid: "8dc5752dad3c",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -868,8 +868,8 @@ export const BE = {
         },
         {
             workflowStepUid: "dd3e9bf3e0ea",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -888,8 +888,8 @@ export const BF = {
     workflowSteps: [
         {
             workflowStepUid: "b5e96430cba5",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -912,8 +912,8 @@ export const BF = {
         },
         {
             workflowStepUid: "42457e581a54",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -925,15 +925,15 @@ export const BF = {
         },
         {
             workflowStepUid: "41d3942a7566",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "b1909eacb5ce",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -945,8 +945,8 @@ export const BF = {
         },
         {
             workflowStepUid: "863319b51a3f",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -958,8 +958,8 @@ export const BF = {
         },
         {
             workflowStepUid: "cb12d6198c7c",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -971,8 +971,8 @@ export const BF = {
         },
         {
             workflowStepUid: "e0405f577ddb",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -991,8 +991,8 @@ export const CD = {
     workflowSteps: [
         {
             workflowStepUid: "7dbc1ae9cde2",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1015,8 +1015,8 @@ export const CD = {
         },
         {
             workflowStepUid: "12b6090d92b7",
-            workflowStepName: `${encodedWorkflowStepType.fork.slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: `${encodedNodeType.fork.slice(0, 1)}2`,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 3,
             actions: [
@@ -1034,8 +1034,8 @@ export const CD = {
         },
         {
             workflowStepUid: "b5df7d26284c",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1047,15 +1047,15 @@ export const CD = {
         },
         {
             workflowStepUid: "8a1cafced3b4",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 6,
             actions: []
         },
         {
             workflowStepUid: "4b4484c2cfea",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 5,
             actions: [
                 {
@@ -1067,8 +1067,8 @@ export const CD = {
         },
         {
             workflowStepUid: "7a6054af88e8",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1080,8 +1080,8 @@ export const CD = {
         },
         {
             workflowStepUid: "f7aabbca784e",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1093,8 +1093,8 @@ export const CD = {
         },
         {
             workflowStepUid: "9dc9981a9955",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1106,8 +1106,8 @@ export const CD = {
         },
         {
             workflowStepUid: "1a83641d9fc0",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1128,8 +1128,8 @@ export const DA = {
     workflowSteps: [
         {
             workflowStepUid: "da-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1157,8 +1157,8 @@ export const DA = {
         },
         {
             workflowStepUid: "review1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 4)}`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 4)}`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1170,15 +1170,15 @@ export const DA = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         },
         {
             workflowStepUid: "pretrans1",
-            workflowStepName: encodedWorkflowStepType[1].slice(0, 3),
-            workflowStepType: encodedWorkflowStepType[1],
+            workflowStepName: encodedNodeType[1].slice(0, 3),
+            workflowStepType: encodedNodeType[1],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1190,8 +1190,8 @@ export const DA = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1203,8 +1203,8 @@ export const DA = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1216,8 +1216,8 @@ export const DA = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1229,8 +1229,8 @@ export const DA = {
         },
         {
             workflowStepUid: "trans4",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1250,8 +1250,8 @@ export const DB = {
     workflowSteps: [
         {
             workflowStepUid: "db-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1284,8 +1284,8 @@ export const DB = {
         },
         {
             workflowStepUid: "trans0",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1297,8 +1297,8 @@ export const DB = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1310,8 +1310,8 @@ export const DB = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1323,8 +1323,8 @@ export const DB = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1336,8 +1336,8 @@ export const DB = {
         },
         {
             workflowStepUid: "trans4",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1349,8 +1349,8 @@ export const DB = {
         },
         {
             workflowStepUid: "review2",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1362,8 +1362,8 @@ export const DB = {
         },
         {
             workflowStepUid: "edit1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1375,8 +1375,8 @@ export const DB = {
         },
         {
             workflowStepUid: "review0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1388,8 +1388,8 @@ export const DB = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 5,
             actions: []
         }
@@ -1402,8 +1402,8 @@ export const DC = {
     workflowSteps: [
         {
             workflowStepUid: "dc-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1436,8 +1436,8 @@ export const DC = {
         },
         {
             workflowStepUid: "trans0",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1449,8 +1449,8 @@ export const DC = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1462,8 +1462,8 @@ export const DC = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1475,8 +1475,8 @@ export const DC = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1488,8 +1488,8 @@ export const DC = {
         },
         {
             workflowStepUid: "trans4",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1501,8 +1501,8 @@ export const DC = {
         },
         {
             workflowStepUid: "review2",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1514,8 +1514,8 @@ export const DC = {
         },
         {
             workflowStepUid: "edit1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1527,8 +1527,8 @@ export const DC = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 4,
             actions: []
         }
@@ -1541,8 +1541,8 @@ export const DD = {
     workflowSteps: [
         {
             workflowStepUid: "dd-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1570,8 +1570,8 @@ export const DD = {
         },
         {
             workflowStepUid: "trans0",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1583,8 +1583,8 @@ export const DD = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1596,8 +1596,8 @@ export const DD = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1609,8 +1609,8 @@ export const DD = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1622,8 +1622,8 @@ export const DD = {
         },
         {
             workflowStepUid: "review3",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1635,8 +1635,8 @@ export const DD = {
         },
         {
             workflowStepUid: "edit3",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1648,8 +1648,8 @@ export const DD = {
         },
         {
             workflowStepUid: "edit0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 5,
             actions: [
                 {
@@ -1661,8 +1661,8 @@ export const DD = {
         },
         {
             workflowStepUid: "review0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 6,
             actions: [
                 {
@@ -1674,8 +1674,8 @@ export const DD = {
         },
         {
             workflowStepUid: "review1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1687,8 +1687,8 @@ export const DD = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 7,
             actions: []
         }
@@ -1701,8 +1701,8 @@ export const DE = {
     workflowSteps: [
         {
             workflowStepUid: "de-d1",
-            workflowStepName: encodedWorkflowStepType.fork,
-            workflowStepType: encodedWorkflowStepType.fork,
+            workflowStepName: encodedNodeType.fork,
+            workflowStepType: encodedNodeType.fork,
             dynamicRules: [],
             workflowStepOrder: 1,
             actions: [
@@ -1755,8 +1755,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans0",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1768,8 +1768,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans1",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1781,8 +1781,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans2",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1794,8 +1794,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans3",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1807,8 +1807,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans4",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1820,8 +1820,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans5",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}5`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}5`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1833,8 +1833,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans6",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}6`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}6`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1846,8 +1846,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans7",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}7`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}7`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1859,8 +1859,8 @@ export const DE = {
         },
         {
             workflowStepUid: "trans8",
-            workflowStepName: `${encodedWorkflowStepType[2].slice(0, 1)}8`,
-            workflowStepType: encodedWorkflowStepType[2],
+            workflowStepName: `${encodedNodeType[2].slice(0, 1)}8`,
+            workflowStepType: encodedNodeType[2],
             workflowStepOrder: 2,
             actions: [
                 {
@@ -1872,8 +1872,8 @@ export const DE = {
         },
         {
             workflowStepUid: "edit2",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}0`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}0`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1885,8 +1885,8 @@ export const DE = {
         },
         {
             workflowStepUid: "edit1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}1`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}1`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [
                 {
@@ -1898,8 +1898,8 @@ export const DE = {
         },
         {
             workflowStepUid: "edit0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}2`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1911,8 +1911,8 @@ export const DE = {
         },
         {
             workflowStepUid: "review1",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}3`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}3`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 4,
             actions: [
                 {
@@ -1924,8 +1924,8 @@ export const DE = {
         },
         {
             workflowStepUid: "pmr0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}4`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}4`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 5,
             actions: [
                 {
@@ -1937,8 +1937,8 @@ export const DE = {
         },
         {
             workflowStepUid: "review0",
-            workflowStepName: `${encodedWorkflowStepType[3].slice(0, 1)}5`,
-            workflowStepType: encodedWorkflowStepType[3],
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}5`,
+            workflowStepType: encodedNodeType[3],
             workflowStepOrder: 6,
             actions: [
                 {
@@ -1950,8 +1950,8 @@ export const DE = {
         },
         {
             workflowStepUid: "published",
-            workflowStepName: encodedWorkflowStepType.finish.toLocaleLowerCase(),
-            workflowStepType: encodedWorkflowStepType.finish,
+            workflowStepName: encodedNodeType.finish.toLocaleLowerCase(),
+            workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 7,
             actions: []
         }

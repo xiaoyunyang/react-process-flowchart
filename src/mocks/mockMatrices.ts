@@ -1,4 +1,4 @@
-import { encodedWorkflowStepType } from "../config";
+import { encodedNodeType } from "../config";
 import { WorkflowVisDataT } from "../lib/types/workflowVisTypes";
 
 // NOTE
@@ -10,8 +10,8 @@ export const workflowVisData = {
     workflowStepNodes: {
         "node-start": {
             id: "node-start",
-            name: encodedWorkflowStepType["start"],
-            type: encodedWorkflowStepType["start"],
+            name: encodedNodeType["start"],
+            type: encodedNodeType["start"],
             workflowStepOrder: 0,
             nextNodes: [
                 { id: "node-fork", primary: true }
@@ -20,8 +20,8 @@ export const workflowVisData = {
         },
         "node-fork": {
             id: "node-fork",
-            name: encodedWorkflowStepType["fork"],
-            type: encodedWorkflowStepType["fork"],
+            name: encodedNodeType["fork"],
+            type: encodedNodeType["fork"],
             workflowStepOrder: 1,
             nextNodes: [
                 { id: "node-1A", primary: true },
@@ -31,8 +31,8 @@ export const workflowVisData = {
         },
         "node-1A": {
             id: "node-1A",
-            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}1`,
-            type: encodedWorkflowStepType[2],
+            name: `${encodedNodeType[2].toLocaleLowerCase()}1`,
+            type: encodedNodeType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -41,8 +41,8 @@ export const workflowVisData = {
         },
         "node-2A": {
             id: "node-2A",
-            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}2`,
-            type: encodedWorkflowStepType[2],
+            name: `${encodedNodeType[2].toLocaleLowerCase()}2`,
+            type: encodedNodeType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -51,8 +51,8 @@ export const workflowVisData = {
         },
         "node-3A": {
             id: "node-3A",
-            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}3`,
-            type: encodedWorkflowStepType[2],
+            name: `${encodedNodeType[2].toLocaleLowerCase()}3`,
+            type: encodedNodeType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -61,8 +61,8 @@ export const workflowVisData = {
         },
         "node-4A": {
             id: "node-4A",
-            name: `${encodedWorkflowStepType[2].toLocaleLowerCase()}4`,
-            type: encodedWorkflowStepType[2],
+            name: `${encodedNodeType[2].toLocaleLowerCase()}4`,
+            type: encodedNodeType[2],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "node-1B", primary: true }
@@ -71,8 +71,8 @@ export const workflowVisData = {
         },
         "node-1B": {
             id: "node-1B",
-            name: `${encodedWorkflowStepType[3].toLocaleLowerCase()}1`,
-            type: encodedWorkflowStepType[3],
+            name: `${encodedNodeType[3].toLocaleLowerCase()}1`,
+            type: encodedNodeType[3],
             workflowStepOrder: 3,
             nextNodes: [
                 { id: "node-1C", primary: true }
@@ -81,8 +81,8 @@ export const workflowVisData = {
         },
         "node-1C": {
             id: "node-1C",
-            name: `${encodedWorkflowStepType[4].toLocaleLowerCase()}2`,
-            type: encodedWorkflowStepType[4],
+            name: `${encodedNodeType[4].toLocaleLowerCase()}2`,
+            type: encodedNodeType[4],
             workflowStepOrder: 4,
             nextNodes: [
                 { id: "node-finish", primary: true }
@@ -91,8 +91,8 @@ export const workflowVisData = {
         },
         "node-finish": {
             id: "node-finish",
-            name: encodedWorkflowStepType["finish"].toLocaleLowerCase(),
-            type: encodedWorkflowStepType["finish"],
+            name: encodedNodeType["finish"].toLocaleLowerCase(),
+            type: encodedNodeType["finish"],
             workflowStepOrder: 5,
             nextNodes: [],
             prevSteps: []
@@ -100,7 +100,7 @@ export const workflowVisData = {
         "m-long": {
             id: "m-long",
             name: "MMMMMMMMMMMMMM", // 14 chars
-            type: encodedWorkflowStepType[4],
+            type: encodedNodeType[4],
             workflowStepOrder: 1,
             nextNodes: [
                 { id: "node-fork", primary: true }
@@ -110,7 +110,7 @@ export const workflowVisData = {
         "a-long": {
             id: "a-long",
             name: "AAA AAAAAAAAAAA", // 14 chars
-            type: encodedWorkflowStepType[4],
+            type: encodedNodeType[4],
             workflowStepOrder: 2,
             nextNodes: [
                 { id: "i-long", primary: true }
@@ -120,7 +120,7 @@ export const workflowVisData = {
         "i-long": {
             id: "i-long",
             name: "iiiiiiiiiiiiii", // 14 chars
-            type: encodedWorkflowStepType[4],
+            type: encodedNodeType[4],
             workflowStepOrder: 3,
             nextNodes: [],
             prevSteps: []

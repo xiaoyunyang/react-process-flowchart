@@ -1,9 +1,9 @@
 import {
-    encodedWorkflowStepType
+    encodedNodeType
 } from "../workflowTypes";
 
 const messages = {
-    [encodedWorkflowStepType.start]: "Push",
+    [encodedNodeType.start]: "Push",
     stepIsDisabled: "This step is disabled"
 };
 

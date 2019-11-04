@@ -10,7 +10,7 @@ import WorkflowStep from "../src/lib/components/WorkflowStep";
 
 // Config
 import { 
-  encodedWorkflowStepType, ThemeT,
+  encodedNodeType, ThemeT,
   messages
 } from "../src/config";
 
@@ -30,7 +30,7 @@ const themeOptions = {
   LIGHT: ThemeT.LIGHT
 }
 
-const nodeTypeOptions = encodedWorkflowStepType;
+const nodeTypeOptions = encodedNodeType;
 
 const storyWrapperClass = classNames(
   styles.flowchart,
@@ -43,7 +43,11 @@ storiesOf("WorkflowStep", module)
     <div className={storyWrapperClass}>
       <WorkflowStep 
         name={text("name", "Translation")}
-        type={select("Node Type", nodeTypeOptions, encodedWorkflowStepType[0])}
+        type={select("Node Type", nodeTypeOptions, encodedNodeType[0])}
+        workflowUid="foo"
+        workflowStepUid="fooStep"
+        nextSteps={[]}
+        prevSteps={[]}
         theme={select("Theme", themeOptions, ThemeT.LIGHT)}
         isDisabled={boolean("isDisabled", false)}
         stepDisabledMessage={text("disabledMessage", "Step is disabled")}

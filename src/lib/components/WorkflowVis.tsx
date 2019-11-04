@@ -10,7 +10,8 @@ import Column from "./Column";
 
 // Types
 import {
-    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT, AddNodeParams
+    Matrix, WorkflowVisDataT, ColEntry, WorkflowStepNodeT,
+    AddNodeParams, GenericTile
 } from "../types/workflowVisTypes";
 
 // Utils
@@ -30,7 +31,8 @@ const newColEntry = (
     }
 ): ColEntry => {
     const { tileId } = decodeMatrixEntry(matrixEntry);
-    const tile = (workflowStepNodes[tileId]) ? workflowStepNodes[tileId] : connectors[tileId];
+    const tile: GenericTile = (workflowStepNodes[tileId]) ? 
+        workflowStepNodes[tileId] : connectors[tileId];
 
     return { matrixEntry, tile };
 };
@@ -41,7 +43,7 @@ export interface WorkflowVisPropsT {
     editMode: boolean;
     addNodeParams: AddNodeParams;
 }
-const WorkflowsVis = (
+const WorkflowVis = (
     { workflowVisData, matrix, editMode, addNodeParams }: WorkflowVisPropsT
 ) => {
     const { workflowStepNodes } = workflowVisData;
@@ -70,4 +72,4 @@ const WorkflowsVis = (
     );
 };
 
-export default WorkflowsVis;
+export default WorkflowVis;

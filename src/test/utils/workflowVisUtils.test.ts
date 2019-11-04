@@ -30,7 +30,7 @@ import {
 
 // Types
 import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../lib/types/workflowVisTypes";
-import { WorkflowStepTypeT } from "../../config";
+import { NodeTypeT } from "../../config";
 
 // Mocks
 import { AA, BA, DA, DB, DC, DD } from "../../mocks/mockWorkflowsData";
@@ -44,7 +44,7 @@ describe("WorkflowVisUtils", () => {
             expect(isConnector(type)).toBe(true);
         });
         test.each(
-            Object.values(WorkflowStepTypeT)
+            Object.values(NodeTypeT)
         )("returns false for type = %s", (type) => {
             expect(isConnector(type)).toBe(false);
         });

@@ -7,8 +7,8 @@ import DecisionStep from "./DecisionStep";
 import Connector from "./Connector";
 
 // Types
-import { WorkflowStepTypeT, encodedWorkflowStepType } from "../../config";
-import { ColEntry, AddNodeParams } from "../types/workflowVisTypes";
+import { encodedNodeType } from "../../config";
+import { NodeTileT, ColEntry, AddNodeParams } from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry, isConnector } from "../utils/workflowVisUtils";
@@ -55,17 +55,34 @@ export default class Column extends React.PureComponent<PropsT> {
             );
         }
 
+        const {
+            name,
+            type,
+            id,
+            workflowUid,
+            prevSteps,
+            nextSteps,
+            isDisabled,
+            displayWarning
+        } = tile as NodeTileT;
+
         // Decision Step
-        if (tile.type === encodedWorkflowStepType.fork) {
+        if (tile.type === encodedNodeType.fork) {
             return <DecisionStep />;
         }
 
         // WorkflowStep
+        // TODO: shouldHighlight is different in project
         return (
             <WorkflowStep
-                name={tile.name}
-                type={tile.type as WorkflowStepTypeT}
-                isDisabled={false}
+                name={name}
+                type={type}
+                workflowStepUid={id}
+                workflowUid={workflowUid}
+                nextSteps={nextSteps}
+                displayWarning={displayWarning}
+                isDisabled={isDisabled}
+                prevSteps={prevSteps}
                 shouldHighlight={false}
             />
         );

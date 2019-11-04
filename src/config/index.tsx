@@ -6,7 +6,7 @@
 import React from 'react';
 
 // Types
-import { encodedWorkflowStepType } from "./workflowTypes";
+import { encodedNodeType } from "./workflowTypes";
 import { EndomorphDict, PolymorphDict } from '../lib/types/generic';
 
 import {
@@ -29,26 +29,50 @@ export enum ThemeT {
 }
 
 interface StepBaseOptions {
-    theme: ThemeT;
     canEdit: boolean;
     canDelete: boolean;
 }
 
 interface StepOptions extends StepBaseOptions {
-    canManageUsers: boolean; // TODO: put optional options here
+    canManageUsers: boolean; // put optional options here
 }
 
-const workflowStepConfig: {[stepType: string]: StepOptions} = {
-    [encodedWorkflowStepType.start]: { theme: ThemeT.DARK, canEdit: false, canDelete: false, canManageUsers: false },
-    [encodedWorkflowStepType.fork]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[0]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[1]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[2]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[3]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[4]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[5]]: { theme: ThemeT.LIGHT, canEdit: true, canDelete: true, canManageUsers: false },
-    [encodedWorkflowStepType[6]]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false },
-    [encodedWorkflowStepType.finish]: { theme: ThemeT.DARK, canEdit: true, canDelete: false, canManageUsers: false }
+interface StepConfig {
+    theme: ThemeT;
+    options: StepOptions;
+}
+
+const workflowStepConfig: {[stepType: string]: StepConfig} = {
+    [encodedNodeType.start]: {
+        theme: ThemeT.DARK, options: { canEdit: false, canDelete: false, canManageUsers: false }
+    },
+    [encodedNodeType.fork]: {
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[0]]: {
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[1]]: {
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[2]]: { 
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[3]]: { 
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[4]]: { 
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[5]]: { 
+        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    [encodedNodeType[6]]: { 
+        theme: ThemeT.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
+    },
+    [encodedNodeType.finish]: {
+        theme: ThemeT.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
+    }
 };
 
 const AddWorkflowStepIcon = () => (

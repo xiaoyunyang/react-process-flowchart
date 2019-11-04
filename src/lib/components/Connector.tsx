@@ -9,6 +9,7 @@ import styles from "../styles/workflowVis.module.css";
 
 // Types
 import {
+    ContainerNameT,
     ConnectorT, ConnectorTypeT, ConnectorName, CreateAddChildNodeCommand
 } from "../types/workflowVisTypes";
 
@@ -83,131 +84,130 @@ export const connectors: { [id: string]: ConnectorT } = {
     "diamond|downRight": {
         id: "diamond|downRight",
         name: ConnectorName.DOWN_RIGHT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "box|downRight": {
+    "box|downRight": { // Not used
         id: "box|downRight",
         name: ConnectorName.DOWN_RIGHT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.BOX_CONNECTOR
     },
     "diamond|downRightDash": {
         id: "diamond|downRightDash",
         name: ConnectorName.DOWN_RIGHT_DASH,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "diamond|downRightDash.edit": {
         id: "diamond|downRightDash.edit",
         name: ConnectorName.DOWN_RIGHT_DASH_EDIT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "box|rightUpArrow": {
         id: "box|rightUpArrow",
         name: ConnectorName.RIGHT_UP_ARROW,
-        containerName: "connectorContainerBox",
-        type: ConnectorTypeT.BOX_CONNECTOR
+        containerName: ContainerNameT.BOX,
+        type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "box|rightUp": {
         id: "box|rightUp",
         name: ConnectorName.RIGHT_UP,
-        containerName: "connectorContainerBox",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.BOX_CONNECTOR
     },
     "box|arrowUp": {
         id: "box|arrowUp",
         name: ConnectorName.ARROW_UP,
-        containerName: "connectorContainerBox",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.BOX_CONNECTOR
     },
     "standard|arrowRight": {
         id: "standard|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
-        containerName: "connectorContainerStandard",
+        containerName: ContainerNameT.STANDARD,
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "standard|arrowRight.edit": {
         id: "standard|arrowRight.edit",
         name: ConnectorName.ARROW_RIGHT_EDIT,
-        containerName: "connectorContainerStandard",
+        containerName: ContainerNameT.STANDARD,
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "box|arrowRight": {
         id: "box|arrowRight",
         name: ConnectorName.ARROW_RIGHT,
-        containerName: "connectorContainerBox",
-        type: ConnectorTypeT.BOX_CONNECTOR
+        containerName: ContainerNameT.BOX,
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "box|lineHoriz": {
         id: "box|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
-        containerName: "connectorContainerBox",
-        type: ConnectorTypeT.BOX_CONNECTOR
-    },
-    "standard|lineHoriz": {
-        id: "standard|lineHoriz",
-        name: ConnectorName.LINE_HORIZ,
-        containerName: "connectorContainerStandard",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "box|lineVert": {
         id: "box|lineVert",
         name: ConnectorName.LINE_VERT,
-        containerName: "connectorContainerBox",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.BOX_CONNECTOR
+    },
+    "standard|lineHoriz": {
+        id: "standard|lineHoriz",
+        name: ConnectorName.LINE_HORIZ,
+        containerName: ContainerNameT.STANDARD,
+        type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "standard|lineHoriz.edit": {
         id: "standard|lineHoriz.edit",
         name: ConnectorName.LINE_HORIZ_EDIT,
-        containerName: "connectorContainerStandard",
+        containerName: ContainerNameT.STANDARD,
         type: ConnectorTypeT.STANDARD_CONNECTOR
     },
     "diamond|lineHoriz": {
         id: "diamond|lineHoriz",
         name: ConnectorName.LINE_HORIZ,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "diamond|lineHoriz.edit": {
         id: "diamond|lineHoriz.edit",
         name: ConnectorName.LINE_HORIZ_EDIT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "diamond|lineVert": {
         id: "diamond|lineVert",
         name: ConnectorName.LINE_VERT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
-    "diamond|upRight": {
+    "diamond|upRight": { // Not used
         id: "diamond|upRight",
         name: ConnectorName.UP_RIGHT,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "diamond|empty": {
         id: "diamond|empty",
         name: ConnectorName.EMPTY,
-        containerName: "connectorContainerDiamond",
+        containerName: ContainerNameT.DIAMOND,
         type: ConnectorTypeT.DIAMOND_CONNECTOR
     },
     "box|empty": {
         id: "box|empty",
         name: ConnectorName.EMPTY,
-        containerName: "connectorContainerBox",
+        containerName: ContainerNameT.BOX,
         type: ConnectorTypeT.BOX_CONNECTOR
     },
     "standard|empty": {
         id: "standard|empty",
         name: ConnectorName.EMPTY,
-        containerName: "connectorContainerStandard",
+        containerName: ContainerNameT.STANDARD,
         type: ConnectorTypeT.STANDARD_CONNECTOR
     }
 };
-
 
 export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNodeCommand
 ): { [name in ConnectorName]: JSX.Element } => {

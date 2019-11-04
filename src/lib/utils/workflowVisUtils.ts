@@ -3,15 +3,15 @@ import { clone, chain, sort } from "ramda";
 import MinHeap from "./MinHeap";
 
 // Types
-import { WorkflowStepT, encodedWorkflowStepType } from "../../config";
 import {
     WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
     MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
     GenericTileType, ConnectorTypeT, NextNode
 } from "../types/workflowVisTypes";
-
+import {
+    WorkflowStepT, NodeTypeT, encodedNodeType, Utils
+} from "../../config";
 import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
-
 
 // Constants
 const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
@@ -192,8 +192,15 @@ const getPrevSteps = ({
     workflowSteps, workflowStepOrder
 }: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
 ): WorkflowStepT[] => workflowSteps.filter(wfStep =>
-    wfStep.workflowStepType !== encodedWorkflowStepType.fork &&
+    wfStep.workflowStepType !== encodedNodeType.fork &&
     wfStep.workflowStepOrder < workflowStepOrder
+);
+
+export const getNextSteps = ({
+    workflowSteps, workflowStepOrder
+}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
+): WorkflowStepT[] => workflowSteps.filter(wfStep =>
+    wfStep.workflowStepOrder > workflowStepOrder
 );
 
 // TODO: Need a huge refactor of this function
@@ -224,9 +231,7 @@ const createWorkflowStepNodes = (
         const {
             workflowStepOrder,
             workflowStepUid,
-            workflowStepName,
-            workflowStepType,
-            actions
+            workflowStepName
         } = workflowStep;
 
         // We need to convert all keys for dictionaries to a string because key of a dictionary
@@ -238,7 +243,7 @@ const createWorkflowStepNodes = (
                 ? workflowStepOrderOccur[stringifiedWorkflowStepOrder]
                 : 0) + 1;
 
-        if (workflowStepType === encodedWorkflowStepType.fork) {
+        if (Utils.getNodeType({ workflowStep }) === encodedNodeType.fork) {
             forkStepCols = forkStepCols.concat(workflowStepOrder * 2);
         }
 
@@ -251,17 +256,17 @@ const createWorkflowStepNodes = (
         // Not sure if we need prevSteps...?
         const prevSteps = getPrevSteps({ workflowSteps, workflowStepOrder });
 
-        const nextNodes = actions
-            .filter(action => action.actionType !== "REJECT")
-            .map(action => ({ id: action.nextWorkflowStepUid, primary: action.primary }));
-
         workflowStepNodes[workflowStepUid] = {
             id: workflowStepUid,
+            workflowUid,
             name: workflowStepName,
-            type: workflowStepType,
+            type: Utils.getNodeType({ workflowStep }),
             workflowStepOrder,
-            nextNodes,
-            prevSteps
+            nextNodes: Utils.getNextNodes(workflowStep),
+            isDisabled: Utils.getIsDisabled(workflowStep),
+            nextSteps: getNextSteps({ workflowSteps, workflowStepOrder }),
+            prevSteps,
+            displayWarning: Utils.getDisplayWarning(workflowStep)
         };
     }
 
@@ -271,10 +276,13 @@ const createWorkflowStepNodes = (
         ...workflowStepNodes,
         [firstStepId]: {
             id: firstStepId,
+            workflowUid: firstStepId,
             name: "",
-            type: encodedWorkflowStepType.start,
+            type: encodedNodeType.start,
             workflowStepOrder: 0,
+            nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 }),
             nextNodes: authorizeNextNodes,
+            isDisabled: false,
             prevSteps: []
         }
     };

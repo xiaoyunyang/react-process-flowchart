@@ -5,7 +5,7 @@ import Adapter from "enzyme-adapter-react-16";
 // Components
 import EditButton from "../../lib/components/EditButton";
 
-import { createAddNodeParams, encodedWorkflowStepType, AddWorkflowStepIcon } from "../../config";
+import { createAddNodeParams, encodedNodeType, AddWorkflowStepIcon } from "../../config";
 
 configure({ adapter: new Adapter() });
 
@@ -13,10 +13,13 @@ const mockWorkflowStepNode = {
     id: "123",
     workflowUid: "JjY1Zwp5i8Royl0ojwk",
     name: "lWveC",
-    type: encodedWorkflowStepType[0],
+    nodeType: encodedNodeType[2],
+    type: encodedNodeType[2],
     workflowStepOrder: 2,
-    nextNodes: [{ id: "456", primary: false }],
-    prevSteps: []
+    nextNodes: [],
+    prevSteps: [],
+    nextSteps: [],
+    isDisabled: false
 };
 
 describe("EditButton Spec", () => {

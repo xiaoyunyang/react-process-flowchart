@@ -6,7 +6,7 @@ import Adapter from "enzyme-adapter-react-16";
 import DecisionStep, { DiamondIcon } from "../../lib/components/DecisionStep";
 
 // Types
-import { workflowStepConfig, encodedWorkflowStepType, ForkIcon } from "../../config";
+import { workflowStepConfig, encodedNodeType, ForkIcon } from "../../config";
 
 configure({ adapter: new Adapter() });
 
@@ -22,7 +22,7 @@ describe("DecisionStep Spec", () => {
             expect(decisionStep.hasClass("diamondContainer")).toBe(true);
         });
         it("renders correct theme for decisionStep", () => {
-            const { theme } = workflowStepConfig[encodedWorkflowStepType.fork];
+            const { theme } = workflowStepConfig[encodedNodeType.fork];
             expect(decisionStep.childAt(0).hasClass(`theme${theme}`)).toBe(true);
         });
 

@@ -7,7 +7,9 @@ import Truncate from "react-truncate";
 import {
     Tooltip, Dropdown,
     WorkflowStepEditMenu,
-    WorkflowStepTypeT, ThemeT, WorkflowStepIcon, workflowStepConfig,
+    // DropdownComponent
+    NodeTypeT, ThemeT, WorkflowStepT,
+    WorkflowStepIcon, workflowStepConfig,
     messages,
     ExclamationIcon
 } from "../../config";
@@ -33,7 +35,11 @@ export const Icon = ({ type }: { type: string }) => (
 
 interface PropsT {
     name: string;
-    type: WorkflowStepTypeT;
+    type: NodeTypeT;
+    workflowUid: string;
+    workflowStepUid: string;
+    nextSteps?: WorkflowStepT[];
+    prevSteps: WorkflowStepT[];
     isDisabled: boolean;
     stepDisabledMessage?: string;
     shouldHighlight: boolean;
@@ -154,14 +160,16 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         );
     }
     renderInDropdownConditionally(children: ReactNode, isClickable: boolean) {
-        const { type, } = this.props;
-        const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
+        const { type, workflowStepUid, workflowUid, nextSteps, prevSteps } = this.props;
 
         // TODO: the following is different from project code
         const editMenuProps = {
-            closeOnClick: false,
-            onOpen: this.boundOpenDropdownMenu,
-            onClose: this.boundCloseDropdownMenu
+            ...workflowStepConfig[type].options,
+            type,
+            workflowStepUid,
+            workflowUid,
+            nextSteps,
+            prevSteps
         };
 
         return isClickable ? (
@@ -188,13 +196,17 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </Tooltip>
         ) : children;
     }
-    
+
     render() {
         const { type, isDisabled, displayWarning } = this.props;
-        const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
+
+        const hasOption = Object.values(workflowStepConfig[type].options).reduce(
+            (acc: boolean, curr: boolean) => acc || curr,
+            false
+        );
 
         // TODO: need to change the config so it doesn't explicitly identify what the options are
-        const isClickable = !isDisabled && (canEdit || canDelete || canManageUsers);
+        const isClickable = !isDisabled && hasOption;
         
         return this.renderInTooltipConditionally(
             this.renderInDropdownConditionally(

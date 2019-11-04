@@ -5,7 +5,7 @@ import { text, boolean } from '@storybook/addon-knobs';
 
 // import WorkflowVis from "../src/lib/components/WorkflowVis";
 import Workflow from "../src/lib/components/Workflow";
-import { encodedWorkflowStepType } from "../src/config/examples/workflowTypes.cicd";
+import { encodedNodeType } from "../src/config/examples/workflowTypes.cicd";
 
 // Mocks
 // import {
