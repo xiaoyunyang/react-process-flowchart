@@ -27,15 +27,21 @@ describe("Column Spec", () => {
         },
         {
             matrixEntry: "box|empty|0,1",
-            tile: { id: "box|empty", name: "empty", containerName: "connectorContainerBox", type: ConnectorTypeT.BOX_CONNECTOR }
+            tile: {
+                id: "box|empty", name: "empty", containerName: "connectorContainerBox", type: ConnectorTypeT.BOX_CONNECTOR
+            }
         },
         {
             matrixEntry: "diamond|lineHoriz|3,3|2,2",
-            tile: { id: "diamond|lineHoriz", name: "lineHoriz", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
+            tile: {
+                id: "diamond|lineHoriz", name: "lineHoriz", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR
+            }
         },
         {
             matrixEntry: "diamond|arrowRight|3,4|2,4",
-            tile: { id: "diamond|arrowRight", name: "arrowRight", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR }
+            tile: {
+                id: "diamond|arrowRight", name: "arrowRight", containerName: "connectorContainerDiamond", type: ConnectorTypeT.DIAMOND_CONNECTOR
+            }
         }
     ];
 
@@ -47,7 +53,8 @@ describe("Column Spec", () => {
         }: {
             ownCoord: string | undefined;
             parentCoord: string | undefined;
-        }) => createAddChildNodeCommand;
+        }
+    ) => createAddChildNodeCommand;
 
     let props: any;
 

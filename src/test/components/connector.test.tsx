@@ -32,11 +32,13 @@ describe("Connector Spec", () => {
     describe("render", () => {
         test.each(
             Object.keys(connectors)
-        )("renders correct connector for id = %s", id => {
+        )("renders correct connector for id = %s", (id) => {
             connector.setProps({ id });
             const { containerName, name } = connectors[id];
             expect(connector.hasClass(containerName)).toBe(true);
-            expect(connector.contains(connectorComponent(createAddChildNodeCommand)[name])).toBe(true);
+            expect(connector.contains(
+                connectorComponent(createAddChildNodeCommand)[name]
+            )).toBe(true);
         });
     });
 });

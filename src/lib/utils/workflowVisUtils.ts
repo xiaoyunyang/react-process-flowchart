@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 // Utils
 import { clone, chain, sort } from "ramda";
 import MinHeap from "./MinHeap";
@@ -11,7 +12,9 @@ import {
 import {
     WorkflowStepT, NodeTypeT, encodedNodeType, Utils
 } from "../../config";
-import { OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict } from "../types/generic";
+import {
+    OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict
+} from "../types/generic";
 
 // Constants
 const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
@@ -22,8 +25,9 @@ const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
  * @param {GenericTileType} tileType
  * @returns {boolean} true if tileType is a member of ConnectorTypeT
  */
-export const isConnector = (tileType: GenericTileType): tileType is ConnectorTypeT =>
-    Object.values(ConnectorTypeT).includes(tileType as ConnectorTypeT);
+export const isConnector = (
+    tileType: GenericTileType
+): tileType is ConnectorTypeT => Object.values(ConnectorTypeT).includes(tileType as ConnectorTypeT);
 
 /**
  * Encodes colNum and rowNum as comma delimited string
@@ -42,7 +46,7 @@ export const encodeMatrixCoord = ({ colNum, rowNum }: MatrixCoord): string => `$
  * @returns {number} rowNum
  */
 export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
-    const [colNum, rowNum] = colRow.split(",").map(s => +s);
+    const [colNum, rowNum] = colRow.split(",").map((s) => +s);
     return { colNum, rowNum };
 };
 
@@ -56,7 +60,9 @@ export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
  * @return {string} matrixEntry - a period delimited string that encodes all the params
  */
 export const encodeMatrixEntry = (
-    { colType, entryName, encodedOwnCoord, encodedParentCoord }: {
+    {
+        colType, entryName, encodedOwnCoord, encodedParentCoord
+    }: {
         colType: ColType;
         entryName: string;
         encodedOwnCoord: string;
@@ -111,8 +117,9 @@ export const isPlaceholder = (matrixEntry: string): boolean => {
  * @param {string[]} col
  * @returns {number} rowNum
  */
-export const firstUnoccupiedInCol = (col: string[]): number =>
-    col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
+export const firstUnoccupiedInCol = (
+    col: string[]
+): number => col.findIndex((matrixEntry: string) => isPlaceholder(matrixEntry));
 
 /**
  * Determines the rowNum of the last non-empty slot in a column that's a node
@@ -152,6 +159,7 @@ const replaceTile = (
 
     const newCol = clone(matrix[colNum]);
     newCol[rowNum] = replaceBy;
+    // eslint-disable-next-line no-param-reassign
     matrix[colNum] = newCol;
 };
 
@@ -167,15 +175,16 @@ export const initCol = (
     { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
 ): string[] => Array.from(Array(numRows)
     .keys())
-    .map(rowNum => encodeMatrixEntry({
+    .map((rowNum) => encodeMatrixEntry({
         colType,
         entryName: MATRIX_PLACEHOLDER_NAME,
         encodedOwnCoord: encodeMatrixCoord({ colNum, rowNum })
     }));
 
 /**
- * Creates a numCols x numRows matrix initalized with placeholders (box.empty, diamond.empty, or standard.empty)
- * 
+ * Creates a numCols x numRows matrix initalized with placeholders
+ * (box.empty, diamond.empty, or standard.empty)
+ *
  * @param {number} numRows
  * @param {ColType} colTypes array of ColTypes (string) - box, diamond, or standard
  * @returns {Matrix} a 2D array of matrixEntries
@@ -190,18 +199,12 @@ export const initMatrix = (
 // getPrevSteps and get NextSteps are utils
 const getPrevSteps = ({
     workflowSteps, workflowStepOrder
-}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
-): WorkflowStepT[] => workflowSteps.filter(wfStep =>
-    wfStep.workflowStepType !== encodedNodeType.fork &&
-    wfStep.workflowStepOrder < workflowStepOrder
-);
+}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }): WorkflowStepT[] => workflowSteps.filter((wfStep) => wfStep.workflowStepType !== encodedNodeType.fork
+    && wfStep.workflowStepOrder < workflowStepOrder);
 
 export const getNextSteps = ({
     workflowSteps, workflowStepOrder
-}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }
-): WorkflowStepT[] => workflowSteps.filter(wfStep =>
-    wfStep.workflowStepOrder > workflowStepOrder
-);
+}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }): WorkflowStepT[] => workflowSteps.filter((wfStep) => wfStep.workflowStepOrder > workflowStepOrder);
 
 // TODO: Need a huge refactor of this function
 const createWorkflowStepNodes = (
@@ -287,15 +290,17 @@ const createWorkflowStepNodes = (
         }
     };
 
-    return { firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols };
+    return {
+        firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols
+    };
 };
 
 
 /**
  * Creates the workflowVisData and initial matrix
  *
- * @param {string[]} workflowSteps 
- * @param {string} workflowUid 
+ * @param {string[]} workflowSteps
+ * @param {string} workflowUid
  * @returns {WorkflowVisDataT} workflowVisData
  * @returns {Matrix} initialMatrix
  * @returns {number[]} forkStepCols - the colNums where decision steps are
@@ -311,7 +316,7 @@ export const createWorkflowVisData = (
         workflowStepNodes
     };
 
-    const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map(id => +id)) * 2) + 1;
+    const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map((id) => +id)) * 2) + 1;
 
     // Naive: if we see at least one decision step, we want to add an additional row to the matrix
     // to accomodate the dash line add button
@@ -333,7 +338,7 @@ export const createWorkflowVisData = (
 };
 
 /**
- * Adds a new Node to the matrix. Mutates the original matrix. 
+ * Adds a new Node to the matrix. Mutates the original matrix.
  *
  * @param {Matrix} matrix
  * @param {number} colNum
@@ -341,7 +346,9 @@ export const createWorkflowVisData = (
  * @returns {MatrixCoord} { rowNum, colNum } of the newly added Node in the matrix
  */
 export const addNodeToMatrix = (
-    { matrix, colNum, newNodeId, encodedParentCoord }: {
+    {
+        matrix, colNum, newNodeId, encodedParentCoord
+    }: {
         matrix: Matrix;
         colNum: number;
         newNodeId: string;
@@ -400,8 +407,8 @@ export const addConnectorToMatrix = (
     const { colNum, rowNum } = decodeMatrixCoord(ownCoord);
     const { tileType } = decodeMatrixEntry(matrix[colNum][rowNum]);
 
-    const parentNodeCoord: string | undefined = nodeCoords.includes(parentCoord) ?
-        parentCoord : undefined;
+    const parentNodeCoord: string | undefined = nodeCoords.includes(parentCoord)
+        ? parentCoord : undefined;
 
     const replaceBy = encodeMatrixEntry({
         colType: tileType,
@@ -434,16 +441,18 @@ export const createCoordPairs = (
 ): CoordPairT[] => {
     const nodeIds = Object.keys(nodeIdToParentCoords);
 
-    const newCoord = (nodeId: string): CoordPairT[] => nodeIdToParentCoords[nodeId].map((colRow: string) => ({
+    const newCoord = (
+        nodeId: string
+    ): CoordPairT[] => nodeIdToParentCoords[nodeId].map((colRow: string) => ({
         parentCoord: decodeMatrixCoord(colRow),
         childCoord: decodeMatrixCoord(nodeIdToCoord[nodeId])
     }));
 
-    return chain(nodeId => newCoord(nodeId), nodeIds);
+    return chain((nodeId) => newCoord(nodeId), nodeIds);
 };
 
 /**
- * Create a sequence of LineHoriz and returns the coordinate of the last LineHoriz 
+ * Create a sequence of LineHoriz and returns the coordinate of the last LineHoriz
  *
  * @param {number} startCol
  * @param {number} endCol
@@ -453,7 +462,9 @@ export const createCoordPairs = (
  * @returns {string} lastLineCoord - the coord of the last lineHoriz in the series
  */
 export const createLineHorizes = (
-    { startCol, endCol, rowNum, parentCoord }: {
+    {
+        startCol, endCol, rowNum, parentCoord
+    }: {
         startCol: number; endCol: number; rowNum: number; parentCoord: string;
     }
 ): { lines: ConnectorToPlace[]; lastLineCoord: string } => {
@@ -480,7 +491,8 @@ export const createLineHorizes = (
  *
  * @param {MatrixCoord} parentCoord
  * @param {MatrixCoord} childCoord
- * @returns {ConnectorToPlace[]} an array of ConnectorToPlace for between the colNums of parent and child nodes
+ * @returns {ConnectorToPlace[]} an array of ConnectorToPlace for between the
+ * colNums of parent and child nodes
  */
 export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): ConnectorToPlace[] => {
     const { parentCoord, childCoord } = coordPair;
@@ -527,7 +539,7 @@ export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): Connec
         // parentCoord is pointing to an empty slot in the matrix
         const firstEntry = {
             ownCoord: encodeMatrixCoord({ colNum: startCol, rowNum }),
-            parentCoord: encodeMatrixCoord({ colNum: fromCol - 1, rowNum: rowNum }),
+            parentCoord: encodeMatrixCoord({ colNum: fromCol - 1, rowNum }),
             connectorName: ConnectorName.DOWN_RIGHT
         };
         const { lines, lastLineCoord } = createLineHorizes({
@@ -554,8 +566,8 @@ export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): Connec
         startCol, endCol, rowNum, parentCoord: parentNodeCoord
     });
 
-    const lastConnectorName = ((fromRow - toRow) > 1) ? ConnectorName.RIGHT_UP :
-        ConnectorName.RIGHT_UP_ARROW;
+    const lastConnectorName = ((fromRow - toRow) > 1) ? ConnectorName.RIGHT_UP
+        : ConnectorName.RIGHT_UP_ARROW;
     const lastEntry = {
         ownCoord: encodeMatrixCoord({ colNum: endCol, rowNum }),
         connectorName: lastConnectorName,
@@ -571,10 +583,11 @@ export const createHorizConnectorsBetweenNodes = (coordPair: CoordPairT): Connec
  * @param {ConnectorToPlace} connectorToPlace
  * @returns {MatrixCoord[]} rightUpCoords - coords for where all the rightUp connectors go
  */
-export const getRightUpCoords = (connectorsToPlace: ConnectorToPlace[]): MatrixCoord[] =>
-    connectorsToPlace
-        .filter(({ connectorName }) => connectorName === ConnectorName.RIGHT_UP)
-        .map(({ ownCoord }) => decodeMatrixCoord(ownCoord));
+export const getRightUpCoords = (
+    connectorsToPlace: ConnectorToPlace[]
+): MatrixCoord[] => connectorsToPlace
+    .filter(({ connectorName }) => connectorName === ConnectorName.RIGHT_UP)
+    .map(({ ownCoord }) => decodeMatrixCoord(ownCoord));
 
 
 /**
@@ -605,7 +618,7 @@ export const addVertConnectorsToMatrix = (
 
         const replaceBy = encodeMatrixEntry({
             colType: tileType,
-            entryName: entryName,
+            entryName,
             encodedOwnCoord: encodedOwnCoord as string,
             encodedParentCoord: encodedParentNodeCoord as string
         });
@@ -613,21 +626,23 @@ export const addVertConnectorsToMatrix = (
     }
 
     // mutate matrix
+    // eslint-disable-next-line no-param-reassign
     matrix[colNum] = col;
 };
 
 /**
  * Takes a dictionary and returns a new dictionary with the key and value swapped
  *
- * @param {EndomorphDict} keyToVal 
+ * @param {EndomorphDict} keyToVal
  * @param {EndomorphDict} valToKey
  */
-export const invertKeyVal = (keyToVal: EndomorphDict): EndomorphDict =>
-    Object.keys(keyToVal).map(key => [key, keyToVal[key]]).reduce((acc, curr) => {
-        const [key, val] = curr;
-        const valToKey = { [val]: key };
-        return { ...acc, ...valToKey };
-    }, {});
+export const invertKeyVal = (
+    keyToVal: EndomorphDict
+): EndomorphDict => Object.keys(keyToVal).map((key) => [key, keyToVal[key]]).reduce((acc, curr) => {
+    const [key, val] = curr;
+    const valToKey = { [val]: key };
+    return { ...acc, ...valToKey };
+}, {});
 
 
 /**
@@ -639,7 +654,7 @@ export const invertKeyVal = (keyToVal: EndomorphDict): EndomorphDict =>
  */
 export const downRightDashesToPlace = (
     { matrix, forkStepCols }: { matrix: Matrix; forkStepCols: number[] }
-): { replaceBy: string; coord: MatrixCoord }[] => forkStepCols.map(colNum => {
+): { replaceBy: string; coord: MatrixCoord }[] => forkStepCols.map((colNum) => {
     const col = matrix[colNum];
     const parentRowNum = lastNodeInCol(col);
     const rowNum = lastOccupiedInCol(col) + 1;
@@ -658,11 +673,13 @@ export const downRightDashesToPlace = (
     };
 });
 
-const getRowNum = ({ nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: EndomorphDict }) =>
-    decodeMatrixCoord(nodeIdToCoord[nodeId]).rowNum;
+const getRowNum = (
+    { nodeId, nodeIdToCoord }: { nodeId: string; nodeIdToCoord: EndomorphDict }
+) => decodeMatrixCoord(nodeIdToCoord[nodeId]).rowNum;
 
-const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) =>
-    getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
+const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (
+    a: string, b: string
+) => getRowNum({ nodeId: a, nodeIdToCoord }) - getRowNum({ nodeId: b, nodeIdToCoord });
 
 /**
  * Get an array of nodeIds starting from given starting node until the sink node in the given graph
@@ -678,7 +695,7 @@ const parentIdSortBy = (nodeIdToCoord: EndomorphDict) => (a: string, b: string) 
 export const getPath = ({
     node, workflowStepNodes, path
 }: { node: string; workflowStepNodes: WorkflowStepNodes; path: string[] }): string[] => {
-    const children = workflowStepNodes[node].nextNodes.map(n => n.id);
+    const children = workflowStepNodes[node].nextNodes.map((n) => n.id);
 
     if (children.length === 0) {
         return path;
@@ -706,11 +723,10 @@ export const findNodeWithClosestCommonDescendant = (
     }
 ): string => {
     for (let i = 1; i < currPrimaryPath.length; i += 1) {
-        const unsortedCandidatePaths = nodesToSort.map(node => ({
+        const unsortedCandidatePaths = nodesToSort.map((node) => ({
             head: node,
             commonAncestorIndex: paths[node].indexOf(currPrimaryPath[i])
-        })
-        ).filter(
+        })).filter(
             ({ commonAncestorIndex }) => (commonAncestorIndex > 0)
         );
 
@@ -745,7 +761,9 @@ export const findNodeWithClosestCommonDescendant = (
  * @returns {Array<string>} sortedNodes - updated sortedNodes
  */
 export const closestCommonDescendantSort = (
-    { currPrimaryPath, sortedNodes, nodesToSort, paths }: {
+    {
+        currPrimaryPath, sortedNodes, nodesToSort, paths
+    }: {
         currPrimaryPath: string[];
         sortedNodes: string[];
         nodesToSort: string[];
@@ -761,7 +779,7 @@ export const closestCommonDescendantSort = (
     return closestCommonDescendantSort({
         currPrimaryPath: paths[nodeToAdd],
         sortedNodes: sortedNodes.concat(nodeToAdd),
-        nodesToSort: nodesToSort.filter(node => node !== nodeToAdd),
+        nodesToSort: nodesToSort.filter((node) => node !== nodeToAdd),
         paths
     });
 };
@@ -778,11 +796,11 @@ export const getSortedNextNodes = (
         nextNodes: NextNode[]; workflowStepNodes: WorkflowStepNodes;
     }
 ): string[] => {
-    if (nextNodes.length < 2) return nextNodes.map(node => node.id);
+    if (nextNodes.length < 2) return nextNodes.map((node) => node.id);
     const primaryNode = nextNodes.find((nextNode: NextNode) => nextNode.primary);
     const primaryNodeId: string = primaryNode ? primaryNode.id : nextNodes[0].id;
 
-    const nodes: string[] = nextNodes.map(nextNode => nextNode.id);
+    const nodes: string[] = nextNodes.map((nextNode) => nextNode.id);
 
     const paths: PolymorphDict = nodes.reduce((acc: PolymorphDict, node: string) => (
         {
@@ -798,7 +816,7 @@ export const getSortedNextNodes = (
     return closestCommonDescendantSort({
         currPrimaryPath: paths[primaryNodeId],
         sortedNodes: [primaryNodeId],
-        nodesToSort: nodes.filter(node => node !== primaryNodeId),
+        nodesToSort: nodes.filter((node) => node !== primaryNodeId),
         paths
     });
 };
@@ -845,7 +863,7 @@ export const populateMatrix = (
     // nodeId -> nodeId[]
     const nodeIdToParentNodeIds: PolymorphDict = {};
 
-    let offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
+    const offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
 
     // BFS with Min Heap to keep track of toExplore
     while (!toExplore.isEmpty()) {
@@ -899,7 +917,9 @@ export const populateMatrix = (
 
             const parentNodeIds = nodeIdToParentNodeIds[nextStepId];
             nodeIdToParentNodeIds[nextStepId] = (parentNodeIds || []).concat(id);
-            // console.log("nodeIdToParentNodeIds = ", JSON.stringify(nodeIdToParentNodeIds, null, 2));
+            // console.log("nodeIdToParentNodeIds = ",
+            // JSON.stringify(nodeIdToParentNodeIds, null, 2));
+
             if (!explored[nextStepId]) {
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
@@ -921,7 +941,8 @@ export const populateMatrix = (
                 explored[nextStepId] = true;
             }
             // console.log("toExplore", toExplore);
-            // console.log("toExplore workflowStepOrder", toExplore.map(nodeId => workflowStepNodes[nodeId].workflowStepOrder));
+            // console.log("toExplore workflowStepOrder",
+            // toExplore.map(nodeId => workflowStepNodes[nodeId].workflowStepOrder));
         }
     }
 
@@ -943,12 +964,12 @@ export const populateMatrix = (
     // Populate matrix with regular connectors
     connectorsToPlace
         .forEach(
-            connectorToPlace => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
+            (connectorToPlace) => addConnectorToMatrix({ matrix, connectorToPlace, nodeCoords })
         );
 
 
-    // Step 2.2 - If there are right up connectors in the matrix, we want to draw vertLine and arrowUp
-    // above them while the tile is empty.
+    // Step 2.2 - If there are right up connectors in the matrix, we want to draw
+    // vertLine and arrowUp above them while the tile is empty.
 
     // TODO: We will cache the coord of all the rightUp connectors in the matrix
     // during createHorizConnectorsBetweenNodes. After that's implemented, we can get rid
@@ -957,7 +978,7 @@ export const populateMatrix = (
     // console.log(matrix);
     getRightUpCoords(connectorsToPlace)
         .forEach(
-            rightUpCoord => addVertConnectorsToMatrix({ matrix, startCoord: rightUpCoord })
+            (rightUpCoord) => addVertConnectorsToMatrix({ matrix, startCoord: rightUpCoord })
         );
 
     // Step 2.3 - Decision Step Dashed line
@@ -966,7 +987,7 @@ export const populateMatrix = (
     // steps are
     // Populate matrix with downRight dash line connectors branching from diamond
     downRightDashesToPlace({ matrix, forkStepCols })
-        .forEach(downRightDashToPlace => replaceTile({
+        .forEach((downRightDashToPlace) => replaceTile({
             matrix,
             replaceBy: downRightDashToPlace.replaceBy,
             coord: downRightDashToPlace.coord
@@ -978,15 +999,16 @@ export const populateMatrix = (
 /**
  * Given plusBtn coordinate and a list of candidate coordinates for where the next nodes could be,
  * determine the next node (there can only be one next node)
- * 
+ *
  * @param {MatrixCoord} plusBtnCoord
  * @param {EndomorphDict} coordToNodeId
- * @param {string[]} candidateNodeIds 
+ * @param {string[]} candidateNodeIds
  */
 export const findNextNode = ({
     plusBtnCoord, coordToNodeId, candidateNextNodeIds
-}: { plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNextNodeIds: string[] }
-): string => {
+}: {
+    plusBtnCoord: MatrixCoord; coordToNodeId: EndomorphDict; candidateNextNodeIds: string[];
+}): string => {
     // NOTE: It's assumed all candidateNextNodeIds are to the right of the plus button so their
     // colNum is irrelevant
     const { rowNum: plusBtnRowNum } = plusBtnCoord;
@@ -1002,4 +1024,3 @@ export const findNextNode = ({
 
     return coordToNodeId[encodeMatrixCoord(nextNodeCoord)];
 };
-

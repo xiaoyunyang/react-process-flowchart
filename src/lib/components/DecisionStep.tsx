@@ -1,9 +1,9 @@
 // Components
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
 // Styles
-import styles from '../styles/workflowVis.module.css';
+import styles from "../styles/workflowVis.module.css";
 
 // Types
 import { encodedNodeType, workflowStepConfig, ForkIcon } from "../../config";

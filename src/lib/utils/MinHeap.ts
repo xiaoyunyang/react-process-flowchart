@@ -9,11 +9,13 @@ export default class MinHeap {
     constructor() {
         this.arr = Array(1).fill(null);
     }
+
     swap(i: number, j: number) {
         const temp = this.arr[i];
         this.arr[i] = this.arr[j];
         this.arr[j] = temp;
     }
+
     insert(elem: HeapElemT) {
         // For min heap, when we insert a new element, we begin with adding it to the
         // end of the array. Then we keep swapping with its parent until the parent's
@@ -25,21 +27,26 @@ export default class MinHeap {
         const insertedIndex = this.arr.length - 1;
         this.bubbleUp(insertedIndex);
     }
+
     printHeap() {
         return `heap ->  ${JSON.stringify(this.arr, null, 2)}`;
     }
+
     getHeap() {
         return this.arr;
     }
+
     isEmpty(): boolean {
         return this.arr.length < 2;
     }
+
     getMin() {
         if (this.isEmpty()) {
             return undefined;
         }
         return this.arr[1];
     }
+
     deleteMin(): HeapElemT | undefined {
         // For min Heap, when we delete min, we fill the void with the last element in the heap.
         // Then we swap that element with its children until both its children
@@ -58,6 +65,7 @@ export default class MinHeap {
 
         return min;
     }
+
     bubbleUp(insertedIndex: number) {
         const parentIndex = Math.floor(insertedIndex / 2);
 
@@ -72,12 +80,13 @@ export default class MinHeap {
         this.swap(parentIndex, insertedIndex);
         this.bubbleUp(parentIndex);
     }
+
     bubbleDown(parentIndex: number) {
         const leftChildIndex = parentIndex * 2;
         const rightChildIndex = (parentIndex * 2) + 1;
 
         const smallerChildIndex = [leftChildIndex, rightChildIndex]
-            .filter(i => this.arr[i] !== undefined)
+            .filter((i) => this.arr[i] !== undefined)
             .sort((a, b) => this.arr[a].priority - this.arr[b].priority)[0];
 
         if (!smallerChildIndex) return;

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React from "react";
 
 // Styles
-import style from '../styles/workflowVis.module.css';
+import style from "../styles/workflowVis.module.css";
 
 // Components
 import WorkflowVisContainer from "../WorkflowVisContainer";
@@ -34,12 +34,13 @@ export default class Workflow extends React.PureComponent<PropsT, StateT> {
         this.boundToggleEditMode = this.toggleEditMode.bind(this);
     }
 
+    boundToggleEditMode: () => void;
+
     toggleEditMode() {
         const { editMode } = this.state;
         this.setState({ editMode: !editMode });
     }
 
-    boundToggleEditMode: () => void;
 
     render() {
         const { workflow } = this.props;

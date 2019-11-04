@@ -52,7 +52,7 @@ storiesOf("WorkflowStep", module)
         isDisabled={boolean("isDisabled", false)}
         stepDisabledMessage={text("disabledMessage", "Step is disabled")}
         shouldHighlight={boolean("shouldHighlight", false)}
-        displayWarning={text("Display Warning", messages.stepIsDisabled)}
+        displayWarning={text("Display Warning", "This step has warning")}
       />
     </div>
   ));

@@ -36,7 +36,7 @@ describe("EditButton Spec", () => {
     let editButton: any;
     let props: any;
     let createAddChildNodeCommandSpy: any;
-    
+
     beforeEach(() => {
         props = {
             createAddChildNodeCommand
@@ -58,7 +58,7 @@ describe("EditButton Spec", () => {
         editButton = shallow(<EditButton {...props} />);
         const event = {
             currentTarget: {
-                getBoundingClientRect: () => { return { left: 2, top: 4 }; }
+                getBoundingClientRect: () => ({ left: 2, top: 4 })
             }
         };
 
@@ -67,7 +67,7 @@ describe("EditButton Spec", () => {
 
         const mock = {
             addChildNodeMock: createAddChildNodeCommand,
-            isEmptyBranch: false,
+            isEmptyBranch: false
         };
         expect(
             createAddChildNodeCommandSpy(event, mock)

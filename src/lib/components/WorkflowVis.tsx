@@ -1,8 +1,8 @@
 // Libraries
-import React from 'react';
+import React from "react";
 
 // Styles
-import style from '../styles/workflowVis.module.css';
+import style from "../styles/workflowVis.module.css";
 
 // Components
 import { connectors } from "./Connector";
@@ -31,8 +31,8 @@ const newColEntry = (
     }
 ): ColEntry => {
     const { tileId } = decodeMatrixEntry(matrixEntry);
-    const tile: GenericTile = (workflowStepNodes[tileId]) ? 
-        workflowStepNodes[tileId] : connectors[tileId];
+    const tile: GenericTile = (workflowStepNodes[tileId])
+        ? workflowStepNodes[tileId] : connectors[tileId];
 
     return { matrixEntry, tile };
 };
@@ -44,29 +44,32 @@ export interface WorkflowVisPropsT {
     addNodeParams: AddNodeParams;
 }
 const WorkflowVis = (
-    { workflowVisData, matrix, editMode, addNodeParams }: WorkflowVisPropsT
+    {
+        workflowVisData, matrix, editMode, addNodeParams
+    }: WorkflowVisPropsT
 ) => {
     const { workflowStepNodes } = workflowVisData;
 
     const cols: ColEntry[][] = matrix.map(
         (colNodes: string[]) => colNodes.map(
-            (matrixEntry: string) => newColEntry({ workflowStepNodes, matrixEntry })));
+            (matrixEntry: string) => newColEntry({ workflowStepNodes, matrixEntry })
+        )
+    );
 
-    // TODO: className is not necessary. Inline style determines row and col. Only there for debugging
+    // TODO: className is not necessary. Inline style determines row and col.
+    // Only there for debugging
     return (
         <div className={style.wrapper}>
             {
-                cols.map((col, i) =>
-                    (
-                        <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
-                            <Column
-                                colEntries={col}
-                                editMode={editMode}
-                                addNodeParams={addNodeParams}
-                            />
-                        </div>
-                    )
-                )
+                cols.map((col, i) => (
+                    <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
+                        <Column
+                            colEntries={col}
+                            editMode={editMode}
+                            addNodeParams={addNodeParams}
+                        />
+                    </div>
+                ))
             }
         </div>
     );

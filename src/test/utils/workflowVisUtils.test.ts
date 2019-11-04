@@ -29,12 +29,18 @@ import {
 } from "../../lib/utils/workflowVisUtils";
 
 // Types
-import { ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes } from "../../lib/types/workflowVisTypes";
+import {
+    ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes
+} from "../../lib/types/workflowVisTypes";
 import { NodeTypeT } from "../../config";
 
 // Mocks
-import { AA, BA, DA, DB, DC, DD } from "../../mocks/mockWorkflowsData";
-import { matrixDA, matrixDB, matrixDC, matrixDD } from "../../mocks/mockMatrices";
+import {
+    AA, BA, DA, DB, DC, DD
+} from "../../mocks/mockWorkflowsData";
+import {
+    matrixDA, matrixDB, matrixDC, matrixDD
+} from "../../mocks/mockMatrices";
 
 describe("WorkflowVisUtils", () => {
     describe("#isConnector", () => {
@@ -202,7 +208,7 @@ describe("WorkflowVisUtils", () => {
                 b2b5c4c7cfd7: "4,1",
                 "297786162f15": "6,0",
                 "492b709fc90a": "8,0",
-                a3135bdf3aa3: "10,0",
+                a3135bdf3aa3: "10,0"
             };
             const nodeIdToParentCoords = {
                 ba322565b1bf: ["0,0"],
@@ -238,7 +244,7 @@ describe("WorkflowVisUtils", () => {
             expect(lines).toEqual([
                 { ownCoord: "1,1", parentCoord: "0,0", connectorName: ConnectorName.LINE_HORIZ },
                 { ownCoord: "2,1", parentCoord: "1,1", connectorName: ConnectorName.LINE_HORIZ },
-                { ownCoord: "3,1", parentCoord: "2,1", connectorName: ConnectorName.LINE_HORIZ },
+                { ownCoord: "3,1", parentCoord: "2,1", connectorName: ConnectorName.LINE_HORIZ }
             ]);
             expect(lastLineCoord).toBe("3,1");
         });
@@ -297,7 +303,7 @@ describe("WorkflowVisUtils", () => {
                 { connectorName: ConnectorName.ARROW_RIGHT, ownCoord: "1,2", parentCoord: "3,4" },
                 { connectorName: ConnectorName.RIGHT_UP, ownCoord: "5,6", parentCoord: "7,8" },
                 { connectorName: ConnectorName.RIGHT_UP_ARROW, ownCoord: "9,10", parentCoord: "11,12" },
-                { connectorName: ConnectorName.RIGHT_UP, ownCoord: "13,14", parentCoord: "15,16" },
+                { connectorName: ConnectorName.RIGHT_UP, ownCoord: "13,14", parentCoord: "15,16" }
             ];
             expect(getRightUpCoords(connectorsToPlace)).toEqual([
                 { colNum: 5, rowNum: 6 },
@@ -309,7 +315,7 @@ describe("WorkflowVisUtils", () => {
                 { connectorName: ConnectorName.ARROW_RIGHT, ownCoord: "1,2", parentCoord: "3,4" },
                 { connectorName: ConnectorName.LINE_HORIZ, ownCoord: "5,6", parentCoord: "7,8" },
                 { connectorName: ConnectorName.RIGHT_UP_ARROW, ownCoord: "9,10", parentCoord: "11,12" },
-                { connectorName: ConnectorName.LINE_VERT, ownCoord: "13,14", parentCoord: "15,16" },
+                { connectorName: ConnectorName.LINE_VERT, ownCoord: "13,14", parentCoord: "15,16" }
             ];
             expect(getRightUpCoords(connectorsToPlace)).toEqual([]);
         });
@@ -395,7 +401,7 @@ describe("WorkflowVisUtils", () => {
             a: { nextNodes: [{ id: "b", primary: true }] },
             b: { nextNodes: [{ id: "c", primary: true }] },
             c: { nextNodes: [{ id: "d", primary: true }] },
-            d: { nextNodes: [] },
+            d: { nextNodes: [] }
         } as any as WorkflowStepNodes;
 
         expect(getPath({ node: "a", workflowStepNodes, path: ["a"] })).toEqual(["a", "b", "c", "d"]);
@@ -433,7 +439,9 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "c2", "a1", "a2", "a3"]
             };
             expect(
-                closestCommonDescendantSort({ currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({
+                    currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths
+                })
             ).toEqual(["a0", "d0", "c0", "b0"]);
         });
         test("parallel paths", () => {
@@ -443,7 +451,9 @@ describe("WorkflowVisUtils", () => {
                 d0: ["d0", "d1", "d2", "d3"]
             };
             expect(
-                closestCommonDescendantSort({ currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths })
+                closestCommonDescendantSort({
+                    currPrimaryPath, sortedNodes: ["a0"], nodesToSort, paths
+                })
             ).toEqual(["a0", "b0", "c0", "d0"]);
         });
     });
@@ -473,7 +483,7 @@ describe("WorkflowVisUtils", () => {
                 { id: "a0", primary: true },
                 { id: "b0", primary: false },
                 { id: "c0", primary: false },
-                { id: "d0", primary: false },
+                { id: "d0", primary: false }
             ];
             expect(
                 getSortedNextNodes({ nextNodes, workflowStepNodes })
@@ -494,7 +504,9 @@ describe("WorkflowVisUtils", () => {
             const newNodeId = "1234";
             const encodedParentCoord = "0,0";
             const colNum = 1;
-            const { rowNum } = addNodeToMatrix({ matrix, colNum, newNodeId, encodedParentCoord });
+            const { rowNum } = addNodeToMatrix({
+                matrix, colNum, newNodeId, encodedParentCoord
+            });
             expect(rowNum).toBe(0);
             expect(matrix[1]).toEqual(["1234", "standard|empty|1,1", "standard|empty|1,2"]);
         });
@@ -502,7 +514,9 @@ describe("WorkflowVisUtils", () => {
             const newNodeId = "1234";
             const encodedParentCoord = "0,1";
             const colNum = 1;
-            const { rowNum } = addNodeToMatrix({ matrix, colNum, newNodeId, encodedParentCoord });
+            const { rowNum } = addNodeToMatrix({
+                matrix, colNum, newNodeId, encodedParentCoord
+            });
             expect(rowNum).toBe(1);
             expect(matrix[1]).toEqual(["standard|empty|1,0", "1234", "standard|empty|1,2"]);
         });

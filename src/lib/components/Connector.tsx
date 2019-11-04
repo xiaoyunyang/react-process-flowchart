@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
 // Components
@@ -22,8 +22,7 @@ export const ArrowRight = () => (
 
 export const ArrowRightEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
-) =>
-    (
+) => (
         <div className={classNames(styles.arrowRight, styles.flexContainer)}>
             <div className={classNames(styles.line, styles.lineShort)} />
             <EditButton createAddChildNodeCommand={createAddChildNodeCommand} />
@@ -42,8 +41,7 @@ export const LineVert = () => (
 
 export const LineHorizEditable = (
     { createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }
-) =>
-    (
+) => (
         <div className={classNames(styles.lineHoriz, styles.flexContainer)}>
             <div className={classNames(styles.line, styles.lineShort)} />
             <EditButton createAddChildNodeCommand={createAddChildNodeCommand} />
@@ -71,7 +69,9 @@ export const ArrowUp = () => (
     </div>
 );
 
-export const DownRightDashEditable = ({ createAddChildNodeCommand }: { createAddChildNodeCommand: CreateAddChildNodeCommand }) => (
+export const DownRightDashEditable = ({ createAddChildNodeCommand }: {
+    createAddChildNodeCommand: CreateAddChildNodeCommand;
+}) => (
     <div className={classNames(styles.flexContainer, styles.downRightDash)}>
         <div className={classNames(styles.downRight)} />
         <EditButton createAddChildNodeCommand={createAddChildNodeCommand} isEmptyBranch />
@@ -209,8 +209,7 @@ export const connectors: { [id: string]: ConnectorT } = {
     }
 };
 
-export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNodeCommand
-): { [name in ConnectorName]: JSX.Element } => {
+export const connectorComponent = (createAddChildNodeCommand: CreateAddChildNodeCommand): { [name in ConnectorName]: JSX.Element } => {
     const component: { [name in ConnectorName]: JSX.Element } = {
         downRight: <div className={styles.downRight} />,
         upRight: <div className={styles.upRight} />,

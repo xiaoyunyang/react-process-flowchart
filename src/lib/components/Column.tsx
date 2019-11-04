@@ -33,17 +33,21 @@ export default class Column extends React.PureComponent<PropsT> {
             const shouldRenderEditButton = editMode && !!encodedParentNodeCoord;
             const id = shouldRenderEditButton ? `${connectorId}.edit` : connectorId;
 
-            // The matrixEntry of a connector can encode its own coordinate and its parent's coordinate.
+            // The matrixEntry of a connector can encode its own coordinate and its
+            // parent's coordinate.
             // The matrixEntry for a connector is unique because it consists of
             // ${connectorType}|${connectorName}|${encodedOwnCoord}|${encodedParentNodeCoord}
             // So we are guaranteed to have unique keys for each column item
 
-            // TODO: We want to pass some information about prev workstep to EditButton so when the EditButton is clicked,
-            // the parent's workflowStepUid can be retrieved from performing a lookup of the 
-            // in nodeCoord using encodedParentNodeCoord. Therefore, we want to pass encodedParentNodeCoord to EditButton
-            // When EditButton is clicked, it emits an event and the reducer can act on. If the encodedParentNodeCoord belongs
-            // to a workflowStep (i.e., the encodedParentNodeCoord lookup in nodeCoord yields a workflowStepUid), then we will
-            // bring up a form
+            // TODO: We want to pass some information about prev workstep to EditButton
+            // so when the EditButton is clicked,
+            // the parent's workflowStepUid can be retrieved from performing a lookup of the
+            // in nodeCoord using encodedParentNodeCoord. Therefore, we want to pass
+            // encodedParentNodeCoord to EditButton
+            // When EditButton is clicked, it emits an event and the reducer can act on.
+            // If the encodedParentNodeCoord belongs
+            // to a workflowStep (i.e., the encodedParentNodeCoord lookup in nodeCoord
+            // yields a workflowStepUid), then we will bring up a form
             return (
                 <Connector
                     id={id}
@@ -87,6 +91,7 @@ export default class Column extends React.PureComponent<PropsT> {
             />
         );
     }
+
     render() {
         const { colEntries, editMode, addNodeParams } = this.props;
 

@@ -4,17 +4,15 @@ import {
     NodeTypeT
 } from "./workflowTypes";
 
-export const getDisplayWarning = (workflowStep: WorkflowStepT): ReactNode => {
-    return false;
-}
+export const getDisplayWarning = (workflowStep: WorkflowStepT): ReactNode => false;
 
 export const getNodeType = ({ workflowStep }: { workflowStep: WorkflowStepT }): NodeTypeT => {
-    const { workflowStepType} = workflowStep;
-    return workflowStepType
-}
+    const { workflowStepType } = workflowStep;
+    return workflowStepType;
+};
 
 export const getNextNodes = ({ actions }: WorkflowStepT) => actions
-    .filter(action => action.actionType !== "REJECT")
-    .map(action => ({ id: action.nextWorkflowStepUid, primary: action.primary }));
+    .filter((action) => action.actionType !== "REJECT")
+    .map((action) => ({ id: action.nextWorkflowStepUid, primary: action.primary }));
 
-export const getIsDisabled = (workflowStep: WorkflowStepT) => false
+export const getIsDisabled = (workflowStep: WorkflowStepT) => false;

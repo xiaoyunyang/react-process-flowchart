@@ -1,5 +1,5 @@
 // Libraries
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 import Truncate from "react-truncate";
 
@@ -51,9 +51,7 @@ interface State {
     displayTooltip: boolean;
 }
 
-export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
-    private displayNameRef: React.RefObject<HTMLInputElement> = React.createRef();
-
+export default class WorkflowStep extends React.PureComponent<PropsT, State> {
     constructor(props: PropsT) {
         super(props);
 
@@ -73,10 +71,13 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
     }
 
     boundOpenDropdownMenu: () => void;
+
     boundCloseDropdownMenu: () => void;
+
     toggleDropdownMenu(dropdownMenuOpened: boolean) {
         this.setState({ dropdownMenuOpened });
     }
+
     renderDisplayName({ displayName, isClickable }: { displayName: string; isClickable: boolean }) {
         const { dropdownMenuOpened } = this.state;
 
@@ -108,12 +109,14 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </div>
         );
     }
+
     renderTooltippedDisplayName(
-        { name, isClickable }: { name: string; isClickable: boolean }) {
+        { name, isClickable }: { name: string; isClickable: boolean }
+    ) {
         const { displayTooltip } = this.state;
 
-        return displayTooltip ?
-            (
+        return displayTooltip
+            ? (
                 <Tooltip
                     className={styles.boxTooltip}
                     placement="top"
@@ -131,16 +134,18 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         isClickable: boolean;
         isDisabled?: boolean;
     }) {
-        const { name, type, shouldHighlight, displayWarning } = this.props;
+        const {
+            name, type, shouldHighlight, displayWarning, theme: propsTheme
+        } = this.props;
+        const theme = propsTheme || workflowStepConfig[type].theme; // TODO: need to test this
 
-        const theme = this.props.theme || workflowStepConfig[type].theme; // TODO: need to test this
-
-        const renderedName: string = (messages as {[key: string]: string})[type] 
+        const renderedName: string = (messages as {[key: string]: string})[type]
             ? (messages as {[key: string]: string})[type] : name;
 
-        const boxContainerClassName = isClickable ?
-            classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
+        const boxContainerClassName = isClickable
+            ? classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
+        // TODO: the outer div seems to be missing a lot of properties, like role="button"
         return (
             <div className={boxContainerClassName}>
                 <div
@@ -159,8 +164,11 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </div>
         );
     }
+
     renderInDropdownConditionally(children: ReactNode, isClickable: boolean) {
-        const { type, workflowStepUid, workflowUid, nextSteps, prevSteps } = this.props;
+        const {
+            type, workflowStepUid, workflowUid, nextSteps, prevSteps
+        } = this.props;
 
         // TODO: the following is different from project code
         const editMenuProps = {
@@ -183,6 +191,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </Dropdown>
         ) : children;
     }
+
     renderInTooltipConditionally(children: ReactNode, condition: boolean) {
         const { displayWarning, stepDisabledMessage } = this.props;
         const tooltipContent = displayWarning || stepDisabledMessage || messages.stepIsDisabled;
@@ -207,7 +216,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
 
         // TODO: need to change the config so it doesn't explicitly identify what the options are
         const isClickable = !isDisabled && hasOption;
-        
+
         return this.renderInTooltipConditionally(
             this.renderInDropdownConditionally(
                 this.renderWorkflowStep({ isClickable, isDisabled }),
@@ -215,5 +224,5 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             ),
             !!displayWarning || isDisabled
         );
-    };
+    }
 }

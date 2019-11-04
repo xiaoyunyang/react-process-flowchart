@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { ReactNode } from "react";
 import { NodeTypeT, WorkflowStepT } from "../../config";
 import { EndomorphDict, PolymorphDict } from "./generic";
@@ -117,8 +118,9 @@ export interface ColEntry {
 
 export type AddChildNodeCommand = string;
 
-export type CreateAddChildNodeCommand = ({ left, top, isEmptyBranch
-}: { left: number; top: number; isEmptyBranch: boolean }) => AddChildNodeCommand;
+export type CreateAddChildNodeCommand = ({ left, top, isEmptyBranch }: {
+    left: number; top: number; isEmptyBranch: boolean;
+}) => AddChildNodeCommand;
 
 
 export type AddNodeParams = ({ ownCoord, parentCoord }: {

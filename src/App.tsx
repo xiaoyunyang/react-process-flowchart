@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
-import logo from './logo.svg';
+import logo from "./logo.svg";
 
 // Styles
-import './App.css';
+import "./App.css";
 import styles from "./lib/styles/workflowVis.module.css";
 
 // Data
@@ -23,7 +23,7 @@ import Workflow from "./lib/components/Workflow";
 import WorkflowVis from "./lib/components/WorkflowVis";
 
 const workflows: any = [
-    AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD, 
+    AA, AB, AC, AD, AE, BA, BB, BC, BD, BE, BF, CD,
     DA, DB, DC, DD, DE
 ];
 // const workflows: any = [DE];
@@ -49,32 +49,30 @@ const App = () => (
                 classNames(
                     styles.flowchartContainer,
                     { [styles.debug]: debugModeOn }
-                )}
+                )
+            }
             >
                 {
-                    workflows.map((workflow: MockWorkflowsData) =>
-                        <Workflow key={workflow.workflowUid} workflow={workflow} />
-                    )
+                    workflows.map((
+                        workflow: MockWorkflowsData
+                    ) => <Workflow key={workflow.workflowUid} workflow={workflow} />)
                 }
             </div>
         )}
         <div className={styles.flowchartContainer}>
             <h1>WorkflowVis Unit Test</h1>
-            {enableMatrixUnitTest &&
-                matrices.map(({ name, matrix }) => {
-                    return (
-                        <div key={`test-layout-${name}`}>
-                            <h2>{name}</h2>
-                            <WorkflowVis
-                                matrix={matrix}
-                                workflowVisData={workflowVisData}
-                                editMode={enableMatrixUnitTestEditMode}
-                                addNodeParams={noop}
-                            />
-                        </div>
-                    );
-                })
-            }
+            {enableMatrixUnitTest
+                && matrices.map(({ name, matrix }) => (
+                    <div key={`test-layout-${name}`}>
+                        <h2>{name}</h2>
+                        <WorkflowVis
+                            matrix={matrix}
+                            workflowVisData={workflowVisData}
+                            editMode={enableMatrixUnitTestEditMode}
+                            addNodeParams={noop}
+                        />
+                    </div>
+                ))}
         </div>
     </div>
 );

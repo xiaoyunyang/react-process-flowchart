@@ -22,7 +22,6 @@ import {
 import styles from "./styles/workflowVis.module.css";
 
 
-
 interface PropsT {
     workflowUid: string;
     workflowSteps: WorkflowStepT[];
@@ -45,23 +44,27 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
         };
         this.updatePlusBtnClickParamsBound = this.updatePlusBtnClickParams.bind(this);
     }
-    updatePlusBtnClickParamsBound: ({ left, top, tetheredNodeId, nextNodeId }: {
+
+    updatePlusBtnClickParamsBound: ({
+        left, top, tetheredNodeId, nextNodeId
+    }: {
         left: number; top: number;
         tetheredNodeId: string; nextNodeId: string;
     }) => void;
+
     updatePlusBtnClickParams({
         left, top, tetheredNodeId, nextNodeId
     }: {
         left: number; top: number;
         tetheredNodeId: string; nextNodeId: string;
-    }
-    ) {
+    }) {
         this.setState({
             plusBtnClickPos: { left, top },
             tetheredNodeId,
             nextNodeId
         });
     }
+
     render() {
         const { workflowUid, workflowSteps, editMode } = this.props;
         const {
@@ -113,23 +116,21 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
         return (
             <div style={{ position: "relative" }}>
-                {
-                    <div className={styles.top}>
-                        <div className={styles.wrapperContainer}>
-                            <WorkflowVis
-                                workflowVisData={workflowVisData}
-                                matrix={matrix}
-                                editMode={editMode}
-                                addNodeParams={createAddNodeParams({
-                                    coordToNodeId,
-                                    workflowStepNodes,
-                                    nodeIdToParentNodeIds,
-                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                                })}
-                            />
-                        </div>
+                <div className={styles.top}>
+                    <div className={styles.wrapperContainer}>
+                        <WorkflowVis
+                            workflowVisData={workflowVisData}
+                            matrix={matrix}
+                            editMode={editMode}
+                            addNodeParams={createAddNodeParams({
+                                coordToNodeId,
+                                workflowStepNodes,
+                                nodeIdToParentNodeIds,
+                                updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                            })}
+                        />
                     </div>
-                }
+                </div>
                 {/* <div className={styles.bottom}>
                     <div className={styles.wrapperContainer}>
                         <WorkflowVis

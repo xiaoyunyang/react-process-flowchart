@@ -2,16 +2,13 @@
 // TODO: Need to refactor createAddNodeParams to incorporate
 // decorator pattern to avoid dependency cycles
 
-// Libraries
-import React from 'react';
-
 // Types
 import { encodedNodeType } from "./workflowTypes";
-import { EndomorphDict, PolymorphDict } from '../lib/types/generic';
+import { EndomorphDict, PolymorphDict } from "../lib/types/generic";
 
 import {
     CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes
-} from  "../lib/types/workflowVisTypes";
+} from "../lib/types/workflowVisTypes";
 
 // Utils
 import {
@@ -55,19 +52,19 @@ const workflowStepConfig: {[stepType: string]: StepConfig} = {
     [encodedNodeType[1]]: {
         theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
-    [encodedNodeType[2]]: { 
+    [encodedNodeType[2]]: {
         theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
-    [encodedNodeType[3]]: { 
+    [encodedNodeType[3]]: {
         theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
-    [encodedNodeType[4]]: { 
+    [encodedNodeType[4]]: {
         theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
-    [encodedNodeType[5]]: { 
+    [encodedNodeType[5]]: {
         theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
-    [encodedNodeType[6]]: { 
+    [encodedNodeType[6]]: {
         theme: ThemeT.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
     },
     [encodedNodeType.finish]: {
@@ -75,9 +72,6 @@ const workflowStepConfig: {[stepType: string]: StepConfig} = {
     }
 };
 
-const AddWorkflowStepIcon = () => (
-    <i className="fas fa-plus" />
-);
 const createAddNodeParams: CreateAddNodeParams = ({
     coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds, updatePlusBtnClickParams
 }: {
@@ -85,9 +79,7 @@ const createAddNodeParams: CreateAddNodeParams = ({
     workflowStepNodes: WorkflowStepNodes;
     nodeIdToParentNodeIds: PolymorphDict;
     updatePlusBtnClickParams: Function;
-}) =>
-    ({ ownCoord = "", parentCoord }: { ownCoord: string | undefined; parentCoord: string | undefined }) =>
-        ({ left, top, isEmptyBranch }: { left: number; top: number; isEmptyBranch: boolean }): AddChildNodeCommand => {
+}) => ({ ownCoord = "", parentCoord }: { ownCoord: string | undefined; parentCoord: string | undefined }) => ({ left, top, isEmptyBranch }: { left: number; top: number; isEmptyBranch: boolean }): AddChildNodeCommand => {
             if (!parentCoord) return "";
             if (parentCoord) {
                 // The command to add new child node is set to this string as a placeholder.
@@ -99,8 +91,7 @@ const createAddNodeParams: CreateAddNodeParams = ({
 
                 const candidateNextNodeIds = nextNodes.map((nextNode: any) => nextNode.id);
 
-                const addChildNodeCommand: AddChildNodeCommand =
-                    `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
+                const addChildNodeCommand: AddChildNodeCommand = `User clicked plus sign tethered to nodeId=${parentNodeId} with prevNodeIds = ${String(prevNodeIds)} candidateNextNodes= ${String(candidateNextNodeIds)}. Draw popover modal at left=${left}, top=${top}`;
 
                 // console.log("MOOOOOOOOOOOOOOOOOO\n", addChildNodeCommand);
 
@@ -131,11 +122,9 @@ const createAddNodeParams: CreateAddNodeParams = ({
 export * from "./workflowTypes";
 export * from "./uic";
 export { default as messages } from "./messages";
- 
+
 export {
-    AddWorkflowStepIcon,
     workflowStepConfig,
     createAddNodeParams,
     Utils
 };
-

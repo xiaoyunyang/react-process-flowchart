@@ -17,12 +17,26 @@ module.exports = {
     rules: {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-member-accessibility": "off",
-        "import/extensions": [1, "never", { ts: "never" }],
-        "import/named": 0,
-        "react/jsx-indent": [0],
-        "react/jsx-indent-props": [0],
-        "indent": [0],
-        "react/jsx-filename-extension": false,
+        "import/extensions": [1, "never", { ts: "never", "json": "always" }],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "indent": ["error", 4],
+        "react/jsx-props-no-spreading": "off",
+        "quotes": ["error", "double"],
+        "comma-dangle": ["error", "never"],
+        "react/jsx-filename-extension": ['warn', {	
+            extensions: ['ts', '.tsx'],	
+          }
+        ],
+        "react/sort-comp": [1, {
+            "order": [
+                "constructor",
+                "lifecycle",
+                "everything-else",
+                "render"
+            ]
+          }]
+          
     },
     overrides: [
         {

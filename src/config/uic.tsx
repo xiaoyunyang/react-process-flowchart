@@ -1,35 +1,40 @@
 // Libraries
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import {
     Tooltip as UITooltip,
     Menu, MenuItem,
     withStyles
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-import { type2IconMapping } from "./workflowTypes";
-import { render } from 'enzyme';
+import { render } from "enzyme";
 
 // Types
-import { TooltipProps } from '@material-ui/core/Tooltip';
-import any from 'ramda/es/any';
+import { TooltipProps } from "@material-ui/core/Tooltip";
+import any from "ramda/es/any";
+import { type2IconMapping } from "./workflowTypes";
 
 // Components
 export const Tooltip = React.forwardRef(
     ({ children, tooltipContent, placement }: any,
-    ref: any
-) => (
+    ref: any) => (
     <UITooltip
         title={tooltipContent}
         placement={placement}
     >
-        <div style={{marginLeft: "auto", marginRight: "auto"}} ref={ref}>
+        <div style={{ marginLeft: "auto", marginRight: "auto" }} ref={ref}>
             { children }
         </div>
     </UITooltip>
-));
+)
+);
 
 // Icons
+
+export const AddWorkflowStepIcon = () => (
+    <i className="fas fa-plus" />
+);
+
 interface IconClassName {
     [id: string]: string;
 }
@@ -51,32 +56,33 @@ const iconClassName: IconClassName = {
 
 
 export const WorkflowStepIcon = ({ type }: { type: string }) => (
-    <div style= {{ textAlign: "center"}}>
-        <i className={ iconClassName[type2IconMapping[type]] } />
+    <div style={{ textAlign: "center" }}>
+        <i className={iconClassName[type2IconMapping[type]]} />
     </div>
 );
 
 export const ExclamationIcon = () => (
-    <div style= {{ 
+    <div style={{
         textAlign: "center",
         top: 3,
         position: "relative",
         fontSize: "inherit"
 
-    }}>
-        <i className= "fas fa-exclamation-circle" />
+    }}
+    >
+        <i className="fas fa-exclamation-circle" />
     </div>
 );
 
 export const ForkIcon = () => (
-    <i className= { iconClassName["branch"]} />
+    <i className={iconClassName.branch} />
 );
 
 const StyledMenu = withStyles({
     paper: {
-      border: '1px solid #d3d4d5',
+      border: "1px solid #d3d4d5",
       marginTop: "5px"
-    },
+    }
   })((props: {
       open: boolean;
       anchorEl: any;
@@ -87,29 +93,33 @@ const StyledMenu = withStyles({
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
+        vertical: "bottom",
+        horizontal: "center"
         }}
         transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
+        vertical: "top",
+        horizontal: "center"
         }}
         {...props}
     />
   ));
 
 
-export const Dropdown = (props: any) => 
-    <props.component {...props}/>;
+export const Dropdown = (props: any) => <props.component {...props} />;
 
 export const DropdownComponent = ({
     canEdit, canDelete, canManageUsers,
     type, workflowStepUid, workflowUid,
     nextSteps, prevSteps,
     onOpen, onClose, children
-}: any) => <WorkflowStepEditMenu 
-    onClose={onClose} onOpen={onOpen} children={children} 
-    />;
+}: any) => (
+<WorkflowStepEditMenu
+    onClose={onClose}
+    onOpen={onOpen}
+>
+{children}
+</WorkflowStepEditMenu>
+);
 
 export const WorkflowStepEditMenu = ({
     closeOnClick, onOpen, onClose, children
@@ -140,5 +150,4 @@ export const WorkflowStepEditMenu = ({
             </StyledMenu>
         </div>
     );
-
 };

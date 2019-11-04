@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 // Styles
-import styles from '../styles/workflowVis.module.css';
+import styles from "../styles/workflowVis.module.css";
 
 import {
     AddWorkflowStepIcon
@@ -42,7 +42,7 @@ export default class EditButton extends React.PureComponent<PropsT> {
             const { addChildNodeMock, isEmptyBranchMock = false } = mock;
             createAddChildNodeCommand = addChildNodeMock;
             isEmptyBranch = isEmptyBranchMock;
-            return createAddChildNodeCommand({ left: left, top: top, isEmptyBranch });
+            return createAddChildNodeCommand({ left, top, isEmptyBranch });
         }
         const {
             createAddChildNodeCommand: createAddChildNodeCommandProps,
@@ -51,7 +51,9 @@ export default class EditButton extends React.PureComponent<PropsT> {
 
         createAddChildNodeCommand = createAddChildNodeCommandProps;
         isEmptyBranch = isEmptyBranchProps;
-        return createAddChildNodeCommand({ left: e.clientX - left, top: e.clientY - top, isEmptyBranch });
+        return createAddChildNodeCommand({
+            left: e.clientX - left, top: e.clientY - top, isEmptyBranch
+        });
     }
 
     render() {
@@ -65,4 +67,3 @@ export default class EditButton extends React.PureComponent<PropsT> {
         );
     }
 }
-

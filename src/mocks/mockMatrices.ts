@@ -10,8 +10,8 @@ export const workflowVisData = {
     workflowStepNodes: {
         "node-start": {
             id: "node-start",
-            name: encodedNodeType["start"],
-            type: encodedNodeType["start"],
+            name: encodedNodeType.start,
+            type: encodedNodeType.start,
             workflowStepOrder: 0,
             nextNodes: [
                 { id: "node-fork", primary: true }
@@ -20,8 +20,8 @@ export const workflowVisData = {
         },
         "node-fork": {
             id: "node-fork",
-            name: encodedNodeType["fork"],
-            type: encodedNodeType["fork"],
+            name: encodedNodeType.fork,
+            type: encodedNodeType.fork,
             workflowStepOrder: 1,
             nextNodes: [
                 { id: "node-1A", primary: true },
@@ -91,8 +91,8 @@ export const workflowVisData = {
         },
         "node-finish": {
             id: "node-finish",
-            name: encodedNodeType["finish"].toLocaleLowerCase(),
-            type: encodedNodeType["finish"],
+            name: encodedNodeType.finish.toLocaleLowerCase(),
+            type: encodedNodeType.finish,
             workflowStepOrder: 5,
             nextNodes: [],
             prevSteps: []

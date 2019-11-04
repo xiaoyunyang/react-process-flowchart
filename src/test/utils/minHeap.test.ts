@@ -2,8 +2,7 @@ import { sort } from "ramda";
 import MinHeap, { HeapElemT } from "../../lib/utils/MinHeap";
 
 // get random int between 0 and max-1
-const getRandomInt = (max: number): number =>
-    Math.floor(Math.random() * Math.floor(max));
+const getRandomInt = (max: number): number => Math.floor(Math.random() * Math.floor(max));
 
 
 // Fisher-Yates Shuffle
@@ -54,19 +53,19 @@ const verifyInvariant = (
 describe("verifyInvariant", () => {
     it("should verify min heap properties correctly for not a min heap", () => {
         const heap = [
-            { val: 'a', priority: 0 },
-            { val: 'a', priority: 12 },
-            { val: 'a', priority: 13 },
-            { val: 'a', priority: 1 },
+            { val: "a", priority: 0 },
+            { val: "a", priority: 12 },
+            { val: "a", priority: 13 },
+            { val: "a", priority: 1 }
         ];
         expect(verifyInvariant(heap, 1)).toBe(false);
     });
     it("should verify min heap properties correctly for a min heap", () => {
         const heap = [
-            { val: 'a', priority: 0 },
-            { val: 'a', priority: 1 },
-            { val: 'a', priority: 2 },
-            { val: 'a', priority: 3 },
+            { val: "a", priority: 0 },
+            { val: "a", priority: 1 },
+            { val: "a", priority: 2 },
+            { val: "a", priority: 3 }
         ];
         expect(verifyInvariant(heap, 1)).toBe(true);
     });
@@ -103,13 +102,13 @@ describe("MinHeap", () => {
         });
 
         it("should remove min priority element from heap", () => {
-            const prios = mins.map(min => (min && min.priority) as number);
+            const prios = mins.map((min) => (min && min.priority) as number);
             const sortBy = (a: number, b: number) => a - b;
             expect(prios).toEqual(sort(sortBy, prios));
         });
     });
     describe("Insert and remove randomized testing", () => {
-        let h: MinHeap = new MinHeap();
+        const h: MinHeap = new MinHeap();
         let mins: (HeapElemT | undefined)[] = [];
         const elems = [
             { val: "a", priority: 0 },
@@ -119,7 +118,7 @@ describe("MinHeap", () => {
             { val: "c1", priority: 2 },
             { val: "d", priority: 3 },
             { val: "e", priority: 4 },
-            { val: "f", priority: 5 },
+            { val: "f", priority: 5 }
         ];
         test.each(
             shuffle(elems)
@@ -137,7 +136,7 @@ describe("MinHeap", () => {
         });
 
         it("should remove min priority element from heap", () => {
-            const prios = mins.map(min => (min && min.priority) as number);
+            const prios = mins.map((min) => (min && min.priority) as number);
             const sortBy = (a: number, b: number) => a - b;
             expect(prios).toEqual(sort(sortBy, prios));
         });
@@ -155,10 +154,10 @@ describe("MinHeap", () => {
             const elems = [
                 { val: "a", priority: 0 },
                 { val: "a1", priority: 0 },
-                { val: "a2", priority: 0 },
+                { val: "a2", priority: 0 }
             ];
 
-            elems.forEach(elem => h.insert(elem));
+            elems.forEach((elem) => h.insert(elem));
             for (let i = 0; i < elems.length; i += 1) {
                 mins = mins.concat(h.deleteMin());
             }
