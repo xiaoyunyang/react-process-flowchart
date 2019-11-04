@@ -3,6 +3,8 @@
 @import "./gridVariables.css";
 @import "./box.css";
 @import "./colors.css";
+@import "./fonts.css";
+@import "./global.css";
 
 .flowchart {
   margin: 0;
@@ -23,19 +25,18 @@
   display: grid;
   grid-template-columns: repeat(var(--max-columns), 2fr 1fr);
   min-height: var(--workflow-wrapper-min-height);
-  overflow-x: scroll;
   overflow-y: hidden;
   padding-bottom: var(--workflow-wrapper-padding-bottom);
-  font-size: 14px;
-  font-size: 0.875rem;
 }
 
+/* Crossing Lines styles ---------- */
 .top {
   position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
 }
+
 .bottom {
   position: absolute;
   left: 0;
@@ -49,6 +50,8 @@
   top: 0;
   z-index: -1;
 }
+
+/* Crossing Lines styles ---------- */
 
 .boxContainer {
   margin-top: var(--row-margin-top);
@@ -65,6 +68,7 @@
 }
 
 .box {
+  position: relative;
   width: var(--box-width);
   height: var(--box-height);
   padding: var(--box-padding);
@@ -74,17 +78,22 @@
   line-height: var(--box-line-height);
 }
 
-.boxInner {
-  padding: var(--box-padding);
-  border: var(--node-border);
-  border-radius: var(--box-border-radius);
+.box .iconContainerWarning {
+  right: calc(var(--base-unit) * 3.25);
+  top: calc(var(--base-unit) * -1);
 }
   
 .diamondContainer {
   margin: calc(var(--base-unit) * 6.25) calc(var(--base-unit) * 2) 0;
   transform: rotate(45deg);
 }
-  
+
+.diamondContainer .iconContainerWarning {
+  transform: rotate(-45deg);
+  right: calc(var(--base-unit) * 3.5);
+  top: calc(var(--base-unit) * -6);
+}
+
 .diamond {
   width: var(--diamond-width);
   height: var(--diamond-width);
@@ -118,7 +127,6 @@ margin-top and height attributes to all three connector classes
 .connectorContainerDiamond .lineLong {
   width: calc(var(--diamond-container-width) * 1.16);
 }
-
 
 .hidden {
   visibility: hidden;
@@ -187,18 +195,20 @@ margin-top and height attributes to all three connector classes
 }
 
 .hoverable .circle:hover {
-  background-color: var(--dark-sky-blue); 
+  background-color: var(--dark-sky-blue);
 }
 
 .circle:focus {
   outline: none;
 }
 
+/* TODO: The margin-bottom is different from project code  */
 .circle i {
   display: block;
   margin: auto;
   color: var(--white);
   font-size: calc(var(--base-unit) * 3);
+  /* margin-bottom: calc(var(--base-unit) * 3); */
   line-height: calc(var(--base-unit) * 0.125);
 }
 
@@ -405,10 +415,6 @@ margin-top and height attributes to all three connector classes
   color: var(--tealish)
 }
 
-.themeLight i {
-  color: var(--heather);
-}
-
 .themeLight .active {
   color: var(--tealish);
 }
@@ -544,6 +550,7 @@ margin-top and height attributes to all three connector classes
 .workflowStepDisplayName p {
   font-size: 14px;
 }
+
 /* DEBUGGING CODE BEGIN */
 /* Code for debugging only. Remove for production */
 #flowchart-container {

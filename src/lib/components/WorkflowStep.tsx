@@ -9,7 +9,7 @@ import {
     WorkflowStepEditMenu,
     WorkflowStepTypeT, ThemeT, WorkflowStepIcon, workflowStepConfig,
     messages,
-    ExclaimationIcon
+    ExclamationIcon
 } from "../../config";
 
 // Style
@@ -17,10 +17,9 @@ import styles from "../styles/workflowVis.module.css";
 
 export const WarningIcon = () => (
     <div className={styles.iconContainerWarning}>
-        <ExclaimationIcon />
+        <ExclamationIcon />
     </div>
 );
-
 
 // TODO: different from project code
 const DropdownComponent = WorkflowStepEditMenu;
@@ -158,11 +157,13 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
         const { type, } = this.props;
         const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
 
+        // TODO: the following is different from project code
         const editMenuProps = {
             closeOnClick: false,
             onOpen: this.boundOpenDropdownMenu,
             onClose: this.boundCloseDropdownMenu
         };
+
         return isClickable ? (
             <Dropdown
                 closeOnClick={false}
@@ -173,15 +174,10 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
                 {children}
             </Dropdown>
         ) : children;
-        // return children;
     }
     renderInTooltipConditionally(children: ReactNode, condition: boolean) {
         const { displayWarning, stepDisabledMessage } = this.props;
-        
-        let displayWarningMsg = undefined;
-
-        const tooltipContent = displayWarningMsg || stepDisabledMessage || messages.stepIsDisabled;
-        
+        const tooltipContent = displayWarning || stepDisabledMessage || messages.stepIsDisabled;
         return condition ? (
             <Tooltip
                 placement="top"
@@ -192,13 +188,14 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State>  {
             </Tooltip>
         ) : children;
     }
+    
     render() {
         const { type, isDisabled, displayWarning } = this.props;
         const { canEdit, canDelete, canManageUsers } = workflowStepConfig[type];
 
         // TODO: need to change the config so it doesn't explicitly identify what the options are
         const isClickable = !isDisabled && (canEdit || canDelete || canManageUsers);
-
+        
         return this.renderInTooltipConditionally(
             this.renderInDropdownConditionally(
                 this.renderWorkflowStep({ isClickable, isDisabled }),

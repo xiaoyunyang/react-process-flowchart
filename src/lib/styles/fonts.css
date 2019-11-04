@@ -1,0 +1,12 @@
+
+@import "./box.css";
+
+:root {
+    --font-family-sans-serif: "adelle-sans", Arial, sans-serif;
+    --font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
+    --font-size-extra-large: calc(var(--base-unit) * 5.5);
+    --font-size-large: calc(var(--base-unit) * 4.5);
+    --font-size: calc(var(--base-unit) * 3.5);
+    --font-size-small: calc(var(--base-unit) * 3.25);
+    --line-height: 1.4;
+}

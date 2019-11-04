@@ -11,7 +11,7 @@ import WorkflowStep from "../src/lib/components/WorkflowStep";
 // Config
 import { 
   encodedWorkflowStepType, ThemeT,
-  Utils
+  messages
 } from "../src/config";
 
 
@@ -38,11 +38,6 @@ const storyWrapperClass = classNames(
   storyBoookStyles.workflowStepWrapper
 );
 
-const displayWarningOptions = {
-  noWarning: "",
-  warning: "foo",
-}
-
 storiesOf("WorkflowStep", module)
   .add("WorkflowStep", () => (
     <div className={storyWrapperClass}>
@@ -53,6 +48,7 @@ storiesOf("WorkflowStep", module)
         isDisabled={boolean("isDisabled", false)}
         stepDisabledMessage={text("disabledMessage", "Step is disabled")}
         shouldHighlight={boolean("shouldHighlight", false)}
+        displayWarning={text("Display Warning", messages.stepIsDisabled)}
       />
     </div>
   ));

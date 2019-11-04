@@ -10,16 +10,24 @@ import {
 import { type2IconMapping } from "./workflowTypes";
 import { render } from 'enzyme';
 
+// Types
+import { TooltipProps } from '@material-ui/core/Tooltip';
+import any from 'ramda/es/any';
+
 // Components
-export const Tooltip = ({ children, tooltipContent, placement }: any) => (
+export const Tooltip = React.forwardRef(
+    ({ children, tooltipContent, placement }: any,
+    ref: any
+) => (
     <UITooltip
         title={tooltipContent}
         placement={placement}
     >
-        { children }
+        <div ref={ref}>
+            { children }
+        </div>
     </UITooltip>
-);
-
+));
 
 // Icons
 interface IconClassName {
@@ -48,16 +56,21 @@ export const WorkflowStepIcon = ({ type }: { type: string }) => (
     </div>
 );
 
-export const ExclaimationIcon = () => (
-    <i className= "fas fa-exclaimation-circle" />
-);
+export const ExclamationIcon = () => (
+    <div style= {{ 
+        textAlign: "center",
+        top: 3,
+        position: "relative",
+        fontSize: "inherit"
 
+    }}>
+        <i className= "fas fa-exclamation-circle" />
+    </div>
+);
 
 export const ForkIcon = () => (
     <i className= { iconClassName["branch"]} />
 );
-
-
 
 const StyledMenu = withStyles({
     paper: {
