@@ -14,7 +14,7 @@ export const DiamondIcon = () => (
     </div>
 );
 
-const DecisionStep = () => {
+const ForkStep = () => {
     const { theme } = workflowStepConfig[encodedNodeType.fork];
     return (
         <div className={classNames(styles.diamondContainer, styles.hoverable)}>
@@ -25,4 +25,4 @@ const DecisionStep = () => {
     );
 };
 
-export default DecisionStep;
+export default ForkStep;

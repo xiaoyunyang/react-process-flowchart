@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { storiesOf } from '@storybook/react';
 import { text, boolean } from '@storybook/addon-knobs';
 
-import DecisionStep from "../src/lib/components/DecisionStep";
+import ForkStep from "../src/lib/components/ForkStep";
 
 // Styles
 // TS complains about module not found when we try to import
@@ -20,10 +20,10 @@ const storyWrapperClass = classNames(
   storyBoookStyles.workflowStepWrapper
 );
 
-storiesOf("DecisionStep", module)
-  .add("DecisionStep", () => (
+storiesOf("ForkStep", module)
+  .add("ForkStep", () => (
     <div className={storyWrapperClass}>
-      <DecisionStep />
+      <ForkStep />
     </div>
   ))
   

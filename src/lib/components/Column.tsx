@@ -3,7 +3,7 @@ import React from "react";
 
 // Components
 import WorkflowStep from "./WorkflowStep";
-import DecisionStep from "./DecisionStep";
+import ForkStep from "./ForkStep";
 import Connector from "./Connector";
 
 // Types
@@ -50,7 +50,7 @@ const Tile = ({
             />
         );
     case TileType.FORK:
-        return <DecisionStep />;
+        return <ForkStep />;
     case TileType.NODE:
         return (
             <WorkflowStep

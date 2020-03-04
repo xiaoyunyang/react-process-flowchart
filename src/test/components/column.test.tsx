@@ -4,7 +4,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 // Components
 import Column from "../../lib/components/Column";
-import DecisionStep from "../../lib/components/DecisionStep";
+import ForkStep from "../../lib/components/ForkStep";
 import WorkflowStep from "../../lib/components/WorkflowStep";
 import Connector from "../../lib/components/Connector";
 
@@ -71,9 +71,9 @@ describe("Column Spec", () => {
 
     describe("render", () => {
         it("renders decision step", () => {
-            const decisionStep = column.find(DecisionStep);
-            expect(decisionStep).toHaveLength(1);
-            expect(column.at(0).childAt(0)).toEqual(decisionStep);
+            const forkStep = column.find(ForkStep);
+            expect(forkStep).toHaveLength(1);
+            expect(column.at(0).childAt(0)).toEqual(forkStep);
         });
         it("renders workflow step", () => {
             const workflowStep = column.find(WorkflowStep);
