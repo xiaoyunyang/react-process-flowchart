@@ -1,11 +1,11 @@
-import { encodedNodeType, ActionTypeT, WorkflowStepT } from "../config";
+import { encodedNodeType, ActionTypeT, WorkflowStep } from "../config";
 
 const actionTypes = Object.keys(ActionTypeT);
 
 export interface MockWorkflowsData {
     workflowUid: string;
     workflowName: string;
-    workflowSteps: WorkflowStepT[];
+    workflowSteps: WorkflowStep[];
 }
 
 export const AA = {

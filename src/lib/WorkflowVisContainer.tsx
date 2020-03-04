@@ -7,7 +7,7 @@ import WorkflowVis from "./components/WorkflowVis";
 import WorkflowStepAddPopover from "./components/WorkflowStepAddPopover";
 
 import {
-    WorkflowStepT,
+    WorkflowStep,
     createAddNodeParams
 } from "../config";
 
@@ -24,7 +24,7 @@ import styles from "./styles/workflowVis.module.css";
 
 interface PropsT {
     workflowUid: string;
-    workflowSteps: WorkflowStepT[];
+    workflowSteps: WorkflowStep[];
     editMode: boolean;
 }
 
@@ -150,7 +150,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                 <div className={styles.foundation}>
                     <div className={styles.wrapperContainer}>
                         <WorkflowVis
-                            workflowVisData={workflowVisData}
+                            workflowVisData={workflowVisData} // TODO: workflowVisData should be in context
                             matrix={initialMatrix}
                             editMode={false}
                             addNodeParams={createAddNodeParams({

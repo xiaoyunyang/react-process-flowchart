@@ -5,29 +5,19 @@ import MinHeap from "./MinHeap";
 
 // Types
 import {
-    WorkflowVisDataT, WorkflowStepNodeT, WorkflowStepNodes, Matrix,
-    MatrixCoord, ConnectorToPlace, ColType, CoordPairT, ConnectorName,
-    GenericTileType, ConnectorTypeT, NextNode
+    ConnectorName, WorkflowVisData, WorkflowStepNodes, Matrix,
+    MatrixCoord, ConnectorToPlace, CoordPairT, TileContainer,
+    NextNode, TileType
 } from "../types/workflowVisTypes";
 import {
-    WorkflowStepT, NodeTypeT, encodedNodeType, Utils
+    WorkflowStep, encodedNodeType, Utils
 } from "../../config";
 import {
-    OccurenceDict, ExistentialDict, EndomorphDict, PolymorphDict
+    OccurrenceDict, ExistentialDict, EndomorphDict, PolymorphDict
 } from "../types/generic";
 
 // Constants
 const MATRIX_PLACEHOLDER_NAME = ConnectorName.EMPTY;
-
-/**
- * Determines if a tileType is a member of ConnectorTypeT
- *
- * @param {GenericTileType} tileType
- * @returns {boolean} true if tileType is a member of ConnectorTypeT
- */
-export const isConnector = (
-    tileType: GenericTileType
-): tileType is ConnectorTypeT => Object.values(ConnectorTypeT).includes(tileType as ConnectorTypeT);
 
 /**
  * Encodes colNum and rowNum as comma delimited string
@@ -61,16 +51,17 @@ export const decodeMatrixCoord = (colRow: string): MatrixCoord => {
  */
 export const encodeMatrixEntry = (
     {
-        colType, entryName, encodedOwnCoord, encodedParentCoord
+        tileType, tileContainer, tileId, encodedOwnCoord, encodedParentCoord
     }: {
-        colType: ColType;
-        entryName: string;
+        tileType: TileType;
+        tileContainer: TileContainer;
+        tileId: string;
         encodedOwnCoord: string;
         encodedParentCoord?: string;
     }
 ): string => {
     const parentCoord = encodedParentCoord ? `|${encodedParentCoord}` : "";
-    return `${colType}|${entryName}|${encodedOwnCoord}${parentCoord}`;
+    return `${tileType}|${tileContainer}|${tileId}|${encodedOwnCoord}${parentCoord}`;
 };
 
 /**
@@ -84,20 +75,20 @@ export const encodeMatrixEntry = (
  * @returns {(string|undefined)} encodedParentNodeCoord - coord of a workflowStep
  */
 export const decodeMatrixEntry = (matrixEntry: string): {
-    tileType: ColType;
+    tileType: TileType;
+    tileContainer: TileContainer;
     tileId: string;
-    tileName: string | undefined;
-    encodedOwnCoord: string | undefined;
+    encodedOwnCoord: string;
     encodedParentNodeCoord: string | undefined;
 } => {
-    const [tileType, tileName, encodedOwnCoord, encodedParentNodeCoord] = matrixEntry.split("|");
-
-    // If matrixEntry is a workflowStep, nodeType is the id because matrixEntry for
-    // a workflowStep is simply the workflowStepUid
-    const tileId = isConnector(tileType) ? `${tileType}|${tileName}` : tileType;
+    const [tileType, tileContainer, tileId, encodedOwnCoord, encodedParentNodeCoord] = matrixEntry.split("|");
 
     return {
-        tileType: tileType as ColType, tileId, tileName, encodedOwnCoord, encodedParentNodeCoord
+        tileType: tileType as TileType,
+        tileContainer: tileContainer as TileContainer,
+        tileId,
+        encodedOwnCoord,
+        encodedParentNodeCoord
     };
 };
 
@@ -108,8 +99,8 @@ export const decodeMatrixEntry = (matrixEntry: string): {
  * @return {number} rowNum
  */
 export const isPlaceholder = (matrixEntry: string): boolean => {
-    const { tileType, tileName } = decodeMatrixEntry(matrixEntry);
-    return isConnector(tileType) && tileName === MATRIX_PLACEHOLDER_NAME;
+    const { tileType, tileId } = decodeMatrixEntry(matrixEntry);
+    return tileType === TileType.CONNECTOR && tileId === MATRIX_PLACEHOLDER_NAME;
 };
 
 /**
@@ -131,7 +122,7 @@ export const lastNodeInCol = (col: string[]): number => {
         const matrixEntry = col[i];
         const { tileType } = decodeMatrixEntry(matrixEntry);
 
-        if (!isConnector(tileType)) return i;
+        if (tileType !== TileType.CONNECTOR) return i;
     }
     return -1;
 };
@@ -168,63 +159,67 @@ const replaceTile = (
  *
  * @param {number} numRows number of rows
  * @param {number} colNum column number
- * @param {colType} colType
+ * @param {tileContainer} tileContainer
  * @returns {string[]} an array of matrixEntries
  */
-export const initCol = (
-    { numRows, colNum, colType }: { numRows: number; colNum: number; colType: ColType }
-): string[] => Array.from(Array(numRows)
-    .keys())
+export const initCol = ({
+    numRows, colNum, tileContainer
+}: {
+    numRows: number; colNum: number; tileContainer: TileContainer;
+}): string[] => Array.from(Array(numRows).keys())
     .map((rowNum) => encodeMatrixEntry({
-        colType,
-        entryName: MATRIX_PLACEHOLDER_NAME,
+        tileType: TileType.CONNECTOR,
+        tileContainer,
+        tileId: MATRIX_PLACEHOLDER_NAME,
         encodedOwnCoord: encodeMatrixCoord({ colNum, rowNum })
     }));
 
 /**
- * Creates a numCols x numRows matrix initalized with placeholders
+ * Creates a numCols x numRows matrix initialized with placeholders
  * (box.empty, diamond.empty, or standard.empty)
  *
  * @param {number} numRows
- * @param {ColType} colTypes array of ColTypes (string) - box, diamond, or standard
+ * @param {tileContainers} tileContainers array of TileContainers - box, diamond, or standard
  * @returns {Matrix} a 2D array of matrixEntries
  */
 export const initMatrix = (
-    { numRows, colTypes }: { numRows: number; colTypes: ColType[] }
-): Matrix => colTypes.map((colType: ColType, i: number) => initCol({
-    numRows, colNum: i, colType
+    { numRows, tileContainers }: { numRows: number; tileContainers: TileContainer[] }
+): Matrix => tileContainers.map((tileContainer: TileContainer, i: number) => initCol({
+    numRows, colNum: i, tileContainer
 }));
 
 // TODO: test getPrevSteps
 // getPrevSteps and get NextSteps are utils
-const getPrevSteps = ({
-    workflowSteps, workflowStepOrder
-}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }): WorkflowStepT[] => workflowSteps.filter((wfStep) => wfStep.workflowStepType !== encodedNodeType.fork
-    && wfStep.workflowStepOrder < workflowStepOrder);
+const getPrevSteps = ({ workflowSteps, workflowStepOrder }: {
+    workflowSteps: WorkflowStep[]; workflowStepOrder: number;
+}): WorkflowStep[] => workflowSteps.filter(
+    (wfStep) => wfStep.workflowStepType !== encodedNodeType.fork
+    && wfStep.workflowStepOrder < workflowStepOrder
+);
 
-export const getNextSteps = ({
-    workflowSteps, workflowStepOrder
-}: { workflowSteps: WorkflowStepT[]; workflowStepOrder: number }): WorkflowStepT[] => workflowSteps.filter((wfStep) => wfStep.workflowStepOrder > workflowStepOrder);
+export const getNextSteps = ({ workflowSteps, workflowStepOrder }: {
+    workflowSteps: WorkflowStep[]; workflowStepOrder: number;
+}): WorkflowStep[] => workflowSteps
+    .filter((wfStep) => wfStep.workflowStepOrder > workflowStepOrder);
 
 // TODO: Need a huge refactor of this function
-const createWorkflowStepNodes = (
-    { workflowSteps, workflowUid }: {
-        workflowUid: string; workflowSteps: WorkflowStepT[];
-    }
-): {
+const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
+    workflowUid: string;
+    workflowSteps: WorkflowStep[];
+}): {
     workflowStepNodes: WorkflowStepNodes;
-    workflowStepOrderOccur: OccurenceDict;
+    workflowStepOrderOccur: OccurrenceDict;
     firstStepId: string;
     forkStepCols: number[];
 } => {
     // TODO: need to move this out of the function
     const firstStepId = `${workflowUid}-auth`;
 
-    let workflowStepNodes: { [id: string]: WorkflowStepNodeT } = {};
+    let workflowStepNodes: WorkflowStepNodes = {};
     let authorizeNextNodes: { id: string; primary: boolean }[] = [];
     let forkStepCols: number[] = [];
 
-    const workflowStepOrderOccur: OccurenceDict = {};
+    const workflowStepOrderOccur: OccurrenceDict = {};
     for (let i = 0; i < workflowSteps.length; i += 1) {
         const workflowStep = workflowSteps[i];
 
@@ -246,7 +241,8 @@ const createWorkflowStepNodes = (
                 ? workflowStepOrderOccur[stringifiedWorkflowStepOrder]
                 : 0) + 1;
 
-        if (Utils.getNodeType({ workflowStep }) === encodedNodeType.fork) {
+        const nodeType = Utils.getNodeType({ workflowStep });
+        if (nodeType === encodedNodeType.fork) {
             forkStepCols = forkStepCols.concat(workflowStepOrder * 2);
         }
 
@@ -263,12 +259,12 @@ const createWorkflowStepNodes = (
             id: workflowStepUid,
             workflowUid,
             name: workflowStepName,
-            type: Utils.getNodeType({ workflowStep }),
+            nodeType,
             workflowStepOrder,
             nextNodes: Utils.getNextNodes(workflowStep),
-            isDisabled: Utils.getIsDisabled(workflowStep),
             nextSteps: getNextSteps({ workflowSteps, workflowStepOrder }),
             prevSteps,
+            isDisabled: Utils.getIsDisabled(workflowStep),
             displayWarning: Utils.getDisplayWarning(workflowStep)
         };
     }
@@ -281,12 +277,13 @@ const createWorkflowStepNodes = (
             id: firstStepId,
             workflowUid: firstStepId,
             name: "",
-            type: encodedNodeType.start,
+            nodeType: encodedNodeType.start,
             workflowStepOrder: 0,
-            nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 }),
             nextNodes: authorizeNextNodes,
+            nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 }),
+            prevSteps: [],
             isDisabled: false,
-            prevSteps: []
+            displayWarning: null
         }
     };
 
@@ -301,13 +298,13 @@ const createWorkflowStepNodes = (
  *
  * @param {string[]} workflowSteps
  * @param {string} workflowUid
- * @returns {WorkflowVisDataT} workflowVisData
+ * @returns {WorkflowVisData} workflowVisData
  * @returns {Matrix} initialMatrix
  * @returns {number[]} forkStepCols - the colNums where decision steps are
  */
 export const createWorkflowVisData = (
-    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStepT[]; workflowUid: string }
-): { workflowVisData: WorkflowVisDataT; initialMatrix: Matrix; forkStepCols: number[] } => {
+    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStep[]; workflowUid: string }
+): { workflowVisData: WorkflowVisData; initialMatrix: Matrix; forkStepCols: number[] } => {
     const {
         firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols
     } = createWorkflowStepNodes({ workflowSteps, workflowUid });
@@ -319,16 +316,16 @@ export const createWorkflowVisData = (
     const numCols = (Math.max(...Object.keys(workflowStepOrderOccur).map((id) => +id)) * 2) + 1;
 
     // Naive: if we see at least one decision step, we want to add an additional row to the matrix
-    // to accomodate the dash line add button
+    // to accommodate the dash line add button
     const numRows = Math.max(...Object.values(workflowStepOrderOccur))
         + (+(forkStepCols.length > 0));
 
-    const colTypes = Array(numCols).fill("standard").map((colType: ColType, i) => {
-        if (i % 2 === 1) return colType;
-        return forkStepCols.includes(i) ? ColType.DIAMOND : ColType.BOX;
+    const tileContainers = Array(numCols).fill(TileContainer.STANDARD).map((tileContainer, i) => {
+        if (i % 2 === 1) return tileContainer;
+        return forkStepCols.includes(i) ? TileContainer.DIAMOND : TileContainer.BOX;
     });
 
-    const initialMatrix = initMatrix({ numRows, colTypes });
+    const initialMatrix = initMatrix({ numRows, tileContainers });
 
     return {
         workflowVisData,
@@ -376,16 +373,26 @@ export const addNodeToMatrix = (
     }
 
     // TODO:
-    // Best: if no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum but if that is occupied, then
-    // we shift col 2 places to the right
-    // Also need to consider if the step is primary. If it is primary, it has to be in the first place in col
+    // Best: if no parent, rowNum is the first unoccupied. If has parent, rowNum is parent rowNum
+    // but if that is occupied, then we shift col 2 places to the right
+    // Also need to consider if the step is primary. If it is primary, it has to be in the first
+    // place in col
     // TODO: Need to have a function for replace col type
     // We also need to change the size of the matrix and shift all the nodes to the right and down
+
+    const { tileContainer, encodedOwnCoord } = decodeMatrixEntry(col[0]);
+    const tileType = tileContainer === TileContainer.DIAMOND ? TileType.FORK : TileType.NODE;
+    const replaceBy = encodeMatrixEntry({
+        tileType,
+        tileContainer,
+        tileId: newNodeId,
+        encodedOwnCoord
+    });
 
     replaceTile({
         coord: { colNum, rowNum },
         matrix,
-        replaceBy: newNodeId
+        replaceBy
     });
     return { rowNum, colNum };
 };
@@ -405,14 +412,15 @@ export const addConnectorToMatrix = (
 ): { replaceBy: string } => {
     const { ownCoord, parentCoord, connectorName } = connectorToPlace;
     const { colNum, rowNum } = decodeMatrixCoord(ownCoord);
-    const { tileType } = decodeMatrixEntry(matrix[colNum][rowNum]);
+    const { tileType, tileContainer } = decodeMatrixEntry(matrix[colNum][rowNum]);
 
     const parentNodeCoord: string | undefined = nodeCoords.includes(parentCoord)
         ? parentCoord : undefined;
 
     const replaceBy = encodeMatrixEntry({
-        colType: tileType,
-        entryName: connectorName,
+        tileType,
+        tileContainer,
+        tileId: connectorName,
         encodedOwnCoord: ownCoord,
         encodedParentCoord: parentNodeCoord
     });
@@ -610,15 +618,18 @@ export const addVertConnectorsToMatrix = (
             break;
         }
 
-        const { tileType, encodedOwnCoord, encodedParentNodeCoord } = decodeMatrixEntry(curr);
+        const {
+            tileType, tileContainer, encodedOwnCoord, encodedParentNodeCoord
+        } = decodeMatrixEntry(curr);
         const { tileType: aboveTileType } = decodeMatrixEntry(above);
 
-        const entryName = (isPlaceholder(above) || isConnector(aboveTileType))
+        const connectorName = (isPlaceholder(above) || aboveTileType === TileType.CONNECTOR)
             ? ConnectorName.LINE_VERT : ConnectorName.ARROW_UP;
 
         const replaceBy = encodeMatrixEntry({
-            colType: tileType,
-            entryName,
+            tileType,
+            tileContainer,
+            tileId: connectorName,
             encodedOwnCoord: encodedOwnCoord as string,
             encodedParentCoord: encodedParentNodeCoord as string
         });
@@ -661,9 +672,12 @@ export const downRightDashesToPlace = (
     const encodedOwnCoord = encodeMatrixCoord({ colNum, rowNum });
     const encodedParentNodeCoord = encodeMatrixCoord({ colNum, rowNum: parentRowNum });
 
+    const tileContainer = TileContainer.DIAMOND;
+
     const replaceBy = encodeMatrixEntry({
-        colType: ColType.DIAMOND,
-        entryName: ConnectorName.DOWN_RIGHT_DASH,
+        tileType: TileType.CONNECTOR,
+        tileContainer,
+        tileId: ConnectorName.DOWN_RIGHT_DASH,
         encodedOwnCoord,
         encodedParentCoord: encodedParentNodeCoord
     });
@@ -824,7 +838,7 @@ export const getSortedNextNodes = (
 /**
  * Uses workflowVisData to populate initialMatrix with workflow steps and connectors
  *
- * @param {WorkflowVisDataT} workflowVisData
+ * @param {WorkflowVisData} workflowVisData
  * @param {Matrix} initialMatrix
  * @param {number[]} forkStepCols - the columns where decision steps reside
  * @returns {Matrix} matrix - populated matrix (may be a different size than initialMatrix)
@@ -833,13 +847,11 @@ export const getSortedNextNodes = (
  */
 export const populateMatrix = (
     { workflowVisData, initialMatrix, forkStepCols }: {
-        workflowVisData: WorkflowVisDataT;
+        workflowVisData: WorkflowVisData;
         initialMatrix: Matrix;
         forkStepCols: number[];
     }
 ): { matrix: Matrix; nodeIdToCoord: EndomorphDict; nodeIdToParentNodeIds: PolymorphDict } => {
-    // console.log("Populate Matrix...");
-
     const matrix = clone(initialMatrix);
 
     // Step 1 - Traverse graph (BFS) and generate nodeIdToParentCoords and nodeIdToCoord
@@ -863,7 +875,7 @@ export const populateMatrix = (
     // nodeId -> nodeId[]
     const nodeIdToParentNodeIds: PolymorphDict = {};
 
-    const offset = 0; // TODO: addWorkflowStepToMatrix will modify offset
+    const offset = 0; // TODO: Does this ever change?
 
     // BFS with Min Heap to keep track of toExplore
     while (!toExplore.isEmpty()) {
@@ -878,17 +890,10 @@ export const populateMatrix = (
         // Get Parents' Ids
         const parentIds = nodeIdToParentNodeIds[id];
 
-        // console.log(">>>>>>> newNodeId", id);
-        // console.log("prevStepIds", parentIds);
-
         // sort parentIds by rowNum in ascending order
         const orderedParentIds = parentIds && sort(parentIdSortBy(nodeIdToCoord), parentIds);
         const parentId = parentIds ? orderedParentIds[0] : "";
         const encodedParentCoord = nodeIdToCoord[parentId]; // smallest rowNum
-
-        // console.log("orderedParentIds", orderedParentIds);
-        // console.log("parentId", parentId);
-        // console.log("encodedParentCoord", nodeIdToCoord[parentId]);
 
         const coord = addNodeToMatrix({
             matrix,
@@ -899,7 +904,6 @@ export const populateMatrix = (
 
         // Add current node's coord into nodeIdToCoord
         nodeIdToCoord[id] = encodeMatrixCoord(coord);
-        // console.log("visiting id ---> ", id);
 
         // TODO: nextNodes - if we are currently looking at a decision step,
         // there will be multiple steps. we want to sort the nextNodes here or sort it
@@ -917,9 +921,6 @@ export const populateMatrix = (
 
             const parentNodeIds = nodeIdToParentNodeIds[nextStepId];
             nodeIdToParentNodeIds[nextStepId] = (parentNodeIds || []).concat(id);
-            // console.log("nodeIdToParentNodeIds = ",
-            // JSON.stringify(nodeIdToParentNodeIds, null, 2));
-
             if (!explored[nextStepId]) {
                 // toExplore maintains the nodeIds in ascending order based on workflowStepOrder
                 // Inefficient to sort everytime for an insert. We can do better on performance by
@@ -940,27 +941,19 @@ export const populateMatrix = (
                 });
                 explored[nextStepId] = true;
             }
-            // console.log("toExplore", toExplore);
-            // console.log("toExplore workflowStepOrder",
-            // toExplore.map(nodeId => workflowStepNodes[nodeId].workflowStepOrder));
         }
     }
 
     // Step 2 - Use parentCoords and nodeCoord to populate the matrix with connectors
-    // console.log("--nodeIdToCoord", nodeIdToCoord);
-    // console.log("--nodeToParentCoords", nodeIdToParentCoords);
-    // console.log("--nodeIdToParentNodeIds", nodeIdToParentNodeIds);
-
     // Step 2.1 - place connectors horizontally
     const coordPairs: CoordPairT[] = createCoordPairs({ nodeIdToCoord, nodeIdToParentCoords });
     const connectorsToPlace: ConnectorToPlace[] = chain(
         createHorizConnectorsBetweenNodes, coordPairs
     );
 
-    // TODO: we may need to place connectors into matrix first because that's when we find out if we have a collision?
-    // The addConnectorToMatrix function should return a new matrix
+    // TODO: we may need to place connectors into matrix first because that's when we find out
+    // if we have a collision? The addConnectorToMatrix function should return a new matrix
     const nodeCoords: string[] = Object.values(nodeIdToCoord);
-
     // Populate matrix with regular connectors
     connectorsToPlace
         .forEach(
@@ -975,7 +968,6 @@ export const populateMatrix = (
     // during createHorizConnectorsBetweenNodes. After that's implemented, we can get rid
     // of the nested for loop below
 
-    // console.log(matrix);
     getRightUpCoords(connectorsToPlace)
         .forEach(
             (rightUpCoord) => addVertConnectorsToMatrix({ matrix, startCoord: rightUpCoord })

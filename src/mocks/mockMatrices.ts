@@ -1,5 +1,5 @@
 import { encodedNodeType } from "../config";
-import { WorkflowVisDataT } from "../lib/types/workflowVisTypes";
+import { WorkflowVisData } from "../lib/types/workflowVisTypes";
 
 // NOTE
 // matrices A through BF correspond to workflowVisData in this file.
@@ -126,7 +126,7 @@ export const workflowVisData = {
             prevSteps: []
         }
     }
-} as any as WorkflowVisDataT;
+} as any as WorkflowVisData;
 
 
 export const matrixTruncateNameTest = [

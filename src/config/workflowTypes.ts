@@ -1,6 +1,6 @@
 // import { ActionTypeT, WorkflowStepTypeT } from "./examples/workflowTypes.smartling";
 // export * from "./examples/workflowTypes.smartling";
-import { ActionTypeT, NodeTypeT } from "./examples/workflowTypes.cicd";
+import { ActionTypeT, NodeType } from "./examples/workflowTypes.cicd";
 
 export * from "./examples/workflowTypes.cicd";
 
@@ -10,10 +10,10 @@ export interface WorkflowActionT {
     nextWorkflowStepUid: string;
 }
 
-export interface WorkflowStepT {
+export interface WorkflowStep {
     workflowStepUid: string;
     workflowStepName: string;
-    workflowStepType: NodeTypeT;
+    workflowStepType: NodeType;
     workflowStepOrder: number;
     actions: WorkflowActionT[];
 }

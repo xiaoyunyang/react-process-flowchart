@@ -8,7 +8,7 @@ import {
     Tooltip, Dropdown,
     WorkflowStepEditMenu,
     // DropdownComponent
-    NodeTypeT, ThemeT, WorkflowStepT,
+    NodeType, ThemeT,
     WorkflowStepIcon, workflowStepConfig,
     messages,
     ExclamationIcon
@@ -16,6 +16,7 @@ import {
 
 // Style
 import styles from "../styles/workflowVis.module.css";
+import { WorkflowStepNode } from "../types/workflowVisTypes";
 
 export const WarningIcon = () => (
     <div className={styles.iconContainerWarning}>
@@ -33,26 +34,19 @@ export const Icon = ({ type }: { type: string }) => (
     </div>
 );
 
-interface PropsT {
-    name: string;
-    type: NodeTypeT;
-    workflowUid: string;
-    workflowStepUid: string;
-    nextSteps?: WorkflowStepT[];
-    prevSteps: WorkflowStepT[];
-    isDisabled: boolean;
+interface Props extends WorkflowStepNode {
     stepDisabledMessage?: string;
     shouldHighlight: boolean;
-    displayWarning?: ReactNode;
     theme?: ThemeT;
 }
+
 interface State {
     dropdownMenuOpened: boolean;
     displayTooltip: boolean;
 }
 
-export default class WorkflowStep extends React.PureComponent<PropsT, State> {
-    constructor(props: PropsT) {
+export default class WorkflowStep extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -135,12 +129,12 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State> {
         isDisabled?: boolean;
     }) {
         const {
-            name, type, shouldHighlight, displayWarning, theme: propsTheme
+            name, nodeType, shouldHighlight, displayWarning, theme: propsTheme
         } = this.props;
-        const theme = propsTheme || workflowStepConfig[type].theme; // TODO: need to test this
+        const theme = propsTheme || workflowStepConfig[nodeType].theme; // TODO: need to test this
 
-        const renderedName: string = (messages as {[key: string]: string})[type]
-            ? (messages as {[key: string]: string})[type] : name;
+        const renderedName: string = (messages as {[key: string]: string})[nodeType]
+            ? (messages as {[key: string]: string})[nodeType] : name;
 
         const boxContainerClassName = isClickable
             ? classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
@@ -158,7 +152,7 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State> {
                     )}
                 >
                     {displayWarning && <WarningIcon />}
-                    <Icon type={type} />
+                    <Icon type={nodeType} />
                     {this.renderTooltippedDisplayName({ name: renderedName, isClickable })}
                 </div>
             </div>
@@ -167,14 +161,14 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State> {
 
     renderInDropdownConditionally(children: ReactNode, isClickable: boolean) {
         const {
-            type, workflowStepUid, workflowUid, nextSteps, prevSteps
+            nodeType, id, workflowUid, nextSteps, prevSteps
         } = this.props;
 
         // TODO: the following is different from project code
         const editMenuProps = {
-            ...workflowStepConfig[type].options,
-            type,
-            workflowStepUid,
+            ...workflowStepConfig[nodeType].options,
+            type: nodeType,
+            workflowStepUid: id,
             workflowUid,
             nextSteps,
             prevSteps
@@ -207,9 +201,8 @@ export default class WorkflowStep extends React.PureComponent<PropsT, State> {
     }
 
     render() {
-        const { type, isDisabled, displayWarning } = this.props;
-
-        const hasOption = Object.values(workflowStepConfig[type].options).reduce(
+        const { nodeType, isDisabled, displayWarning } = this.props;
+        const hasOption = Object.values(workflowStepConfig[nodeType].options).reduce(
             (acc: boolean, curr: boolean) => acc || curr,
             false
         );

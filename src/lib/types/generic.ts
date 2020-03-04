@@ -1,4 +1,4 @@
-export interface OccurenceDict { [key: string]: number }
+export interface OccurrenceDict { [key: string]: number }
 
 export interface ExistentialDict { [key: string]: boolean }
 

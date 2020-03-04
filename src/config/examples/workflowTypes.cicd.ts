@@ -14,7 +14,7 @@ export enum ActionTypeT {
 
 // TODO: AUTHORIZE and DECISION are hard coded and must be included in the WF step Definition
 // Can we create  a factory function to take in addition types for config?
-export enum NodeTypeT {
+export enum NodeType {
     START = "START",
     FORK = "FORK",
     CHECKOUT = "CHECKOUT",
@@ -27,17 +27,17 @@ export enum NodeTypeT {
     DEPLOY_PROD = "DEPLOY_PROD"
 }
 
-export const encodedNodeType: { [key: string]: NodeTypeT } = {
-    start: NodeTypeT.START,
-    fork: NodeTypeT.FORK,
-    0: NodeTypeT.CHECKOUT,
-    1: NodeTypeT.DEPENDENCIES,
-    2: NodeTypeT.BUILD,
-    3: NodeTypeT.TEST,
-    4: NodeTypeT.UPLOAD_ASSETS,
-    5: NodeTypeT.DEPLOY_STG,
-    6: NodeTypeT.APPROVE,
-    finish: NodeTypeT.DEPLOY_PROD
+export const encodedNodeType: { [key: string]: NodeType } = {
+    start: NodeType.START,
+    fork: NodeType.FORK,
+    0: NodeType.CHECKOUT,
+    1: NodeType.DEPENDENCIES,
+    2: NodeType.BUILD,
+    3: NodeType.TEST,
+    4: NodeType.UPLOAD_ASSETS,
+    5: NodeType.DEPLOY_STG,
+    6: NodeType.APPROVE,
+    finish: NodeType.DEPLOY_PROD
 };
 
 export const type2IconMapping: { [type: string]: string } = {

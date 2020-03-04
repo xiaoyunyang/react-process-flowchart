@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { ReactNode } from "react";
-import { NodeTypeT, WorkflowStepT } from "../../config";
+import { NodeType, WorkflowStep } from "../../config";
 import { EndomorphDict, PolymorphDict } from "./generic";
 
 export interface NextNode {
@@ -8,30 +8,24 @@ export interface NextNode {
     primary: boolean;
 }
 
-export interface WorkflowStepNodeT {
+export interface WorkflowStepNode {
     id: string;
     workflowUid: string;
     name: string;
-    type: NodeTypeT;
+    nodeType: NodeType;
     isDisabled: boolean;
     workflowStepOrder: number;
     nextNodes: NextNode[];
-    nextSteps: WorkflowStepT[];
-    prevSteps: WorkflowStepT[];
+    nextSteps: WorkflowStep[];
+    prevSteps: WorkflowStep[];
     displayWarning?: ReactNode;
 }
 
-export interface WorkflowStepNodes { [id: string]: WorkflowStepNodeT }
+export interface WorkflowStepNodes { [id: string]: WorkflowStepNode }
 
-export interface WorkflowVisDataT {
+export interface WorkflowVisData {
     firstStep: string;
-    workflowStepNodes: { [id: string]: WorkflowStepNodeT };
-}
-
-export enum ColType {
-    BOX = "box",
-    DIAMOND = "diamond",
-    STANDARD = "standard"
+    workflowStepNodes: WorkflowStepNodes;
 }
 
 export interface CoordPairT {
@@ -39,10 +33,16 @@ export interface CoordPairT {
     childCoord: MatrixCoord;
 }
 
-export enum ConnectorTypeT {
-    BOX_CONNECTOR = "box",
-    DIAMOND_CONNECTOR = "diamond",
-    STANDARD_CONNECTOR = "standard"
+export enum TileContainer {
+    BOX = "box",
+    DIAMOND = "diamond",
+    STANDARD = "standard"
+}
+
+export enum TileType {
+    CONNECTOR = "CONNECTOR",
+    FORK = "FORK",
+    NODE = "NODE"
 }
 
 export enum ConnectorName {
@@ -60,43 +60,12 @@ export enum ConnectorName {
     UP_RIGHT = "upRight",
     EMPTY = "empty"
 }
-
-export interface ConnectorT {
+export interface ConnectorTile {
+    type: TileType.CONNECTOR;
     id: string;
     name: ConnectorName;
-    containerName: ContainerNameT;
-    type: ConnectorTypeT;
+    containerName: TileContainer;
 }
-
-interface BaseTileT<T> {
-    id: string;
-    name: string;
-    type: T;
-}
-
-export enum ContainerNameT {
-    DIAMOND = "connectorContainerDiamond",
-    BOX = "connectorContainerBox",
-    STANDARD = "connectorContainerStandard"
-}
-
-interface ConnectorTileT extends BaseTileT<ConnectorTypeT> {
-    containerName: ContainerNameT;
-}
-
-export interface NodeTileT extends BaseTileT<NodeTypeT> {
-    displayWarning?: ReactNode;
-    nextNodes?: NextNode[];
-    nextSteps?: WorkflowStepT[];
-    prevSteps: WorkflowStepT[];
-    isDisabled: boolean;
-    workflowStepOrder: number;
-    workflowUid: string;
-}
-
-export type GenericTileType = ConnectorTypeT | NodeTypeT | string;
-
-export type GenericTile = NodeTileT | ConnectorTileT;
 
 export type Matrix = string[][];
 
@@ -109,11 +78,6 @@ export interface ConnectorToPlace {
     connectorName: ConnectorName;
     ownCoord: string;
     parentCoord: string;
-}
-
-export interface ColEntry {
-    tile: GenericTile;
-    matrixEntry: string;
 }
 
 export type AddChildNodeCommand = string;

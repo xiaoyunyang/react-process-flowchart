@@ -8,7 +8,7 @@ import style from "../styles/workflowVis.module.css";
 import WorkflowVisContainer from "../WorkflowVisContainer";
 
 // Types
-import { WorkflowStepT } from "../../config";
+import { WorkflowStep } from "../../config";
 
 
 interface StateT {
@@ -18,7 +18,7 @@ interface StateT {
 interface WorkflowT {
     workflowUid: string;
     workflowName: string;
-    workflowSteps: WorkflowStepT[];
+    workflowSteps: WorkflowStep[];
 }
 
 interface PropsT {
@@ -49,7 +49,6 @@ export default class Workflow extends React.PureComponent<PropsT, StateT> {
         const { editMode } = this.state;
         const toggleEditModeLabel = editMode ? "Done" : "Edit";
         const toggleEditClassName = editMode ? "toggleEditHighlight" : "toggleEdit";
-
         return (
             <div>
                 <div className={style.flexContainer}>
