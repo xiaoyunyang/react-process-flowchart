@@ -5,7 +5,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended",
     ],
     parser: "@typescript-eslint/parser",
-    plugins: ["import", "@typescript-eslint"],
+    plugins: ["import", "@typescript-eslint", "react-hooks"],
     parserOptions: {
         ecmaFeatures: {
             jsx: true
@@ -20,6 +20,8 @@ module.exports = {
         "import/extensions": [1, "never", { ts: "never", "json": "always" }],
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
         "indent": ["error", 4],
         "react/jsx-props-no-spreading": "off",
         "quotes": ["error", "double"],
