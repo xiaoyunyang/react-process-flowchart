@@ -10,7 +10,7 @@ import Connector from "./Connector";
 import { AddNodeParams, TileType } from "../types/workflowVisTypes";
 
 // Utils
-import { decodeMatrixEntry } from "../utils/workflowVisUtils";
+import { decodeMatrixEntry } from "../utils";
 import WorkflowVisContext from "../../context/workflowVis";
 
 

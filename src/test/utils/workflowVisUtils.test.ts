@@ -26,7 +26,7 @@ import {
     populateMatrix,
     addConnectorToMatrix,
     findNextNode
-} from "../../lib/utils/workflowVisUtils";
+} from "../../lib/utils";
 
 // Types
 import {

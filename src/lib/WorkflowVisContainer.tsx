@@ -19,7 +19,7 @@ import {
     createWorkflowVisData,
     populateMatrix,
     invertKeyVal
-} from "./utils/workflowVisUtils";
+} from "./utils";
 
 // Styles
 import styles from "./styles/workflowVis.module.css";

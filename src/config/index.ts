@@ -14,7 +14,7 @@ import {
 import {
     decodeMatrixCoord,
     findNextNode
-} from "../lib/utils/workflowVisUtils";
+} from "../lib/utils";
 
 import * as Utils from "./utils";
 
