@@ -24,7 +24,8 @@ import WorkflowVis from "./lib/components/WorkflowVis";
 
 
 const workflows: any = [
-    AA, AB, AC, AD, AE,
+    AA,
+    AB, AC, AD, AE,
     BA, BB, BC, BD, BE, BF,
     DA, DB, DC, DD, DE
     // CD
@@ -69,7 +70,7 @@ const App = () => (
                         <h2>{name}</h2>
                         <WorkflowVis
                             matrix={matrix}
-                            workflowVisData={workflowVisData}
+                            // workflowVisData={workflowVisData} // TODO: fix unit test?
                             editMode={enableMatrixUnitTestEditMode}
                             addNodeParams={noop}
                         />

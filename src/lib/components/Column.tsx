@@ -1,5 +1,5 @@
 // Libraries
-import React from "react";
+import React, { useContext } from "react";
 
 // Components
 import WorkflowStep from "./WorkflowStep";
@@ -7,31 +7,20 @@ import ForkStep from "./ForkStep";
 import Connector from "./Connector";
 
 // Types
-import {
-    AddNodeParams, TileType, WorkflowStepNodes
-} from "../types/workflowVisTypes";
+import { AddNodeParams, TileType } from "../types/workflowVisTypes";
 
 // Utils
 import { decodeMatrixEntry } from "../utils/workflowVisUtils";
+import WorkflowVisContext from "../../context/workflowVis";
 
-// TODO: need to connect WorkflowStep component to context
-const getWorkflowStepProps = ({
-    tileId, workflowStepNodes
-}: {
-    tileId: string;
-    workflowStepNodes: WorkflowStepNodes;
-}) => ({
-    ...workflowStepNodes[tileId],
-    shouldHighlight: false // TODO: shouldHighlight is different in project
-});
 
 const Tile = ({
-    matrixEntry, workflowStepNodes, editMode, addNodeParams
+    matrixEntry, editMode, addNodeParams
 }: {
     matrixEntry: string;
-    workflowStepNodes: WorkflowStepNodes;
     editMode: boolean; addNodeParams: AddNodeParams;
 }) => {
+    const { workflowStepNodes } = useContext(WorkflowVisContext);
     const {
         tileType, tileContainer, tileId, encodedOwnCoord, encodedParentNodeCoord
     } = decodeMatrixEntry(matrixEntry);
@@ -54,7 +43,8 @@ const Tile = ({
     case TileType.NODE:
         return (
             <WorkflowStep
-                {...getWorkflowStepProps({ tileId, workflowStepNodes })}
+                shouldHighlight={false}
+                workflowStepNode={workflowStepNodes[tileId]}
             />
         );
     default:
@@ -63,10 +53,9 @@ const Tile = ({
 };
 
 const Column = ({
-    matrixCol, workflowStepNodes, editMode, addNodeParams
+    matrixCol, editMode, addNodeParams
 }: {
     matrixCol: string[];
-    workflowStepNodes: WorkflowStepNodes;
     editMode: boolean;
     addNodeParams: AddNodeParams;
 }) => (
@@ -77,7 +66,6 @@ const Column = ({
                 <div key={matrixEntry}>
                     <Tile
                         matrixEntry={matrixEntry}
-                        workflowStepNodes={workflowStepNodes}
                         editMode={editMode}
                         addNodeParams={addNodeParams}
                     />

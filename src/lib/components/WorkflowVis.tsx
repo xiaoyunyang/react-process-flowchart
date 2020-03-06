@@ -9,9 +9,8 @@ import Column from "./Column";
 
 // Types
 import {
-    Matrix, WorkflowVisData, AddNodeParams
+    Matrix, AddNodeParams
 } from "../types/workflowVisTypes";
-
 
 const CSS_GRID_OFFSET = 1;
 
@@ -20,37 +19,26 @@ const getStyleForCol = (i: number) => ({
     gridRow: 1
 });
 
-export interface WorkflowVisPropsT {
-    workflowVisData: WorkflowVisData;
+interface Props {
     matrix: Matrix;
     editMode: boolean;
     addNodeParams: AddNodeParams;
 }
-const WorkflowVis = (
-    {
-        workflowVisData, matrix, editMode, addNodeParams
-    }: WorkflowVisPropsT
-) => {
-    const { workflowStepNodes } = workflowVisData;
-
-    // TODO: className is not necessary. Inline style determines row and col.
-    // Only there for debugging
-    return (
-        <div className={style.wrapper}>
-            {
-                matrix.map((matrixCol, i) => (
-                    <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
-                        <Column
-                            matrixCol={matrixCol}
-                            workflowStepNodes={workflowStepNodes}
-                            editMode={editMode}
-                            addNodeParams={addNodeParams}
-                        />
-                    </div>
-                ))
-            }
-        </div>
-    );
-};
-
+// TODO: className is not necessary. Inline style determines row and col.
+// Only there for debugging
+const WorkflowVis = ({ matrix, editMode, addNodeParams }: Props) => (
+    <div className={style.wrapper}>
+        {
+            matrix.map((matrixCol, i) => (
+                <div key={`col-${CSS_GRID_OFFSET + i}`} style={getStyleForCol(i)} className={style[`col${CSS_GRID_OFFSET + i}`]}>
+                    <Column
+                        matrixCol={matrixCol}
+                        editMode={editMode}
+                        addNodeParams={addNodeParams}
+                    />
+                </div>
+            ))
+        }
+    </div>
+);
 export default WorkflowVis;

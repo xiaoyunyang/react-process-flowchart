@@ -6,6 +6,9 @@ import { clone } from "ramda";
 import WorkflowVis from "./components/WorkflowVis";
 import WorkflowStepAddPopover from "./components/WorkflowStepAddPopover";
 
+import WorkflowVisContext from "../context/workflowVis";
+
+// TODO: deprecate config
 import {
     WorkflowStep,
     createAddNodeParams
@@ -118,17 +121,18 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
             <div style={{ position: "relative" }}>
                 <div className={styles.top}>
                     <div className={styles.wrapperContainer}>
-                        <WorkflowVis
-                            workflowVisData={workflowVisData}
-                            matrix={matrix}
-                            editMode={editMode}
-                            addNodeParams={createAddNodeParams({
-                                coordToNodeId,
-                                workflowStepNodes,
-                                nodeIdToParentNodeIds,
-                                updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                            })}
-                        />
+                        <WorkflowVisContext.Provider value={{ workflowStepNodes }}>
+                            <WorkflowVis
+                                matrix={matrix}
+                                editMode={editMode}
+                                addNodeParams={createAddNodeParams({
+                                    coordToNodeId,
+                                    workflowStepNodes,
+                                    nodeIdToParentNodeIds,
+                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                                })}
+                            />
+                        </WorkflowVisContext.Provider>
                     </div>
                 </div>
                 {/* <div className={styles.bottom}>
@@ -149,17 +153,18 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
                 <div className={styles.foundation}>
                     <div className={styles.wrapperContainer}>
-                        <WorkflowVis
-                            workflowVisData={workflowVisData} // TODO: workflowVisData should be in context
-                            matrix={initialMatrix}
-                            editMode={false}
-                            addNodeParams={createAddNodeParams({
-                                coordToNodeId,
-                                workflowStepNodes,
-                                nodeIdToParentNodeIds,
-                                updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                            })}
-                        />
+                        <WorkflowVisContext.Provider value={{ workflowStepNodes }}>
+                            <WorkflowVis
+                                matrix={initialMatrix}
+                                editMode={false}
+                                addNodeParams={createAddNodeParams({
+                                    coordToNodeId,
+                                    workflowStepNodes,
+                                    nodeIdToParentNodeIds,
+                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                                })}
+                            />
+                        </WorkflowVisContext.Provider>
                     </div>
                 </div>
                 {
