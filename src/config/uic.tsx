@@ -1,5 +1,5 @@
 // Libraries
-import React, { useState } from "react";
+import React from "react";
 
 import {
     Tooltip as UITooltip,
@@ -15,9 +15,10 @@ import any from "ramda/es/any";
 import { type2IconMapping } from "./workflowTypes";
 
 // Components
-export const Tooltip = React.forwardRef(
-    ({ children, tooltipContent, placement }: any,
-    ref: any) => (
+export const Tooltip = React.forwardRef((
+    { children, tooltipContent, placement }: any,
+    ref: any
+) => (
     <UITooltip
         title={tooltipContent}
         placement={placement}
@@ -26,14 +27,8 @@ export const Tooltip = React.forwardRef(
             { children }
         </div>
     </UITooltip>
-)
-);
+));
 
-// Icons
-
-export const AddWorkflowStepIcon = () => (
-    <i className="fas fa-plus" />
-);
 
 interface IconClassName {
     [id: string]: string;
@@ -61,48 +56,35 @@ export const WorkflowStepIcon = ({ type }: { type: string }) => (
     </div>
 );
 
-export const ExclamationIcon = () => (
-    <div style={{
-        textAlign: "center",
-        top: 3,
-        position: "relative",
-        fontSize: "inherit"
-
-    }}
-    >
-        <i className="fas fa-exclamation-circle" />
-    </div>
-);
-
 export const ForkIcon = () => (
     <i className={iconClassName.branch} />
 );
 
 const StyledMenu = withStyles({
     paper: {
-      border: "1px solid #d3d4d5",
-      marginTop: "5px"
+        border: "1px solid #d3d4d5",
+        marginTop: "5px"
     }
-  })((props: {
+})((props: {
       open: boolean;
       anchorEl: any;
       keepMounted: boolean;
       onClose: () => void;
     }) => (
-    <Menu
+        <Menu
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center"
+            vertical: "bottom",
+            horizontal: "center"
         }}
         transformOrigin={{
-        vertical: "top",
-        horizontal: "center"
+            vertical: "top",
+            horizontal: "center"
         }}
         {...props}
     />
-  ));
+));
 
 
 export const Dropdown = (props: any) => <props.component {...props} />;
@@ -113,12 +95,12 @@ export const DropdownComponent = ({
     nextSteps, prevSteps,
     onOpen, onClose, children
 }: any) => (
-<WorkflowStepEditMenu
-    onClose={onClose}
-    onOpen={onOpen}
->
-{children}
-</WorkflowStepEditMenu>
+    <WorkflowStepEditMenu
+        onClose={onClose}
+        onOpen={onOpen}
+    >
+        {children}
+    </WorkflowStepEditMenu>
 );
 
 export const WorkflowStepEditMenu = ({
@@ -151,3 +133,5 @@ export const WorkflowStepEditMenu = ({
         </div>
     );
 };
+
+export * from "../defaultUIC";

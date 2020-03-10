@@ -20,7 +20,7 @@ import * as Utils from "./utils";
 
 
 // TODO: exporting enum as a module is not working
-export enum ThemeT {
+export enum Theme {
     LIGHT = "Light",
     DARK = "Dark"
 }
@@ -35,40 +35,40 @@ interface StepOptions extends StepBaseOptions {
 }
 
 interface StepConfig {
-    theme: ThemeT;
+    theme: Theme;
     options: StepOptions;
 }
 
 const workflowStepConfig: {[stepType: string]: StepConfig} = {
     [encodedNodeType.start]: {
-        theme: ThemeT.DARK, options: { canEdit: false, canDelete: false, canManageUsers: false }
+        theme: Theme.DARK, options: { canEdit: false, canDelete: false, canManageUsers: false }
     },
     [encodedNodeType.fork]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[0]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[1]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[2]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[3]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[4]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[5]]: {
-        theme: ThemeT.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
+        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
     },
     [encodedNodeType[6]]: {
-        theme: ThemeT.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
+        theme: Theme.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
     },
     [encodedNodeType.finish]: {
-        theme: ThemeT.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
+        theme: Theme.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
     }
 };
 

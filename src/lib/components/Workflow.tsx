@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { ReactNode } from "react";
 
 // Styles
 import style from "../styles/workflowVis.module.css";
 
 // Components
 import WorkflowVisContainer from "../WorkflowVisContainer";
+// UIC
+import { WarningIcon as DefaultWarningIcon } from "../../defaultUIC";
 
 // Types
 import { WorkflowStep } from "../../config";
@@ -21,12 +23,16 @@ interface WorkflowT {
     workflowSteps: WorkflowStep[];
 }
 
-interface PropsT {
+export interface OverwriteProps {
+    warningIcon?: ReactNode;
+}
+
+interface Props extends OverwriteProps {
     workflow: WorkflowT;
 }
 
-export default class Workflow extends React.PureComponent<PropsT, StateT> {
-    constructor(props: PropsT) {
+export default class Workflow extends React.PureComponent<Props, StateT> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             editMode: false
@@ -43,7 +49,7 @@ export default class Workflow extends React.PureComponent<PropsT, StateT> {
 
 
     render() {
-        const { workflow } = this.props;
+        const { workflow, warningIcon } = this.props;
         const { workflowUid, workflowName, workflowSteps } = workflow;
 
         const { editMode } = this.state;
@@ -60,6 +66,7 @@ export default class Workflow extends React.PureComponent<PropsT, StateT> {
 
                 <WorkflowVisContainer
                     workflowUid={workflowUid}
+                    warningIcon={warningIcon || DefaultWarningIcon}
                     workflowSteps={workflowSteps}
                     editMode={editMode}
                 />

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, ReactNode } from "react";
 import { WorkflowStepNodes } from "../lib/types/workflowVisTypes";
 
 const WorkflowVisContext = createContext({

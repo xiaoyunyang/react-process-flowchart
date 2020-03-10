@@ -4,7 +4,7 @@ import {
     NodeType
 } from "./workflowTypes";
 
-const displayWarning = false;
+const displayWarning = true;
 
 export const getDisplayWarning = (workflowStep: WorkflowStep): ReactNode => (displayWarning ? "Oops! Something is wrong" : null);
 

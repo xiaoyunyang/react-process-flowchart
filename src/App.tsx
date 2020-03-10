@@ -19,10 +19,22 @@ import {
 import { workflowVisData, matrices } from "./mocks/mockMatrices";
 
 // Components
-import Workflow from "./lib/components/Workflow";
+import Workflow, { OverwriteProps } from "./lib/components/Workflow";
 import WorkflowVis from "./lib/components/WorkflowVis";
 
+// TODO: decouple color of warning icon from lib
+const WarningIcon = (
+    <div style={{
+        textAlign: "center",
+        top: 3,
+        position: "relative",
+        fontSize: "inherit"
 
+    }}
+    >
+        <i className="fas fa-bell" />
+    </div>
+);
 const workflows: any = [
     AA,
     AB, AC, AD, AE,
@@ -45,6 +57,12 @@ const noop = () => () => "foo";
 
 // const addNodeParams = ({}) => ({ workflowStepNodes, coordToNodeId }) => noop;
 
+const useDefault = false;
+
+const overwriteProps: OverwriteProps = useDefault ? {} : {
+    warningIcon: WarningIcon
+};
+
 const App = () => (
     <div>
         {enableAcceptanceTest && (
@@ -58,7 +76,13 @@ const App = () => (
                 {
                     workflows.map((
                         workflow: MockWorkflowsData
-                    ) => <Workflow key={workflow.workflowUid} workflow={workflow} />)
+                    ) => (
+                        <Workflow
+                            key={workflow.workflowUid}
+                            workflow={workflow}
+                            {...overwriteProps}
+                        />
+                    ))
                 }
             </div>
         )}

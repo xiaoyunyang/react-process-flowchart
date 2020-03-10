@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
-import { clone } from "ramda";
+import React, { ReactNode } from "react";
 
 // Components
 import WorkflowVis from "./components/WorkflowVis";
 import WorkflowStepAddPopover from "./components/WorkflowStepAddPopover";
 
+// Context
 import WorkflowVisContext from "../context/workflowVis";
 
 // TODO: deprecate config
@@ -23,12 +23,14 @@ import {
 
 // Styles
 import styles from "./styles/workflowVis.module.css";
+import UicContext from "../context/uic";
 
 
 interface PropsT {
     workflowUid: string;
     workflowSteps: WorkflowStep[];
     editMode: boolean;
+    warningIcon: ReactNode | undefined;
 }
 
 interface StateT {
@@ -69,7 +71,9 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
     }
 
     render() {
-        const { workflowUid, workflowSteps, editMode } = this.props;
+        const {
+            workflowUid, workflowSteps, editMode, warningIcon
+        } = this.props;
         const {
             workflowVisData, initialMatrix, forkStepCols
         } = createWorkflowVisData({ workflowSteps, workflowUid });
@@ -122,16 +126,18 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                 <div className={styles.top}>
                     <div className={styles.wrapperContainer}>
                         <WorkflowVisContext.Provider value={{ workflowStepNodes }}>
-                            <WorkflowVis
-                                matrix={matrix}
-                                editMode={editMode}
-                                addNodeParams={createAddNodeParams({
-                                    coordToNodeId,
-                                    workflowStepNodes,
-                                    nodeIdToParentNodeIds,
-                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                                })}
-                            />
+                            <UicContext.Provider value={{ warningIcon }}>
+                                <WorkflowVis
+                                    matrix={matrix}
+                                    editMode={editMode}
+                                    addNodeParams={createAddNodeParams({
+                                        coordToNodeId,
+                                        workflowStepNodes,
+                                        nodeIdToParentNodeIds,
+                                        updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                                    })}
+                                />
+                            </UicContext.Provider>
                         </WorkflowVisContext.Provider>
                     </div>
                 </div>

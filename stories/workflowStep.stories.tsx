@@ -1,4 +1,3 @@
-
 // Libraries
 import React from 'react';
 import classNames from "classnames";
@@ -10,7 +9,7 @@ import WorkflowStep from "../src/lib/components/WorkflowStep";
 
 // Config
 import { 
-  encodedNodeType, ThemeT,
+  encodedNodeType, Theme,
   messages
 } from "../src/config";
 
@@ -26,8 +25,8 @@ const storyBoookStyles = require<any>('./storybook.module.css');
 export const Button = ({text}: {text: string}) => <button>{text}</button>;
 
 const themeOptions = {
-  DARK: ThemeT.DARK,
-  LIGHT: ThemeT.LIGHT
+  DARK: Theme.DARK,
+  LIGHT: Theme.LIGHT
 }
 
 const nodeTypeOptions = encodedNodeType;
@@ -48,7 +47,7 @@ storiesOf("WorkflowStep", module)
         workflowStepUid="fooStep"
         nextSteps={[]}
         prevSteps={[]}
-        theme={select("Theme", themeOptions, ThemeT.LIGHT)}
+        theme={select("Theme", themeOptions, Theme.LIGHT)}
         isDisabled={boolean("isDisabled", false)}
         stepDisabledMessage={text("disabledMessage", "Step is disabled")}
         shouldHighlight={boolean("shouldHighlight", false)}
