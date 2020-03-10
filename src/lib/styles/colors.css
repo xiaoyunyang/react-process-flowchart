@@ -33,12 +33,12 @@
 	--pale-grey: #edf9f7;
 	--dark-grey: #222424;
 	--dark-grey-two: #363a3a;
-    --charcoal-dark: #4a4a4a;
+  --charcoal-dark: hsl(0, 0%, 29%);
 	--charcoal-grey: #4a4f50;
 	--gunmetal: #5f6565;
 	--black: #000000;
 	--battleship-grey: #747b7c;
-    --cool-grey-three: #979797;
+  --cool-grey-three: #979797;
 	--cool-grey-two: #9aa1a2;
 	--cool-grey: #acb2b2;
 	--silver: #bec3c3;
@@ -60,5 +60,5 @@
 	--cloudy-blue-two: #d5d3df;
 	--pale-grey-two: #e4e3eb;
 	--pale-grey-three: #f4f3f7;
-    --pale-olive-green: #b8d06b;
+  --pale-olive-green: #b8d06b;
 }

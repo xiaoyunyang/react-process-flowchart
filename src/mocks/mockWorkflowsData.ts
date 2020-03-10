@@ -32,14 +32,14 @@ export const AA = {
         },
         {
             workflowStepUid: "6473f65c98fe",
-            workflowStepName: encodedNodeType.finish.toLowerCase(),
+            workflowStepName: `${encodedNodeType.finish.toLowerCase()} test test test`,
             workflowStepType: encodedNodeType.finish,
             workflowStepOrder: 4,
             actions: []
         },
         {
             workflowStepUid: "647384536514",
-            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2`,
+            workflowStepName: `${encodedNodeType[3].slice(0, 1)}2 test test test`,
             workflowStepType: encodedNodeType[3],
             workflowStepOrder: 3,
             actions: [

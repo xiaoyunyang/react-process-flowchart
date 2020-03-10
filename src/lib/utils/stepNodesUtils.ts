@@ -12,7 +12,7 @@ import {
 
 // TODO: Deprecate config
 import {
-    WorkflowStep, encodedNodeType, Utils
+    WorkflowStep, encodedNodeType, Utils, messages
 } from "../../config";
 
 
@@ -29,6 +29,26 @@ export const getNextSteps = ({ workflowSteps, workflowStepOrder }: {
   workflowSteps: readonly WorkflowStep[]; workflowStepOrder: number;
 }): WorkflowStep[] => workflowSteps
     .filter((wfStep) => wfStep.workflowStepOrder > workflowStepOrder);
+
+
+const getFirstStep = ({
+    id, workflowUid, nextSteps, nextNodes
+}: {
+    id: string; workflowUid: string; nextSteps: WorkflowStep[]; nextNodes: any[];
+}) => ({
+    [id]: {
+        id,
+        workflowUid, // TODO:
+        name: messages[encodedNodeType.start],
+        nodeType: encodedNodeType.start,
+        workflowStepOrder: 0,
+        nextNodes,
+        nextSteps,
+        prevSteps: [],
+        isDisabled: Utils.getIsDisabled({} as WorkflowStep),
+        displayWarning: null
+    }
+});
 
 // TODO: Need a huge refactor of this function
 export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
@@ -85,7 +105,7 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
 
         workflowStepNodes[workflowStepUid] = {
             id: workflowStepUid,
-            workflowUid,
+            workflowUid, // TODO: this can be in context?
             name: workflowStepName,
             nodeType,
             workflowStepOrder,
@@ -99,20 +119,15 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
 
     // TODO: We should append authorize to the workflowVisData before we go into this function
     // to derive nodes from workflowVis Data
+    const firstStep = getFirstStep({
+        id: firstStepId,
+        workflowUid,
+        nextNodes: authorizeNextNodes,
+        nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 })
+    });
     workflowStepNodes = {
         ...workflowStepNodes,
-        [firstStepId]: {
-            id: firstStepId,
-            workflowUid: firstStepId,
-            name: "",
-            nodeType: encodedNodeType.start,
-            workflowStepOrder: 0,
-            nextNodes: authorizeNextNodes,
-            nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 }),
-            prevSteps: [],
-            isDisabled: false,
-            displayWarning: null
-        }
+        ...firstStep
     };
 
     return {

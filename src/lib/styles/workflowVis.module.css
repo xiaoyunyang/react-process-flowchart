@@ -389,7 +389,7 @@ margin-top and height attributes to all three connector classes
 }
 
 .themeDark i {
-  color: var(--white) !important;
+  color: var(--white);
 }
 
 .themeDark .active {
@@ -427,6 +427,15 @@ margin-top and height attributes to all three connector classes
 
 .themeLight.workflowStepDisabled i {
   color: var(--silver);
+}
+.themeDark.workflowStepDisabled {
+  cursor: not-allowed;
+  background-color: var(--cool-grey-three);
+  color: var(--silver-five);
+}
+
+.themeDark.workflowStepDisabled i {
+  color: var(--silver-five);
 }
 
 .hoverable .themeLight:hover {
