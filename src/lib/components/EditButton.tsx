@@ -14,27 +14,20 @@ import {
 
 const noop = () => { };
 
-interface PropsT {
+interface Props {
     createAddChildNodeCommand: CreateAddChildNodeCommand;
     isEmptyBranch?: boolean;
 }
-
-export default class EditButton extends React.PureComponent<PropsT> {
-    constructor(props: PropsT) {
-        super(props);
-        this.addNodeWithLocationBound = this.addNodeWithLocation.bind(this);
-    }
-
-    addNodeWithLocationBound: (e: React.MouseEvent, mock?: {
-        addChildNodeMock: CreateAddChildNodeCommand; isEmptyBranchMock: boolean;
-    }) => void;
-
-    addNodeWithLocation(
+const EditButton = ({
+    createAddChildNodeCommand: createAddChildNodeCommandProps,
+    isEmptyBranch: isEmptyBranchProps = false
+}: Props) => {
+    const addNodeWithLocation = (
         e: React.MouseEvent,
         mock?: {
             addChildNodeMock: CreateAddChildNodeCommand; isEmptyBranchMock: boolean;
         }
-    ): AddChildNodeCommand {
+    ): AddChildNodeCommand => {
         const { left, top } = e.currentTarget.getBoundingClientRect();
         let createAddChildNodeCommand: CreateAddChildNodeCommand;
         let isEmptyBranch: boolean;
@@ -44,26 +37,21 @@ export default class EditButton extends React.PureComponent<PropsT> {
             isEmptyBranch = isEmptyBranchMock;
             return createAddChildNodeCommand({ left, top, isEmptyBranch });
         }
-        const {
-            createAddChildNodeCommand: createAddChildNodeCommandProps,
-            isEmptyBranch: isEmptyBranchProps = false
-        } = this.props;
 
         createAddChildNodeCommand = createAddChildNodeCommandProps;
         isEmptyBranch = isEmptyBranchProps;
         return createAddChildNodeCommand({
             left: e.clientX - left, top: e.clientY - top, isEmptyBranch
         });
-    }
+    };
 
-    render() {
-        return (
-            <div className={styles.hoverable} role="button" tabIndex={-1} onClick={this.addNodeWithLocationBound} onKeyPress={noop}>
-                <span className={styles.circle}>
-                    <AddWorkflowStepIcon />
-                </span>
-            </div>
+    return (
+        <div className={styles.hoverable} role="button" tabIndex={-1} onClick={addNodeWithLocation} onKeyPress={noop}>
+            <span className={styles.circle}>
+                <AddWorkflowStepIcon />
+            </span>
+        </div>
 
-        );
-    }
-}
+    );
+};
+export default EditButton;

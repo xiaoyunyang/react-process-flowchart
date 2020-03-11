@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// Libraries
 import React, { ReactNode, useState } from "react";
 
 // Styles
@@ -11,11 +11,6 @@ import { WarningIcon as DefaultWarningIcon } from "../../defaultUIC";
 
 // Types
 import { WorkflowStep } from "../../config";
-
-
-interface StateT {
-    editMode: boolean;
-}
 
 interface WorkflowT {
     workflowUid: string;
