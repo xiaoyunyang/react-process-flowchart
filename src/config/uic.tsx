@@ -7,11 +7,8 @@ import {
     withStyles
 } from "@material-ui/core";
 
-import { render } from "enzyme";
-
 // Types
 import { TooltipProps } from "@material-ui/core/Tooltip";
-import any from "ramda/es/any";
 import { type2IconMapping } from "./workflowTypes";
 
 // Components
@@ -35,7 +32,7 @@ interface IconClassName {
 }
 
 // TODO: move this into the same file as type2IconMapping
-const iconClassName: IconClassName = {
+export const iconClassName: IconClassName = {
     pencil: "fas fa-pencil-alt",
     eye: "far fa-eye",
     check: "far fa-check-circle",
@@ -49,42 +46,33 @@ const iconClassName: IconClassName = {
     vial: "fas fa-vial"
 };
 
-
-export const WorkflowStepIcon = ({ type }: { type: string }) => (
-    <div style={{ textAlign: "center" }}>
-        <i className={iconClassName[type2IconMapping[type]]} />
-    </div>
-);
-
-export const ForkIcon = () => (
-    <i className={iconClassName.branch} />
-);
-
 const StyledMenu = withStyles({
     paper: {
         border: "1px solid #d3d4d5",
         marginTop: "5px"
     }
-})((props: {
+})(
+    (props: {
       open: boolean;
       anchorEl: any;
       keepMounted: boolean;
       onClose: () => void;
     }) => (
         <Menu
-        elevation={0}
-        getContentAnchorEl={null}
-        anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center"
-        }}
-        transformOrigin={{
-            vertical: "top",
-            horizontal: "center"
-        }}
-        {...props}
-    />
-));
+            elevation={0}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center"
+            }}
+            transformOrigin={{
+                vertical: "top",
+                horizontal: "center"
+            }}
+            {...props}
+        />
+    )
+);
 
 
 export const Dropdown = (props: any) => <props.component {...props} />;

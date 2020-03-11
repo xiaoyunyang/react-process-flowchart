@@ -7,7 +7,14 @@ import style from "../styles/workflowVis.module.css";
 // Components
 import WorkflowVisContainer from "../WorkflowVisContainer";
 // UIC
-import { WarningIcon as DefaultWarningIcon } from "../../defaultUIC";
+import {
+    WarningIcon as DefaultWarningIcon,
+    WorkflowStepIcon as DefaultWorkflowStepIcon,
+    ForkIcon as DefaultForkIcon
+} from "../../defaultUIC";
+
+// Context
+import UicContext from "../../context/uic";
 
 // Types
 import { WorkflowStep } from "../../config";
@@ -19,14 +26,18 @@ interface WorkflowT {
 }
 
 export interface OverwriteProps {
+    forkIcon?: ReactNode;
     warningIcon?: ReactNode;
+    workflowStepIcon?: (type: string) => ReactNode;
 }
 
 interface Props extends OverwriteProps {
     workflow: WorkflowT;
 }
 
-const Workflow = ({ workflow, warningIcon }: Props) => {
+const Workflow = ({
+    workflow, warningIcon, workflowStepIcon, forkIcon
+}: Props) => {
     const [editMode, setEditMode] = useState(false);
     const { workflowUid, workflowName, workflowSteps } = workflow;
 
@@ -41,13 +52,20 @@ const Workflow = ({ workflow, warningIcon }: Props) => {
                     {toggleEditModeLabel}
                 </button>
             </div>
+            <UicContext.Provider value={{
+                warningIcon: warningIcon || DefaultWarningIcon,
+                workflowStepIcon: workflowStepIcon || DefaultWorkflowStepIcon,
+                forkIcon: forkIcon || DefaultForkIcon
+            }}
+            >
+                <WorkflowVisContainer
+                    workflowUid={workflowUid}
+                    workflowSteps={workflowSteps}
+                    editMode={editMode}
+                />
+            </UicContext.Provider>
 
-            <WorkflowVisContainer
-                workflowUid={workflowUid}
-                warningIcon={warningIcon || DefaultWarningIcon}
-                workflowSteps={workflowSteps}
-                editMode={editMode}
-            />
+
         </div>
     );
 };

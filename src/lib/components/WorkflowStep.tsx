@@ -11,7 +11,7 @@ import {
     WorkflowStepEditMenu,
     // DropdownComponent
     Theme,
-    WorkflowStepIcon, workflowStepConfig,
+    workflowStepConfig,
     messages,
     NodeType
 } from "../../config";
@@ -39,14 +39,6 @@ const initialState: State = {
 };
 
 const WorkflowStepContext = createContext(initialState);
-
-
-// TODO: different from project code
-export const Icon = ({ type }: { type: string }) => (
-    <div className={styles.iconContainer}>
-        <WorkflowStepIcon type={type} />
-    </div>
-);
 
 const ConditionalTooltip = ({
     children, renderTooltip, tooltipContent
@@ -85,7 +77,11 @@ const ConditionalDropdown = ({
 
 const DisplayName = ({
     displayName, isClickable, setRenderTooltip
-}: { displayName: string; isClickable: boolean; setRenderTooltip: (truncated: boolean) => void}) => {
+}: {
+    displayName: string;
+    isClickable: boolean;
+    setRenderTooltip: (truncated: boolean) => void;
+}) => {
     const { dropdownMenuOpened } = useContext(WorkflowStepContext);
 
     const caretUpClassName = classNames(
@@ -123,7 +119,7 @@ const WorkflowStep = ({
     name: string; displayWarning: ReactNode; nodeType: NodeType;
     isDisabled: boolean; shouldHighlight: boolean; theme: Theme; isClickable: boolean;
 }) => {
-    const { warningIcon } = useContext(UicContext);
+    const { warningIcon, workflowStepIcon } = useContext(UicContext);
     const boxContainerClassName = isClickable
         ? classNames(styles.boxContainer, styles.hoverable) : styles.boxContainer;
 
@@ -145,7 +141,9 @@ const WorkflowStep = ({
                         {warningIcon}
                     </div>
                 )}
-                <Icon type={nodeType} />
+                <div className={styles.iconContainer}>
+                    {workflowStepIcon(nodeType)}
+                </div>
                 <ConditionalTooltip
                     renderTooltip={renderTooltip}
                     tooltipContent={name}

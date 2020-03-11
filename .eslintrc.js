@@ -25,6 +25,7 @@ module.exports = {
         "indent": ["error", 4],
         "react/jsx-props-no-spreading": "off",
         "quotes": ["error", "double"],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
         "comma-dangle": ["error", "never"],
         "react/jsx-filename-extension": ['warn', {	
             extensions: ['ts', '.tsx'],	

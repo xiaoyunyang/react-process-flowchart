@@ -7,6 +7,9 @@ import logo from "./logo.svg";
 import "./App.css";
 import styles from "./lib/styles/workflowVis.module.css";
 
+// Config
+import { iconClassName } from "./config/uic";
+import { type2IconMapping } from "./config/examples/workflowTypes.cicd";
 // Data
 import {
     AA, AB, AC, AD, AE,
@@ -35,6 +38,15 @@ const WarningIcon = (
         <i className="fas fa-bell" />
     </div>
 );
+
+const ForkIcon = <i className="far fa-check-circle" />;
+const WorkflowStepIcon = (type: string) => (
+    <div style={{ textAlign: "center" }}>
+        <i className={iconClassName[type2IconMapping[type]]} />
+    </div>
+);
+
+
 const workflows: any = [
     AA,
     AB, AC, AD, AE,
@@ -47,6 +59,7 @@ const enableMatrixUnitTest = false;
 const enableMatrixUnitTestEditMode = true;
 const enableAcceptanceTest = true;
 const debugModeOn = false;
+const useDefault = false;
 
 // TODO: there's something wrong with visualizing B-D
 // Cannot read property 'id' of undefined
@@ -57,10 +70,11 @@ const noop = () => () => "foo";
 
 // const addNodeParams = ({}) => ({ workflowStepNodes, coordToNodeId }) => noop;
 
-const useDefault = false;
 
 const overwriteProps: OverwriteProps = useDefault ? {} : {
-    warningIcon: WarningIcon
+    warningIcon: WarningIcon,
+    forkIcon: ForkIcon,
+    workflowStepIcon: WorkflowStepIcon
 };
 
 const App = () => (

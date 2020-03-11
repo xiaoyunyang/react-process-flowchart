@@ -23,14 +23,11 @@ import {
 
 // Styles
 import styles from "./styles/workflowVis.module.css";
-import UicContext from "../context/uic";
-
 
 interface PropsT {
     workflowUid: string;
     workflowSteps: WorkflowStep[];
     editMode: boolean;
-    warningIcon: ReactNode | undefined;
 }
 
 interface StateT {
@@ -72,7 +69,7 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
     render() {
         const {
-            workflowUid, workflowSteps, editMode, warningIcon
+            workflowUid, workflowSteps, editMode
         } = this.props;
         const {
             workflowVisData, initialMatrix, forkStepCols
@@ -126,18 +123,16 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
                 <div className={styles.top}>
                     <div className={styles.wrapperContainer}>
                         <WorkflowVisContext.Provider value={{ workflowStepNodes }}>
-                            <UicContext.Provider value={{ warningIcon }}>
-                                <WorkflowVis
-                                    matrix={matrix}
-                                    editMode={editMode}
-                                    addNodeParams={createAddNodeParams({
-                                        coordToNodeId,
-                                        workflowStepNodes,
-                                        nodeIdToParentNodeIds,
-                                        updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
-                                    })}
-                                />
-                            </UicContext.Provider>
+                            <WorkflowVis
+                                matrix={matrix}
+                                editMode={editMode}
+                                addNodeParams={createAddNodeParams({
+                                    coordToNodeId,
+                                    workflowStepNodes,
+                                    nodeIdToParentNodeIds,
+                                    updatePlusBtnClickParams: this.updatePlusBtnClickParamsBound
+                                })}
+                            />
                         </WorkflowVisContext.Provider>
                     </div>
                 </div>
