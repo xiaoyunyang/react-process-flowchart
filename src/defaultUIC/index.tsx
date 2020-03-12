@@ -1,5 +1,6 @@
 // Libraries
 import React from "react";
+import { Tooltip as UITooltip } from "@material-ui/core";
 
 const iconClassName = {
     pencil: "fas fa-pencil-alt",
@@ -15,7 +16,7 @@ const iconClassName = {
     vial: "fas fa-vial"
 };
 
-export const WarningIcon = (
+export const DefaultWarningIcon = (
     <div style={{
         textAlign: "center",
         top: 3,
@@ -28,11 +29,28 @@ export const WarningIcon = (
     </div>
 );
 
-export const AddWorkflowStepIcon = () => (
+export const DefaultAddWorkflowStepIcon = () => (
     <i className="fas fa-plus" />
 );
 
 
-export const WorkflowStepIcon = (_: string) => <></>;
+export const DefaultWorkflowStepIcon = (_: string) => <></>;
 
-export const ForkIcon = <i className={iconClassName.branch} />;
+export const DefaultForkIcon = <i className={iconClassName.branch} />;
+
+
+export const DefaultTooltip = (
+    { children, tooltipContent, placement }: any
+) => (
+    <UITooltip
+        title={tooltipContent}
+        placement={placement}
+    >
+        <div style={{ marginLeft: "auto", marginRight: "auto" }}>
+            { children }
+        </div>
+    </UITooltip>
+);
+
+
+export * from "./dropdownMenu";

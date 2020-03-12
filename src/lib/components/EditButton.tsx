@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 
 // Styles
 import styles from "../styles/workflowVis.module.css";
-
-import {
-    AddWorkflowStepIcon
-} from "../../config";
 
 // Types
 import {
     CreateAddChildNodeCommand, AddChildNodeCommand
 } from "../types/workflowVisTypes";
+
+// Context
+import UicContext from "../../context/uic";
 
 const noop = () => { };
 
@@ -22,6 +21,7 @@ const EditButton = ({
     createAddChildNodeCommand: createAddChildNodeCommandProps,
     isEmptyBranch: isEmptyBranchProps = false
 }: Props) => {
+    const { addWorkflowStepIcon } = useContext(UicContext);
     const addNodeWithLocation = (
         e: React.MouseEvent,
         mock?: {
@@ -48,7 +48,7 @@ const EditButton = ({
     return (
         <div className={styles.hoverable} role="button" tabIndex={-1} onClick={addNodeWithLocation} onKeyPress={noop}>
             <span className={styles.circle}>
-                <AddWorkflowStepIcon />
+                {addWorkflowStepIcon}
             </span>
         </div>
 

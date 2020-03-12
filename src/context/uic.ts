@@ -1,15 +1,23 @@
-import { createContext, ReactNode } from "react";
+import { createContext } from "react";
 // UIC
 import {
-    WarningIcon as DefaultWarningIcon,
-    WorkflowStepIcon as DefaultWorkflowStepIcon,
-    ForkIcon as DefaultForkIcon
+    DefaultWarningIcon,
+    DefaultWorkflowStepIcon,
+    DefaultForkIcon,
+    DefaultDropdown,
+    DefaultDropdownMenu,
+    DefaultAddWorkflowStepIcon,
+    DefaultTooltip
 } from "../defaultUIC";
 
 const UicContext = createContext({
-    warningIcon: DefaultWarningIcon as ReactNode,
-    workflowStepIcon: DefaultWorkflowStepIcon as (type: string) => ReactNode,
-    forkIcon: DefaultForkIcon as ReactNode
+    warningIcon: DefaultWarningIcon,
+    workflowStepIcon: DefaultWorkflowStepIcon,
+    forkIcon: DefaultForkIcon,
+    dropdown: DefaultDropdown,
+    dropdownMenu: DefaultDropdownMenu,
+    addWorkflowStepIcon: DefaultAddWorkflowStepIcon,
+    tooltip: DefaultTooltip
 });
 
 export default UicContext;

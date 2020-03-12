@@ -1,30 +1,11 @@
 // Libraries
-import React from "react";
-
-import {
-    Tooltip as UITooltip,
-    Menu, MenuItem,
-    withStyles
-} from "@material-ui/core";
+import React, { ReactNode } from "react";
+import { MenuItem } from "@material-ui/core";
 
 // Types
-import { TooltipProps } from "@material-ui/core/Tooltip";
-import { type2IconMapping } from "./workflowTypes";
+import { StyledMenu } from "../defaultUIC";
 
 // Components
-export const Tooltip = React.forwardRef((
-    { children, tooltipContent, placement }: any,
-    ref: any
-) => (
-    <UITooltip
-        title={tooltipContent}
-        placement={placement}
-    >
-        <div style={{ marginLeft: "auto", marginRight: "auto" }} ref={ref}>
-            { children }
-        </div>
-    </UITooltip>
-));
 
 
 interface IconClassName {
@@ -46,54 +27,12 @@ export const iconClassName: IconClassName = {
     vial: "fas fa-vial"
 };
 
-const StyledMenu = withStyles({
-    paper: {
-        border: "1px solid #d3d4d5",
-        marginTop: "5px"
-    }
-})(
-    (props: {
-      open: boolean;
-      anchorEl: any;
-      keepMounted: boolean;
-      onClose: () => void;
-    }) => (
-        <Menu
-            elevation={0}
-            getContentAnchorEl={null}
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center"
-            }}
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "center"
-            }}
-            {...props}
-        />
-    )
-);
 
-
-export const Dropdown = (props: any) => <props.component {...props} />;
-
-export const DropdownComponent = ({
-    canEdit, canDelete, canManageUsers,
-    type, workflowStepUid, workflowUid,
-    nextSteps, prevSteps,
-    onOpen, onClose, children
-}: any) => (
-    <WorkflowStepEditMenu
-        onClose={onClose}
-        onOpen={onOpen}
-    >
-        {children}
-    </WorkflowStepEditMenu>
-);
-
-export const WorkflowStepEditMenu = ({
+export const DropdownMenu = ({
     closeOnClick, onOpen, onClose, children
-}: any) => {
+}: {
+    closeOnClick: any; onOpen: any; onClose: any; children: ReactNode;
+}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -115,11 +54,9 @@ export const WorkflowStepEditMenu = ({
                 keepMounted
                 onClose={handleClose}
             >
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Delete</MenuItem>
+                <MenuItem>FOO</MenuItem>
+                <MenuItem>BAR</MenuItem>
             </StyledMenu>
         </div>
     );
 };
-
-export * from "../defaultUIC";

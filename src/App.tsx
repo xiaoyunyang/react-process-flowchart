@@ -8,7 +8,7 @@ import "./App.css";
 import styles from "./lib/styles/workflowVis.module.css";
 
 // Config
-import { iconClassName } from "./config/uic";
+import { iconClassName, DropdownMenu } from "./config/uic";
 import { type2IconMapping } from "./config/examples/workflowTypes.cicd";
 // Data
 import {
@@ -25,6 +25,7 @@ import { workflowVisData, matrices } from "./mocks/mockMatrices";
 import Workflow, { OverwriteProps } from "./lib/components/Workflow";
 import WorkflowVis from "./lib/components/WorkflowVis";
 
+// OVERWRITES =============================================
 // TODO: decouple color of warning icon from lib
 const WarningIcon = (
     <div style={{
@@ -46,6 +47,7 @@ const WorkflowStepIcon = (type: string) => (
     </div>
 );
 
+// ===========================================================
 
 const workflows: any = [
     AA,
@@ -74,7 +76,8 @@ const noop = () => () => "foo";
 const overwriteProps: OverwriteProps = useDefault ? {} : {
     warningIcon: WarningIcon,
     forkIcon: ForkIcon,
-    workflowStepIcon: WorkflowStepIcon
+    workflowStepIcon: WorkflowStepIcon,
+    dropdownMenu: DropdownMenu
 };
 
 const App = () => (

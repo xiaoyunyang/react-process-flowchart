@@ -1,16 +1,21 @@
 // Libraries
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 
 // Styles
 import style from "../styles/workflowVis.module.css";
 
 // Components
 import WorkflowVisContainer from "../WorkflowVisContainer";
+
 // UIC
 import {
-    WarningIcon as DefaultWarningIcon,
-    WorkflowStepIcon as DefaultWorkflowStepIcon,
-    ForkIcon as DefaultForkIcon
+    DefaultWarningIcon,
+    DefaultWorkflowStepIcon,
+    DefaultForkIcon,
+    DefaultDropdownMenu,
+    DefaultAddWorkflowStepIcon,
+    DefaultDropdown,
+    DefaultTooltip
 } from "../../defaultUIC";
 
 // Context
@@ -26,9 +31,12 @@ interface WorkflowT {
 }
 
 export interface OverwriteProps {
-    forkIcon?: ReactNode;
-    warningIcon?: ReactNode;
-    workflowStepIcon?: (type: string) => ReactNode;
+    forkIcon?: typeof DefaultForkIcon;
+    warningIcon?: typeof DefaultWarningIcon;
+    workflowStepIcon?: typeof DefaultWorkflowStepIcon;
+    dropdown?: typeof DefaultDropdown;
+    dropdownMenu?: typeof DefaultDropdownMenu;
+    tooltip?: typeof DefaultTooltip;
 }
 
 interface Props extends OverwriteProps {
@@ -36,7 +44,8 @@ interface Props extends OverwriteProps {
 }
 
 const Workflow = ({
-    workflow, warningIcon, workflowStepIcon, forkIcon
+    workflow, warningIcon, workflowStepIcon, forkIcon,
+    dropdown, dropdownMenu, tooltip
 }: Props) => {
     const [editMode, setEditMode] = useState(false);
     const { workflowUid, workflowName, workflowSteps } = workflow;
@@ -53,9 +62,13 @@ const Workflow = ({
                 </button>
             </div>
             <UicContext.Provider value={{
+                addWorkflowStepIcon: DefaultAddWorkflowStepIcon,
                 warningIcon: warningIcon || DefaultWarningIcon,
                 workflowStepIcon: workflowStepIcon || DefaultWorkflowStepIcon,
-                forkIcon: forkIcon || DefaultForkIcon
+                forkIcon: forkIcon || DefaultForkIcon,
+                dropdown: dropdown || DefaultDropdown,
+                dropdownMenu: dropdownMenu || DefaultDropdownMenu,
+                tooltip: tooltip || DefaultTooltip
             }}
             >
                 <WorkflowVisContainer

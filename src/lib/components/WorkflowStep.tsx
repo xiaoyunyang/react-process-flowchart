@@ -7,9 +7,6 @@ import Truncate from "react-truncate";
 
 // Config
 import {
-    Tooltip, Dropdown,
-    WorkflowStepEditMenu,
-    // DropdownComponent
     Theme,
     workflowStepConfig,
     messages,
@@ -22,7 +19,6 @@ import styles from "../styles/workflowVis.module.css";
 // Types
 import { WorkflowStepNode } from "../types/workflowVisTypes";
 import UicContext from "../../context/uic";
-
 
 interface Props {
     stepDisabledMessage?: string;
@@ -46,34 +42,33 @@ const ConditionalTooltip = ({
     children: JSX.Element;
     renderTooltip: boolean;
     tooltipContent: ReactNode;
-}) => (renderTooltip ? (
-    <Tooltip
-        placement="top"
-        tooltipContent={tooltipContent}
-        tooltipTitleClassName={styles.boxContainerTooltip}
-    >
-        {children}
-    </Tooltip>
-) : children);
+}) => {
+    const { tooltip } = useContext(UicContext);
+    return renderTooltip ? tooltip({
+        placement: "top",
+        tooltipContent,
+        tooltipTitleClassName: styles.boxContainerTooltip,
+        children
+    }) : children;
+};
 
 const ConditionalDropdown = ({
-    children, renderDropdown, onOpen, onClose, dropdownMenu
+    children, renderDropdown, onOpen, onClose
 }: {
     children: JSX.Element;
     renderDropdown: boolean;
     onOpen: () => void;
     onClose: () => void;
-    dropdownMenu: ReactNode;
-}) => (renderDropdown ? (
-    <Dropdown
-        closeOnClick={false}
-        onOpen={onOpen}
-        onClose={onClose}
-        component={dropdownMenu}
-    >
-        {children}
-    </Dropdown>
-) : children);
+}) => {
+    const { dropdownMenu, dropdown } = useContext(UicContext);
+    return renderDropdown ? dropdown({
+        closeOnClick: false,
+        onOpen,
+        onClose,
+        component: dropdownMenu,
+        children
+    }) : children;
+};
 
 const DisplayName = ({
     displayName, isClickable, setRenderTooltip
@@ -194,7 +189,6 @@ const WorkflowStepContainer = ({
     };
 
     // TODO: dropdownMenu needs to contain options from workflowStepNodes
-    const dropdownMenu = WorkflowStepEditMenu;
     const { theme } = workflowStepConfig[nodeType];
 
     return (
@@ -206,7 +200,6 @@ const WorkflowStepContainer = ({
                     renderDropdown={isClickable}
                     onOpen={onOpen}
                     onClose={onClose}
-                    dropdownMenu={dropdownMenu}
                 >
                     <WorkflowStep
                         name={name}
