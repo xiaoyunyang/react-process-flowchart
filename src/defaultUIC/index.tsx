@@ -29,9 +29,7 @@ export const DefaultWarningIcon = (
     </div>
 );
 
-export const DefaultAddWorkflowStepIcon = () => (
-    <i className="fas fa-plus" />
-);
+export const DefaultAddWorkflowStepIcon = <i className="fas fa-plus" />;
 
 
 export const DefaultWorkflowStepIcon = (_: string) => <></>;

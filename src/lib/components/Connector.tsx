@@ -66,6 +66,7 @@ export const ArrowUp = () => (
     </div>
 );
 
+// TODO: deprecate createAddChildNodeCommand in favor of context
 export const DownRightDashEditable = ({ createAddChildNodeCommand }: {
     createAddChildNodeCommand: CreateAddChildNodeCommand;
 }) => (
@@ -79,19 +80,25 @@ export const connectorComponent = (
     createAddChildNodeCommand: CreateAddChildNodeCommand
 ): { [name in ConnectorName]: JSX.Element } => {
     const component: { [name in ConnectorName]: JSX.Element } = {
-        downRight: <div className={styles.downRight} />,
-        upRight: <div className={styles.upRight} />,
-        downRightDash: <div />,
-        "downRightDash.edit": <DownRightDashEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
-        rightUpArrow: <RightUpArrow />,
-        rightUp: <RightUp />,
-        arrowUp: <ArrowUp />,
-        arrowRight: <ArrowRight />,
-        "arrowRight.edit": <ArrowRightEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
-        lineHoriz: <LineHoriz />,
-        "lineHoriz.edit": <LineHorizEditable createAddChildNodeCommand={createAddChildNodeCommand} />,
-        lineVert: <LineVert />,
-        empty: <div />
+        [ConnectorName.DOWN_RIGHT]: <div className={styles.downRight} />,
+        [ConnectorName.UP_RIGHT]: <div className={styles.upRight} />,
+        [ConnectorName.DOWN_RIGHT_DASH]: <div />,
+        [ConnectorName.DOWN_RIGHT_DASH_EDIT]: <DownRightDashEditable
+            createAddChildNodeCommand={createAddChildNodeCommand}
+        />,
+        [ConnectorName.RIGHT_UP_ARROW]: <RightUpArrow />,
+        [ConnectorName.RIGHT_UP]: <RightUp />,
+        [ConnectorName.ARROW_UP]: <ArrowUp />,
+        [ConnectorName.ARROW_RIGHT]: <ArrowRight />,
+        [ConnectorName.ARROW_RIGHT_EDIT]: <ArrowRightEditable
+            createAddChildNodeCommand={createAddChildNodeCommand}
+        />,
+        [ConnectorName.LINE_HORIZ]: <LineHoriz />,
+        [ConnectorName.LINE_HORIZ_EDIT]: <LineHorizEditable
+            createAddChildNodeCommand={createAddChildNodeCommand}
+        />,
+        [ConnectorName.LINE_VERT]: <LineVert />,
+        [ConnectorName.EMPTY]: <></>
     };
 
     return component;
