@@ -7,7 +7,7 @@ import ForkStep from "./ForkStep";
 import Connector from "./Connector";
 
 // Types
-import { AddNodeParams, TileType } from "../types/workflowVisTypes";
+import { AddNodeParams, TileType } from "../types";
 
 // Utils
 import { decodeMatrixEntry } from "../utils";
@@ -41,7 +41,7 @@ const Tile = ({
             />
         );
     case TileType.FORK:
-        return <ForkStep />;
+        return <ForkStep workflowStepNode={workflowStepNodes[tileId]} />;
     case TileType.NODE:
         return (
             <WorkflowStep

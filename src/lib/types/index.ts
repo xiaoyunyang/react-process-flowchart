@@ -1,7 +1,16 @@
 /* eslint-disable import/no-cycle */
 import { ReactNode } from "react";
-import { NodeType, WorkflowStep } from "../../config";
+import { WorkflowStep } from "../../config";
 import { EndomorphDict, PolymorphDict } from "./generic";
+
+export type Theme = "Light" | "Dark"
+
+export interface WorkflowConfig {
+    [nodeType: string]: {
+        theme: string; // Theme
+        options: {[optionName: string]: boolean};
+    };
+}
 
 export interface NextNode {
     id: string;
@@ -12,7 +21,7 @@ export interface WorkflowStepNode {
     id: string;
     workflowUid: string;
     name: string;
-    nodeType: NodeType;
+    nodeType: string;
     isDisabled: boolean;
     workflowStepOrder: number;
     nextNodes: NextNode[];

@@ -7,10 +7,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import styles from "./lib/styles/workflowVis.module.css";
 
-// Config
-import { iconClassName, DropdownMenu } from "./config/uic";
-import { type2IconMapping } from "./config/examples/workflowTypes.cicd";
-// Data
+// Examples
+import { WorkflowStepIcon, DropdownMenu, WarningIcon, ForkIcon } from "./config/examples/workflowTypes.cicd";
 import {
     AA, AB, AC, AD, AE,
     BA, BB, BC, BD, BE, BF,
@@ -25,29 +23,40 @@ import { workflowVisData, matrices } from "./mocks/mockMatrices";
 import Workflow, { OverwriteProps } from "./lib/components/Workflow";
 import WorkflowVis from "./lib/components/WorkflowVis";
 
-// OVERWRITES =============================================
-// TODO: decouple color of warning icon from lib
-const WarningIcon = (
-    <div style={{
-        textAlign: "center",
-        top: 3,
-        position: "relative",
-        fontSize: "inherit"
+// Configuration Object for the visualization
+const workflowConfig = {
+    START: {
+        theme: "Dark", options: { canEdit: false, canDelete: false, canManageUsers: false }
+    },
+    FORK: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    CHECKOUT: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    DEPENDENCIES: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    BUILD: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    TEST: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    UPLOAD_ASSETS: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    DEPLOY_STG: {
+        theme: "Light", options: { canEdit: true, canDelete: true, canManageUsers: false }
+    },
+    APPROVE: {
+        theme: "Dark", options: { canEdit: true, canDelete: false, canManageUsers: false }
+    },
+    DEPLOY_PROD: {
+        theme: "Dark", options: { canEdit: true, canDelete: false, canManageUsers: false }
+    }
+};
 
-    }}
-    >
-        <i className="fas fa-bell" />
-    </div>
-);
-
-const ForkIcon = <i className="far fa-check-circle" />;
-const WorkflowStepIcon = (type: string) => (
-    <div style={{ textAlign: "center" }}>
-        <i className={iconClassName[type2IconMapping[type]]} />
-    </div>
-);
-
-// ===========================================================
 
 const workflows: any = [
     AA,
@@ -97,6 +106,7 @@ const App = () => (
                         <Workflow
                             key={workflow.workflowUid}
                             workflow={workflow}
+                            workflowConfig={workflowConfig}
                             {...overwriteProps}
                         />
                     ))

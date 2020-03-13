@@ -6,7 +6,7 @@ import MinHeap from "./MinHeap";
 // Types
 import {
     WorkflowVisData, Matrix, ConnectorToPlace, CoordPairT, TileContainer
-} from "../types/workflowVisTypes";
+} from "../types";
 import { WorkflowStep } from "../../config";
 import {
     ExistentialDict, EndomorphDict, PolymorphDict

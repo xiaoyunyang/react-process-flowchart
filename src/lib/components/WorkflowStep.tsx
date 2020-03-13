@@ -6,19 +6,17 @@ import classNames from "classnames";
 import Truncate from "react-truncate";
 
 // Config
-import {
-    Theme,
-    workflowStepConfig,
-    messages,
-    NodeType
-} from "../../config";
+import { messages } from "../../config";
 
 // Style
 import styles from "../styles/workflowVis.module.css";
 
 // Types
-import { WorkflowStepNode } from "../types/workflowVisTypes";
+import { WorkflowStepNode, Theme } from "../types";
+
+// Context
 import UicContext from "../../context/uic";
+import ConfigContext from "../../context/config";
 
 interface Props {
     stepDisabledMessage?: string;
@@ -111,7 +109,7 @@ const DisplayName = ({
 const WorkflowStep = ({
     name, displayWarning, nodeType, isDisabled, shouldHighlight, theme, isClickable
 }: {
-    name: string; displayWarning: ReactNode; nodeType: NodeType;
+    name: string; displayWarning: ReactNode; nodeType: string;
     isDisabled: boolean; shouldHighlight: boolean; theme: Theme; isClickable: boolean;
 }) => {
     const { warningIcon, workflowStepIcon } = useContext(UicContext);
@@ -159,6 +157,7 @@ const WorkflowStepContainer = ({
     workflowStepNode, shouldHighlight,
     stepDisabledMessage // TODO: deprecate
 }: Props) => {
+    const { workflowConfig } = useContext(ConfigContext);
     const [dropdownMenuOpened, setDropdownMenuOpened] = useState(false);
     const onClose = () => setDropdownMenuOpened(false);
     const onOpen = () => setDropdownMenuOpened(true);
@@ -169,7 +168,7 @@ const WorkflowStepContainer = ({
     } = workflowStepNode;
 
     // TODO: reduce hasOption into workflowStepNode
-    const hasOption = Object.values(workflowStepConfig[nodeType].options).reduce(
+    const hasOption = Object.values(workflowConfig[nodeType].options).reduce(
         (acc: boolean, curr: boolean) => acc || curr,
         false
     );
@@ -180,7 +179,7 @@ const WorkflowStepContainer = ({
     const tooltipContent = displayWarning || stepDisabledMessage || messages.stepIsDisabled;
 
     const editMenuProps = {
-        ...workflowStepConfig[nodeType].options,
+        ...workflowConfig[nodeType].options,
         type: nodeType,
         workflowStepUid: id,
         workflowUid,
@@ -189,7 +188,7 @@ const WorkflowStepContainer = ({
     };
 
     // TODO: dropdownMenu needs to contain options from workflowStepNodes
-    const { theme } = workflowStepConfig[nodeType];
+    const { theme } = workflowConfig[nodeType];
 
     return (
         <ConditionalTooltip tooltipContent={tooltipContent} renderTooltip={renderTooltip}>
@@ -207,7 +206,7 @@ const WorkflowStepContainer = ({
                         nodeType={nodeType}
                         isDisabled={isDisabled}
                         shouldHighlight={shouldHighlight}
-                        theme={theme}
+                        theme={theme as Theme}
                         isClickable={isClickable}
                     />
                 </ConditionalDropdown>

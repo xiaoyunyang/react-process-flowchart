@@ -10,7 +10,7 @@ import Connector from "../../lib/components/Connector";
 
 // Types
 import { encodedNodeType } from "../../config";
-import { ConnectorTypeT } from "../../lib/types/workflowVisTypes";
+import { ConnectorTypeT } from "../../lib/types";
 
 configure({ adapter: new Adapter() });
 

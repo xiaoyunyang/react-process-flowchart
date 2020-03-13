@@ -6,7 +6,7 @@ import styles from "../styles/workflowVis.module.css";
 // Types
 import {
     CreateAddChildNodeCommand, AddChildNodeCommand
-} from "../types/workflowVisTypes";
+} from "../types";
 
 // Context
 import UicContext from "../../context/uic";
@@ -17,6 +17,7 @@ interface Props {
     createAddChildNodeCommand: CreateAddChildNodeCommand;
     isEmptyBranch?: boolean;
 }
+// TODO: Need to use context for onClick
 const EditButton = ({
     createAddChildNodeCommand: createAddChildNodeCommandProps,
     isEmptyBranch: isEmptyBranchProps = false

@@ -31,7 +31,7 @@ import {
 // Types
 import {
     ColType, ConnectorName, Matrix, ConnectorTypeT, WorkflowStepNodes
-} from "../../lib/types/workflowVisTypes";
+} from "../../lib/types";
 import { NodeTypeT } from "../../config";
 
 // Mocks

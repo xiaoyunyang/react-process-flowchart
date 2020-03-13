@@ -8,7 +8,7 @@ import EditButton from "./EditButton";
 import styles from "../styles/workflowVis.module.css";
 
 // Types
-import { CreateAddChildNodeCommand, TileContainer, ConnectorName } from "../types/workflowVisTypes";
+import { CreateAddChildNodeCommand, TileContainer, ConnectorName } from "../types";
 
 export const ArrowRight = () => (
     <div className={classNames(styles.arrowRight, styles.flexContainer)}>
@@ -78,7 +78,7 @@ export const DownRightDashEditable = ({ createAddChildNodeCommand }: {
 
 export const connectorComponent = (
     createAddChildNodeCommand: CreateAddChildNodeCommand
-): { [name in ConnectorName]: JSX.Element } => {
+): Record<ConnectorName, JSX.Element> => {
     const component: { [name in ConnectorName]: JSX.Element } = {
         [ConnectorName.DOWN_RIGHT]: <div className={styles.downRight} />,
         [ConnectorName.UP_RIGHT]: <div className={styles.upRight} />,

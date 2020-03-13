@@ -13,7 +13,7 @@ import { workflowVisData, matrixBA } from "../../mocks/mockMatrices";
 import { encodedNodeType } from "../../config";
 
 // Constants
-import { ConnectorName, AddNodeParams } from "../../lib/types/workflowVisTypes";
+import { ConnectorName, AddNodeParams } from "../../lib/types";
 
 configure({ adapter: new Adapter() });
 

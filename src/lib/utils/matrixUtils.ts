@@ -6,7 +6,7 @@ import { clone, chain } from "ramda";
 import {
     ConnectorName, Matrix,
     MatrixCoord, ConnectorToPlace, CoordPairT, TileContainer, TileType
-} from "../types/workflowVisTypes";
+} from "../types";
 import {
     EndomorphDict, PolymorphDict
 } from "../types/generic";

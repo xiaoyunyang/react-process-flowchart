@@ -1,5 +1,18 @@
-import { encodedNodeType } from "../config";
-import { WorkflowVisData } from "../lib/types/workflowVisTypes";
+import { WorkflowVisData } from "../lib/types";
+
+export const encodedNodeType = {
+    start: "START",
+    fork: "FORK",
+    0: "CHECKOUT",
+    1: "DEPENDENCIES",
+    2: "BUILD",
+    3: "TEST",
+    4: "UPLOAD_ASSETS",
+    5: "DEPLOY_STG",
+    6: "APPROVE",
+    finish: "DEPLOY_PROD"
+};
+
 
 // NOTE
 // matrices A through BF correspond to workflowVisData in this file.

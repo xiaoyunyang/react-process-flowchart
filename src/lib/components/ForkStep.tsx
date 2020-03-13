@@ -7,13 +7,16 @@ import styles from "../styles/workflowVis.module.css";
 
 // Context
 import UicContext from "../../context/uic";
+import ConfigContext from "../../context/config";
 
 // Types
-import { encodedNodeType, workflowStepConfig } from "../../config";
+import { WorkflowStepNode } from "../types";
 
-const ForkStep = () => {
+const ForkStep = ({ workflowStepNode }: {workflowStepNode: WorkflowStepNode}) => {
+    const { workflowConfig } = useContext(ConfigContext);
     const { forkIcon } = useContext(UicContext);
-    const { theme } = workflowStepConfig[encodedNodeType.fork];
+    const { nodeType } = workflowStepNode;
+    const { theme } = workflowConfig[nodeType];
     return (
         <div className={classNames(styles.diamondContainer, styles.hoverable)}>
             <div className={classNames(styles.diamond, styles.flexContainer, styles[`theme${theme}`])}>

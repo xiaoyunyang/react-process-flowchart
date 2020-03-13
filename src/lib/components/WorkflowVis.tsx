@@ -10,7 +10,7 @@ import Column from "./Column";
 // Types
 import {
     Matrix, AddNodeParams
-} from "../types/workflowVisTypes";
+} from "../types";
 
 const CSS_GRID_OFFSET = 1;
 

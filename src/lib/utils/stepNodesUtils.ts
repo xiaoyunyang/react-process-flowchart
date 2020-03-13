@@ -5,14 +5,14 @@ import { sort } from "ramda";
 // Types
 import {
     WorkflowStepNodes, NextNode
-} from "../types/workflowVisTypes";
+} from "../types";
 import {
     OccurrenceDict, PolymorphDict
 } from "../types/generic";
 
 // TODO: Deprecate config
 import {
-    WorkflowStep, encodedNodeType, Utils, messages
+    WorkflowStep, Utils, messages
 } from "../../config";
 
 
@@ -21,7 +21,7 @@ import {
 export const getPrevSteps = ({ workflowSteps, workflowStepOrder }: {
   workflowSteps: readonly WorkflowStep[]; workflowStepOrder: number;
 }): WorkflowStep[] => workflowSteps.filter(
-    (wfStep) => wfStep.workflowStepType !== encodedNodeType.fork
+    (wfStep) => wfStep.workflowStepType !== "FORK"
   && wfStep.workflowStepOrder < workflowStepOrder
 );
 
@@ -39,8 +39,8 @@ const getFirstStep = ({
     [id]: {
         id,
         workflowUid, // TODO:
-        name: messages[encodedNodeType.start],
-        nodeType: encodedNodeType.start,
+        name: messages.START,
+        nodeType: "START",
         workflowStepOrder: 0,
         nextNodes,
         nextSteps,
@@ -55,10 +55,10 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
   workflowUid: string;
   workflowSteps: readonly WorkflowStep[];
 }): {
-  workflowStepNodes: WorkflowStepNodes;
-  workflowStepOrderOccur: OccurrenceDict;
-  firstStepId: string;
-  forkStepCols: number[];
+    workflowStepNodes: WorkflowStepNodes;
+    workflowStepOrderOccur: OccurrenceDict;
+    firstStepId: string;
+    forkStepCols: number[];
 } => {
     // TODO: need to move this out of the function
     const firstStepId = `${workflowUid}-auth`;
@@ -90,7 +90,7 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
                 : 0) + 1;
 
         const nodeType = Utils.getNodeType({ workflowStep });
-        if (nodeType === encodedNodeType.fork) {
+        if (nodeType === "FORK") {
             forkStepCols = forkStepCols.concat(workflowStepOrder * 2);
         }
 

@@ -3,12 +3,11 @@
 // decorator pattern to avoid dependency cycles
 
 // Types
-import { encodedNodeType } from "./workflowTypes";
 import { EndomorphDict, PolymorphDict } from "../lib/types/generic";
 
 import {
     CreateAddNodeParams, AddChildNodeCommand, WorkflowStepNodes
-} from "../lib/types/workflowVisTypes";
+} from "../lib/types";
 
 // Utils
 import {
@@ -18,59 +17,6 @@ import {
 
 import * as Utils from "./utils";
 
-
-// TODO: exporting enum as a module is not working
-export enum Theme {
-    LIGHT = "Light",
-    DARK = "Dark"
-}
-
-interface StepBaseOptions {
-    canEdit: boolean;
-    canDelete: boolean;
-}
-
-interface StepOptions extends StepBaseOptions {
-    canManageUsers: boolean; // put optional options here
-}
-
-interface StepConfig {
-    theme: Theme;
-    options: StepOptions;
-}
-
-const workflowStepConfig: {[stepType: string]: StepConfig} = {
-    [encodedNodeType.start]: {
-        theme: Theme.DARK, options: { canEdit: false, canDelete: false, canManageUsers: false }
-    },
-    [encodedNodeType.fork]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[0]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[1]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[2]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[3]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[4]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[5]]: {
-        theme: Theme.LIGHT, options: { canEdit: true, canDelete: true, canManageUsers: false }
-    },
-    [encodedNodeType[6]]: {
-        theme: Theme.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
-    },
-    [encodedNodeType.finish]: {
-        theme: Theme.DARK, options: { canEdit: true, canDelete: false, canManageUsers: false }
-    }
-};
 
 const createAddNodeParams: CreateAddNodeParams = ({
     coordToNodeId, workflowStepNodes, nodeIdToParentNodeIds, updatePlusBtnClickParams
@@ -120,11 +66,9 @@ const createAddNodeParams: CreateAddNodeParams = ({
 
 
 export * from "./workflowTypes";
-export * from "./uic";
 export { default as messages } from "./messages";
 
 export {
-    workflowStepConfig,
     createAddNodeParams,
     Utils
 };

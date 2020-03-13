@@ -23,6 +23,8 @@ import UicContext from "../../context/uic";
 
 // Types
 import { WorkflowStep } from "../../config";
+import { WorkflowConfig } from "../types";
+import ConfigContext from "../../context/config";
 
 interface WorkflowT {
     workflowUid: string;
@@ -41,11 +43,12 @@ export interface OverwriteProps {
 
 interface Props extends OverwriteProps {
     workflow: WorkflowT;
+    workflowConfig: WorkflowConfig;
 }
 
 const Workflow = ({
-    workflow, warningIcon, workflowStepIcon, forkIcon,
-    dropdown, dropdownMenu, tooltip
+    workflow, workflowConfig,
+    warningIcon, workflowStepIcon, forkIcon, dropdown, dropdownMenu, tooltip
 }: Props) => {
     const [editMode, setEditMode] = useState(false);
     const { workflowUid, workflowName, workflowSteps } = workflow;
@@ -71,14 +74,17 @@ const Workflow = ({
                 tooltip: tooltip || DefaultTooltip
             }}
             >
-                <WorkflowVisContainer
-                    workflowUid={workflowUid}
-                    workflowSteps={workflowSteps}
-                    editMode={editMode}
-                />
+                <ConfigContext.Provider value={{
+                    workflowConfig
+                }}
+                >
+                    <WorkflowVisContainer
+                        workflowUid={workflowUid}
+                        workflowSteps={workflowSteps}
+                        editMode={editMode}
+                    />
+                </ConfigContext.Provider>
             </UicContext.Provider>
-
-
         </div>
     );
 };
