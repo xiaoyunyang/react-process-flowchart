@@ -19,7 +19,6 @@ export interface NextNode {
 
 export interface WorkflowStepNode {
     id: string;
-    workflowUid: string;
     name: string;
     nodeType: string;
     isDisabled: boolean;

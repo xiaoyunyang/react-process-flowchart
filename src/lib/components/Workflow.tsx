@@ -75,11 +75,10 @@ const Workflow = ({
             }}
             >
                 <ConfigContext.Provider value={{
-                    workflowConfig
+                    workflowConfig, workflowId: workflowUid
                 }}
                 >
                     <WorkflowVisContainer
-                        workflowUid={workflowUid}
                         workflowSteps={workflowSteps}
                         editMode={editMode}
                     />

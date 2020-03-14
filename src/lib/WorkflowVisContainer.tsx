@@ -25,7 +25,6 @@ import {
 import styles from "./styles/workflowVis.module.css";
 
 interface PropsT {
-    workflowUid: string;
     workflowSteps: WorkflowStep[];
     editMode: boolean;
 }
@@ -69,11 +68,11 @@ export default class WorkflowVisContainer extends React.PureComponent<PropsT, St
 
     render() {
         const {
-            workflowUid, workflowSteps, editMode
+            workflowSteps, editMode
         } = this.props;
         const {
             workflowVisData, initialMatrix, forkStepCols
-        } = createWorkflowVisData({ workflowSteps, workflowUid });
+        } = createWorkflowVisData({ workflowSteps });
 
         // TODO: remove block ----
         // const bottomMatrix = clone(initialMatrix);

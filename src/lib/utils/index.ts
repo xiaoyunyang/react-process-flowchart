@@ -33,11 +33,11 @@ import {
  * @returns {number[]} forkStepCols - the colNums where decision steps are
  */
 export const createWorkflowVisData = (
-    { workflowSteps, workflowUid }: { workflowSteps: WorkflowStep[]; workflowUid: string }
+    { workflowSteps }: { workflowSteps: WorkflowStep[] }
 ): { workflowVisData: WorkflowVisData; initialMatrix: Matrix; forkStepCols: number[] } => {
     const {
         firstStepId, workflowStepNodes, workflowStepOrderOccur, forkStepCols
-    } = createWorkflowStepNodes({ workflowSteps, workflowUid });
+    } = createWorkflowStepNodes(workflowSteps);
     const workflowVisData = {
         firstStep: firstStepId,
         workflowStepNodes

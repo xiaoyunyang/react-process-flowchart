@@ -32,13 +32,12 @@ export const getNextSteps = ({ workflowSteps, workflowStepOrder }: {
 
 
 const getFirstStep = ({
-    id, workflowUid, nextSteps, nextNodes
+    id, nextSteps, nextNodes
 }: {
-    id: string; workflowUid: string; nextSteps: WorkflowStep[]; nextNodes: any[];
+    id: string; nextSteps: WorkflowStep[]; nextNodes: any[];
 }) => ({
     [id]: {
         id,
-        workflowUid, // TODO:
         name: messages.START,
         nodeType: "START",
         workflowStepOrder: 0,
@@ -51,17 +50,14 @@ const getFirstStep = ({
 });
 
 // TODO: Need a huge refactor of this function
-export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
-  workflowUid: string;
-  workflowSteps: readonly WorkflowStep[];
-}): {
+export const createWorkflowStepNodes = (workflowSteps: readonly WorkflowStep[]): {
     workflowStepNodes: WorkflowStepNodes;
     workflowStepOrderOccur: OccurrenceDict;
     firstStepId: string;
     forkStepCols: number[];
 } => {
     // TODO: need to move this out of the function
-    const firstStepId = `${workflowUid}-auth`;
+    const firstStepId = "start";
 
     let workflowStepNodes: WorkflowStepNodes = {};
     let authorizeNextNodes: { id: string; primary: boolean }[] = [];
@@ -78,7 +74,7 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
             workflowStepOrder,
             workflowStepUid,
             workflowStepName
-        } = workflowStep;
+        } = Utils.getNodeFromStep(workflowStep);
 
         // We need to convert all keys for dictionaries to a string because key of a dictionary
         // must be string as we defined it in types/generics
@@ -105,7 +101,6 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
 
         workflowStepNodes[workflowStepUid] = {
             id: workflowStepUid,
-            workflowUid, // TODO: this can be in context?
             name: workflowStepName,
             nodeType,
             workflowStepOrder,
@@ -121,7 +116,6 @@ export const createWorkflowStepNodes = ({ workflowSteps, workflowUid }: {
     // to derive nodes from workflowVis Data
     const firstStep = getFirstStep({
         id: firstStepId,
-        workflowUid,
         nextNodes: authorizeNextNodes,
         nextSteps: getNextSteps({ workflowSteps, workflowStepOrder: 0 })
     });

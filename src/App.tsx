@@ -8,7 +8,9 @@ import "./App.css";
 import styles from "./lib/styles/workflowVis.module.css";
 
 // Examples
-import { WorkflowStepIcon, DropdownMenu, WarningIcon, ForkIcon } from "./config/examples/workflowTypes.cicd";
+import {
+    WorkflowStepIcon, DropdownMenu, WarningIcon, ForkIcon
+} from "./config/examples/workflowTypes.cicd";
 import {
     AA, AB, AC, AD, AE,
     BA, BB, BC, BD, BE, BF,

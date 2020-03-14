@@ -17,3 +17,16 @@ export const getNextNodes = ({ actions }: WorkflowStep) => actions
     .map((action) => ({ id: action.nextWorkflowStepUid, primary: action.primary }));
 
 export const getIsDisabled = (workflowStep: WorkflowStep) => isDisabled;
+
+export const getNodeFromStep = (workflowStep: WorkflowStep) => {
+    const {
+        workflowStepOrder,
+        workflowStepUid,
+        workflowStepName
+    } = workflowStep;
+    return {
+        workflowStepOrder,
+        workflowStepUid,
+        workflowStepName
+    };
+};
